@@ -37,7 +37,7 @@
 
 	<!-- ____________________________ Engine Settings ___________________________ -->
 
-	<define name="MODS_ALLOWED"/>
+	<define name="MODS_ALLOWED" unless="html5"/>
 	<define name="CHECK_FOR_UPDATES"/>
 	<define name="ACHIEVEMENTS_ALLOWED"/>
 	<define name="VIDEOS_ALLOWED" unless="32bits"/>
