@@ -38,7 +38,7 @@ class GenesisAssets
 
 	public static var keyedAssets:Map<String, Dynamic> = [];
 
-	public static function getAsset(path:String, type:AssetType):Dynamic
+	public static function getAsset(path:String, type:AssetType, ?compress:Bool = true):Dynamic
 	{
 		var goodPath:String = getPath(path, type);
 		
@@ -53,7 +53,7 @@ class GenesisAssets
 			case SPARROW:
 				var graphicPath = getPath(path, IMAGE);
 				trace('sparrow graphic path $graphicPath');
-				var graphic:FlxGraphic = returnGraphic(graphicPath, true);
+				var graphic:FlxGraphic = returnGraphic(graphicPath, compress);
 				trace('sparrow xml path $goodPath');
 				return FlxAtlasFrames.fromSparrow(graphic, File.getContent(goodPath));
 			default:
