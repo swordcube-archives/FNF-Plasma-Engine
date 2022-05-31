@@ -4,7 +4,15 @@ import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxState;
 import flixel.util.FlxColor;
+import haxe.CallStack;
+import haxe.io.Path;
+import lime.app.Application;
+import openfl.Lib;
 import openfl.display.Sprite;
+import openfl.events.UncaughtErrorEvent;
+import states.TitleState;
+import sys.FileSystem;
+import sys.io.File;
 import ui.GenesisFPS;
 
 class Main extends Sprite
@@ -25,6 +33,8 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
+		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
+		
 		game = new FlxGame(gameWidth, gameHeight, curState, zoom, framerate, framerate, skipSplash, startFullscreen);
 		addChild(game);
 
@@ -34,5 +44,45 @@ class Main extends Sprite
 		FlxG.fixedTimestep = false; // This ensures that the game is not tied to the FPS
 		FlxG.mouse.useSystemCursor = true; // Use system cursor because it's prettier
 		FlxG.mouse.visible = false; // Hide mouse on start
+	}
+	
+	// makes the game tell yoiu things when it crashes, i think!!
+	function onCrash(e:UncaughtErrorEvent)
+	{
+		var errMsg:String = "";
+		var path:String;
+		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
+		var dateNow:String = Date.now().toString();
+
+		dateNow = StringTools.replace(dateNow, " ", "_");
+		dateNow = StringTools.replace(dateNow, ":", "'");
+
+		path = "./crash/" + "GenesisEngine_" + dateNow + ".txt";
+
+		for (stackItem in callStack)
+		{
+			switch (stackItem)
+			{
+				case FilePos(s, file, line, column):
+					errMsg += file + " (line " + line + ")\n";
+				default:
+					Sys.println(stackItem);
+			}
+		}
+
+		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/swordcube/FNF-Genesis-Engine";
+
+		if (!FileSystem.exists("./crash/"))
+			FileSystem.createDirectory("./crash/");
+
+		File.saveContent(path, errMsg + "\n");
+
+		Sys.println(errMsg);
+		Sys.println("Crash dump saved in " + Path.normalize(path));
+
+		// display a message then die
+		Application.current.window.alert(errMsg, "Something went wrong!");
+		//DiscordClient.shutdown();
+		Sys.exit(1);
 	}
 }

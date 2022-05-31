@@ -31,7 +31,7 @@ class GenesisFPS extends TextField
 		x = inX;
 		y = inY;
 		selectable = false;
-		defaultTextFormat = new TextFormat("_sans", 12, inCol);
+		defaultTextFormat = new TextFormat("_sans", 16, inCol);
 
         fpsCounter = new FPS(10000, 10000, inCol);
         fpsCounter.visible = false;

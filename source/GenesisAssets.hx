@@ -45,9 +45,9 @@ class GenesisAssets
 		switch (type)
 		{
 			case TEXT:
-				return File.getContent(path);
+				return File.getContent(goodPath);
 			case IMAGE:
-				return returnGraphic(goodPath, false);
+				return returnGraphic(goodPath, compress);
 			case MUSIC | SOUND | SONG:
 				return returnSound(goodPath);
 			case SPARROW:
@@ -121,6 +121,7 @@ class GenesisAssets
 
 	public static function getAllMods()
 	{
+		#if MODS_ALLOWED
 		if(FlxG.save.data.mods != null)
 			activeMods = FlxG.save.data.mods;
 
@@ -141,6 +142,7 @@ class GenesisAssets
 		}
 
 		FlxG.save.data.mods = activeMods;
+		#end
 
 		trace("returning all mods!");
 
@@ -169,6 +171,7 @@ class GenesisAssets
 				basePath = path;
 		}
 
+		#if MODS_ALLOWED
 		if(mod == null)
 		{
 			for(_mod in mods)
@@ -185,6 +188,7 @@ class GenesisAssets
 			if(FileSystem.exists('${cwd}mods/$mod/$basePath'))
 				return '${cwd}mods/$mod/$basePath';
 		}
+		#end
 
 		if(Assets.exists('assets/$basePath'))
 			return 'assets/$basePath';
