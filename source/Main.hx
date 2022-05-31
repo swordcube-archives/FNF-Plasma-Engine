@@ -11,9 +11,12 @@ import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.UncaughtErrorEvent;
 import states.TitleState;
+import ui.GenesisFPS;
+
+#if sys
 import sys.FileSystem;
 import sys.io.File;
-import ui.GenesisFPS;
+#end
 
 class Main extends Sprite
 {
@@ -49,6 +52,7 @@ class Main extends Sprite
 	// makes the game tell yoiu things when it crashes, i think!!
 	function onCrash(e:UncaughtErrorEvent)
 	{
+		#if sys
 		var errMsg:String = "";
 		var path:String;
 		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
@@ -84,5 +88,6 @@ class Main extends Sprite
 		Application.current.window.alert(errMsg, "Something went wrong!");
 		//DiscordClient.shutdown();
 		Sys.exit(1);
+		#end
 	}
 }

@@ -3,13 +3,18 @@ package;
 import flixel.FlxG;
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.system.FlxSound;
 import lime.utils.Assets;
 import openfl.display.BitmapData;
 import openfl.media.Sound;
-import sys.FileSystem;
-import sys.io.File;
 
 using StringTools;
+
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
+
 
 // kinda stole part of this from https://github.com/Yoshubs/FNF-Forever-Engine/blob/master/source/AssetManager.hx
 // specifically the `returnGraphic` and `returnSound` functions
@@ -31,7 +36,11 @@ using StringTools;
 
 class GenesisAssets
 {
+	#if sys
 	public static var cwd:String = Sys.getCwd();
+	#else
+	public static var cwd:String = "";
+	#end
 
 	public static var mods:Array<String> = [];
 	public static var activeMods:Map<String, Bool> = [];
@@ -45,7 +54,11 @@ class GenesisAssets
 		switch (type)
 		{
 			case TEXT:
+				#if sys
 				return File.getContent(goodPath);
+				#else
+				return Assets.getText(goodPath);
+				#end
 			case IMAGE:
 				return returnGraphic(goodPath, compress);
 			case MUSIC | SOUND | SONG:
@@ -55,7 +68,13 @@ class GenesisAssets
 				trace('sparrow graphic path $graphicPath');
 				var graphic:FlxGraphic = returnGraphic(graphicPath, compress);
 				trace('sparrow xml path $goodPath');
-				return FlxAtlasFrames.fromSparrow(graphic, File.getContent(goodPath));
+				return FlxAtlasFrames.fromSparrow(graphic, 
+					#if sys
+					File.getContent(goodPath)
+					#else
+					Assets.getText(goodPath)
+					#end
+				);
 			default:
 				trace('returning directory $goodPath');
 				return goodPath;
@@ -72,12 +91,21 @@ class GenesisAssets
 
 	public static function returnGraphic(key:String, ?textureCompression:Bool = false)
 	{
+		#if sys
 		if (FileSystem.exists(key))
+		#else
+		if (Assets.exists(key))
+		#end
 		{
 			if (!keyedAssets.exists(key))
 			{
+				#if sys
 				var bitmap = BitmapData.fromFile(key);
+				#end
+
 				var newGraphic:FlxGraphic;
+
+				#if sys
 				if (textureCompression)
 				{
 					var texture = FlxG.stage.context3D.createTexture(bitmap.width, bitmap.height, BGRA, true);
@@ -92,8 +120,15 @@ class GenesisAssets
 				else
 				{
 					newGraphic = FlxGraphic.fromBitmapData(bitmap, false, key, false);
+					#else
+					newGraphic = FlxGraphic.fromAssetKey(key, false, key, false);
+					#end
+
 					trace('new bitmap $key, not textured');
+				#if sys
 				}
+				#end
+
 				keyedAssets.set(key, newGraphic);
 			}
 			trace('graphic returning $key with gpu rendering $textureCompression');
@@ -105,17 +140,31 @@ class GenesisAssets
 
 	public static function returnSound(key:String)
 	{
+		#if sys
 		if (FileSystem.exists(key))
+		#else
+		if (Assets.exists(key))
+		#end
 		{
 			if (!keyedAssets.exists(key))
 			{
+				#if sys
 				keyedAssets.set(key, Sound.fromFile(key));
+				#else
+				@:privateAccess
+				keyedAssets.set(key, new FlxSound().loadEmbedded(key)._sound);
+				#end
+
 				trace('new sound $key');
 			}
+
 			trace('sound returning $key');
+
 			return keyedAssets.get(key);
 		}
+
 		trace('sound returning null at $key');
+
 		return null;
 	}
 
