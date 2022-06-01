@@ -50,6 +50,8 @@ class MusicBeatState extends FlxUIState
 	{
 		updateContents();
 
+		FlxG.stage.frameRate = 240;
+
 		super.update(elapsed);
 	}
 
@@ -71,7 +73,7 @@ class MusicBeatState extends FlxUIState
 			}
 		}
 		if (skippedSteps.length > 0) {
-			trace('skipped steps $skippedSteps');
+			//trace('skipped steps $skippedSteps');
 			skippedSteps = [];
 		}
 		curStep = trueStep;

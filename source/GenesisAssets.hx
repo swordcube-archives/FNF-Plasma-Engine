@@ -215,7 +215,7 @@ class GenesisAssets
 			case SONG:
 				basePath = 'songs/$path.ogg';
 			case FONT:
-				basePath = 'data/fonts/$path';
+				basePath = 'fonts/$path';
 			default:
 				basePath = path;
 		}

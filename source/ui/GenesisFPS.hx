@@ -31,7 +31,9 @@ class GenesisFPS extends TextField
 		x = inX;
 		y = inY;
 		selectable = false;
-		defaultTextFormat = new TextFormat("_sans", 16, inCol);
+
+        var font = GenesisAssets.getAsset('vcr.ttf', FONT); // default font is usually _sans, but vcr looks nicer
+		defaultTextFormat = new TextFormat(font, 14, inCol);
 
         fpsCounter = new FPS(10000, 10000, inCol);
         fpsCounter.visible = false;

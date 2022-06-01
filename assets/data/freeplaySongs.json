@@ -1,0 +1,44 @@
+{
+    "songs": [
+        {
+            "name": "Tutorial",
+            "icon": "gf",
+            "color": "#9271FD",
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "Bopeebo",
+            "icon": "dad",
+            "color": "#9271FD",
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "Fresh",
+            "icon": "dad",
+            "color": "#9271FD",
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "Dad Battle",
+            "icon": "dad",
+            "color": "#9271FD",
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        }
+    ]
+}

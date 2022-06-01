@@ -34,6 +34,9 @@ class TitleState extends MusicBeatState
 	{
 		super.create();
 
+        persistentUpdate = true;
+        persistentDraw = true;
+
 		freakyMenu = GenesisAssets.getAsset('freakyMenu', MUSIC);
 
 		Conductor.changeBPM(102);
@@ -141,8 +144,13 @@ class TitleState extends MusicBeatState
 			}
 		}
 
-		if(startedIntro)
-			Conductor.songPosition += FlxG.elapsed * 1000;
+		if(startedIntro || skippedIntro)
+		{
+			if(FlxG.sound.music != null && FlxG.sound.music.playing)
+				Conductor.songPosition = FlxG.sound.music.time;
+			else
+				Conductor.songPosition += FlxG.elapsed * 1000;
+		}
 	}
 
 	override public function beatHit()

@@ -293,12 +293,12 @@ class Alphabet extends FlxSpriteGroup
 		{
 			var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
 
-			y = FlxMath.lerp(y, (scaledY * 120) + (FlxG.height * 0.48), elapsed * 6);
+			y = FlxMath.lerp(y, (scaledY * 120) + (FlxG.height * 0.48), elapsed * 9.6);
 			// lmao
 			if (!disableX)
-				x = FlxMath.lerp(x, (targetY * 20) + 90, elapsed * 6);
+				x = FlxMath.lerp(x, (targetY * 20) + 90, elapsed * 9.6);
 			else
-				x = FlxMath.lerp(x, xTo, elapsed * 6);
+				x = FlxMath.lerp(x, xTo, elapsed * 9.6);
 		}
 
 		if ((text != textInit))
@@ -339,14 +339,14 @@ class AlphaCharacter extends FlxSprite
 
 	public function createBold(letter:String)
 	{
-		if (AlphaCharacter.alphabet.indexOf(letter.toLowerCase()) != -1)
-		{
+		//if (AlphaCharacter.alphabet.indexOf(letter.toLowerCase()) != -1)
+		//{
 			// or just load regular text
 			animation.addByPrefix(letter, letter.toUpperCase() + " bold", 24);
 			animation.play(letter);
 			scale.set(textSize, textSize);
 			updateHitbox();
-		}
+		//}
 	}
 
 	public function createLetter(letter:String):Void
