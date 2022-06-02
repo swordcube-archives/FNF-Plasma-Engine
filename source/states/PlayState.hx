@@ -14,6 +14,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+import ui.playState.Note;
 import ui.playState.StrumLine;
 import ui.playState.UI;
 
@@ -43,6 +44,9 @@ class PlayState extends MusicBeatState
 
 	// UI
 	public var UI:UI;
+	public var scrollSpeed:Float = 1;
+
+	public var uiSkin:String = 'arrows';
 
 	// Health
 	public var health:Float = 1;
@@ -83,6 +87,17 @@ class PlayState extends MusicBeatState
 			SONG = SongLoader.loadJSON("test", "normal");
 
 		songData = SONG.song;
+		
+		if(songData.uiSkin != null)
+			uiSkin = songData.uiSkin;
+
+		scrollSpeed = songData.speed;
+
+		// invert scroll speeds on downscroll
+		// we're gonna check to see if the scroll speed is negative
+		// for cliprect shit and other shit, like gamers
+		if(Init.getOption('downscroll') == true)
+			scrollSpeed = -scrollSpeed;
 
 		cachedSong = [
 			"inst" => GenesisAssets.getAsset('${songData.song.toLowerCase()}/Inst', GenesisAssets.AssetType.SONG),
@@ -140,6 +155,49 @@ class PlayState extends MusicBeatState
 	{
 		FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, 0.95);
 		camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95);
+
+		for(section in songData.notes)
+		{
+			for(songNotes in section.sectionNotes)
+			{
+				var daStrumTime:Float = songNotes[0];
+				
+				// Spawn the notes as the song goes on
+				if((daStrumTime - Conductor.songPosition) < 2500)
+				{
+					var daNoteData:Int = Std.int(songNotes[1] % songData.keyCount);
+
+					var gottaHitNote:Bool = section.mustHitSection;
+
+					if (songNotes[1] > (songData.keyCount - 1))
+						gottaHitNote = !section.mustHitSection;
+
+					var swagNote:Note = new Note(daStrumTime, daNoteData, uiSkin, false);
+					swagNote.mustPress = gottaHitNote;
+					swagNote.sustainLength = songNotes[2];
+
+					var susLength:Float = swagNote.sustainLength / Conductor.stepCrochet;
+					var floorSus:Int = Math.floor(susLength);
+					if(floorSus > 0)
+					{
+						for (susNote in 0...floorSus)
+						{
+							var isEnd:Bool = false;
+							if(susNote >= floorSus)
+								isEnd = true;
+
+							var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + (Conductor.stepCrochet / FlxMath.roundDecimal(scrollSpeed, 2)), daNoteData, uiSkin, true, isEnd);
+							sustainNote.mustPress = gottaHitNote;
+							UI.notes.add(sustainNote);
+						}
+					}
+
+					UI.notes.add(swagNote);
+				}
+				else
+					break; // Performance is always nice isn't it?
+			}
+		}
 	}
 
 	public var countdownActive:Bool = false;

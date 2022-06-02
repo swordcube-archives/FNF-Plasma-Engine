@@ -1,19 +1,24 @@
 package ui.playState;
 
+import base.Conductor;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.ui.FlxBar;
 import states.PlayState;
 
-class UI extends FlxSpriteGroup
+class UI extends FlxGroup
 {
     public var defaultStrumY:Float = 50;
 
     // Strum Lines
     public var opponentStrums:StrumLine;
     public var playerStrums:StrumLine;
+
+    // Notes
+    public var notes:FlxTypedGroup<Note>;
 
     // Health Bar & Icons
     public var healthBarBG:FlxSprite;
@@ -34,11 +39,16 @@ class UI extends FlxSpriteGroup
 
         defaultStrumY -= 15;
 
-        opponentStrums = new StrumLine(xMult, defaultStrumY, 'arrows', 4);
+        var uiSkin:String = PlayState.instance.uiSkin;
+
+        opponentStrums = new StrumLine(xMult, defaultStrumY, uiSkin, 4);
         add(opponentStrums);
 
-        playerStrums = new StrumLine((FlxG.width / 2) + xMult, defaultStrumY, 'arrows', 4);
+        playerStrums = new StrumLine((FlxG.width / 2) + xMult, defaultStrumY, uiSkin, 4);
         add(playerStrums);
+
+        notes = new FlxTypedGroup<Note>();
+        add(notes);
 
         // Health Bar
         healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(GenesisAssets.getAsset('ui/healthBar', IMAGE));
@@ -75,6 +85,43 @@ class UI extends FlxSpriteGroup
 			physicsUpdate();
 			physicsUpdateTimer = 0;
 		}
+
+        notes.forEachAlive(function(daNote:Note) {
+            var scrollSpeed:Float = PlayState.instance.scrollSpeed;
+
+            var strum:StrumNote = daNote.mustPress ? playerStrums.members[daNote.noteData] : opponentStrums.members[daNote.noteData];
+            daNote.x = strum.x;
+            if(daNote.isSustainNote)
+            {
+                if(daNote.json.skinType == "pixel")
+                    daNote.x += daNote.width / 1.5;
+                else
+                    daNote.x += daNote.width;
+            }
+
+            daNote.y = (0.45 * (Conductor.songPosition - daNote.strumTime) * scrollSpeed);
+            
+            // Check if the scroll speed is negative (basically check if downscroll is on)
+            if(Math.abs(scrollSpeed) != scrollSpeed)
+            {
+                if(daNote.y > (FlxG.height + daNote.height))
+                {
+                    notes.remove(daNote, true);
+                    daNote.kill();
+                    daNote.destroy();
+                }
+            }
+            else
+            {
+                if(daNote.y < -daNote.height)
+                {
+                    notes.remove(daNote, true);
+                    daNote.kill();
+                    daNote.destroy();
+                }
+            }
+
+        });
     }
 
 	public function physicsUpdate()
