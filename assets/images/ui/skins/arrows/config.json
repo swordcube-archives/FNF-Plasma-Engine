@@ -1,0 +1,28 @@
+{
+    "ratingSkin": "arrows",
+    "comboSkin": "arrows",
+    "noteSplashesSkin": "arrows",
+    "countdownSkin": "arrows",
+    "arrowScale": 0.7,
+    "ratingScale": 1,
+    "comboScale": 1,
+    "skinType": "standard",
+    "arrowSize": [
+        "THIS IS ONLY USED WHEN SKINTYPE IS SET TO PIXEL",
+        "THEREFORE THIS GOES UNUSED FOR THIS SKIN!"
+    ],
+    "arrowFrames": [
+        {
+            "anim": "static",
+            "frames": ["THIS IS ONLY USED WHEN SKINTYPE IS SET TO PIXEL"]
+        },
+        {
+            "anim": "press",
+            "frames": ["THIS IS ONLY USED WHEN SKINTYPE IS SET TO PIXEL"]
+        },
+        {
+            "anim": "confirm",
+            "frames": ["THIS IS ONLY USED WHEN SKINTYPE IS SET TO PIXEL"]
+        }
+    ]
+}

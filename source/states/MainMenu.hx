@@ -30,7 +30,7 @@ class MainMenu extends MusicBeatState
     var menuOptions:Array<String> = [
         "story-mode",
         "freeplay",
-        #if MODS_ALLOWED "mods" #end,
+        #if MODS_ALLOWED "mods", #end
         //"replays",
         "credits",
         "options"
@@ -77,7 +77,7 @@ class MainMenu extends MusicBeatState
 
         for(i in 0...menuOptions.length)
         {
-			var offset:Float = 108 - (Math.max(menuOptions.length, 4) - 4) * 80;
+			var offset:Float = 78 - (Math.max(menuOptions.length, 4) - 4) * 80;
 			var menuItem:FlxSprite = new FlxSprite(0, (i * 160)  + offset);
 			menuItem.frames = GenesisAssets.getAsset('ui/mainMenu/${menuOptions[i]}', SPARROW);
 			menuItem.animation.addByPrefix('idle', "basic", 24);
@@ -85,7 +85,7 @@ class MainMenu extends MusicBeatState
 			menuItem.animation.play('idle');
 			menuItem.ID = i;
 			menuItem.screenCenter(X);
-			var scr:Float = (menuOptions.length - 4) * 0.4;
+			var scr:Float = (menuOptions.length - 4) * 0.3;
 			if(menuOptions.length < 5) scr = 0;
 			menuItem.scrollFactor.set(0, scr);
 			menuItem.antialiasing = true;
@@ -102,7 +102,6 @@ class MainMenu extends MusicBeatState
 
         var versionShit:FlxText = new FlxText(5, 0, 0, "", 16);
         versionShit.setFormat(GenesisAssets.getAsset("vcr.ttf", FONT), 16, FlxColor.WHITE, LEFT, OUTLINE, FlxColor.BLACK);
-        versionShit.borderSize = 2;
         versionShit.scrollFactor.set();
 
         versionShit.text = "Genesis Engine v" + Application.current.meta.get("version");

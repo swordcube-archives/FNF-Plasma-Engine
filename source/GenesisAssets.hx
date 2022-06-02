@@ -47,9 +47,9 @@ class GenesisAssets
 
 	public static var keyedAssets:Map<String, Dynamic> = [];
 
-	public static function getAsset(path:String, type:AssetType, ?compress:Bool = true):Dynamic
+	public static function getAsset(path:String, type:AssetType, ?mod:Null<String> = null, ?compress:Bool = true):Dynamic
 	{
-		var goodPath:String = getPath(path, type);
+		var goodPath:String = getPath(path, type, mod);
 		
 		switch (type)
 		{
@@ -228,20 +228,42 @@ class GenesisAssets
 				if(activeMods.get(_mod) == true)
 				{
 					if(FileSystem.exists('${cwd}mods/$_mod/$basePath'))
+					{
+						#if html5
+						if(type == FONT)
+							return openfl.utils.Assets.getFont('${cwd}mods/$_mod/$basePath').fontName;
+						#end
+
 						return '${cwd}mods/$_mod/$basePath';
+					}
 				}
 			}
 		}
 		else 
 		{
 			if(FileSystem.exists('${cwd}mods/$mod/$basePath'))
+			{
+				#if html5
+				if(type == FONT)
+					return openfl.utils.Assets.getFont('${cwd}mods/$mod/$basePath').fontName;
+				#end
+				
 				return '${cwd}mods/$mod/$basePath';
+			}
 		}
 		#end
 
 		if(Assets.exists('assets/$basePath'))
-			return 'assets/$basePath';
+		{
+			#if html5
+			if(type == FONT)
+				return openfl.utils.Assets.getFont('assets/$basePath').fontName;
+			#end
 
+			return 'assets/$basePath';
+		}
+
+		trace('assets/$basePath doesn\'t exist!');
 		return null;
 	}
 }

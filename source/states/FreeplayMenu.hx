@@ -3,6 +3,7 @@ package states;
 import base.Controls;
 import base.CoolUtil;
 import base.MusicBeat.MusicBeatState;
+import base.SongLoader;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -68,6 +69,12 @@ class FreeplayMenu extends MusicBeatState
 
         if(Controls.isPressed("UI_DOWN", JUST_PRESSED))
             changeSelection(1);
+
+        if(Controls.isPressed("ACCEPT", JUST_PRESSED))
+        {
+            PlayState.SONG = SongLoader.loadJSON(songs[curSelected].name.toLowerCase(), "normal");
+            States.switchState(this, new PlayState());
+        }
     }
 
     function addSong(index:Int = 0, name:String, ?icon:Null<String> = "face", ?color:Null<String> = "#000000")

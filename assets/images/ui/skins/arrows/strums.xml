@@ -159,9 +159,18 @@
 	<SubTexture name="I press0024" x="302" y="1111" width="148" height="151"/>
 	<SubTexture name="I press0025" x="302" y="1111" width="148" height="151"/>
 	<SubTexture name="I press0026" x="302" y="1111" width="148" height="151"/>
-	<SubTexture name="arrowDOWN0000" x="954" y="946" width="157" height="153"/>
-	<SubTexture name="arrowLEFT0000" x="462" y="947" width="153" height="157"/>
-	<SubTexture name="arrowRIGHT0000" x="617" y="947" width="153" height="157"/>
-	<SubTexture name="arrowSPACE0000" x="1481" y="2" width="169" height="169"/>
-	<SubTexture name="arrowUP0000" x="772" y="947" width="157" height="153"/>
+	<!-- static animations -->
+	<!-- i had to modify this xml myself to get these static shits here -->
+	<!-- they were like arrowLEFT, arrowDOWN, etc before -->
+	<SubTexture name="A static0000" x="462" y="947" width="153" height="157"/>
+	<SubTexture name="B static0000" x="954" y="946" width="157" height="153"/>
+	<SubTexture name="C static0000" x="772" y="947" width="157" height="153"/>
+	<SubTexture name="D static0000" x="617" y="947" width="153" height="157"/>
+
+	<SubTexture name="E static0000" x="1481" y="2" width="169" height="169"/>
+
+	<SubTexture name="F static0000" x="462" y="947" width="153" height="157"/>
+	<SubTexture name="G static0000" x="954" y="946" width="157" height="153"/>
+	<SubTexture name="H static0000" x="772" y="947" width="157" height="153"/>
+	<SubTexture name="I static0000" x="617" y="947" width="153" height="157"/>
 </TextureAtlas>
