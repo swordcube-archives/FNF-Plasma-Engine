@@ -27,6 +27,8 @@ class UI extends FlxGroup
     public var iconP2:HealthIcon;
     public var iconP1:HealthIcon;
 
+    public var downscroll:Bool = Init.getOption('downscroll');
+
     public function new()
     {
         super(); 
@@ -34,7 +36,7 @@ class UI extends FlxGroup
         // Strum Lines
 		var xMult:Float = 65;
 
-		if(Init.getOption('downscroll') == true)
+		if(downscroll == true)
 			defaultStrumY = FlxG.height - 150;
 
         defaultStrumY -= 15;
@@ -80,6 +82,7 @@ class UI extends FlxGroup
         super.update(elapsed);
 
 		physicsUpdateTimer += elapsed;
+        
 		if(physicsUpdateTimer > 1 / 60)
 		{
 			physicsUpdate();
@@ -90,7 +93,9 @@ class UI extends FlxGroup
             var scrollSpeed:Float = PlayState.instance.scrollSpeed;
 
             var strum:StrumNote = daNote.mustPress ? playerStrums.members[daNote.noteData] : opponentStrums.members[daNote.noteData];
+            
             daNote.x = strum.x;
+
             if(daNote.isSustainNote)
             {
                 if(daNote.json.skinType == "pixel")
@@ -99,28 +104,17 @@ class UI extends FlxGroup
                     daNote.x += daNote.width;
             }
 
-            daNote.y = (0.45 * (Conductor.songPosition - daNote.strumTime) * scrollSpeed);
-            
-            // Check if the scroll speed is negative (basically check if downscroll is on)
-            if(Math.abs(scrollSpeed) != scrollSpeed)
-            {
-                if(daNote.y > (FlxG.height + daNote.height))
-                {
-                    notes.remove(daNote, true);
-                    daNote.kill();
-                    daNote.destroy();
-                }
-            }
+            if(downscroll == true)
+                daNote.y = strum.y + (0.45 * (Conductor.songPosition - daNote.strumTime) * scrollSpeed);
             else
+                daNote.y = strum.y - (0.45 * (Conductor.songPosition - daNote.strumTime) * scrollSpeed);
+            
+            if(Conductor.songPosition - daNote.strumTime > Conductor.safeZoneOffset)
             {
-                if(daNote.y < -daNote.height)
-                {
-                    notes.remove(daNote, true);
-                    daNote.kill();
-                    daNote.destroy();
-                }
+                notes.remove(daNote, true);
+                daNote.kill();
+                daNote.destroy();
             }
-
         });
     }
 

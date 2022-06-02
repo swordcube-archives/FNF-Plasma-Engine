@@ -45,18 +45,23 @@ class Note extends FlxSprite
     public function loadSkin(skin:String = 'arrows')
     {
         json = Json.parse(GenesisAssets.getAsset('images/ui/skins/$skin/config.json', TEXT));
+        
         switch(json.skinType)
         {
             case "standard":
                 frames = GenesisAssets.getAsset('ui/skins/$skin/notes', SPARROW);
+                
                 antialiasing = true;
+
                 var keyCount:Int = PlayState.songData.keyCount;
-                animation.addByPrefix("normal", ManiaShit.letterDirections[keyCount][noteData], 24, true);
+
+                animation.addByPrefix("normal", ManiaShit.letterDirections[keyCount][noteData] + "0", 24, true);
                 animation.addByPrefix("hold", ManiaShit.letterDirections[keyCount][noteData] + " hold", 24, false);
                 animation.addByPrefix("tail", ManiaShit.letterDirections[keyCount][noteData] + " tail", 24, false);
         }
 
         scale.set(json.arrowScale, json.arrowScale);
+        
         updateHitbox();
 
         if(isSustainNote)
@@ -98,8 +103,11 @@ class Note extends FlxSprite
 
 			if (strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * earlyHitMult))
 			{
-				if((isSustainNote && prevNote.wasGoodHit) || strumTime <= Conductor.songPosition)
-					wasGoodHit = true;
+                if(prevNote != null)
+                {
+				    if((isSustainNote && prevNote.wasGoodHit) || strumTime <= Conductor.songPosition)
+					    wasGoodHit = true;
+                }
 			}
 		}
 

@@ -175,24 +175,35 @@ class PlayState extends MusicBeatState
 					var swagNote:Note = new Note(daStrumTime, daNoteData, uiSkin, false);
 					swagNote.mustPress = gottaHitNote;
 					swagNote.sustainLength = songNotes[2];
+					
+					swagNote.x = -1000;
+					swagNote.y = -1000;
 
 					var susLength:Float = swagNote.sustainLength / Conductor.stepCrochet;
 					var floorSus:Int = Math.floor(susLength);
+					
 					if(floorSus > 0)
 					{
 						for (susNote in 0...floorSus)
 						{
 							var isEnd:Bool = false;
+							
 							if(susNote >= floorSus)
 								isEnd = true;
 
 							var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + (Conductor.stepCrochet / FlxMath.roundDecimal(scrollSpeed, 2)), daNoteData, uiSkin, true, isEnd);
 							sustainNote.mustPress = gottaHitNote;
+
+							sustainNote.x = -1000;
+							sustainNote.y = -1000;
+
 							UI.notes.add(sustainNote);
 						}
 					}
 
 					UI.notes.add(swagNote);
+
+					section.sectionNotes.remove(songNotes);
 				}
 				else
 					break; // Performance is always nice isn't it?
@@ -298,14 +309,20 @@ class PlayState extends MusicBeatState
 					Conductor.songPosition = 0;
 					
 					FlxG.sound.playMusic(cachedSong["inst"], 1, false);
+
 					if(cachedSong["voices"] != null)
 						voices = new FlxSound().loadEmbedded(cachedSong["voices"]);
 					
 					FlxG.sound.music.pause();
 					FlxG.sound.music.time = 0;
 					FlxG.sound.music.play();
+
 					if(cachedSong["voices"] != null)
+					{
 						voices.play();
+						
+						FlxG.sound.list.add(voices);
+					}
 			}
 
 			swagCounter++;

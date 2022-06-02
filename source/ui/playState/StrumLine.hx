@@ -12,8 +12,10 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
     public function new(x:Float, y:Float, skin:String, ?keyCount:Int = 4)
     {
         super(x, y);
+        
         this.keyCount = keyCount;
         this.skin = skin;
+
         reloadStrums();
     }
 
@@ -28,8 +30,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
         for(i in 0...keyCount)
         {
-            var strum:StrumNote = new StrumNote(Note.swagWidth * i, 0, skin, i, keyCount);
-			strum.y -= 10;
+            var strum:StrumNote = new StrumNote(Note.swagWidth * i, -10, skin, i, keyCount);
 			strum.alpha = 0;
             add(strum);
             

@@ -21,10 +21,9 @@ class MusicBeatState extends FlxUIState
 
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;*/
-
 	// class create event
 	override function create()
-	{	
+	{
 		if(!FlxTransitionableState.skipNextTransOut)
 			openSubState(new FNFTransition(0.8, true));
 

@@ -114,14 +114,25 @@ class GenesisAssets
 					bitmap.dispose();
 					bitmap.disposeImage();
 					bitmap = null;
+					
 					trace('new texture $key, bitmap is $bitmap');
+					
 					newGraphic = FlxGraphic.fromBitmapData(BitmapData.fromTexture(texture), false, key, false);
+
+					newGraphic.destroyOnNoUse = false;
+					newGraphic.persist = true;
 				}
 				else
 				{
 					newGraphic = FlxGraphic.fromBitmapData(bitmap, false, key, false);
+
+					newGraphic.destroyOnNoUse = false;
+					newGraphic.persist = true;
 					#else
 					newGraphic = FlxGraphic.fromAssetKey(key, false, key, false);
+
+					newGraphic.destroyOnNoUse = false;
+					newGraphic.persist = true;
 					#end
 
 					trace('new bitmap $key, not textured');
@@ -131,10 +142,14 @@ class GenesisAssets
 
 				keyedAssets.set(key, newGraphic);
 			}
+
 			trace('graphic returning $key with gpu rendering $textureCompression');
+			
 			return keyedAssets.get(key);
 		}
+
 		trace('graphic returning null at $key with gpu rendering $textureCompression');
+
 		return null;
 	}
 

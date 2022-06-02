@@ -37,6 +37,7 @@ class StrumNote extends FlxSprite
     public function loadSkin(skin:String = 'arrows')
     {
         json = Json.parse(GenesisAssets.getAsset('images/ui/skins/$skin/config.json', TEXT));
+
         switch(json.skinType)
         {
             case "standard":
@@ -48,6 +49,7 @@ class StrumNote extends FlxSprite
         }
 
         scale.set(json.arrowScale, json.arrowScale);
+
         updateHitbox();
 
         playAnim("static");
@@ -56,7 +58,20 @@ class StrumNote extends FlxSprite
 	public function playAnim(anim:String, ?force:Bool = false)
     {
 		animation.play(anim, force);
-		centerOffsets();
+
 		centerOrigin();
+
+        if(json.skinType != "pixel")
+        {
+            offset.x = frameWidth / 2;
+            offset.y = frameHeight / 2;
+
+            var scale = json.arrowScale;
+
+            offset.x -= 156 * (scale / 2);
+            offset.y -= 156 * (scale / 2);
+        }
+        else
+            centerOffsets();
     }
 }
