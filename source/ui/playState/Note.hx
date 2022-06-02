@@ -56,11 +56,34 @@ class Note extends FlxSprite
                 var keyCount:Int = PlayState.songData.keyCount;
 
                 animation.addByPrefix("normal", ManiaShit.letterDirections[keyCount][noteData] + "0", 24, true);
-                animation.addByPrefix("hold", ManiaShit.letterDirections[keyCount][noteData] + " hold", 24, false);
-                animation.addByPrefix("tail", ManiaShit.letterDirections[keyCount][noteData] + " tail", 24, false);
+                animation.addByPrefix("hold", ManiaShit.letterDirections[keyCount][noteData] + " hold0", 24, false);
+                animation.addByPrefix("tail", ManiaShit.letterDirections[keyCount][noteData] + " tail0", 24, false);
         }
 
         scale.set(json.arrowScale, json.arrowScale);
+        
+        if(isSustainNote)
+        {
+            alpha = 0.6;
+            
+            if(!isEndOfSustain)
+            {
+                scale.y *= Conductor.stepCrochet / 100 * 1.5;
+                
+                if(PlayState.instance != null)
+                {
+                    scale.y *= PlayState.instance.scrollSpeed;
+
+                    if(PlayState.instance.UI.opponentStrums.members[0].json.skinType == "pixel")
+                    {
+                        scale.y *= 1.19;
+                        scale.y *= (6 / height); //Auto adjust note size
+                    }
+                }
+            }
+        }
+        else
+            alpha = 1;
         
         updateHitbox();
 
@@ -79,6 +102,7 @@ class Note extends FlxSprite
     {
 		animation.play(anim, force);
 		centerOffsets();
+        updateHitbox();
 		centerOrigin();
     }
 

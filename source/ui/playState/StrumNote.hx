@@ -1,5 +1,6 @@
 package ui.playState;
 
+import base.Conductor;
 import base.ManiaShit;
 import flixel.FlxSprite;
 import haxe.Json;
@@ -20,6 +21,8 @@ typedef ArrowSkin = {
 class StrumNote extends FlxSprite
 {
     public var json:ArrowSkin = null;
+
+    public var animTimer:Float = 0;
     
     var noteData:Int = 0;
     var keyCount:Int = 4;
@@ -55,6 +58,20 @@ class StrumNote extends FlxSprite
         playAnim("static");
     }
 
+    public var animFinished:Bool = false;
+
+    override public function update(elapsed:Float)
+    {
+        super.update(elapsed);
+
+        animTimer += elapsed;
+        if(animTimer > (Conductor.stepCrochet / 1000.0))
+        {
+            animFinished = true;
+            animTimer = 0;
+        }
+    }
+
 	public function playAnim(anim:String, ?force:Bool = false)
     {
 		animation.play(anim, force);
@@ -73,5 +90,8 @@ class StrumNote extends FlxSprite
         }
         else
             centerOffsets();
+
+        animFinished = false;
+        animTimer = 0;
     }
 }

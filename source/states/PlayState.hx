@@ -141,8 +141,16 @@ class PlayState extends MusicBeatState
 		Conductor.songPosition += FlxG.elapsed * 1000;
 
 		if(Controls.isPressed("BACK", JUST_PRESSED))
-		{
+		{			
+			voices.stop();
+			voices.kill();
+			voices.destroy();
+			
 			FlxG.sound.playMusic(freakyMenu);
+
+			persistentUpdate = false;
+			persistentDraw = true;
+
 			// Story Mode doesn't exist yet so it just takes you to Freeplay instead
 			/*if(isStoryMode)
 				States.switchState(this, new StoryMenu());
@@ -172,7 +180,14 @@ class PlayState extends MusicBeatState
 					if (songNotes[1] > (songData.keyCount - 1))
 						gottaHitNote = !section.mustHitSection;
 
+					var oldNote:Note;
+					if (UI.notes.length > 0)
+						oldNote = UI.notes.members[Std.int(UI.notes.length - 1)];
+					else
+						oldNote = null;
+
 					var swagNote:Note = new Note(daStrumTime, daNoteData, uiSkin, false);
+					swagNote.prevNote = oldNote;
 					swagNote.mustPress = gottaHitNote;
 					swagNote.sustainLength = songNotes[2];
 					
@@ -188,10 +203,13 @@ class PlayState extends MusicBeatState
 						{
 							var isEnd:Bool = false;
 							
-							if(susNote >= floorSus)
+							if(susNote > floorSus - 2)
 								isEnd = true;
 
+							oldNote = UI.notes.members[Std.int(UI.notes.length - 1)];
+
 							var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + (Conductor.stepCrochet / FlxMath.roundDecimal(scrollSpeed, 2)), daNoteData, uiSkin, true, isEnd);
+							sustainNote.prevNote = oldNote;
 							sustainNote.mustPress = gottaHitNote;
 
 							sustainNote.x = -1000;

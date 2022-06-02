@@ -6,8 +6,11 @@ import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
+import flixel.math.FlxRect;
 import flixel.ui.FlxBar;
 import states.PlayState;
+
+using StringTools;
 
 class UI extends FlxGroup
 {
@@ -34,12 +37,10 @@ class UI extends FlxGroup
         super(); 
         
         // Strum Lines
-		var xMult:Float = 65;
+		var xMult:Float = 85;
 
 		if(downscroll == true)
 			defaultStrumY = FlxG.height - 150;
-
-        defaultStrumY -= 15;
 
         var uiSkin:String = PlayState.instance.uiSkin;
 
@@ -55,7 +56,7 @@ class UI extends FlxGroup
         // Health Bar
         healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(GenesisAssets.getAsset('ui/healthBar', IMAGE));
 		healthBarBG.screenCenter(X);
-        if(Init.getOption('downscroll') == true)
+        if(downscroll == true)
             healthBarBG.y = 60;
         add(healthBarBG);
 
@@ -89,6 +90,14 @@ class UI extends FlxGroup
 			physicsUpdateTimer = 0;
 		}
 
+        opponentStrums.forEachAlive(function(strum:StrumNote) {
+            if(strum.animation.curAnim != null)
+            {
+                if(strum.animFinished && strum.animation.curAnim.name == "confirm")
+                    strum.playAnim("static");
+            }
+        });
+
         notes.forEachAlive(function(daNote:Note) {
             var scrollSpeed:Float = PlayState.instance.scrollSpeed;
 
@@ -104,10 +113,53 @@ class UI extends FlxGroup
                     daNote.x += daNote.width;
             }
 
-            if(downscroll == true)
-                daNote.y = strum.y + (0.45 * (Conductor.songPosition - daNote.strumTime) * scrollSpeed);
+            daNote.y = strum.y - (0.45 * (Conductor.songPosition - daNote.strumTime) * scrollSpeed);
+            var center = strum.y + (Note.swagWidth / 2);
+
+            if (Math.abs(scrollSpeed) != scrollSpeed)
+            {
+                if (daNote.isSustainNote)
+                {
+                    if (daNote.animation.curAnim.name.endsWith('end') && daNote.prevNote != null)
+                        daNote.y += daNote.prevNote.height;
+                    else
+                        daNote.y += daNote.height / 2;
+
+                    if (daNote.y - daNote.offset.y * daNote.scale.y + daNote.height >= center
+                        && (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit))))
+                    {
+                        var swagRect = new FlxRect(0, 0, daNote.frameWidth, daNote.frameHeight);
+                        swagRect.height = (center - daNote.y) / daNote.scale.y;
+                        swagRect.y = daNote.frameHeight - swagRect.height;
+
+                        daNote.clipRect = swagRect;
+                    }
+                }
+            }
             else
-                daNote.y = strum.y - (0.45 * (Conductor.songPosition - daNote.strumTime) * scrollSpeed);
+            {
+                if (daNote.isSustainNote
+                    && daNote.y + daNote.offset.y * daNote.scale.y <= center
+                    && (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit))))
+                {
+                    var swagRect = new FlxRect(0, 0, daNote.width / daNote.scale.x, daNote.height / daNote.scale.y);
+                    swagRect.y = (center - daNote.y) / daNote.scale.y;
+                    swagRect.height -= swagRect.y;
+
+                    daNote.clipRect = swagRect;
+                }
+            }
+
+            if(!daNote.mustPress)
+            {
+                if(Conductor.songPosition >= daNote.strumTime)
+                {
+                    opponentStrums.members[daNote.noteData].playAnim("confirm", true);
+                    notes.remove(daNote, true);
+                    daNote.kill();
+                    daNote.destroy();
+                }
+            }
             
             if(Conductor.songPosition - daNote.strumTime > Conductor.safeZoneOffset)
             {

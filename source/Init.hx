@@ -32,6 +32,12 @@ class Init extends MusicBeatState
 		    "Allows you to press non-existent notes.",
             true
         ),
+        "botplay" => new Option(
+            BOOL,
+            "Botplay",
+		    "Let the game play itself! Useful for showcases or for skill issues.",
+            true
+        ),
         "auto-pause" => new Option(
             BOOL,
             "Auto Pause",
