@@ -29,6 +29,10 @@ class FreeplayMenu extends MusicBeatState
     override public function create()
     {
         super.create();
+
+        if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
+            FlxG.sound.playMusic(GenesisAssets.getAsset('freakyMenu', MUSIC));
+        
         scrollMenu = GenesisAssets.getAsset('menus/scrollMenu', SOUND);
         cancelMenu = GenesisAssets.getAsset('menus/cancelMenu', SOUND);
 

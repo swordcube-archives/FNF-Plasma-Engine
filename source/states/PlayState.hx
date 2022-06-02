@@ -9,6 +9,7 @@ import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
+import flixel.system.FlxSound;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -48,15 +49,32 @@ class PlayState extends MusicBeatState
 	public var minHealth:Float = 0;
 	public var maxHealth:Float = 2;
 
+	// Music
+	var freakyMenu:Dynamic;
+
+	// Song
+	var cachedSong:Map<String, Dynamic> = [];
+	var voices:FlxSound = new FlxSound();
+
 	public function new()
 	{
 		super();
 		instance = this;
 	}
 
+	function getVocals():Dynamic
+	{
+		if(songData.needsVoices)
+			return GenesisAssets.getAsset('${songData.song.toLowerCase()}/Voices', GenesisAssets.AssetType.SONG);
+
+		return null;
+	}
+
 	override public function create()
 	{
 		super.create();
+
+		freakyMenu = GenesisAssets.getAsset('freakyMenu', MUSIC);
 
 		persistentUpdate = true;
 		persistentDraw = true;
@@ -65,6 +83,11 @@ class PlayState extends MusicBeatState
 			SONG = SongLoader.loadJSON("test", "normal");
 
 		songData = SONG.song;
+
+		cachedSong = [
+			"inst" => GenesisAssets.getAsset('${songData.song.toLowerCase()}/Inst', GenesisAssets.AssetType.SONG),
+			"voices" => getVocals(),
+		];
 
 		FlxG.sound.music.stop();
 
@@ -104,6 +127,7 @@ class PlayState extends MusicBeatState
 
 		if(Controls.isPressed("BACK", JUST_PRESSED))
 		{
+			FlxG.sound.playMusic(freakyMenu);
 			// Story Mode doesn't exist yet so it just takes you to Freeplay instead
 			/*if(isStoryMode)
 				States.switchState(this, new StoryMenu());
@@ -114,10 +138,11 @@ class PlayState extends MusicBeatState
 
 	public function physicsUpdate()
 	{
-		//FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, 0.95);
+		FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, 0.95);
+		camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95);
 	}
 
-	public var startedCountdown:Bool = false;
+	public var countdownActive:Bool = false;
 
 	public var countdownReady:FlxSprite;
 	public var countdownSet:FlxSprite;
@@ -125,7 +150,7 @@ class PlayState extends MusicBeatState
 
 	public function startCountdown()
 	{
-		startedCountdown = true;
+		countdownActive = true;
 		
 		var countdownGraphics:Map<String, Dynamic> = [
 			"ready" => GenesisAssets.getAsset('ui/skins/${UI.opponentStrums.skin}/countdown/ready', IMAGE),
@@ -148,8 +173,10 @@ class PlayState extends MusicBeatState
 			switch(swagCounter)
 			{
 				case 0:
+					Conductor.songPosition = Conductor.crochet * -4;
 					FlxG.sound.play(countdownSounds["3"]);
 				case 1:
+					Conductor.songPosition = Conductor.crochet * -3;
 					FlxG.sound.play(countdownSounds["2"]);
 
 					countdownReady = new FlxSprite().loadGraphic(countdownGraphics["ready"]);
@@ -169,6 +196,7 @@ class PlayState extends MusicBeatState
 						}
 					});
 				case 2:
+					Conductor.songPosition = Conductor.crochet * -2;
 					FlxG.sound.play(countdownSounds["1"]);
 
 					countdownSet = new FlxSprite().loadGraphic(countdownGraphics["set"]);
@@ -188,6 +216,7 @@ class PlayState extends MusicBeatState
 						}
 					});
 				case 3:
+					Conductor.songPosition = Conductor.crochet * -1;
 					FlxG.sound.play(countdownSounds["go"]);
 
 					countdownGo = new FlxSprite().loadGraphic(countdownGraphics["go"]);
@@ -207,8 +236,18 @@ class PlayState extends MusicBeatState
 						}
 					});
 				case 4:
-					startedCountdown = false;
+					countdownActive = false;
 					Conductor.songPosition = 0;
+					
+					FlxG.sound.playMusic(cachedSong["inst"], 1, false);
+					if(cachedSong["voices"] != null)
+						voices = new FlxSound().loadEmbedded(cachedSong["voices"]);
+					
+					FlxG.sound.music.pause();
+					FlxG.sound.music.time = 0;
+					FlxG.sound.music.play();
+					if(cachedSong["voices"] != null)
+						voices.play();
 			}
 
 			swagCounter++;
@@ -223,7 +262,7 @@ class PlayState extends MusicBeatState
 		if(camZooming && curBeat % 4 == 0)
 		{
 			FlxG.camera.zoom += 0.015;
-			//camHUD.zoom += 0.065;
+			camHUD.zoom += 0.05;
 		}
 	}
 
@@ -231,6 +270,24 @@ class PlayState extends MusicBeatState
 	{
 		super.stepHit();
 		UI.stepHit();
+
+		if (Math.abs(FlxG.sound.music.time - (Conductor.songPosition - Conductor.offset)) > 20
+			|| (SONG.needsVoices && Math.abs(voices.time - (Conductor.songPosition - Conductor.offset)) > 20))
+		{
+			resyncVocals();
+		}
+	}
+
+	function resyncVocals():Void
+	{
+		if(countdownActive) return;
+
+		voices.pause();
+
+		FlxG.sound.music.play();
+		Conductor.songPosition = FlxG.sound.music.time;
+		voices.time = Conductor.songPosition;
+		voices.play();
 	}
 
     function setupCameras()

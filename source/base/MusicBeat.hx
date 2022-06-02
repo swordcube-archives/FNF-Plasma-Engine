@@ -112,15 +112,16 @@ class MusicBeatState extends FlxUIState
 
 	public function stepHit():Void
 	{
-		if (curStep % 4 == 0)
-			beatHit();
-		
-		// trace('step $curStep');
-
 		if (!storedSteps.contains(curStep))
 			storedSteps.push(curStep);
 		else
+		{
 			trace('SOMETHING WENT WRONG??? STEP REPEATED $curStep');
+			return;
+		}
+
+		if (curStep % 4 == 0)
+			beatHit();
 	}
 
 	public function beatHit():Void

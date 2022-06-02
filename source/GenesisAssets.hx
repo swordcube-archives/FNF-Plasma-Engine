@@ -201,6 +201,8 @@ class GenesisAssets
 	public static function getPath(path:String, type:AssetType, ?mod:Null<String> = null)
 	{
 		var basePath = '';
+
+		trace("TYPE: " + type);
 		
 		switch(type)
 		{

@@ -63,11 +63,23 @@ class UI extends FlxSpriteGroup
         add(iconP1);
     }
 
+    var physicsUpdateTimer:Float = 0;
+
     override public function update(elapsed:Float)
     {
         super.update(elapsed);
 
-        var scale = FlxMath.lerp(1, iconP2.scale.x, 0.3);
+		physicsUpdateTimer += elapsed;
+		if(physicsUpdateTimer > 1 / 60)
+		{
+			physicsUpdate();
+			physicsUpdateTimer = 0;
+		}
+    }
+
+	public function physicsUpdate()
+    {
+        var scale = FlxMath.lerp(1, iconP2.scale.x, 0.5);
 
         iconP2.scale.set(scale, scale);
         iconP2.updateHitbox();
