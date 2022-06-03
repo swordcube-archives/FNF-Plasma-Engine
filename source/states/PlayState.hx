@@ -14,8 +14,11 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+import funkin.playState.Stage;
+import haxe.Json;
 import ui.playState.Note;
 import ui.playState.StrumLine;
+import ui.playState.StrumNote;
 import ui.playState.UI;
 
 class PlayState extends MusicBeatState
@@ -40,6 +43,9 @@ class PlayState extends MusicBeatState
 	public var camHUD:FlxCamera;
 	public var camOther:FlxCamera;
 
+	// Stage
+	public var stage:Stage;
+
 	// UI
 	public var UI:UI;
 	public var scrollSpeed:Float = 1;
@@ -61,13 +67,15 @@ class PlayState extends MusicBeatState
 	// Stats
 	public var songScore:Int = 0;
 	public var songMisses:Int = 0;
-	public var songAccuracy:Int = 0;
+	public var songAccuracy:Float = 0;
 
 	public var marvelous:Int = 0;
 	public var sicks:Int = 0;
 	public var goods:Int = 0;
 	public var bads:Int = 0;
 	public var shits:Int = 0;
+
+	public var combo:Int = 0;
 
 	public var totalNotes:Int = 0;
 	public var totalHit:Float = 0.0;
@@ -119,6 +127,12 @@ class PlayState extends MusicBeatState
 		FlxG.sound.music.stop();
 
 		setupCameras();
+
+		stage = new Stage('stage');
+		add(stage);
+		add(stage.foregroundSprites);
+
+		FlxG.camera.zoom = defaultCamZoom;
 
 		UI = new UI();
 		UI.cameras = [camHUD];
@@ -252,7 +266,10 @@ class PlayState extends MusicBeatState
 		];
 
 		var swagCounter:Int = 0;
-		var textureAntiAliasing:Bool = !(UI.opponentStrums.members[0].json.skinType == "pixel");
+
+		var json:ArrowSkin = Json.parse(GenesisAssets.getAsset('images/ui/skins/$uiSkin/config.json', TEXT));
+
+		var textureAntiAliasing:Bool = json.skinType != "pixel";
 
 		new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
 		{
@@ -393,7 +410,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	function resyncVocals():Void
+	public function resyncVocals():Void
 	{
 		if(countdownActive) return;
 

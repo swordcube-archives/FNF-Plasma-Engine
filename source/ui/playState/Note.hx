@@ -83,6 +83,8 @@ class Note extends FlxSprite
 
     public function updateScale()
     {
+        scrollSpeed = PlayState.instance.scrollSpeed;
+        
         scale.set(json.arrowScale, json.arrowScale);
         
         if(isSustainNote)
@@ -97,7 +99,8 @@ class Note extends FlxSprite
                 {
                     scale.y *= PlayState.instance.scrollSpeed;
 
-                    if(PlayState.instance.UI.opponentStrums.members[0].json.skinType == "pixel")
+                    var json:ArrowSkin = Json.parse(GenesisAssets.getAsset('images/ui/skins/${PlayState.instance.uiSkin}/config.json', TEXT));
+                    if(json.skinType == "pixel")
                     {
                         scale.y *= 1.19;
                         scale.y *= (6 / height); //Auto adjust note size
@@ -111,11 +114,14 @@ class Note extends FlxSprite
         updateHitbox();
     }
 
+    var scrollSpeed:Float = -1;
+
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
-        updateScale();
+        if(PlayState.instance.scrollSpeed != scrollSpeed)
+            updateScale();
 
         calculateCanBeHit();
 

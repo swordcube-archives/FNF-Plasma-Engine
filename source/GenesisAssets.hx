@@ -15,9 +15,12 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 
+// kinda stole some of this from https://github.com/Yoshubs/FNF-Forever-Engine/blob/master/source/AssetManager.hx
 
-// kinda stole part of this from https://github.com/Yoshubs/FNF-Forever-Engine/blob/master/source/AssetManager.hx
-// specifically the `returnGraphic` and `returnSound` functions
+// i will replace this code if requested, (i probably should, my instinct at first here was)
+// ooh look pretty code i want it
+
+// why did i do that
 
 // thanks Yoshubs for being cool and gaming and shit
 

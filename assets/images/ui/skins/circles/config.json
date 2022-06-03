@@ -4,8 +4,8 @@
     "noteSplashesSkin": "arrows",
     "countdownSkin": "arrows",
     "arrowScale": 0.7,
-    "ratingScale": 1,
-    "comboScale": 1,
+    "ratingScale": 0.7,
+    "comboScale": 0.5,
     "skinType": "standard",
     "arrowSize": [
         "THIS IS ONLY USED WHEN SKINTYPE IS SET TO PIXEL",

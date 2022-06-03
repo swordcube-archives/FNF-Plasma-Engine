@@ -4,6 +4,7 @@ import base.Conductor;
 import base.Controls;
 import base.Ranking;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
@@ -13,9 +14,12 @@ import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxMath;
 import flixel.math.FlxRect;
 import flixel.text.FlxText;
+import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
+import haxe.Json;
 import states.PlayState;
+import ui.playState.StrumNote;
 
 using StringTools;
 
@@ -39,6 +43,9 @@ class UI extends FlxGroup
 
     // Text
     public var scoreTxt:FlxText;
+
+    // Ratings
+    public var ratings:FlxTypedGroup<FlxSprite>;
 
     // Extra Variables
     public var downscroll:Bool = Init.getOption('downscroll');
@@ -64,6 +71,9 @@ class UI extends FlxGroup
 
         notes = new FlxTypedGroup<Note>();
         add(notes);
+
+        ratings = new FlxTypedGroup<FlxSprite>();
+        add(ratings);
 
         // Health Bar
         healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(GenesisAssets.getAsset('ui/healthBar', IMAGE));
@@ -98,9 +108,19 @@ class UI extends FlxGroup
 	public var pressed:Array<Bool> = [];
 	public var released:Array<Bool> = [];
 
+    public function calculateAccuracy()
+    {
+        if(PlayState.instance.totalHit != 0 && PlayState.instance.totalNotes != 0)
+            PlayState.instance.songAccuracy = (PlayState.instance.totalHit / PlayState.instance.totalNotes);
+        else
+            PlayState.instance.songAccuracy = 0;
+    }
+
     override public function update(elapsed:Float)
     {
         super.update(elapsed);
+
+        calculateAccuracy();
 
         var accuracy:Float = PlayState.instance.songAccuracy * 100;
 
@@ -224,6 +244,8 @@ class UI extends FlxGroup
                 
                 PlayState.instance.songScore -= 10;
 
+                PlayState.instance.combo = 0;
+
                 PlayState.instance.totalNotes++;
             }
         });
@@ -332,14 +354,7 @@ class UI extends FlxGroup
                     dontHitTheseDirectionsLol[note.noteData] = true;
                     noteDataTimes[note.noteData] = note.strumTime;
 
-                    PlayState.instance.voices.volume = 1;
-                    PlayState.instance.health += 0.023;
-
-                    note.wasGoodHit = true;
-
-					notes.remove(note, true);
-					note.kill();
-					note.destroy();
+                    goodNoteHit(note);
                 }
             }
 
@@ -409,5 +424,112 @@ class UI extends FlxGroup
     public function stepHit()
     {
         // this might never do anything, but idk yet
+    }
+
+    public function goodNoteHit(daNote:Note)
+    {
+        if(!daNote.wasGoodHit)
+        {
+            daNote.wasGoodHit = true;
+
+            PlayState.instance.resyncVocals();
+
+            PlayState.instance.combo++;
+            popUpScore(daNote.strumTime, daNote);
+
+            PlayState.instance.voices.volume = 1;
+            PlayState.instance.health += 0.023;
+
+            notes.remove(daNote, true);
+            daNote.kill();
+            daNote.destroy();
+        }
+    }
+
+    public function popUpScore(strumTime:Float, daNote:Note)
+    {
+        // Accuracy Shit
+        var ratingStr:String = Ranking.judgeNote(strumTime);
+        
+        switch(ratingStr)
+        {
+            case "marvelous" | "sick":
+                PlayState.instance.songScore += Ranking.getRatingScore(ratingStr);
+                PlayState.instance.totalHit += 1;
+            case "good":
+                PlayState.instance.songScore += Ranking.getRatingScore(ratingStr);
+                PlayState.instance.totalHit += 0.7;
+            case "bad":
+                PlayState.instance.songScore += Ranking.getRatingScore(ratingStr);
+                PlayState.instance.totalHit += 0.45;
+            case "shit":
+                PlayState.instance.songScore += Ranking.getRatingScore(ratingStr);
+        }
+
+        PlayState.instance.totalNotes += 1;
+
+        // Spawning the Rating & Combo
+        var coolObject:FlxObject = new FlxObject(FlxG.width * 0.35);
+        coolObject.screenCenter(Y);
+
+        var json:ArrowSkin = Json.parse(GenesisAssets.getAsset('images/ui/skins/${PlayState.instance.uiSkin}/config.json', TEXT));
+
+        var rating:FlxSprite = new FlxSprite(coolObject.x - 40, coolObject.y - 60);
+        rating.loadGraphic(GenesisAssets.getAsset('ui/skins/${json.ratingSkin}/ratings/$ratingStr', IMAGE)); 
+		rating.acceleration.y = 550;
+		rating.velocity.y -= FlxG.random.int(140, 175);
+		rating.velocity.x -= FlxG.random.int(0, 10);
+
+        rating.setGraphicSize(Std.int(rating.width * json.ratingScale));
+        rating.updateHitbox();
+
+        ratings.add(rating);
+
+		FlxTween.tween(rating, {alpha: 0}, 0.2, {
+			startDelay: Conductor.crochet * 0.001,
+            onComplete: function(twn:FlxTween) {
+                ratings.remove(rating, true);
+                rating.kill();
+                rating.destroy();
+            }
+		});
+
+		var seperatedScore:Array<Int> = [];
+
+		if(PlayState.instance.combo >= 1000)
+			seperatedScore.push(Math.floor(PlayState.instance.combo / 1000) % 10);
+        
+		seperatedScore.push(Math.floor(PlayState.instance.combo / 100) % 10);
+		seperatedScore.push(Math.floor(PlayState.instance.combo / 10) % 10);
+		seperatedScore.push(PlayState.instance.combo % 10);
+
+        var daLoop:Int = 0;
+        for(i in seperatedScore)
+        {
+			var numScore:FlxSprite = new FlxSprite();
+            numScore.loadGraphic(GenesisAssets.getAsset('ui/skins/${json.comboSkin}/combo/num${Std.int(i)}', IMAGE)); 
+			numScore.x = coolObject.x + (43 * daLoop) - 90;
+			numScore.y = coolObject.y + 80;
+            numScore.setGraphicSize(Std.int(numScore.width * json.comboScale));
+            numScore.updateHitbox();
+
+			numScore.acceleration.y = FlxG.random.int(200, 300);
+			numScore.velocity.y -= FlxG.random.int(140, 160);
+			numScore.velocity.x = FlxG.random.float(-5, 5);
+
+            ratings.add(numScore);
+
+			FlxTween.tween(numScore, {alpha: 0}, 0.2, {
+				onComplete: function(tween:FlxTween)
+				{
+                    ratings.remove(numScore, true);
+                    numScore.kill();
+					numScore.destroy();
+				},
+				startDelay: Conductor.crochet * 0.002
+			});
+
+            daLoop++;
+        }
     }
 }
