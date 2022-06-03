@@ -43,9 +43,24 @@
 	<define name="ACHIEVEMENTS_ALLOWED"/>
 	<define name="VIDEOS_ALLOWED" unless="32bits"/>
 
+	<define name="PRELOAD_ALL" unless="web" />
+	<define name="NO_PRELOAD_ALL" unless="PRELOAD_ALL"/>
+
+	<section if="PRELOAD_ALL">
+		<library name="songs"   preload="true" />
+	</section>
+	
+	<section if="NO_PRELOAD_ALL">
+		<library name="songs"   preload="true" />
+	</section>
+
+	<assets path="assets/songs" library="songs"/>
+
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />
+	<haxedev set='webgl' />
+
 	<haxelib name="flixel-addons" />
 	<haxelib name="flixel-ui" />
 	<haxelib name="hscript" />
@@ -57,6 +72,7 @@
 	<haxedef name="FLX_NO_KEYBOARD" if="mobile" />
 	<haxedef name="FLX_NO_TOUCH" if="desktop" />
 
+	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />

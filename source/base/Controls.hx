@@ -59,7 +59,7 @@ class Controls
             }
         }
         else
-            saveGameControls(defaultControls[0]);
+            saveUIControls(defaultControls[0]);
 
         if(FlxG.save.data.gameControls != null)
         {
@@ -73,7 +73,7 @@ class Controls
             }
         }
         else
-            saveUIControls(defaultControls[1]);
+            saveGameControls(defaultControls[1]);
     }
 
     public static function saveUIControls(param:Dynamic = null)

@@ -24,15 +24,13 @@ class PlayState extends MusicBeatState
 	public static var instance:PlayState;
 
 	// Song Shit
-	public static var SONG:Dynamic;
-
 	public static var isStoryMode:Bool = false;
 
+	public static var SONG:Dynamic;
 	public static var songData:Song;
 
-	// Strum Lines
-	var opponentStrums:StrumLine;
-	var playerStrums:StrumLine;
+	public static var storyWeek:String = "tutorial";
+	public static var curDifficulty:String = "normal";
 
 	// Cameras
 	public var camZooming:Bool = true;
@@ -54,11 +52,25 @@ class PlayState extends MusicBeatState
 	public var maxHealth:Float = 2;
 
 	// Music
-	var freakyMenu:Dynamic;
+	public var freakyMenu:Dynamic;
 
 	// Song
-	var cachedSong:Map<String, Dynamic> = [];
-	var voices:FlxSound = new FlxSound();
+	public var cachedSong:Map<String, Dynamic> = [];
+	public var voices:FlxSound = new FlxSound();
+
+	// Stats
+	public var songScore:Int = 0;
+	public var songMisses:Int = 0;
+	public var songAccuracy:Int = 0;
+
+	public var marvelous:Int = 0;
+	public var sicks:Int = 0;
+	public var goods:Int = 0;
+	public var bads:Int = 0;
+	public var shits:Int = 0;
+
+	public var totalNotes:Int = 0;
+	public var totalHit:Float = 0.0;
 
 	public function new()
 	{
@@ -142,20 +154,7 @@ class PlayState extends MusicBeatState
 
 		if(Controls.isPressed("BACK", JUST_PRESSED))
 		{			
-			voices.stop();
-			voices.kill();
-			voices.destroy();
-			
-			FlxG.sound.playMusic(freakyMenu);
-
-			persistentUpdate = false;
-			persistentDraw = true;
-
-			// Story Mode doesn't exist yet so it just takes you to Freeplay instead
-			/*if(isStoryMode)
-				States.switchState(this, new StoryMenu());
-			else*/
-				States.switchState(this, new FreeplayMenu());
+			goBackToMenu();
 		}
 	}
 
@@ -327,6 +326,7 @@ class PlayState extends MusicBeatState
 					Conductor.songPosition = 0;
 					
 					FlxG.sound.playMusic(cachedSong["inst"], 1, false);
+					FlxG.sound.music.onComplete = endSong;
 
 					if(cachedSong["voices"] != null)
 						voices = new FlxSound().loadEmbedded(cachedSong["voices"]);
@@ -338,13 +338,35 @@ class PlayState extends MusicBeatState
 					if(cachedSong["voices"] != null)
 					{
 						voices.play();
-						
 						FlxG.sound.list.add(voices);
 					}
 			}
 
 			swagCounter++;
 		}, 5);
+	}
+
+	function endSong()
+	{
+		goBackToMenu();
+	}
+
+	function goBackToMenu()
+	{
+		voices.stop();
+		voices.kill();
+		voices.destroy();
+		
+		FlxG.sound.playMusic(freakyMenu);
+
+		persistentUpdate = false;
+		persistentDraw = true;
+
+		// Story Mode doesn't exist yet so it just takes you to Freeplay instead
+		/*if(isStoryMode)
+			States.switchState(this, new StoryMenu());
+		else*/
+			States.switchState(this, new FreeplayMenu());
 	}
 
 	override public function beatHit()

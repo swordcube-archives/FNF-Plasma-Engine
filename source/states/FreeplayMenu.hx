@@ -2,11 +2,13 @@ package states;
 
 import base.Controls;
 import base.CoolUtil;
+import base.Highscore;
 import base.MusicBeat.MusicBeatState;
 import base.SongLoader;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import haxe.Json;
 import lime.utils.Assets;
@@ -23,8 +25,16 @@ class FreeplayMenu extends MusicBeatState
     var cancelMenu:Dynamic;
 
     static var curSelected:Int = 0;
+    static var curDifficulty:Int = 1;
 
     var songs:Array<FreeplaySong> = [];
+
+    // Score
+	var scoreBG:FlxSprite;
+	var scoreText:FlxText;
+	var diffText:FlxText;
+	var lerpScore:Float = 0;
+	var intendedScore:Int = 0;
     
     override public function create()
     {
@@ -45,22 +55,66 @@ class FreeplayMenu extends MusicBeatState
         iconList = new FlxTypedGroup<HealthIcon>();
         add(iconList);
 
+		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
+		scoreText.setFormat(GenesisAssets.getAsset('vcr.ttf', FONT), 32, FlxColor.WHITE, RIGHT);
+
+		scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(1, 66, 0xFF000000);
+		scoreBG.antialiasing = false;
+		scoreBG.alpha = 0.6;
+		add(scoreBG);
+
+		diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
+		diffText.font = scoreText.font;
+		add(diffText);
+
+		add(scoreText);
+
         var assetsJson:SongListJson = Json.parse(Assets.getText('assets/data/freeplaySongs.json'));
         for(i in 0...assetsJson.songs.length)
         {
             var song = assetsJson.songs[i];
-            addSong(i, song.name, song.icon, song.color);
-            songs.push(assetsJson.songs[i]);
+
+            // debugOnly allows songs that only appear when compiling to debug mode
+            // by doing "lime test windows -debug" or whatever
+            if(song.debugOnly)
+            {
+                #if debug
+                addSong(i, song.name, song.icon, song.color);
+                songs.push(song);
+                #end
+            }
+            else 
+            {
+                addSong(i, song.name, song.icon, song.color);
+                songs.push(song);
+            }
         }
 
         changeSelection();
+    }
+
+    var physicsUpdateTimer:Float = 0;
+
+    function physicsUpdate()
+    {
+        menuBG.color = FlxColor.interpolate(menuBG.color, FlxColor.fromString(songs[curSelected].color), 0.045);
     }
 
     override public function update(elapsed:Float)
     {
         super.update(elapsed);
 
-        menuBG.color = FlxColor.interpolate(menuBG.color, FlxColor.fromString(songs[curSelected].color), CoolUtil.camLerpShit(0.045));
+        physicsUpdateTimer += elapsed;
+        if(physicsUpdateTimer > 1 / 60)
+        {
+            physicsUpdate();
+            physicsUpdateTimer = 0;
+        }
+
+		lerpScore = CoolUtil.coolLerp(lerpScore, intendedScore, 0.4);
+
+		scoreText.text = "PERSONAL BEST:" + Math.round(lerpScore);
+		positionHighscore();
 
         if(Controls.isPressed("BACK", JUST_PRESSED))
         {
@@ -74,12 +128,27 @@ class FreeplayMenu extends MusicBeatState
         if(Controls.isPressed("UI_DOWN", JUST_PRESSED))
             changeSelection(1);
 
+        if(Controls.isPressed("UI_LEFT", JUST_PRESSED))
+            changeDiff(-1);
+
+        if(Controls.isPressed("UI_RIGHT", JUST_PRESSED))
+            changeDiff(1);
+
         if(Controls.isPressed("ACCEPT", JUST_PRESSED))
         {
-            PlayState.SONG = SongLoader.loadJSON(songs[curSelected].name.toLowerCase(), "normal");
+            PlayState.SONG = SongLoader.loadJSON(songs[curSelected].name.toLowerCase(), songs[curSelected].difficulties[curDifficulty]);
             States.switchState(this, new PlayState());
         }
     }
+
+	function positionHighscore()
+	{
+		scoreText.x = FlxG.width - scoreText.width - 6;
+		scoreBG.scale.x = FlxG.width - scoreText.x + 6;
+		scoreBG.x = FlxG.width - scoreBG.scale.x / 2;
+		diffText.x = scoreBG.x + scoreBG.width / 2;
+		diffText.x -= diffText.width / 2;
+	}
 
     function addSong(index:Int = 0, name:String, ?icon:Null<String> = "face", ?color:Null<String> = "#000000")
     {
@@ -111,6 +180,23 @@ class FreeplayMenu extends MusicBeatState
             else
                 text.alpha = 0.6;
         });
+
+        intendedScore = Highscore.getScore(songs[curSelected].name, songs[curSelected].difficulties[curDifficulty]);
+
+        changeDiff();
+    }
+
+    function changeDiff(change:Int = 0)
+    {
+        curDifficulty += change;
+        if(curDifficulty < 0)
+            curDifficulty = songs[curSelected].difficulties.length - 1;
+        if(curDifficulty > songs[curSelected].difficulties.length - 1)
+            curDifficulty = 0;
+
+		PlayState.curDifficulty = songs[curSelected].difficulties[curDifficulty];
+		diffText.text = '< ' + PlayState.curDifficulty.toUpperCase() + ' >';
+		positionHighscore();
     }
 }
 
@@ -120,6 +206,7 @@ typedef FreeplaySong =
     var icon:String;
     var color:String;
     var difficulties:Array<String>;
+    var debugOnly:Bool;
 }
 
 typedef SongListJson =

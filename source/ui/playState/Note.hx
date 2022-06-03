@@ -23,7 +23,7 @@ class Note extends FlxSprite
     public var sustainLength:Float = 0;
     public var isSustainNote:Bool = false;
     public var isEndOfSustain:Bool = false;
-    public var earlyHitMult:Float = 0.5;
+    public var earlyHitMult:Float = 1;
     public var prevNote:Note;
     
     public static var swagWidth:Float = 160 * 0.7;
@@ -60,6 +60,29 @@ class Note extends FlxSprite
                 animation.addByPrefix("tail", ManiaShit.letterDirections[keyCount][noteData] + " tail0", 24, false);
         }
 
+        updateScale();
+
+        if(isSustainNote)
+        {
+            if(isEndOfSustain)
+                playAnim("tail");
+            else
+                playAnim("hold");
+        }
+        else
+            playAnim("normal");
+    }
+
+	public function playAnim(anim:String, ?force:Bool = false)
+    {
+		animation.play(anim, force);
+		centerOffsets();
+        updateHitbox();
+		centerOrigin();
+    }
+
+    public function updateScale()
+    {
         scale.set(json.arrowScale, json.arrowScale);
         
         if(isSustainNote)
@@ -86,30 +109,25 @@ class Note extends FlxSprite
             alpha = 1;
         
         updateHitbox();
-
-        if(isSustainNote)
-        {
-            if(isEndOfSustain)
-                playAnim("tail");
-            else
-                playAnim("hold");
-        }
-        else
-            playAnim("normal");
-    }
-
-	public function playAnim(anim:String, ?force:Bool = false)
-    {
-		animation.play(anim, force);
-		centerOffsets();
-        updateHitbox();
-		centerOrigin();
     }
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
+        updateScale();
+
+        calculateCanBeHit();
+
+		if (tooLate && !inEditor)
+		{
+			if (alpha > 0.3)
+				alpha = 0.3;
+		}
+	}
+
+    public function calculateCanBeHit()
+    {
 		if (mustPress)
 		{
 			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
@@ -134,11 +152,5 @@ class Note extends FlxSprite
                 }
 			}
 		}
-
-		if (tooLate && !inEditor)
-		{
-			if (alpha > 0.3)
-				alpha = 0.3;
-		}
-	}
+    }
 }

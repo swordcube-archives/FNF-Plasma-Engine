@@ -1,13 +1,20 @@
 package ui.playState;
 
 import base.Conductor;
+import base.Controls;
+import base.Ranking;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
+import flixel.input.FlxInput.FlxInputState;
+import flixel.input.keyboard.FlxKey;
+import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxMath;
 import flixel.math.FlxRect;
+import flixel.text.FlxText;
 import flixel.ui.FlxBar;
+import flixel.util.FlxColor;
 import states.PlayState;
 
 using StringTools;
@@ -30,11 +37,16 @@ class UI extends FlxGroup
     public var iconP2:HealthIcon;
     public var iconP1:HealthIcon;
 
+    // Text
+    public var scoreTxt:FlxText;
+
+    // Extra Variables
     public var downscroll:Bool = Init.getOption('downscroll');
 
+    // Functions
     public function new()
     {
-        super(); 
+        super();
         
         // Strum Lines
 		var xMult:Float = 85;
@@ -74,13 +86,31 @@ class UI extends FlxGroup
         iconP1 = new HealthIcon(PlayState.songData.player1, true);
         iconP1.y = healthBar.y - (iconP1.height / 2);
         add(iconP1);
+
+        scoreTxt = new FlxText(0, healthBarBG.y + 35, 0, "", 16);
+        scoreTxt.setFormat(GenesisAssets.getAsset('vcr.ttf', FONT), 16, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
+        add(scoreTxt);
     }
 
     var physicsUpdateTimer:Float = 0;
 
+	public var justPressed:Array<Bool> = [];
+	public var pressed:Array<Bool> = [];
+	public var released:Array<Bool> = [];
+
     override public function update(elapsed:Float)
     {
         super.update(elapsed);
+
+        var accuracy:Float = PlayState.instance.songAccuracy * 100;
+
+        scoreTxt.text = (
+            "Score: " + PlayState.instance.songScore + " // " +
+            "Misses: " + PlayState.instance.songMisses + " // " +
+            "Accuracy: " + FlxMath.roundDecimal(accuracy, 2) + "% // " +
+            "Rank: " + Ranking.getRank(accuracy)
+        );
+        scoreTxt.screenCenter(X);
 
 		physicsUpdateTimer += elapsed;
         
@@ -97,6 +127,17 @@ class UI extends FlxGroup
                     strum.playAnim("static");
             }
         });
+
+        if(Init.getOption('botplay') == true)
+        {
+            playerStrums.forEachAlive(function(strum:StrumNote) {
+                if(strum.animation.curAnim != null)
+                {
+                    if(strum.animFinished && strum.animation.curAnim.name == "confirm")
+                        strum.playAnim("static");
+                }
+            });
+        }
 
         notes.forEachAlive(function(daNote:Note) {
             var scrollSpeed:Float = PlayState.instance.scrollSpeed;
@@ -120,13 +161,13 @@ class UI extends FlxGroup
             {
                 if (daNote.isSustainNote)
                 {
-                    if (daNote.animation.curAnim.name.endsWith('end') && daNote.prevNote != null)
+                    if (daNote.isEndOfSustain && daNote.prevNote != null)
                         daNote.y += daNote.prevNote.height;
                     else
                         daNote.y += daNote.height / 2;
 
                     if (daNote.y - daNote.offset.y * daNote.scale.y + daNote.height >= center
-                        && (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit))))
+                        && (!daNote.mustPress || (pressed[daNote.noteData] || Init.getOption('botplay'))))
                     {
                         var swagRect = new FlxRect(0, 0, daNote.frameWidth, daNote.frameHeight);
                         swagRect.height = (center - daNote.y) / daNote.scale.y;
@@ -140,7 +181,7 @@ class UI extends FlxGroup
             {
                 if (daNote.isSustainNote
                     && daNote.y + daNote.offset.y * daNote.scale.y <= center
-                    && (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit))))
+                    && (!daNote.mustPress || (daNote.wasGoodHit || (pressed[daNote.noteData] || Init.getOption('botplay')))))
                 {
                     var swagRect = new FlxRect(0, 0, daNote.width / daNote.scale.x, daNote.height / daNote.scale.y);
                     swagRect.y = (center - daNote.y) / daNote.scale.y;
@@ -152,12 +193,19 @@ class UI extends FlxGroup
 
             if(!daNote.mustPress)
             {
-                if(Conductor.songPosition >= daNote.strumTime)
+                if(daNote.isSustainNote)
                 {
-                    opponentStrums.members[daNote.noteData].playAnim("confirm", true);
-                    notes.remove(daNote, true);
-                    daNote.kill();
-                    daNote.destroy();
+                    if(Conductor.songPosition >= (daNote.strumTime + (Conductor.safeZoneOffset / 4)))
+                    {
+                        killOpponentNote(daNote);
+                    }
+                }
+                else
+                {
+                    if(Conductor.songPosition >= daNote.strumTime)
+                    {
+                        killOpponentNote(daNote);
+                    }
                 }
             }
             
@@ -166,6 +214,159 @@ class UI extends FlxGroup
                 notes.remove(daNote, true);
                 daNote.kill();
                 daNote.destroy();
+
+                PlayState.instance.voices.volume = 0;
+
+                if(!daNote.isSustainNote)
+                    PlayState.instance.songMisses++;
+                
+                PlayState.instance.songScore -= 10;
+
+                PlayState.instance.totalNotes++;
+            }
+        });
+
+        keyShit();
+    }
+
+    function killOpponentNote(daNote:Note)
+    {
+        PlayState.instance.voices.volume = 1;
+        
+        opponentStrums.members[daNote.noteData].playAnim("confirm", true);
+        notes.remove(daNote, true);
+        daNote.kill();
+        daNote.destroy();
+    }
+
+    function keyShit()
+    {
+        var keyCount:Int = PlayState.songData.keyCount;
+
+		var testBinds:Array<FlxKey> = Controls.gameControls.get(keyCount + "_key")[0];
+		var testBindsAlt:Array<FlxKey> = Controls.gameControls.get(keyCount + "_key")[1];
+        
+		justPressed = [];
+		pressed = [];
+		released = [];
+
+		for(i in 0...keyCount)
+		{
+			justPressed.push(false);
+			pressed.push(false);
+			released.push(false);
+		}
+
+        for(i in 0...testBinds.length)
+        {
+            justPressed[i] = testBinds[i] != FlxKey.NONE ? FlxG.keys.checkStatus(testBinds[i], FlxInputState.JUST_PRESSED) : false;
+            pressed[i] = testBinds[i] != FlxKey.NONE ? FlxG.keys.checkStatus(testBinds[i], FlxInputState.PRESSED) : false;
+            released[i] = testBinds[i] != FlxKey.NONE ? FlxG.keys.checkStatus(testBinds[i], FlxInputState.RELEASED) : false;
+
+            if(released[i] == true)
+            {
+                justPressed[i] = testBindsAlt[i] != FlxKey.NONE ? FlxG.keys.checkStatus(testBindsAlt[i], FlxInputState.JUST_PRESSED) : false;
+                pressed[i] = testBindsAlt[i] != FlxKey.NONE ? FlxG.keys.checkStatus(testBindsAlt[i], FlxInputState.PRESSED) : false;
+                released[i] = testBindsAlt[i] != FlxKey.NONE ? FlxG.keys.checkStatus(testBindsAlt[i], FlxInputState.RELEASED) : false;
+            }
+        }
+
+        if(Init.getOption('botplay') != true)
+        {
+            for(i in 0...justPressed.length)
+            {
+                if(justPressed[i])
+                {
+                    playerStrums.members[i].playAnim("press", true);
+                }
+            }
+
+            for(i in 0...released.length)
+            {
+                if(released[i])
+                {
+                    playerStrums.members[i].playAnim("static");
+                }
+            }
+        }
+
+        var possibleNotes:Array<Note> = [];
+
+        notes.forEach(function(note:Note) {
+			note.calculateCanBeHit();
+
+			if(Init.getOption('botplay') != true)
+			{
+				if(note.canBeHit && note.mustPress && !note.tooLate && !note.isSustainNote)
+					possibleNotes.push(note);
+			}
+			else
+			{
+				if((!note.isSustainNote ? note.strumTime : note.strumTime + (Conductor.safeZoneOffset / 4)) <= Conductor.songPosition && note.mustPress)
+					possibleNotes.push(note);
+			}
+        });
+
+        possibleNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
+
+		var dontHitTheseDirectionsLol:Array<Bool> = [];
+		var noteDataTimes:Array<Float> = [];
+
+		for(i in 0...keyCount)
+        {
+            dontHitTheseDirectionsLol.push(false);
+            noteDataTimes.push(-1);
+        }
+
+		if(possibleNotes.length > 0)
+		{
+			for(i in 0...possibleNotes.length)
+			{
+				var note = possibleNotes[i];
+
+				if(((justPressed[note.noteData] && !dontHitTheseDirectionsLol[note.noteData]) && Init.getOption('botplay') != true) || Init.getOption('botplay') == true)
+				{
+                    playerStrums.members[note.noteData].playAnim("confirm", true);
+                    dontHitTheseDirectionsLol[note.noteData] = true;
+                    noteDataTimes[note.noteData] = note.strumTime;
+
+                    PlayState.instance.voices.volume = 1;
+                    note.wasGoodHit = true;
+
+					notes.remove(note, true);
+					note.kill();
+					note.destroy();
+                }
+            }
+
+            for(i in 0...possibleNotes.length)
+            {
+                var note = possibleNotes[i];
+
+                if(note.strumTime == noteDataTimes[note.noteData] && dontHitTheseDirectionsLol[note.noteData])
+                {
+                    PlayState.instance.voices.volume = 1;
+                    note.wasGoodHit = true;
+                    notes.remove(note);
+                    note.kill();
+                    note.destroy();
+                }
+            }
+        }
+
+        notes.forEach(function(note:Note) {
+            if(note.isSustainNote && note.mustPress)
+            {
+                if((pressed[note.noteData] || Init.getOption('botplay') == true) && Conductor.songPosition >= note.strumTime + (Conductor.safeZoneOffset / 4))
+                {
+                    playerStrums.members[note.noteData].playAnim("confirm", true);
+
+                    PlayState.instance.voices.volume = 1;
+                    note.wasGoodHit = true;
+                    notes.remove(note, true);
+                    note.kill();
+                    note.destroy();
+                }
             }
         });
     }

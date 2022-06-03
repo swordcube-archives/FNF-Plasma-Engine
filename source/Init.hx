@@ -36,7 +36,7 @@ class Init extends MusicBeatState
             BOOL,
             "Botplay",
 		    "Let the game play itself! Useful for showcases or for skill issues.",
-            true
+            false
         ),
         "auto-pause" => new Option(
             BOOL,

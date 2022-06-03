@@ -1,6 +1,13 @@
 {
     "songs": [
         {
+            "name": "Test",
+            "icon": "bf-pixel",
+            "color": "#7bd6f6",
+            "difficulties": ["normal"],
+            "debugOnly": true
+        },
+        {
             "name": "Tutorial",
             "icon": "gf",
             "color": "#9271FD",
