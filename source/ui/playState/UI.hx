@@ -215,6 +215,8 @@ class UI extends FlxGroup
                 daNote.kill();
                 daNote.destroy();
 
+                PlayState.instance.health -= 0.045;
+
                 PlayState.instance.voices.volume = 0;
 
                 if(!daNote.isSustainNote)
@@ -331,6 +333,8 @@ class UI extends FlxGroup
                     noteDataTimes[note.noteData] = note.strumTime;
 
                     PlayState.instance.voices.volume = 1;
+                    PlayState.instance.health += 0.023;
+
                     note.wasGoodHit = true;
 
 					notes.remove(note, true);
@@ -345,8 +349,6 @@ class UI extends FlxGroup
 
                 if(note.strumTime == noteDataTimes[note.noteData] && dontHitTheseDirectionsLol[note.noteData])
                 {
-                    PlayState.instance.voices.volume = 1;
-                    note.wasGoodHit = true;
                     notes.remove(note);
                     note.kill();
                     note.destroy();
@@ -360,6 +362,7 @@ class UI extends FlxGroup
                 if((pressed[note.noteData] || Init.getOption('botplay') == true) && Conductor.songPosition >= note.strumTime + (Conductor.safeZoneOffset / 4))
                 {
                     playerStrums.members[note.noteData].playAnim("confirm", true);
+                    PlayState.instance.health += 0.023;
 
                     PlayState.instance.voices.volume = 1;
                     note.wasGoodHit = true;
