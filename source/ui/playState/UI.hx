@@ -463,6 +463,7 @@ class UI extends FlxGroup
                 PlayState.instance.songScore += Ranking.getRatingScore(ratingStr);
                 PlayState.instance.totalHit += 0.45;
             case "shit":
+                PlayState.instance.health -= 0.15;
                 PlayState.instance.songScore += Ranking.getRatingScore(ratingStr);
         }
 
