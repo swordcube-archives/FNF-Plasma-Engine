@@ -70,24 +70,21 @@ class FreeplayMenu extends MusicBeatState
 		add(scoreText);
 
         var assetsJson:SongListJson = Json.parse(Assets.getText('assets/data/freeplaySongs.json'));
+        
+        #if !debug
+        for(song in assetsJson.songs)
+        {
+            if(song.debugOnly)
+                assetsJson.songs.remove(song);
+        }
+        #end
+
         for(i in 0...assetsJson.songs.length)
         {
             var song = assetsJson.songs[i];
 
-            // debugOnly allows songs that only appear when compiling to debug mode
-            // by doing "lime test windows -debug" or whatever
-            if(song.debugOnly)
-            {
-                #if debug
-                addSong(i, song.name, song.icon, song.color);
-                songs.push(song);
-                #end
-            }
-            else 
-            {
-                addSong(i, song.name, song.icon, song.color);
-                songs.push(song);
-            }
+            addSong(i, song.name, song.icon, song.color);
+            songs.push(song);
         }
 
         changeSelection();

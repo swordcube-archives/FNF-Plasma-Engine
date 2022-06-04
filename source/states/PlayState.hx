@@ -115,12 +115,6 @@ class PlayState extends MusicBeatState
 
 		scrollSpeed = songData.speed;
 
-		// invert scroll speeds on downscroll
-		// we're gonna check to see if the scroll speed is negative
-		// for cliprect shit and other shit, like gamers
-		if(Init.getOption('downscroll') == true)
-			scrollSpeed = -scrollSpeed;
-
 		cachedSong = [
 			"inst" => GenesisAssets.getAsset('${songData.song.toLowerCase()}/Inst', GenesisAssets.AssetType.SONG),
 			"voices" => getVocals(),
@@ -205,6 +199,7 @@ class PlayState extends MusicBeatState
 					swagNote.prevNote = oldNote;
 					swagNote.mustPress = gottaHitNote;
 					swagNote.sustainLength = songNotes[2];
+					swagNote.downscrollNote = Init.getOption("downscroll");
 					
 					swagNote.x = -1000;
 					swagNote.y = -1000;
@@ -226,6 +221,10 @@ class PlayState extends MusicBeatState
 							var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + (Conductor.stepCrochet / FlxMath.roundDecimal(scrollSpeed, 2)), daNoteData, uiSkin, true, isEnd);
 							sustainNote.prevNote = oldNote;
 							sustainNote.mustPress = gottaHitNote;
+							sustainNote.downscrollNote = Init.getOption("downscroll");
+
+							if(susNote == floorSus - 1)
+								sustainNote.angle = 180;
 
 							sustainNote.x = -1000;
 							sustainNote.y = -1000;

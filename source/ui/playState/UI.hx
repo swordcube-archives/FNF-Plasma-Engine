@@ -179,12 +179,14 @@ class UI extends FlxGroup
                     daNote.x += daNote.width;
             }
 
-            daNote.y = strum.y - (0.45 * (Conductor.songPosition - daNote.strumTime) * scrollSpeed);
+            if(daNote.downscrollNote)
+                daNote.y = strum.y + (0.45 * (Conductor.songPosition - daNote.strumTime) * scrollSpeed);
+            else
+                daNote.y = strum.y - (0.45 * (Conductor.songPosition - daNote.strumTime) * scrollSpeed);
 
             var center = strum.y + (Note.swagWidth / 2);
-
-            // basically if(downscroll)
-            if(Math.abs(scrollSpeed) != scrollSpeed)
+            
+            if(daNote.downscrollNote)
             {
                 if (daNote.isSustainNote)
                 {
@@ -193,12 +195,12 @@ class UI extends FlxGroup
                     else
                         daNote.y += daNote.height / 2;
 
-                    if (daNote.y - daNote.offset.y * daNote.scale.y + daNote.height >= center
+                    if (Conductor.songPosition >= daNote.strumTime
                         && (!daNote.mustPress || (pressed[daNote.noteData] || Init.getOption('botplay'))))
                     {
                         var swagRect = new FlxRect(0, 0, daNote.frameWidth, daNote.frameHeight);
-                        swagRect.height = (center - daNote.y) / daNote.scale.y;
-                        swagRect.y = daNote.frameHeight - swagRect.height;
+
+                        swagRect.height -= ((daNote.y + (daNote.frameHeight / 2)) - (center / 2)) / daNote.scale.y;
 
                         daNote.clipRect = swagRect;
                     }

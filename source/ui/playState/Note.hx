@@ -32,6 +32,8 @@ class Note extends FlxSprite
 
     public var json:ArrowSkin = null;
 
+    public var downscrollNote:Bool = false;
+
     public function new(strumTime:Float, noteData:Int, skin:String, isSustainNote:Bool = false, isEndOfSustain:Bool = false)
     {
         this.noteData = noteData;
@@ -94,12 +96,6 @@ class Note extends FlxSprite
         if(isSustainNote)
         {
             alpha = 0.6;
-
-            // basically if(downscroll)
-            if(Math.abs(scrollSpeed) != scrollSpeed)
-                angle = 180;
-            else
-                angle = 0;
             
             if(!isEndOfSustain)
             {
