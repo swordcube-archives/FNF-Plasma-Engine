@@ -127,6 +127,8 @@ class Note extends FlxSprite
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+        if(isSustainNote)
+            flipY = downscrollNote;
 
         if(PlayState.instance.scrollSpeed != scrollSpeed)
             updateScale();

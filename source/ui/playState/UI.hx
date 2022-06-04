@@ -195,12 +195,12 @@ class UI extends FlxGroup
                     else
                         daNote.y += daNote.height / 2;
 
-                    if (Conductor.songPosition >= daNote.strumTime
+                    if (daNote.y - daNote.offset.y * daNote.scale.y + daNote.height >= center
                         && (!daNote.mustPress || (pressed[daNote.noteData] || Init.getOption('botplay'))))
                     {
                         var swagRect = new FlxRect(0, 0, daNote.frameWidth, daNote.frameHeight);
-
-                        swagRect.height -= ((daNote.y + (daNote.frameHeight / 2)) - (center / 2)) / daNote.scale.y;
+                        swagRect.height = (center - daNote.y) / daNote.scale.y;
+                        swagRect.y = daNote.frameHeight - swagRect.height;
 
                         daNote.clipRect = swagRect;
                     }

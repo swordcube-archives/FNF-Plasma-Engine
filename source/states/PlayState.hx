@@ -213,7 +213,7 @@ class PlayState extends MusicBeatState
 						{
 							var isEnd:Bool = false;
 							
-							if(susNote > floorSus - 2)
+							if(susNote == floorSus - 1)
 								isEnd = true;
 
 							oldNote = UI.notes.members[Std.int(UI.notes.length - 1)];
@@ -222,9 +222,6 @@ class PlayState extends MusicBeatState
 							sustainNote.prevNote = oldNote;
 							sustainNote.mustPress = gottaHitNote;
 							sustainNote.downscrollNote = Init.getOption("downscroll");
-
-							if(susNote == floorSus - 1)
-								sustainNote.angle = 180;
 
 							sustainNote.x = -1000;
 							sustainNote.y = -1000;
