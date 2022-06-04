@@ -179,14 +179,12 @@ class UI extends FlxGroup
                     daNote.x += daNote.width;
             }
 
-            if (Math.abs(scrollSpeed) != scrollSpeed)
-                daNote.y = strum.y - (-0.45 * (Conductor.songPosition - daNote.strumTime) * Math.abs(scrollSpeed));
-            else
-                daNote.y = strum.y - (0.45 * (Conductor.songPosition - daNote.strumTime) * Math.abs(scrollSpeed));
+            daNote.y = strum.y - (0.45 * (Conductor.songPosition - daNote.strumTime) * scrollSpeed);
 
             var center = strum.y + (Note.swagWidth / 2);
 
-            if (Math.abs(scrollSpeed) != scrollSpeed)
+            // basically if(downscroll)
+            if(Math.abs(scrollSpeed) != scrollSpeed)
             {
                 if (daNote.isSustainNote)
                 {

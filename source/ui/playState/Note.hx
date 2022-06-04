@@ -95,6 +95,7 @@ class Note extends FlxSprite
         {
             alpha = 0.6;
 
+            // basically if(downscroll)
             if(Math.abs(scrollSpeed) != scrollSpeed)
                 angle = 180;
             else
