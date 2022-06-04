@@ -103,7 +103,7 @@ class Note extends FlxSprite
             
             if(!isEndOfSustain)
             {
-                scale.y = 1;
+                scale.y = 0.7;
                 
                 scale.y *= Conductor.stepCrochet / 100 * 1.5;
                 

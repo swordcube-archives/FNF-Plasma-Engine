@@ -52,6 +52,8 @@ class PlayState extends MusicBeatState
 
 	public var uiSkin:String = 'arrows';
 
+	public static var daPixelZoom:Float = 6;
+
 	// Health
 	public var health:Float = 1;
 	public var minHealth:Float = 0;
