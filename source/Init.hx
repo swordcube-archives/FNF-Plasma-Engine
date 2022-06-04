@@ -18,7 +18,7 @@ class Init extends MusicBeatState
             BOOL,
             "Downscroll",
 		    "Choose whether to have the strumline vertically flipped in gameplay or not.",
-            false
+            true
         ),
         "centered-notes" => new Option(
             BOOL,

@@ -147,6 +147,8 @@ class MainMenu extends MusicBeatState
                 
                 FlxFlicker.flicker(magenta, 1.1, 0.15, false);
 
+                selected = true;
+
                 menuButtons.forEach(function(spr:FlxSprite)
                 {
                     if (curSelected != spr.ID)

@@ -25,6 +25,8 @@ class Note extends FlxSprite
     public var isEndOfSustain:Bool = false;
     public var earlyHitMult:Float = 1;
     public var prevNote:Note;
+
+    public var originalHeightForCalcs:Float = 6;
     
     public static var swagWidth:Float = 160 * 0.7;
 
@@ -48,6 +50,8 @@ class Note extends FlxSprite
         
         switch(json.skinType)
         {
+            case "pixel":
+                originalHeightForCalcs = height;
             case "standard":
                 frames = GenesisAssets.getAsset('ui/skins/$skin/notes', SPARROW);
                 
@@ -90,14 +94,21 @@ class Note extends FlxSprite
         if(isSustainNote)
         {
             alpha = 0.6;
+
+            if(Math.abs(scrollSpeed) != scrollSpeed)
+                angle = 180;
+            else
+                angle = 0;
             
             if(!isEndOfSustain)
             {
+                scale.y = 1;
+                
                 scale.y *= Conductor.stepCrochet / 100 * 1.5;
                 
                 if(PlayState.instance != null)
                 {
-                    scale.y *= PlayState.instance.scrollSpeed;
+                    scale.y *= Math.abs(scrollSpeed);
 
                     var json:ArrowSkin = Json.parse(GenesisAssets.getAsset('images/ui/skins/${PlayState.instance.uiSkin}/config.json', TEXT));
                     if(json.skinType == "pixel")

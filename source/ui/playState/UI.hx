@@ -2,6 +2,7 @@ package ui.playState;
 
 import base.Conductor;
 import base.Controls;
+import base.ManiaShit;
 import base.Ranking;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -100,6 +101,10 @@ class UI extends FlxGroup
         scoreTxt = new FlxText(0, healthBarBG.y + 35, 0, "", 16);
         scoreTxt.setFormat(GenesisAssets.getAsset('vcr.ttf', FONT), 16, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
         add(scoreTxt);
+
+        var cacheSplash:NoteSplash = new NoteSplash(100, 100, "A");
+        cacheSplash.alpha = 0;
+        add(cacheSplash);
     }
 
     var physicsUpdateTimer:Float = 0;
@@ -174,7 +179,11 @@ class UI extends FlxGroup
                     daNote.x += daNote.width;
             }
 
-            daNote.y = strum.y - (0.45 * (Conductor.songPosition - daNote.strumTime) * scrollSpeed);
+            if (Math.abs(scrollSpeed) != scrollSpeed)
+                daNote.y = strum.y - (-0.45 * (Conductor.songPosition - daNote.strumTime) * Math.abs(scrollSpeed));
+            else
+                daNote.y = strum.y - (0.45 * (Conductor.songPosition - daNote.strumTime) * Math.abs(scrollSpeed));
+
             var center = strum.y + (Note.swagWidth / 2);
 
             if (Math.abs(scrollSpeed) != scrollSpeed)
@@ -456,6 +465,10 @@ class UI extends FlxGroup
             case "marvelous" | "sick":
                 PlayState.instance.songScore += Ranking.getRatingScore(ratingStr);
                 PlayState.instance.totalHit += 1;
+
+                var strum:StrumNote = playerStrums.members[daNote.noteData];
+                var newSplash:NoteSplash = new NoteSplash(strum.x, strum.y, ManiaShit.letterDirections[PlayState.songData.keyCount][daNote.noteData]);
+                add(newSplash);
             case "good":
                 PlayState.instance.songScore += Ranking.getRatingScore(ratingStr);
                 PlayState.instance.totalHit += 0.7;
