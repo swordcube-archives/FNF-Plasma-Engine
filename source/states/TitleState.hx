@@ -51,20 +51,20 @@ class TitleState extends MusicBeatState
 		ngSpr.setGraphicSize(Std.int(ngSpr.width * 0.8));
 		ngSpr.updateHitbox();
 		ngSpr.screenCenter(X);
-		ngSpr.antialiasing = true;
+		ngSpr.antialiasing = Init.getOption('anti-aliasing');
 
 		// load gf
 		gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
 		gfDance.frames = GenesisAssets.getAsset('title/gfTitle', SPARROW);
 		gfDance.animation.addByPrefix('danceLeft', 'danceLeft', 24, false);
 		gfDance.animation.addByPrefix('danceRight', 'danceRight', 24, false);
-		gfDance.antialiasing = true;
+		gfDance.antialiasing = Init.getOption('anti-aliasing');
 		gfDance.visible = false;
 		add(gfDance);
 
 		logo = new FlxSprite(-150, -100);
 		logo.frames = GenesisAssets.getAsset('title/fnfLogo', SPARROW);
-		logo.antialiasing = true;
+		logo.antialiasing = Init.getOption('anti-aliasing');
 		logo.animation.addByPrefix('bump', 'bump', 24, false);
 		logo.animation.play('bump');
 		logo.updateHitbox();
@@ -75,7 +75,7 @@ class TitleState extends MusicBeatState
 		titleText.frames = GenesisAssets.getAsset('title/titleEnter', SPARROW);
 		titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
 		titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
-		titleText.antialiasing = true;
+		titleText.antialiasing = Init.getOption('anti-aliasing');
 		titleText.animation.play('idle');
 		titleText.updateHitbox();
 		titleText.visible = false;

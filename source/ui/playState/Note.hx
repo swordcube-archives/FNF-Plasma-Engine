@@ -57,7 +57,7 @@ class Note extends FlxSprite
             case "standard":
                 frames = GenesisAssets.getAsset('ui/skins/$skin/notes', SPARROW);
                 
-                antialiasing = true;
+                antialiasing = Init.getOption('anti-aliasing');
 
                 var keyCount:Int = PlayState.songData.keyCount;
 

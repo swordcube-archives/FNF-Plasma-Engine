@@ -68,9 +68,9 @@ class GenesisAssets
 				return returnSound(goodPath);
 			case SPARROW:
 				var graphicPath = getPath(path, IMAGE);
-				trace('sparrow graphic path $graphicPath');
+				//trace('sparrow graphic path $graphicPath');
 				var graphic:FlxGraphic = returnGraphic(graphicPath, compress);
-				trace('sparrow xml path $goodPath');
+				//trace('sparrow xml path $goodPath');
 				return FlxAtlasFrames.fromSparrow(graphic, 
 					#if sys
 					File.getContent(goodPath)
@@ -79,11 +79,11 @@ class GenesisAssets
 					#end
 				);
 			default:
-				trace('returning directory $goodPath');
+				//trace('returning directory $goodPath');
 				return goodPath;
 		}
 
-		trace('Asset: ' + path + ' with type of: ' + type + "could not be found. Returning null.");
+		//trace('Asset: ' + path + ' with type of: ' + type + "could not be found. Returning null.");
 		return null;
 	}
 
@@ -118,7 +118,7 @@ class GenesisAssets
 					bitmap.disposeImage();
 					bitmap = null;
 					
-					trace('new texture $key, bitmap is $bitmap');
+					//trace('new texture $key, bitmap is $bitmap');
 					
 					newGraphic = FlxGraphic.fromBitmapData(BitmapData.fromTexture(texture), false, key, false);
 
@@ -138,7 +138,7 @@ class GenesisAssets
 					newGraphic.persist = true;
 					#end
 
-					trace('new bitmap $key, not textured');
+					//trace('new bitmap $key, not textured');
 				#if sys
 				}
 				#end
@@ -146,12 +146,12 @@ class GenesisAssets
 				keyedAssets.set(key, newGraphic);
 			}
 
-			trace('graphic returning $key with gpu rendering $textureCompression');
+			//trace('graphic returning $key with gpu rendering $textureCompression');
 			
 			return keyedAssets.get(key);
 		}
 
-		trace('graphic returning null at $key with gpu rendering $textureCompression');
+		//trace('graphic returning null at $key with gpu rendering $textureCompression');
 
 		return null;
 	}
@@ -173,15 +173,15 @@ class GenesisAssets
 				keyedAssets.set(key, new FlxSound().loadEmbedded(key)._sound);
 				#end
 
-				trace('new sound $key');
+				//trace('new sound $key');
 			}
 
-			trace('sound returning $key');
+			//trace('sound returning $key');
 
 			return keyedAssets.get(key);
 		}
 
-		trace('sound returning null at $key');
+		//trace('sound returning null at $key');
 
 		return null;
 	}
@@ -211,7 +211,7 @@ class GenesisAssets
 		FlxG.save.data.mods = activeMods;
 		#end
 
-		trace("returning all mods!");
+		//trace("returning all mods!");
 
 		return mods;
 	}
@@ -220,7 +220,7 @@ class GenesisAssets
 	{
 		var basePath = '';
 
-		trace("TYPE: " + type);
+		//trace("TYPE: " + type);
 		
 		switch(type)
 		{
@@ -283,7 +283,7 @@ class GenesisAssets
 			return 'assets/$basePath';
 		}
 
-		trace('assets/$basePath doesn\'t exist!');
+		//trace('assets/$basePath doesn\'t exist!');
 		return null;
 	}
 }

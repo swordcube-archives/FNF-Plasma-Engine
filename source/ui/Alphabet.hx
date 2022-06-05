@@ -33,6 +33,8 @@ class Alphabet extends FlxSpriteGroup
 	public var textInit:String;
 
 	public var xTo = 100;
+	public var xAdd:Float = 0;
+	public var yAdd:Float = 0;
 
 	public var isMenuItem:Bool = false;
 
@@ -106,7 +108,7 @@ class Alphabet extends FlxSpriteGroup
 		}
 	}
 
-	function destroyText():Void
+	public function destroyText():Void
 	{
 		for (_sprite in _sprites.copy())
 			_sprite.destroy();
@@ -123,13 +125,13 @@ class Alphabet extends FlxSpriteGroup
 		var xPos:Float = 0;
 		for (character in splitWords)
 		{
-			if (character == " " || character == "-")
+			if (character == " ")
 				lastWasSpace = true;
 
 			var isNumber:Bool = AlphaCharacter.numbers.contains(character);
 			var isSymbol:Bool = AlphaCharacter.symbols.contains(character);
 
-			if ((AlphaCharacter.alphabet.indexOf(character.toLowerCase()) != -1) || (AlphaCharacter.numbers.contains(character)))
+			if ((AlphaCharacter.alphabet.indexOf(character.toLowerCase()) != -1) || (AlphaCharacter.numbers.contains(character)) || (AlphaCharacter.symbols.contains(character)))
 			{
 				if (xPosResetted)
 				{
@@ -293,10 +295,10 @@ class Alphabet extends FlxSpriteGroup
 		{
 			var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
 
-			y = FlxMath.lerp(y, (scaledY * 120) + (FlxG.height * 0.48), elapsed * 9.6);
+			y = FlxMath.lerp(y, (scaledY * 120) + (FlxG.height * 0.48) + yAdd, elapsed * 9.6);
 			// lmao
 			if (!disableX)
-				x = FlxMath.lerp(x, (targetY * 20) + 90, elapsed * 9.6);
+				x = FlxMath.lerp(x, (targetY * 20) + 90 + xAdd, elapsed * 9.6);
 			else
 				x = FlxMath.lerp(x, xTo, elapsed * 9.6);
 		}
@@ -346,6 +348,27 @@ class AlphaCharacter extends FlxSprite
 			animation.play(letter);
 			scale.set(textSize, textSize);
 			updateHitbox();
+
+			switch (letter)
+			{
+				case "'":
+					y -= 20 * textSize;
+				case '-':
+					//x -= 35 - (90 * (1.0 - textSize));
+					y += 20 * textSize;
+				case '(':
+					x -= 65 * textSize;
+					y -= 5 * textSize;
+					offset.x = -58 * textSize;
+				case ')':
+					x -= 20 / textSize;
+					y -= 5 * textSize;
+					offset.x = 12 * textSize;
+				case '.':
+					y += 45 * textSize;
+					x += 5 * textSize;
+					offset.x += 3 * textSize;
+			}
 		//}
 	}
 
@@ -374,6 +397,9 @@ class AlphaCharacter extends FlxSprite
 		animation.play(letter);
 
 		updateHitbox();
+
+		y = (110 - height);
+		y += row * 60;
 	}
 
 	public function createSymbol(letter:String)

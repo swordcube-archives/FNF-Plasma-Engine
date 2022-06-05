@@ -45,7 +45,7 @@ class StrumNote extends FlxSprite
         {
             case "standard":
                 frames = GenesisAssets.getAsset('ui/skins/$skin/strums', SPARROW);
-                antialiasing = true;
+                antialiasing = Init.getOption('anti-aliasing');
                 animation.addByPrefix("static", ManiaShit.letterDirections[keyCount][noteData] + " static", 24, true);
                 animation.addByPrefix("press", ManiaShit.letterDirections[keyCount][noteData] + " press", 24, false);
                 animation.addByPrefix("confirm", ManiaShit.letterDirections[keyCount][noteData] + " confirm", 24, false);

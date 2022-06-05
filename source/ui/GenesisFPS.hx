@@ -48,6 +48,12 @@ class GenesisFPS extends TextField
 	{
         currentFPS = fpsCounter.currentFPS;
 
+        infoDisplayed = [
+            Init.getOption('fps-counter'),
+            Init.getOption('memory-counter'),
+            false
+        ];
+
         if(visible)
         {
             text = "";

@@ -62,7 +62,7 @@ class MainMenu extends MusicBeatState
         menuBG.updateHitbox();
         menuBG.screenCenter();
         menuBG.scrollFactor.set(0, 0.1);
-        menuBG.antialiasing = true;
+        menuBG.antialiasing = Init.getOption('anti-aliasing');
         add(menuBG);
 
         magenta = new FlxSprite().loadGraphic(GenesisAssets.getAsset('menuBGDesat', IMAGE));
@@ -71,7 +71,7 @@ class MainMenu extends MusicBeatState
         magenta.screenCenter();
         magenta.scrollFactor.set(menuBG.scrollFactor.x, menuBG.scrollFactor.y);
 		magenta.visible = false;
-		magenta.antialiasing = true;
+		magenta.antialiasing = Init.getOption('anti-aliasing');
 		magenta.color = 0xFFfd719b;
         add(magenta);
 
@@ -91,7 +91,7 @@ class MainMenu extends MusicBeatState
 			var scr:Float = (menuOptions.length - 4) * 0.3;
 			if(menuOptions.length < 5) scr = 0;
 			menuItem.scrollFactor.set(0, scr);
-			menuItem.antialiasing = true;
+			menuItem.antialiasing = Init.getOption('anti-aliasing');
 			menuItem.updateHitbox();
 			menuButtons.add(menuItem);
         }
@@ -182,7 +182,7 @@ class MainMenu extends MusicBeatState
                                     case 'credits':
                                         States.switchState(this, new PlayState());
                                     case 'options':
-                                        States.switchState(this, new PlayState());
+                                        States.switchState(this, new OptionsMenu());
                                 }
                             });
                         });

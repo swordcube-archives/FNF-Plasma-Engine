@@ -466,9 +466,12 @@ class UI extends FlxGroup
                 PlayState.instance.songScore += Ranking.getRatingScore(ratingStr);
                 PlayState.instance.totalHit += 1;
 
-                var strum:StrumNote = playerStrums.members[daNote.noteData];
-                var newSplash:NoteSplash = new NoteSplash(strum.x, strum.y, ManiaShit.letterDirections[PlayState.songData.keyCount][daNote.noteData]);
-                add(newSplash);
+                if(!Init.getOption('disable-note-splashes'))
+                {
+                    var strum:StrumNote = playerStrums.members[daNote.noteData];
+                    var newSplash:NoteSplash = new NoteSplash(strum.x, strum.y, ManiaShit.letterDirections[PlayState.songData.keyCount][daNote.noteData]);
+                    add(newSplash);
+                }
             case "good":
                 PlayState.instance.songScore += Ranking.getRatingScore(ratingStr);
                 PlayState.instance.totalHit += 0.7;
@@ -488,8 +491,16 @@ class UI extends FlxGroup
 
         var json:ArrowSkin = Json.parse(GenesisAssets.getAsset('images/ui/skins/${PlayState.instance.uiSkin}/config.json', TEXT));
 
+        var loadedGraphics:Map<String, Dynamic> = [
+            "marvelous" => GenesisAssets.getAsset('ui/skins/${json.ratingSkin}/ratings/marvelous', IMAGE),
+            "sick" => GenesisAssets.getAsset('ui/skins/${json.ratingSkin}/ratings/sick', IMAGE),
+            "good" => GenesisAssets.getAsset('ui/skins/${json.ratingSkin}/ratings/good', IMAGE),
+            "bad" => GenesisAssets.getAsset('ui/skins/${json.ratingSkin}/ratings/bad', IMAGE),
+            "shit" => GenesisAssets.getAsset('ui/skins/${json.ratingSkin}/ratings/shit', IMAGE),
+        ];
+
         var rating:FlxSprite = new FlxSprite(coolObject.x - 40, coolObject.y - 60);
-        rating.loadGraphic(GenesisAssets.getAsset('ui/skins/${json.ratingSkin}/ratings/$ratingStr', IMAGE)); 
+        rating.loadGraphic(loadedGraphics[ratingStr]); 
 		rating.acceleration.y = 550;
 		rating.velocity.y -= FlxG.random.int(140, 175);
 		rating.velocity.x -= FlxG.random.int(0, 10);
