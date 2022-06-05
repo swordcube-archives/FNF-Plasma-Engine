@@ -45,6 +45,16 @@ class Init extends MusicBeatState
                 "Choose whether or not to pause the game automatically if the window is unfocused.",
                 true
             ),
+            "note-offset" => new Option(
+                NUMBER,
+                "Note Offset",
+                "Adjust how early or how late your notes spawn.\nLess = Earlier, More = Later",
+                0, // 0 by default
+                1, // 1 decimal
+                0.1, // changes by -0.1 or 0.1 in options
+                -1000, // minimum value is -1000
+                1000 // maximum value is 1000
+            ),
         ],
 
         "Appearance" => [
@@ -70,7 +80,7 @@ class Init extends MusicBeatState
                 BOOL,
                 "Disable Note Splashes",
                 "Choose whether or not to disable note splashes during gameplay.\nUseful if you find these to be distracting.",
-                true
+                false
             ),
             "clip-style" => new Option(
                 ARRAY,

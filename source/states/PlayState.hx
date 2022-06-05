@@ -177,7 +177,7 @@ class PlayState extends MusicBeatState
 		{
 			for(songNotes in section.sectionNotes)
 			{
-				var daStrumTime:Float = songNotes[0];
+				var daStrumTime:Float = songNotes[0] + Init.getOption('note-offset');
 				
 				// Spawn the notes as the song goes on
 				if((daStrumTime - Conductor.songPosition) < 2500)

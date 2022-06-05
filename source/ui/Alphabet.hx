@@ -344,7 +344,7 @@ class AlphaCharacter extends FlxSprite
 		//if (AlphaCharacter.alphabet.indexOf(letter.toLowerCase()) != -1)
 		//{
 			// or just load regular text
-			animation.addByPrefix(letter, letter.toUpperCase() + " bold", 24);
+			animation.addByPrefix(letter, letter.toUpperCase() + " bold0", 24);
 			animation.play(letter);
 			scale.set(textSize, textSize);
 			updateHitbox();
@@ -380,26 +380,41 @@ class AlphaCharacter extends FlxSprite
 			letterCase = 'capital';
 		}
 
-		animation.addByPrefix(letter, letter + " " + letterCase, 24);
+		animation.addByPrefix(letter, letter + " " + letterCase + "0", 24);
 		animation.play(letter);
 		scale.set(textSize, textSize);
 		updateHitbox();
 
-		FlxG.log.add('the row' + row);
+		switch (letter)
+		{
+			case "'":
+				y -= 20 * textSize;
+			case '-':
+				//x -= 35 - (90 * (1.0 - textSize));
+				y += 20 * textSize;
+			case '(':
+				x -= 65 * textSize;
+				y -= 5 * textSize;
+				offset.x = -58 * textSize;
+			case ')':
+				x -= 20 / textSize;
+				y -= 5 * textSize;
+				offset.x = 12 * textSize;
+			case '.':
+				y += 45 * textSize;
+				x += 5 * textSize;
+				offset.x += 3 * textSize;
+		}
 
-		y = (110 - height);
-		y += row * 50;
+		FlxG.log.add('the row' + row);
 	}
 
 	public function createNumber(letter:String):Void
 	{
-		animation.addByPrefix(letter, letter, 24);
+		animation.addByPrefix(letter, letter + "0", 24);
 		animation.play(letter);
 
 		updateHitbox();
-
-		y = (110 - height);
-		y += row * 60;
 	}
 
 	public function createSymbol(letter:String)
@@ -407,32 +422,32 @@ class AlphaCharacter extends FlxSprite
 		switch (letter)
 		{
 			case '.':
-				animation.addByPrefix(letter, 'period', 24);
+				animation.addByPrefix(letter, 'period0', 24);
 				animation.play(letter);
 				setGraphicSize(8, 8);
 				y += 48;
 			case "'":
-				animation.addByPrefix(letter, 'apostraphie', 24);
+				animation.addByPrefix(letter, 'apostraphie0', 24);
 				animation.play(letter);
 				setGraphicSize(10, 10);
 				y += 20;
 			case "?":
-				animation.addByPrefix(letter, 'question mark', 24);
+				animation.addByPrefix(letter, 'question mark0', 24);
 				animation.play(letter);
 				setGraphicSize(20, 40);
 				y += 16;
 			case "!":
-				animation.addByPrefix(letter, 'exclamation point', 24);
+				animation.addByPrefix(letter, 'exclamation point0', 24);
 				animation.play(letter);
 				setGraphicSize(10, 40);
 				y += 16;
 			case ",":
-				animation.addByPrefix(letter, 'comma', 24);
+				animation.addByPrefix(letter, 'comma0', 24);
 				animation.play(letter);
 				setGraphicSize(10, 10);
 				y += 48;
 			default:
-				animation.addByPrefix(letter, letter, 24);
+				animation.addByPrefix(letter, letter + '0', 24);
 				animation.play(letter);
 		}
 

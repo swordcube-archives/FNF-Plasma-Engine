@@ -24,7 +24,10 @@ class OptionsMenu extends MusicBeatState
     var selectorArrows:Map<String, Alphabet> = null;
     var selectorText:Alphabet;
 
-    var pages:Array<String> = [];
+    var pages:Array<String> = [
+        "Preferences",
+        "Appearance"
+    ];
 
     static var curSelected:Int = 0;
     static var curPage:Int = 0;
@@ -34,9 +37,6 @@ class OptionsMenu extends MusicBeatState
     override public function create()
     {
         super.create();
-
-        for(key in Init.options.keys())
-            pages.push(key);
 
         persistentUpdate = true;
         persistentDraw = true;
@@ -93,8 +93,8 @@ class OptionsMenu extends MusicBeatState
         {
             curSelected += change;
             if(curSelected < 0)
-                curSelected = grpAlphabet.length - 1;
-            if(curSelected > grpAlphabet.length - 1)
+                curSelected = grpAlphabet.members.length - 1;
+            if(curSelected > grpAlphabet.members.length - 1)
                 curSelected = 0;
 
             var i:Int = 0;
@@ -132,6 +132,8 @@ class OptionsMenu extends MusicBeatState
             a.destroy();
         });
 
+        grpAlphabet.clear();
+
         var i:Int = 0;
         for(rawOption in Init.options.get(pages[curPage]).keys())
         {
@@ -139,6 +141,11 @@ class OptionsMenu extends MusicBeatState
             var newOption:GUIOption = new GUIOption(0, (70 * i) + 30, option.title, true, false, rawOption, option.type);
 			newOption.alphabet.isMenuItem = true;
 			newOption.alphabet.targetY = i;
+            newOption.decimals = option.decimals;
+            newOption.multiplier = option.multiplier;
+            newOption.minimum = option.minimum;
+            newOption.maximum = option.maximum;
+            newOption.values = option.values;
             grpAlphabet.add(newOption);
             i++;
         }
@@ -184,23 +191,6 @@ class OptionsMenu extends MusicBeatState
             selectorText.alpha = 1;
         }
 
-        // Modifying Options
-        var option = grpAlphabet.members[curSelected];
-        switch(option.type)
-        {
-            case BOOL:
-                if(!selectingPage && Controls.isPressed("ACCEPT", JUST_PRESSED) && !FlxG.keys.justPressed.SPACE)
-                {
-                    Init.setOption(option.saveData, !Init.getOption(option.saveData));
-                    option.checkbox.daValue = Init.getOption(option.saveData);
-                    option.checkbox.refreshAnim(option.checkbox.daValue);
-
-                    FlxG.autoPause = Init.getOption("auto-pause");
-                }
-            default:
-                trace("your mother");
-        }
-
         if(FlxG.keys.justPressed.SPACE)
         {
             selectingPage = !selectingPage;
@@ -231,7 +221,59 @@ class OptionsMenu extends MusicBeatState
                 changeSelection(1);
         }
 
+        // Modifying Options
+        modifyCurOption(elapsed);
+
         selectorText.y = FlxMath.lerp(selectorText.y, selectorBox.y + 15, 0.2);
         selectorText.alpha = FlxMath.lerp(selectorText.alpha, 1, 0.2);
+    }
+    
+    var holdTimer:Float = 0;
+
+    function modifyCurOption(elapsed:Float)
+    {
+        var option = grpAlphabet.members[curSelected];
+        switch(option.type)
+        {
+            case BOOL:
+                if(!selectingPage && Controls.isPressed("ACCEPT", JUST_PRESSED) && !FlxG.keys.justPressed.SPACE)
+                {
+                    Init.setOption(option.saveData, !Init.getOption(option.saveData));
+                    option.checkbox.daValue = Init.getOption(option.saveData);
+                    option.checkbox.refreshAnim(option.checkbox.daValue);
+
+                    FlxG.autoPause = Init.getOption("auto-pause");
+                }
+            case NUMBER:
+                if(selectingPage) return;
+                
+                var left = Controls.isPressed("UI_LEFT", PRESSED);
+                var right = Controls.isPressed("UI_RIGHT", PRESSED);
+
+                var leftP = Controls.isPressed("UI_LEFT", JUST_PRESSED);
+                var rightP = Controls.isPressed("UI_RIGHT", JUST_PRESSED);
+
+                if(left || right)
+                {
+                    holdTimer += elapsed;
+                    if((leftP || rightP) || holdTimer > 0.5)
+                    {
+                        var mult:Float = left ? -option.multiplier : option.multiplier;
+                        var value:Float = Init.getOption(option.saveData) + mult;
+                        if(value < option.minimum)
+                            value = option.minimum;
+                        if(value > option.maximum)
+                            value = option.maximum;
+
+                        value = FlxMath.roundDecimal(value, option.decimals);
+
+                        Init.setOption(option.saveData, value);
+                    }
+                }
+                else
+                    holdTimer = 0;
+            default:
+                trace("your mother");
+        }
     }
 }
