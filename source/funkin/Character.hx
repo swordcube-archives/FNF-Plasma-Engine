@@ -108,9 +108,30 @@ class Character extends FNFSprite
 		animation.finish();
     }
 
+	public var heyTimer:Float = 0;
+	public var specialAnim:Bool = false;
+
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
+	
+		if(heyTimer > 0)
+		{
+			heyTimer -= elapsed;
+			if(heyTimer <= 0)
+			{
+				if(specialAnim && animation.curAnim.name == 'hey' || animation.curAnim.name == 'cheer')
+				{
+					specialAnim = false;
+					dance();
+				}
+				heyTimer = 0;
+			}
+		} else if(specialAnim && animation.curAnim.finished)
+		{
+			specialAnim = false;
+			dance();
+		}
 
 		switch (curCharacter)
 		{

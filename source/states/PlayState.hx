@@ -7,8 +7,10 @@ import base.Song;
 import base.SongLoader;
 import flixel.FlxCamera;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
+import flixel.math.FlxPoint;
 import flixel.system.FlxSound;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -44,13 +46,21 @@ class PlayState extends MusicBeatState
 	public static var storyWeek:String = "tutorial";
 	public static var curDifficulty:String = "normal";
 
-	// Cameras
+	// Camera Shit
 	public var camZooming:Bool = true;
 	public var defaultCamZoom:Float = 1.0;
 	
 	public var camGame:FlxCamera;
 	public var camHUD:FlxCamera;
 	public var camOther:FlxCamera;
+
+	public var curSection:Int = 0;
+	public var camFollow:FlxObject;
+	public var camFollowPos:FlxObject;
+
+	public var camDisplaceX:Float = 0;
+	public var camDisplaceY:Float = 0;
+	public static var cameraSpeed:Float = 1;
 
 	// Stage
 	public var stage:Stage;
@@ -207,9 +217,8 @@ class PlayState extends MusicBeatState
 		stage = new Stage('stage');
 		add(stage);
 
-		// Add Dad and GF
+		// Make Dad and GF real
 		dad = new Character(100, 100, 'dad');
-		add(dad);
 
 		var gfVersion:String = "gf";
 
@@ -223,24 +232,48 @@ class PlayState extends MusicBeatState
 			gfVersion = songData.gf;
 
 		gf = new Character(400, 130, 'gf');
-		add(gf);
 
 		// Add objects in the stage that go in front of GF
 		add(stage.inFrontOfGFSprites);
 
+		// Make BF real
 		bf = new Boyfriend(770, 450, 'bf');
 		bf.flipX = !bf.flipX;
+
+		// Actually add the guys
+		add(gf);
+		add(dad);
 		add(bf);
 
 		// Add front layer of stage
 		add(stage.foregroundSprites);
 
-		FlxG.camera.zoom = defaultCamZoom;
+		// set the camera position to the center of the stage
+		var camPos:FlxPoint = new FlxPoint(0, 0);
+		camPos.set(gf.x + (gf.frameWidth / 2), gf.y + (gf.frameHeight / 2));
 
+		// create the shit that makes the camera work
+		camFollow = new FlxObject(0, 0, 1, 1);
+		camFollow.setPosition(camPos.x, camPos.y);
+		camFollowPos = new FlxObject(0, 0, 1, 1);
+		camFollowPos.setPosition(camPos.x, camPos.y);
+		
+		add(camFollow);
+		add(camFollowPos);
+
+		// actually set the camera up
+		FlxG.camera.follow(camFollowPos, LOCKON, 1);
+		FlxG.camera.zoom = defaultCamZoom;
+		FlxG.camera.focusOn(camFollow.getPosition());
+
+		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
+
+		// add the UI
 		UI = new UI();
 		UI.cameras = [camHUD];
 		add(UI);
 
+		// start the song
 		Conductor.changeBPM(songData.bpm);
 		Conductor.mapBPMChanges(songData);
 		Conductor.songPosition = Conductor.crochet * -5;
@@ -248,6 +281,7 @@ class PlayState extends MusicBeatState
 		if(!inCutscene)
 			startCountdown();
 
+		// do createPost function for any running scripts
 		callOnHScripts("createPost");
 	}
 
@@ -282,6 +316,8 @@ class PlayState extends MusicBeatState
 
 		callOnHScripts("updatePost", [elapsed]);
 	}
+
+	var lastSection:Int = 0;
 
 	public function physicsUpdate()
 	{
@@ -356,6 +392,50 @@ class PlayState extends MusicBeatState
 				}
 			}
 		}
+
+		var bruj:Int = Std.int(curStep / 16);
+		if(bruj < 0)
+			bruj = 0;
+		if(bruj > songData.notes.length - 1)
+			bruj = songData.notes.length - 1;
+
+		if(songData.notes[bruj] != null)
+		{
+			var curSection = bruj;
+			if (curSection != lastSection) {
+				// section reset stuff
+				var lastMustHit:Bool = songData.notes[lastSection].mustHitSection;
+				if (songData.notes[curSection].mustHitSection != lastMustHit) {
+					camDisplaceX = 0;
+					camDisplaceY = 0;
+				}
+				lastSection = bruj;
+			}
+
+			if (!songData.notes[bruj].mustHitSection)
+			{
+				var char = dad;
+
+				var getCenterX = char.getMidpoint().x + 100;
+				var getCenterY = char.getMidpoint().y - 100;
+
+				camFollow.setPosition(getCenterX + camDisplaceX + char.cameraPosition[0],
+					getCenterY + camDisplaceY + char.cameraPosition[1]);
+			}
+			else
+			{
+				var char = bf;
+
+				var getCenterX = char.getMidpoint().x - 100;
+				var getCenterY = char.getMidpoint().y - 100;
+
+				camFollow.setPosition(getCenterX + camDisplaceX - char.cameraPosition[0],
+					getCenterY + camDisplaceY + char.cameraPosition[1]);
+			}
+		}
+
+		var lerpVal = cameraSpeed * 0.1;
+		camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
 	}
 
 	public var countdownActive:Bool = false;
@@ -391,8 +471,6 @@ class PlayState extends MusicBeatState
 
 		new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
 		{
-			callOnHScripts("countdownTick", [swagCounter]);
-
 			if (gf != null && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing"))
 				gf.dance();
 			
@@ -416,6 +494,8 @@ class PlayState extends MusicBeatState
 					var sprite:FlxSprite = countdownReady;
 					sprite.screenCenter();
 					sprite.antialiasing = textureAntiAliasing;
+					sprite.scrollFactor.set();
+					sprite.cameras = [camHUD];
 					add(sprite);
 
 					FlxTween.tween(sprite, {alpha: 0}, Conductor.crochet / 1000, {
@@ -436,6 +516,8 @@ class PlayState extends MusicBeatState
 					var sprite:FlxSprite = countdownSet;
 					sprite.screenCenter();
 					sprite.antialiasing = textureAntiAliasing;
+					sprite.scrollFactor.set();
+					sprite.cameras = [camHUD];
 					add(sprite);
 
 					FlxTween.tween(sprite, {alpha: 0}, Conductor.crochet / 1000, {
@@ -456,6 +538,8 @@ class PlayState extends MusicBeatState
 					var sprite:FlxSprite = countdownGo;
 					sprite.screenCenter();
 					sprite.antialiasing = textureAntiAliasing;
+					sprite.scrollFactor.set();
+					sprite.cameras = [camHUD];
 					add(sprite);
 
 					FlxTween.tween(sprite, {alpha: 0}, Conductor.crochet / 1000, {
@@ -468,7 +552,6 @@ class PlayState extends MusicBeatState
 						}
 					});
 				case 4:
-					countdownActive = false;
 					Conductor.songPosition = 0;
 					
 					FlxG.sound.playMusic(cachedSong["inst"], 1, false);
@@ -486,8 +569,11 @@ class PlayState extends MusicBeatState
 						voices.play();
 						FlxG.sound.list.add(voices);
 					}
+
+					countdownActive = false;
 			}
 
+			callOnHScripts("countdownTick", [swagCounter]);
 			swagCounter++;
 		}, 5);
 	}

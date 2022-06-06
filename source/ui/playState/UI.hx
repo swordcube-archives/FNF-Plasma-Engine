@@ -51,6 +51,9 @@ class UI extends FlxGroup
     // Extra Variables
     public var downscroll:Bool = Init.getOption('downscroll');
 
+    // Miss Sounds
+    public var missSounds:Map<String, Dynamic> = new Map<String, Dynamic>();
+
     // Functions
     public function new()
     {
@@ -103,8 +106,12 @@ class UI extends FlxGroup
         add(scoreTxt);
 
         var cacheSplash:NoteSplash = new NoteSplash(100, 100, "A");
-        cacheSplash.alpha = 0;
+        cacheSplash.alpha = 0.01;
         add(cacheSplash);
+
+        missSounds.set('missnote1', GenesisAssets.getAsset('missnote1', SOUND));
+        missSounds.set('missnote2', GenesisAssets.getAsset('missnote2', SOUND));
+        missSounds.set('missnote3', GenesisAssets.getAsset('missnote3', SOUND));
     }
 
     var physicsUpdateTimer:Float = 0;
@@ -260,18 +267,23 @@ class UI extends FlxGroup
                 daNote.kill();
                 daNote.destroy();
 
-                PlayState.instance.health -= 0.045;
-
-                PlayState.instance.voices.volume = 0;
-
-                if(!daNote.isSustainNote)
+                if(!daNote.isEndOfSustain)
+                {
+                    PlayState.instance.health -= 0.045;
+                    PlayState.instance.voices.volume = 0;
                     PlayState.instance.songMisses++;
-                
-                PlayState.instance.songScore -= 10;
+                    PlayState.instance.songScore -= 10;
+                    PlayState.instance.combo = 0;
+                    PlayState.instance.totalNotes++;
 
-                PlayState.instance.combo = 0;
+                    FlxG.sound.play(missSounds['missnote' + FlxG.random.int(1, 3)], FlxG.random.float(0.1, 0.2));
 
-                PlayState.instance.totalNotes++;
+                    if(!PlayState.instance.bf.specialAnim)
+                    {
+                        PlayState.instance.bf.holdTimer = 0;
+                        PlayState.instance.bf.playAnim(ManiaShit.singAnims[PlayState.songData.keyCount][daNote.noteData] + "miss", true);
+                    }
+                }
             }
         });
 
@@ -413,8 +425,12 @@ class UI extends FlxGroup
             {
                 if((pressed[note.noteData] || Init.getOption('botplay') == true) && Conductor.songPosition >= note.strumTime + (Conductor.safeZoneOffset / 4))
                 {
-                    PlayState.instance.bf.holdTimer = 0;
-                    PlayState.instance.bf.playAnim(ManiaShit.singAnims[PlayState.songData.keyCount][note.noteData], true);
+                    if(!PlayState.instance.bf.specialAnim)
+                    {
+                        PlayState.instance.bf.holdTimer = 0;
+                        PlayState.instance.bf.playAnim(ManiaShit.singAnims[PlayState.songData.keyCount][note.noteData], true);
+                    }
+
                     playerStrums.members[note.noteData].playAnim("confirm", true);
                     PlayState.instance.health += 0.023;
 
@@ -479,8 +495,11 @@ class UI extends FlxGroup
             PlayState.instance.voices.volume = 1;
             PlayState.instance.health += 0.023;
 
-            PlayState.instance.bf.holdTimer = 0;
-            PlayState.instance.bf.playAnim(ManiaShit.singAnims[PlayState.songData.keyCount][daNote.noteData], true);
+            if(!PlayState.instance.bf.specialAnim)
+            {
+                PlayState.instance.bf.holdTimer = 0;
+                PlayState.instance.bf.playAnim(ManiaShit.singAnims[PlayState.songData.keyCount][daNote.noteData], true);
+            }
 
             notes.remove(daNote, true);
             daNote.kill();

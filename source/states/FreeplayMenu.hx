@@ -133,6 +133,8 @@ class FreeplayMenu extends MusicBeatState
 
         if(Controls.isPressed("ACCEPT", JUST_PRESSED))
         {
+            GenesisAssets.keyedAssets.clear();
+            
             PlayState.SONG = SongLoader.loadJSON(songs[curSelected].name.toLowerCase(), songs[curSelected].difficulties[curDifficulty]);
             States.switchState(this, new PlayState());
         }

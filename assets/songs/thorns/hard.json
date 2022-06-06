@@ -5,6 +5,7 @@
         "needsVoices": true,
         "player1": "bf-pixel",
         "player2": "spirit",
+        "gf": "gf-pixel",
         "speed": 1.5,
         "notes": [
             {

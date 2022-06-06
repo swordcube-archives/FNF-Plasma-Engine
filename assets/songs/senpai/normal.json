@@ -5,6 +5,7 @@
         "needsVoices": true,
         "player1": "bf-pixel",
         "player2": "senpai",
+        "gf": "gf-pixel",
         "speed": 1.2,
         "notes": [
             {
