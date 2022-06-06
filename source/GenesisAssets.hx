@@ -254,6 +254,9 @@ class GenesisAssets
 							return openfl.utils.Assets.getFont('${cwd}mods/$_mod/$basePath').fontName;
 						#end
 
+						if(type == HSCRIPT)
+							return File.getContent('${cwd}mods/$_mod/$basePath');
+
 						return '${cwd}mods/$_mod/$basePath';
 					}
 				}
@@ -267,6 +270,9 @@ class GenesisAssets
 				if(type == FONT)
 					return openfl.utils.Assets.getFont('${cwd}mods/$mod/$basePath').fontName;
 				#end
+
+				if(type == HSCRIPT)
+					return File.getContent('${cwd}mods/$mod/$basePath');
 				
 				return '${cwd}mods/$mod/$basePath';
 			}
@@ -280,10 +286,69 @@ class GenesisAssets
 				return openfl.utils.Assets.getFont('assets/$basePath').fontName;
 			#end
 
+			if(type == HSCRIPT)
+				return Assets.getText('assets/$basePath');
+
 			return 'assets/$basePath';
 		}
 
 		//trace('assets/$basePath doesn\'t exist!');
 		return null;
+	}
+
+	public static function exists(path:String, type:AssetType, ?mod:Null<String> = null)
+	{
+		var basePath = '';
+
+		//trace("TYPE: " + type);
+		
+		switch(type)
+		{
+			case IMAGE:
+				basePath = 'images/$path.png';
+			case SPARROW:
+				basePath = 'images/$path.xml';
+			case MUSIC:
+				basePath = 'music/$path.ogg';
+			case SOUND:
+				basePath = 'sounds/$path.ogg';
+			case SONG:
+				basePath = 'songs/$path.ogg';
+			case FONT:
+				basePath = 'fonts/$path';
+			default:
+				basePath = path;
+		}
+
+		#if MODS_ALLOWED
+		if(mod == null)
+		{
+			for(_mod in mods)
+			{
+				if(activeMods.get(_mod) == true)
+				{
+					if(FileSystem.exists('${cwd}mods/$_mod/$basePath'))
+					{
+						return true;
+					}
+				}
+			}
+		}
+		else 
+		{
+			if(FileSystem.exists('${cwd}mods/$mod/$basePath'))
+			{
+				return true;
+			}
+		}
+		#end
+
+		if(Assets.exists('assets/$basePath'))
+		{
+			return true;
+		}
+
+		//trace('assets/$basePath doesn\'t exist!');
+		return false;
 	}
 }

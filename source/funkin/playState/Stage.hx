@@ -1,15 +1,10 @@
 package funkin.playState;
 
+import flixel.FlxBasic;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
+import hscript.HScript;
 import states.PlayState;
-
-@:enum abstract StageLayer(String) to String
-{
-	var BACK = 'back';
-	var ABOVE_GF = 'above_gf';
-	var FRONT = 'front';
-}
 
 class Stage extends FlxGroup
 {
@@ -19,10 +14,12 @@ class Stage extends FlxGroup
     public var stageCurtains:FlxSprite;
 
     // Foreground Sprite Group
+    public var inFrontOfGFSprites:FlxGroup = new FlxGroup();
     public var foregroundSprites:FlxGroup = new FlxGroup();
 
     // Extra Variables
     public var curStage:String = "stage";
+    public var script:HScript;
 
     // Functions
     public function new(stage:String)
@@ -71,15 +68,49 @@ class Stage extends FlxGroup
                 stageFront.updateHitbox();
                 add(stageFront);
 
-                stageFront = new FlxSprite(-500, -300);
-                stageFront.loadGraphic(GenesisAssets.getAsset('stages/$curStage/stagecurtains', IMAGE));
-                stageFront.scrollFactor.set(1.3, 1.3);
-                stageFront.scale.set(0.9, 0.9);
-                stageFront.updateHitbox();
-                add(stageFront);
+                stageCurtains = new FlxSprite(-500, -300);
+                stageCurtains.loadGraphic(GenesisAssets.getAsset('stages/$curStage/stagecurtains', IMAGE));
+                stageCurtains.scrollFactor.set(1.3, 1.3);
+                stageCurtains.scale.set(0.9, 0.9);
+                stageCurtains.updateHitbox();
+                add(stageCurtains);
 
                 // Run hscript and allow users to do Stage.removeDefaultStage();
                 // To make their own custom stage
+                if(GenesisAssets.exists('stages/$curStage/script.hx', HSCRIPT))
+                {
+                    trace("TRYING TO RUN SCRIPT! " + 'stages/$curStage/script.hx');
+                    script = new HScript('stages/$curStage/script.hx');
+                    script.interp.variables.set("Stage", this);
+                    script.start();
+
+                    PlayState.instance.scripts.push(script);
+                }
+                else
+                    trace("SCRIPT DON'T EXIST IN STAGE DIRECTORY!");
         }
+    }
+
+    public function addSprite(object:FlxBasic, layer:String = "BACK")
+    {
+        switch(layer)
+        {
+            case "BACK":
+                add(object);
+            case "GF" | "MIDDLE":
+                inFrontOfGFSprites.add(object);
+            case "FRONT":
+                foregroundSprites.add(object);
+        }
+    }
+
+    public function removeDefaultStage()
+    {
+        remove(bg);
+        remove(stageFront);
+        remove(stageCurtains);
+        bg.kill();
+        stageFront.kill();
+        stageCurtains.destroy();
     }
 }

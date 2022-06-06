@@ -145,6 +145,22 @@ class UI extends FlxGroup
 			physicsUpdateTimer = 0;
 		}
 
+		if (healthBar.percent < 20)
+			iconP1.animation.play('losing');
+		else
+			if (healthBar.percent > 80)
+				iconP1.animation.play('winning');
+			else
+				iconP1.animation.play('normal');
+
+		if (healthBar.percent > 80)
+			iconP2.animation.play('losing');
+		else
+			if (healthBar.percent < 20)
+				iconP2.animation.play('winning');
+			else
+				iconP2.animation.play('normal');
+
         opponentStrums.forEachAlive(function(strum:StrumNote) {
             if(strum.animation.curAnim != null)
             {
@@ -238,7 +254,7 @@ class UI extends FlxGroup
                 }
             }
             
-            if(Conductor.songPosition - daNote.strumTime > Conductor.safeZoneOffset)
+            if(!Init.getOption('botplay') && Conductor.songPosition - daNote.strumTime > Conductor.safeZoneOffset)
             {
                 notes.remove(daNote, true);
                 daNote.kill();
@@ -260,12 +276,21 @@ class UI extends FlxGroup
         });
 
         keyShit();
+        var boyfriend = PlayState.instance.bf;
+        if(pressed.contains(true))
+            boyfriend.holdTimer = 0;
+
+        if(!pressed.contains(true) && boyfriend.holdTimer > Conductor.stepCrochet * 0.0011 * boyfriend.singDuration && boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss'))
+            boyfriend.dance();
     }
 
     function killOpponentNote(daNote:Note)
     {
         PlayState.instance.voices.volume = 1;
         
+        PlayState.instance.dad.holdTimer = 0;
+        PlayState.instance.dad.playAnim(ManiaShit.singAnims[PlayState.songData.keyCount][daNote.noteData], true);
+
         opponentStrums.members[daNote.noteData].playAnim("confirm", true);
         notes.remove(daNote, true);
         daNote.kill();
@@ -359,11 +384,14 @@ class UI extends FlxGroup
 
 				if(((justPressed[note.noteData] && !dontHitTheseDirectionsLol[note.noteData]) && Init.getOption('botplay') != true) || Init.getOption('botplay') == true)
 				{
-                    playerStrums.members[note.noteData].playAnim("confirm", true);
-                    dontHitTheseDirectionsLol[note.noteData] = true;
-                    noteDataTimes[note.noteData] = note.strumTime;
+                    if(!note.isSustainNote)
+                    {
+                        playerStrums.members[note.noteData].playAnim("confirm", true);
+                        dontHitTheseDirectionsLol[note.noteData] = true;
+                        noteDataTimes[note.noteData] = note.strumTime;
 
-                    goodNoteHit(note);
+                        goodNoteHit(note);
+                    }
                 }
             }
 
@@ -385,6 +413,8 @@ class UI extends FlxGroup
             {
                 if((pressed[note.noteData] || Init.getOption('botplay') == true) && Conductor.songPosition >= note.strumTime + (Conductor.safeZoneOffset / 4))
                 {
+                    PlayState.instance.bf.holdTimer = 0;
+                    PlayState.instance.bf.playAnim(ManiaShit.singAnims[PlayState.songData.keyCount][note.noteData], true);
                     playerStrums.members[note.noteData].playAnim("confirm", true);
                     PlayState.instance.health += 0.023;
 
@@ -448,6 +478,9 @@ class UI extends FlxGroup
 
             PlayState.instance.voices.volume = 1;
             PlayState.instance.health += 0.023;
+
+            PlayState.instance.bf.holdTimer = 0;
+            PlayState.instance.bf.playAnim(ManiaShit.singAnims[PlayState.songData.keyCount][daNote.noteData], true);
 
             notes.remove(daNote, true);
             daNote.kill();
