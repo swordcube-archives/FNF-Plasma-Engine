@@ -38,6 +38,13 @@ class Stage extends FlxGroup
             m.destroy();
         }
 
+        for(m in inFrontOfGFSprites.members)
+        {
+            inFrontOfGFSprites.members.remove(m);
+            m.kill();
+            m.destroy();
+        }
+
         for(m in foregroundSprites.members)
         {
             foregroundSprites.members.remove(m);
