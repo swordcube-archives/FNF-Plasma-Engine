@@ -51,7 +51,7 @@
 	</section>
 	
 	<section if="NO_PRELOAD_ALL">
-		<library name="songs"   preload="true" />
+		<library name="songs"   preload="false" />
 	</section>
 
 	<assets path="assets/songs" library="songs"/>
