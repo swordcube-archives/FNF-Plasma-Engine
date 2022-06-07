@@ -48,13 +48,16 @@
 
 	<section if="PRELOAD_ALL">
 		<library name="songs"   preload="true" />
+		<library name="images"   preload="true" />
 	</section>
 	
 	<section if="NO_PRELOAD_ALL">
 		<library name="songs"   preload="false" />
+		<library name="images"   preload="false" />
 	</section>
 
-	<assets path="assets/songs" library="songs"/>
+	<assets path="assets/songs"  library="songs"/>
+	<assets path="assets/images" library="images"/>
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
