@@ -99,4 +99,41 @@ class CoolUtil
 	{
 		return a + camLerpShit(ratio) * (b - a);
 	}
+
+	private static var hexCodes = "0123456789ABCDEF";
+
+	public static function rgbToHex(r:Int, g:Int, b:Int):String
+	{
+		var hexString = "#";
+		//Red
+		hexString += hexCodes.charAt(Math.floor(r/16));
+		hexString += hexCodes.charAt(r%16);
+		//Green
+		hexString += hexCodes.charAt(Math.floor(g/16));
+		hexString += hexCodes.charAt(g%16);
+		//Blue
+		hexString += hexCodes.charAt(Math.floor(b/16));
+		hexString += hexCodes.charAt(b%16);
+		
+		return hexString;
+	}
+	
+	public static function rgbaToHex(r:Int, g:Int, b:Int, a:Int):String
+	{
+		var hexString = "#";
+		//Red
+		hexString += hexCodes.charAt(Math.floor(r/16));
+		hexString += hexCodes.charAt(r%16);
+		//Green
+		hexString += hexCodes.charAt(Math.floor(g/16));
+		hexString += hexCodes.charAt(g%16);
+		//Blue
+		hexString += hexCodes.charAt(Math.floor(b/16));
+		hexString += hexCodes.charAt(b%16);
+		//Alpha
+		hexString += hexCodes.charAt(Math.floor(a/16));
+		hexString += hexCodes.charAt(a%16);
+		
+		return hexString;
+	}
 }

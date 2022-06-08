@@ -1,14 +1,17 @@
 package funkin;
 
 import base.Conductor;
+import base.CoolUtil;
 import haxe.Json;
 import hscript.HScript;
 import states.PlayState;
 
 using StringTools;
 
+// GE Character Type
+
 typedef CharacterData = {
-	var animations:Array<CharacterAnimationData>;
+	var animations:Array<CharacterAnim>;
 	var healthIcon:String;
 	var healthBarColor:String;
 	var antiAliasing:Bool;
@@ -17,11 +20,10 @@ typedef CharacterData = {
 	var scale:Float;
 	var position:Array<Float>;
 	var cameraPosition:Array<Float>;
-	var actsLike:String;
 	var deathCharacter:String;
 };
 
-typedef CharacterAnimationData = {
+typedef CharacterAnim = {
 	var animName:String;
 	var animPrefix:String;
 	var animOffsets:Array<Float>;
@@ -30,12 +32,41 @@ typedef CharacterAnimationData = {
 	var looped:Bool;
 };
 
+// Psych Character Type
+typedef PsychCharacter = {
+	var animations:Array<PsychCharacterAnim>;
+	var no_antialiasing:Bool;
+	var image:String;
+	var position:Array<Float>;
+	var healthicon:String;
+	var flip_x:Bool;
+	var healthbar_colors:Array<Int>;
+	var camera_position:Array<Float>;
+	var sing_duration:Float;
+	var scale:Float;
+	var deathCharacter:String;
+};
+
+typedef PsychCharacterAnim = {
+	var offsets:Array<Float>;
+	var loop:Bool;
+	var fps:Int;
+	var anim:String; // anim name
+	var indices:Array<Int>;
+	var name:String; // anim prefix
+};
+
 class Character extends FNFSprite
 {
 	public var debugMode:Bool = false;
 
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = 'bf';
+
+	public var healthIcon:String = 'face';
+	public var healthBarColor:String = '#000000';
+
+	public var deathCharacter:String = 'bf-dead';
 
 	public var json:CharacterData;
 
@@ -66,13 +97,55 @@ class Character extends FNFSprite
 		switch(curCharacter)
 		{
 			default:
-				json = Json.parse(GenesisAssets.getAsset('images/characters/jsons/$curCharacter.json', TEXT));
+				var readJson:Dynamic = Json.parse(GenesisAssets.getAsset('images/characters/jsons/$curCharacter.json', TEXT));
+				
+				if(readJson.image != null) // Checks if the char is a Psych one then does some cool magic
+				{
+					var psychJson:PsychCharacter = readJson;
+
+					var deathCharacter:String = "bf-dead";
+					if(psychJson.deathCharacter != null)
+						deathCharacter = psychJson.deathCharacter;
+					
+					// Convert everything (except anims) in a psych json to
+					// GE format, We convert anims after setting the json here
+					json = {
+						"animations": [],
+						"healthIcon": psychJson.healthicon,
+						"healthBarColor": CoolUtil.rgbToHex(psychJson.healthbar_colors[0], psychJson.healthbar_colors[1], psychJson.healthbar_colors[2]),
+						"antiAliasing": !psychJson.no_antialiasing,
+						"singDuration": psychJson.sing_duration,
+						"flipX": psychJson.flip_x,
+						"scale": psychJson.scale,
+						"position": psychJson.position,
+						"cameraPosition": psychJson.camera_position,
+						"deathCharacter": deathCharacter
+					};
+
+					// Convert the animations to GE format
+					for(psychAnim in psychJson.animations)
+					{
+						json.animations.push({
+							"animName": psychAnim.anim,
+							"animPrefix": psychAnim.name,
+							"animOffsets": psychAnim.offsets,
+							"animIndices": psychAnim.indices,
+							"looped": psychAnim.loop,
+							"fps": psychAnim.fps
+						});
+					}
+				}
+				else
+					json = readJson; // If it's a GE json then we don't need to convert anything.
 
 				singDuration = json.singDuration;
+				deathCharacter = json.deathCharacter;
 
 				frames = GenesisAssets.getAsset('characters/spritesheets/$curCharacter/assets', SPARROW);
 
-				for(anim in json.animations)
+				var anims:Array<Dynamic> = json.animations;
+
+				for(anim in anims)
 				{
 					if(anim.animIndices != null && anim.animIndices.length > 0)
 						animation.addByIndices(anim.animName, anim.animPrefix, anim.animIndices, '', anim.fps, anim.looped);
@@ -89,10 +162,15 @@ class Character extends FNFSprite
 
 				flipX = json.flipX;
 
+				scale.set(json.scale, json.scale);
+				updateHitbox();
+
 				x += json.position[0];
 				y += json.position[1];
 
 				cameraPosition = json.cameraPosition;
+				healthIcon = json.healthIcon;
+				healthBarColor = json.healthBarColor;
 		}
 
 		
@@ -191,11 +269,17 @@ class Character extends FNFSprite
 					if (!animation.curAnim.name.endsWith('DOWN-alt'))
 						playAnim('idle');
 				default:
-					if(json.actsLike != null && gfLikeCharacters.contains(json.actsLike))
+					if(animOffsets.exists('danceLeft') && animOffsets.exists('danceRight'))
 					{
 						if(animation.curAnim == null || !animation.curAnim.name.startsWith('hair'))
 						{
 							danced = !danced;
+
+							if(animation.curAnim != null && animation.curAnim.name == "singLEFT")
+								danced = false;
+
+							if(animation.curAnim != null && animation.curAnim.name == "singRIGHT")
+								danced = true;
 		
 							if (danced)
 								playAnim('danceRight');

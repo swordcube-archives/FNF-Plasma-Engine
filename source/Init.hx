@@ -1,5 +1,6 @@
 package;
 
+import base.Highscore;
 import base.MusicBeat.MusicBeatState;
 import flixel.FlxG;
 import flixel.FlxState;
@@ -130,6 +131,8 @@ class Init extends MusicBeatState
         }
 
         GenesisAssets.init();
+        Highscore.init();
+        
         FlxG.autoPause = Init.getOption("auto-pause");
         States.switchState(this, new states.TitleState(), true);
     }

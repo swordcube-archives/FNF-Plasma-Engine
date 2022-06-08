@@ -89,7 +89,11 @@ class UI extends FlxGroup
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), PlayState.instance,
 			'health', PlayState.instance.minHealth, PlayState.instance.maxHealth);
 		healthBar.scrollFactor.set();
-		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
+        var colors:Array<FlxColor> = [
+            FlxColor.fromString(PlayState.instance.dad.healthBarColor),
+            FlxColor.fromString(PlayState.instance.bf.healthBarColor)
+        ];
+		healthBar.createFilledBar(colors[0], colors[1]);
 		add(healthBar);
 
         // Icons
@@ -486,8 +490,6 @@ class UI extends FlxGroup
         if(!daNote.wasGoodHit)
         {
             daNote.wasGoodHit = true;
-
-            PlayState.instance.resyncVocals();
 
             PlayState.instance.combo++;
             popUpScore(daNote.strumTime, daNote);

@@ -108,6 +108,8 @@ class FreeplayMenu extends MusicBeatState
             physicsUpdateTimer = 0;
         }
 
+        intendedScore = Highscore.getScore(songs[curSelected].name.toLowerCase(), songs[curSelected].difficulties[curDifficulty]);
+
 		lerpScore = CoolUtil.coolLerp(lerpScore, intendedScore, 0.4);
 
 		scoreText.text = "PERSONAL BEST:" + Math.round(lerpScore);
@@ -179,8 +181,6 @@ class FreeplayMenu extends MusicBeatState
             else
                 text.alpha = 0.6;
         });
-
-        intendedScore = Highscore.getScore(songs[curSelected].name, songs[curSelected].difficulties[curDifficulty]);
 
         changeDiff();
     }

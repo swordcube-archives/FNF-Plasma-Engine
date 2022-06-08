@@ -2,6 +2,7 @@ package states;
 
 import base.Conductor;
 import base.Controls;
+import base.Highscore;
 import base.MusicBeat.MusicBeatState;
 import base.Song;
 import base.SongLoader;
@@ -99,6 +100,11 @@ class PlayState extends MusicBeatState
 	public var songScore:Int = 0;
 	public var songMisses:Int = 0;
 	public var songAccuracy:Float = 0;
+
+	public static var campaignScore:Int = 0;
+	public static var campaignMisses:Int = 0;
+
+	public static var storyPlaylist:Array<String> = [];
 
 	public var marvelous:Int = 0;
 	public var sicks:Int = 0;
@@ -218,7 +224,7 @@ class PlayState extends MusicBeatState
 		add(stage);
 
 		// Make Dad and GF real
-		dad = new Character(100, 100, 'dad');
+		dad = new Character(100, 100, songData.player2);
 
 		var gfVersion:String = "gf";
 
@@ -231,26 +237,41 @@ class PlayState extends MusicBeatState
 		if(songData.gf != null)
 			gfVersion = songData.gf;
 
-		gf = new Character(400, 130, 'gf');
+		gf = new Character(400, 130, gfVersion);
 
-		// Add objects in the stage that go in front of GF
+		// Add GF and the objects in the stage that go in front of GF
+		add(gf);
 		add(stage.inFrontOfGFSprites);
 
 		// Make BF real
-		bf = new Boyfriend(770, 450, 'bf');
+		bf = new Boyfriend(770, 450, songData.player1);
 		bf.flipX = !bf.flipX;
 
 		// Actually add the guys
-		add(gf);
 		add(dad);
 		add(bf);
+
+		// Make tutorial work correctly and not show 2 gfs
+		if(dad.curCharacter == gf.curCharacter)
+		{
+			dad.setPosition(gf.x, gf.y);
+			
+			remove(gf);
+			gf.kill();
+			gf.destroy();
+			
+			gf = null;
+		}
 
 		// Add front layer of stage
 		add(stage.foregroundSprites);
 
 		// set the camera position to the center of the stage
 		var camPos:FlxPoint = new FlxPoint(0, 0);
-		camPos.set(gf.x + (gf.frameWidth / 2), gf.y + (gf.frameHeight / 2));
+		if(gf != null)
+			camPos.set(gf.x + (gf.frameWidth / 2), gf.y + (gf.frameHeight / 2));
+		else
+			camPos.set(dad.x + (dad.frameWidth / 2), dad.y + (dad.frameHeight / 2));
 
 		// create the shit that makes the camera work
 		camFollow = new FlxObject(0, 0, 1, 1);
@@ -559,16 +580,21 @@ class PlayState extends MusicBeatState
 
 					if(cachedSong["voices"] != null)
 						voices = new FlxSound().loadEmbedded(cachedSong["voices"]);
-					
-					FlxG.sound.music.pause();
-					FlxG.sound.music.time = 0;
-					FlxG.sound.music.play();
 
 					if(cachedSong["voices"] != null)
 					{
 						voices.play();
 						FlxG.sound.list.add(voices);
 					}
+
+					FlxG.sound.music.pause();
+					voices.pause();
+
+					FlxG.sound.music.time = 0;
+					voices.time = 0;
+
+					FlxG.sound.music.play();
+					voices.play();
 
 					countdownActive = false;
 			}
@@ -580,7 +606,32 @@ class PlayState extends MusicBeatState
 
 	function endSong()
 	{
-		goBackToMenu();
+		endingSong = true;
+
+		Highscore.saveScore(songData.song.toLowerCase(), songScore, curDifficulty);
+		
+		if(isStoryMode)
+		{
+			campaignScore += songScore;
+			campaignMisses += songMisses;
+
+			storyPlaylist.remove(storyPlaylist[0]);
+
+			if (storyPlaylist.length <= 0)
+			{
+				Highscore.saveWeekScore(storyWeek, campaignScore, curDifficulty);
+				goBackToMenu();
+			}
+			else
+			{
+				PlayState.SONG = SongLoader.loadJSON(storyPlaylist[0].toLowerCase(), curDifficulty);
+				States.switchState(this, new PlayState(), true);
+			}
+		}
+		else
+		{
+			goBackToMenu();
+		}
 	}
 
 	function goBackToMenu()
@@ -633,23 +684,20 @@ class PlayState extends MusicBeatState
 
 		callOnHScripts("stepHit", [curStep]);
 
-		if (Math.abs(FlxG.sound.music.time - (Conductor.songPosition - Conductor.offset)) > 20
-			|| (SONG.needsVoices && Math.abs(voices.time - (Conductor.songPosition - Conductor.offset)) > 20))
-		{
+		if (FlxG.sound.music.time >= Conductor.songPosition + 20 || FlxG.sound.music.time <= Conductor.songPosition - 20)
 			resyncVocals();
-		}
 	}
 
 	public function resyncVocals():Void
 	{
-		if(countdownActive || endingSong) return;
-
+		trace('resyncing vocal time ${voices.time}');
+		FlxG.sound.music.pause();
 		voices.pause();
-
-		FlxG.sound.music.play();
 		Conductor.songPosition = FlxG.sound.music.time;
 		voices.time = Conductor.songPosition;
+		FlxG.sound.music.play();
 		voices.play();
+		trace('new vocal time ${Conductor.songPosition}');
 	}
 
     function setupCameras()
