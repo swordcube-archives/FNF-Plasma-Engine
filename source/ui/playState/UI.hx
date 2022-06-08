@@ -97,11 +97,11 @@ class UI extends FlxGroup
 		add(healthBar);
 
         // Icons
-        iconP2 = new HealthIcon(PlayState.songData.player2);
+        iconP2 = new HealthIcon(PlayState.instance.dad.healthIcon);
         iconP2.y = healthBar.y - (iconP2.height / 2);
         add(iconP2);
 
-        iconP1 = new HealthIcon(PlayState.songData.player1, true);
+        iconP1 = new HealthIcon(PlayState.instance.bf.healthIcon, true);
         iconP1.y = healthBar.y - (iconP1.height / 2);
         add(iconP1);
 
