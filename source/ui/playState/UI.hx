@@ -450,7 +450,7 @@ class UI extends FlxGroup
 
 	public function physicsUpdate()
     {
-        var scale = FlxMath.lerp(1, iconP2.scale.x, 0.5);
+        var scale = FlxMath.lerp(iconP2.scale.x, 1, 0.2);
 
         iconP2.scale.set(scale, scale);
         iconP2.updateHitbox();

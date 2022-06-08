@@ -4,9 +4,11 @@ import flixel.FlxG;
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.system.FlxSound;
+import haxe.Json;
 import lime.utils.Assets;
 import openfl.display.BitmapData;
 import openfl.media.Sound;
+import states.ModsMenu.ModInfoJSON;
 
 using StringTools;
 
@@ -35,6 +37,7 @@ import sys.io.File;
 	var DIRECTORY = 'directory';
 	var TEXT = 'TEXT';
 	var HSCRIPT = 'hx';
+	var MOD_ICON = 'mod_icon';
 }
 
 class GenesisAssets
@@ -62,7 +65,7 @@ class GenesisAssets
 				#else
 				return Assets.getText(goodPath);
 				#end
-			case IMAGE:
+			case IMAGE | MOD_ICON:
 				return returnGraphic(goodPath, compress);
 			case MUSIC | SOUND | SONG:
 				return returnSound(goodPath);
@@ -201,19 +204,43 @@ class GenesisAssets
 			for(mod in modsDirectory)
 			{
 				if(!mod.contains('.'))
+				{
 					mods.push(mod);
 
-				if(activeMods.get(mod) == null)
-					activeMods.set(mod, true);
+					var enabled:Bool = true;
+					var json:ModInfoJSON = Json.parse(File.getContent('${cwd}mods/$mod/modInfo.json'));
+					if(json != null)
+						enabled = json.enabledByDefault;
+
+					if(activeMods.get(mod) == null)
+						activeMods.set(mod, enabled);
+				}
 			}
 		}
 
 		FlxG.save.data.mods = activeMods;
+		FlxG.save.flush();
 		#end
 
 		//trace("returning all mods!");
 
 		return mods;
+	}
+
+	public static function getModActive(mod:String)
+	{
+		if(activeMods.get(mod) != null)
+			return activeMods.get(mod);
+
+		return false;
+	}
+
+	public static function setModActive(mod:String, value:Bool)
+	{
+		activeMods.set(mod, value);
+
+		FlxG.save.data.mods = activeMods;
+		FlxG.save.flush();
 	}
 
 	public static function getPath(path:String, type:AssetType, ?mod:Null<String> = null)

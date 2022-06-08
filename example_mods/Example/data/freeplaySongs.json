@@ -1,0 +1,12 @@
+{
+    "songs": [
+        {
+            "name": "Example",
+            "icon": "dad",
+            "color": "#9271FD",
+            "difficulties": [
+                "normal"
+            ]
+        }
+    ]
+}

@@ -133,7 +133,7 @@ class Init extends MusicBeatState
         GenesisAssets.init();
         Highscore.init();
         
-        FlxG.autoPause = Init.getOption("auto-pause");
+        FlxG.autoPause = getOption("auto-pause");
         States.switchState(this, new states.TitleState(), true);
     }
 }

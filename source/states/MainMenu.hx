@@ -177,7 +177,7 @@ class MainMenu extends MusicBeatState
                                         States.switchState(this, new FreeplayMenu());
                                     #if MODS_ALLOWED
                                     case 'mods':
-                                        States.switchState(this, new PlayState());
+                                        States.switchState(this, new ModsMenu());
                                     #end
                                     case 'credits':
                                         States.switchState(this, new PlayState());

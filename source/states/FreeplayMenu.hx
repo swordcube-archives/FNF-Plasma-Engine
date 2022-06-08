@@ -83,8 +83,34 @@ class FreeplayMenu extends MusicBeatState
         {
             var song = assetsJson.songs[i];
 
-            addSong(i, song.name, song.icon, song.color);
+            addSong(songs.length, song.name, song.icon, song.color);
             songs.push(song);
+        }
+
+        // Get songs from mods and put them here
+        // I want to change this later, i have like no time rn lol
+        for(mod in GenesisAssets.mods)
+        {
+            if(GenesisAssets.getModActive(mod) == true)
+            {
+                var modsJson:SongListJson = Json.parse(GenesisAssets.getAsset('data/freeplaySongs.json', TEXT, mod));
+        
+                #if !debug
+                for(song in modsJson.songs)
+                {
+                    if(song.debugOnly)
+                        modsJson.songs.remove(song);
+                }
+                #end
+        
+                for(i in 0...modsJson.songs.length)
+                {
+                    var song = modsJson.songs[i];
+        
+                    addSong(songs.length, song.name, song.icon, song.color);
+                    songs.push(song);
+                }
+            }
         }
 
         changeSelection();
