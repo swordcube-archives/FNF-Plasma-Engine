@@ -41,6 +41,9 @@ class MusicBeatState extends FlxUIState
 			sound.destroy();
 		});
 
+		FlxG.bitmap.dumpCache();
+		FlxG.bitmap.clearCache();
+
 		toasts = new FlxTypedGroup<NotificationToast>();
 		add(toasts);
 

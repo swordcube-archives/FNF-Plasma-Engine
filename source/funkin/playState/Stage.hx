@@ -89,6 +89,7 @@ class Stage extends FlxGroup
                     trace("TRYING TO RUN SCRIPT! " + 'stages/$curStage/script.hx');
                     script = new HScript('stages/$curStage/script.hx');
                     script.interp.variables.set("Stage", this);
+                    script.state = PlayState.instance;
                     script.start();
 
                     PlayState.instance.scripts.push(script);

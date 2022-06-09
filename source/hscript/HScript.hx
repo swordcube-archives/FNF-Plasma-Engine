@@ -25,6 +25,8 @@ class HScript
 
     public var otherScripts:Array<HScript> = [];
 
+    public var executedScript:Bool = false;
+
     public var state:Dynamic;
 
     public function new(hscriptPath:String)
@@ -104,8 +106,6 @@ class HScript
                 }
             }
         });
-
-        interp.execute(program);
     }
 
     public function log(text, ?doTrace:Bool = false)
@@ -118,6 +118,24 @@ class HScript
 
     public function start()
     {
+        executedScript = true;
+        try {
+            interp.execute(program);
+        } catch(e) {
+            executedScript = false;
+            log(e.details(), true);
+
+            if(state != null)
+            {
+                state.toasts.add(new NotificationToast(
+                    "HScript Error",
+                    "An error happened in one of your scripts! Check the logs by pausing and choosing logs.",
+                    NotificationToast.presetColors["ERROR"],
+                    ERROR
+                ));
+            }
+        }
+        
         callFunction("create");
     }
 

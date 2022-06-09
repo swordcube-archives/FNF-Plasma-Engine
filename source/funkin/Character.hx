@@ -177,7 +177,10 @@ class Character extends FNFSprite
 		if(GenesisAssets.exists('images/characters/scripts/$curCharacter/script.hx', HSCRIPT))
 		{
 			script = new HScript('images/characters/scripts/$curCharacter/script.hx');
-			script.callFunction("create", [curCharacter, isPlayer]);
+			script.state = PlayState.instance;
+			script.start();
+			
+			script.callFunction("createCharacter", [curCharacter, isPlayer]);
 
 			PlayState.instance.scripts.push(script);
 		}
