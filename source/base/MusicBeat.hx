@@ -6,8 +6,10 @@ import flixel.FlxSubState;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.ui.FlxUIState;
 import flixel.addons.ui.FlxUISubState;
+import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.system.FlxSound;
 import substates.FNFTransition;
+import ui.NotificationToast;
 
 class MusicBeatState extends FlxUIState
 {
@@ -21,6 +23,9 @@ class MusicBeatState extends FlxUIState
 
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;*/
+
+	public var toasts:FlxTypedGroup<NotificationToast>;
+
 	// class create event
 	override function create()
 	{
@@ -36,6 +41,9 @@ class MusicBeatState extends FlxUIState
 			sound.destroy();
 		});
 
+		toasts = new FlxTypedGroup<NotificationToast>();
+		add(toasts);
+
 		super.create();
 
 		// For debugging
@@ -50,6 +58,16 @@ class MusicBeatState extends FlxUIState
 		updateContents();
 
 		FlxG.stage.frameRate = 240;
+
+		var i:Int = 0;
+		toasts.forEachAlive(function(t:NotificationToast) {
+			t.y = 20 + (i * (t.height + 20));
+			i++;
+		});
+
+		toasts.forEachDead(function(t:NotificationToast) {
+			toasts.remove(t, true);
+		});
 
 		super.update(elapsed);
 	}

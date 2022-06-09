@@ -170,6 +170,7 @@ class PlayState extends MusicBeatState
 		{
 			trace("TRYING TO RUN SCRIPT! " + 'songs/${songData.song.toLowerCase()}/script.hx');
 			script = new HScript('songs/${songData.song.toLowerCase()}/script.hx');
+			script.state = this;
 			script.start();
 
 			scripts.push(script);
@@ -186,6 +187,7 @@ class PlayState extends MusicBeatState
 				if(file.endsWith(".hx"))
 				{
 					var swagScript:HScript = new HScript(File.getContent('${GenesisAssets.cwd}assets/scripts/$file'));
+					swagScript.state = this;
 					swagScript.start();
 
 					scripts.push(swagScript);
@@ -207,6 +209,7 @@ class PlayState extends MusicBeatState
 						if(file.endsWith(".hx"))
 						{
 							var swagScript:HScript = new HScript(GenesisAssets.getAsset('scripts/$file', HSCRIPT, mod));
+							swagScript.state = this;
 							swagScript.start();
 			
 							scripts.push(swagScript);

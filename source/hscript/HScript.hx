@@ -2,12 +2,15 @@ package hscript;
 
 import base.Conductor;
 import base.CoolUtil;
+import base.MusicBeat.MusicBeatState;
 import base.SongLoader;
+import flixel.FlxG;
 import hscript.Interp;
 import hscript.Parser;
 import states.PlayState;
 import ui.Alphabet;
 import ui.HealthIcon;
+import ui.NotificationToast;
 import ui.playState.NoteSplash;
 
 using StringTools;
@@ -21,6 +24,8 @@ class HScript
     public var interp:Interp = new Interp();
 
     public var otherScripts:Array<HScript> = [];
+
+    public var state:Dynamic;
 
     public function new(hscriptPath:String)
     {
@@ -135,6 +140,16 @@ class HScript
             } catch(e) {
                 log(e.details(), true);
                 log("ERROR Caused in " + func + " with " + Std.string(args) + " args", true);
+
+                if(state != null)
+                {
+                    state.toasts.add(new NotificationToast(
+                        "HScript Error",
+                        "An error happened in one of your scripts! Check the logs by pausing and choosing logs.",
+                        NotificationToast.presetColors["ERROR"],
+                        ERROR
+                    ));
+                }
             }
         }
 

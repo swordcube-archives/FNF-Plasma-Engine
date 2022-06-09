@@ -14,6 +14,7 @@ import haxe.Json;
 import lime.utils.Assets;
 import ui.Alphabet;
 import ui.HealthIcon;
+import ui.NotificationToast;
 
 class FreeplayMenu extends MusicBeatState
 {
@@ -38,8 +39,6 @@ class FreeplayMenu extends MusicBeatState
     
     override public function create()
     {
-        super.create();
-
         if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
             FlxG.sound.playMusic(GenesisAssets.getAsset('freakyMenu', MUSIC));
         
@@ -114,6 +113,29 @@ class FreeplayMenu extends MusicBeatState
         }
 
         changeSelection();
+
+        super.create();
+
+        toasts.add(new NotificationToast(
+            "Error Test",
+            "Testing.... This is random filler text to iohserupfjickoe-f!",
+            NotificationToast.presetColors["ERROR"],
+            ERROR
+        ));
+
+        toasts.add(new NotificationToast(
+            "Warning Test",
+            "Testing.... This is random filler text to iohserupfjickoe-f!",
+            NotificationToast.presetColors["WARNING"],
+            WARNING
+        ));
+
+        toasts.add(new NotificationToast(
+            "Info Test",
+            "Testing.... This is random filler text to iohserupfjickoe-f!",
+            NotificationToast.presetColors["INFO"],
+            INFO
+        ));
     }
 
     var physicsUpdateTimer:Float = 0;
