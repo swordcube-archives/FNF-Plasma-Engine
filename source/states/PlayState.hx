@@ -223,11 +223,17 @@ class PlayState extends MusicBeatState
 		setupCameras();
 
 		// Add back layer of stage
-		stage = new Stage('stage');
+		var stageToLoad:String = "stage";
+		if(songData.stage != null)
+			stageToLoad = songData.stage;
+
+		trace("LOADING STAGE: " + stageToLoad);
+		
+		stage = new Stage(stageToLoad);
 		add(stage);
 
 		// Make Dad and GF real
-		dad = new Character(100, 100, songData.player2);
+		dad = new Character(stage.dadPosition.x, stage.dadPosition.y, songData.player2);
 
 		var gfVersion:String = "gf";
 
@@ -240,14 +246,14 @@ class PlayState extends MusicBeatState
 		if(songData.gf != null)
 			gfVersion = songData.gf;
 
-		gf = new Character(400, 130, gfVersion);
+		gf = new Character(stage.gfPosition.x, stage.gfPosition.y, gfVersion);
 
 		// Add GF and the objects in the stage that go in front of GF
 		add(gf);
 		add(stage.inFrontOfGFSprites);
 
 		// Make BF real
-		bf = new Boyfriend(770, 450, songData.player1);
+		bf = new Boyfriend(stage.bfPosition.x, stage.bfPosition.y, songData.player1);
 		bf.flipX = !bf.flipX;
 
 		// Actually add the guys
@@ -684,6 +690,18 @@ class PlayState extends MusicBeatState
 	{
 		super.stepHit();
 		UI.stepHit();
+
+		var bruj:Int = Std.int(curStep / 16);
+		if(bruj < 0)
+			bruj = 0;
+		if(bruj > songData.notes.length - 1)
+			bruj = songData.notes.length - 1;
+		
+		if (songData.notes[bruj] != null)
+		{
+			if (songData.notes[bruj].changeBPM)
+				Conductor.changeBPM(songData.notes[bruj].bpm);
+		}
 
 		callOnHScripts("stepHit", [curStep]);
 

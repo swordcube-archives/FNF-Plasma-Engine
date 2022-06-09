@@ -165,8 +165,8 @@ class Character extends FNFSprite
 				scale.set(json.scale, json.scale);
 				updateHitbox();
 
-				x += json.position[0];
-				y += json.position[1];
+				this.x += json.position[0];
+				this.y += json.position[1];
 
 				cameraPosition = json.cameraPosition;
 				healthIcon = json.healthIcon;

@@ -46,6 +46,36 @@
                 "normal",
                 "hard"
             ]
+        },
+        {
+            "name": "Spookeez",
+            "icon": "spooky",
+            "color": "#223344",
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "South",
+            "icon": "spooky",
+            "color": "#223344",
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "Monster",
+            "icon": "monster",
+            "color": "#223344",
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
         }
     ]
 }

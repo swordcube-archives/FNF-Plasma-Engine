@@ -44,12 +44,15 @@ class HScript
         interp.variables.set("FlxG", flixel.FlxG);
         interp.variables.set("OpenFLAssets", openfl.utils.Assets);
         interp.variables.set("Assets", lime.utils.Assets);
-        interp.variables.set("GenesisAssets", GenesisAssets);
+        interp.variables.set("GenesisAssets", HScriptGenesisAssets);
         interp.variables.set("FlxSprite", flixel.FlxSprite);
+        interp.variables.set("FNFSprite", funkin.FNFSprite);
+        interp.variables.set("FlxMath", flixel.math.FlxMath);
         interp.variables.set("Math", Math);
         interp.variables.set("Std", Std);
 
         // game classes
+        interp.variables.set("NotificationToast", NotificationToast);
         interp.variables.set("SongLoader", SongLoader);
         interp.variables.set("Alphabet", Alphabet);
         interp.variables.set("NoteSplash", NoteSplash);
@@ -120,6 +123,7 @@ class HScript
     {
         executedScript = true;
         try {
+            interp.variables.set("curState", state);
             interp.execute(program);
         } catch(e) {
             executedScript = false;
@@ -136,16 +140,20 @@ class HScript
             }
         }
         
-        callFunction("create");
+        if(executedScript)
+            callFunction("create");
     }
 
     public function update(elapsed:Float)
     {
-        callFunction("update", [elapsed]);
+        if(executedScript)
+            callFunction("update", [elapsed]);
     }
 
     public function callFunction(func:String, ?args:Array<Dynamic>)
     {
+        if(!executedScript) return;
+        
         if(interp.variables.exists(func))
         {
             var real_func = interp.variables.get(func);
