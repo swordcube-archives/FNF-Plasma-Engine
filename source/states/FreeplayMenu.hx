@@ -115,27 +115,6 @@ class FreeplayMenu extends MusicBeatState
         changeSelection();
 
         super.create();
-
-        toasts.add(new NotificationToast(
-            "Error Test",
-            "Testing.... This is random filler text to iohserupfjickoe-f!",
-            NotificationToast.presetColors["ERROR"],
-            ERROR
-        ));
-
-        toasts.add(new NotificationToast(
-            "Warning Test",
-            "Testing.... This is random filler text to iohserupfjickoe-f!",
-            NotificationToast.presetColors["WARNING"],
-            WARNING
-        ));
-
-        toasts.add(new NotificationToast(
-            "Info Test",
-            "Testing.... This is random filler text to iohserupfjickoe-f!",
-            NotificationToast.presetColors["INFO"],
-            INFO
-        ));
     }
 
     var physicsUpdateTimer:Float = 0;
