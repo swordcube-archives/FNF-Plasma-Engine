@@ -50,7 +50,7 @@ class PlayState extends MusicBeatState
 	// Camera Shit
 	public var camZooming:Bool = true;
 	public var defaultCamZoom:Float = 1.0;
-	
+
 	public var camGame:FlxCamera;
 	public var camHUD:FlxCamera;
 	public var camOther:FlxCamera;
@@ -61,6 +61,7 @@ class PlayState extends MusicBeatState
 
 	public var camDisplaceX:Float = 0;
 	public var camDisplaceY:Float = 0;
+
 	public static var cameraSpeed:Float = 1;
 
 	// Stage
@@ -73,7 +74,7 @@ class PlayState extends MusicBeatState
 
 	// Scripts
 	public var script:HScript;
-	
+
 	public var scripts:Array<HScript> = [];
 
 	// UI
@@ -132,7 +133,7 @@ class PlayState extends MusicBeatState
 
 	function getVocals():Dynamic
 	{
-		if(songData.needsVoices)
+		if (songData.needsVoices)
 			return GenesisAssets.getAsset('${songData.song.toLowerCase()}/Voices', GenesisAssets.AssetType.SONG);
 
 		return null;
@@ -149,12 +150,12 @@ class PlayState extends MusicBeatState
 		persistentUpdate = true;
 		persistentDraw = true;
 
-		if(SONG == null)
+		if (SONG == null)
 			SONG = SongLoader.loadJSON("test", "normal");
 
 		songData = SONG.song;
-		
-		if(songData.uiSkin != null)
+
+		if (songData.uiSkin != null)
 			uiSkin = songData.uiSkin;
 
 		scrollSpeed = songData.speed;
@@ -166,7 +167,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.sound.music.stop();
 
-		if(GenesisAssets.exists('songs/${songData.song.toLowerCase()}/script.hx', HSCRIPT))
+		if (GenesisAssets.exists('songs/${songData.song.toLowerCase()}/script.hx', HSCRIPT))
 		{
 			trace("TRYING TO RUN SCRIPT! " + 'songs/${songData.song.toLowerCase()}/script.hx');
 			script = new HScript('songs/${songData.song.toLowerCase()}/script.hx');
@@ -179,12 +180,12 @@ class PlayState extends MusicBeatState
 			trace("SCRIPT DON'T EXIST IN SONG DIRECTORY!");
 
 		#if sys
-		if(FileSystem.exists('${GenesisAssets.cwd}assets/scripts'))
+		if (FileSystem.exists('${GenesisAssets.cwd}assets/scripts'))
 		{
 			var pissAss:Array<String> = FileSystem.readDirectory('${GenesisAssets.cwd}assets/scripts');
-			for(file in pissAss)
+			for (file in pissAss)
 			{
-				if(file.endsWith(".hx"))
+				if (file.endsWith(".hx"))
 				{
 					var swagScript:HScript = new HScript(File.getContent('${GenesisAssets.cwd}assets/scripts/$file'));
 					swagScript.state = this;
@@ -197,21 +198,21 @@ class PlayState extends MusicBeatState
 		#end
 
 		#if MODS_ALLOWED
-		for(mod in GenesisAssets.mods)
+		for (mod in GenesisAssets.mods)
 		{
-			if(GenesisAssets.activeMods.get(mod) == true)
+			if (GenesisAssets.activeMods.get(mod) == true)
 			{
-				if(FileSystem.exists('${GenesisAssets.cwd}mods/$mod/scripts'))
+				if (FileSystem.exists('${GenesisAssets.cwd}mods/$mod/scripts'))
 				{
 					var pissAss:Array<String> = FileSystem.readDirectory('${GenesisAssets.cwd}mods/$mod/scripts');
-					for(file in pissAss)
+					for (file in pissAss)
 					{
-						if(file.endsWith(".hx"))
+						if (file.endsWith(".hx"))
 						{
 							var swagScript:HScript = new HScript(GenesisAssets.getAsset('scripts/$file', HSCRIPT, mod));
 							swagScript.state = this;
 							swagScript.start();
-			
+
 							scripts.push(swagScript);
 						}
 					}
@@ -224,11 +225,11 @@ class PlayState extends MusicBeatState
 
 		// Add back layer of stage
 		var stageToLoad:String = "stage";
-		if(songData.stage != null)
+		if (songData.stage != null)
 			stageToLoad = songData.stage;
 
 		trace("LOADING STAGE: " + stageToLoad);
-		
+
 		stage = new Stage(stageToLoad);
 		add(stage);
 
@@ -237,13 +238,13 @@ class PlayState extends MusicBeatState
 
 		var gfVersion:String = "gf";
 
-		if(songData.player3 != null)
+		if (songData.player3 != null)
 			gfVersion = songData.player3;
 
-		if(songData.gfVersion != null)
+		if (songData.gfVersion != null)
 			gfVersion = songData.gfVersion;
 
-		if(songData.gf != null)
+		if (songData.gf != null)
 			gfVersion = songData.gf;
 
 		gf = new Character(stage.gfPosition.x, stage.gfPosition.y, gfVersion);
@@ -261,14 +262,14 @@ class PlayState extends MusicBeatState
 		add(bf);
 
 		// Make tutorial work correctly and not show 2 gfs
-		if(dad.curCharacter == gf.curCharacter)
+		if (dad.curCharacter == gf.curCharacter)
 		{
 			dad.setPosition(gf.x, gf.y);
-			
+
 			remove(gf);
 			gf.kill();
 			gf.destroy();
-			
+
 			gf = null;
 		}
 
@@ -277,7 +278,7 @@ class PlayState extends MusicBeatState
 
 		// set the camera position to the center of the stage
 		var camPos:FlxPoint = new FlxPoint(0, 0);
-		if(gf != null)
+		if (gf != null)
 			camPos.set(gf.x + (gf.frameWidth / 2), gf.y + (gf.frameHeight / 2));
 		else
 			camPos.set(dad.x + (dad.frameWidth / 2), dad.y + (dad.frameHeight / 2));
@@ -287,7 +288,7 @@ class PlayState extends MusicBeatState
 		camFollow.setPosition(camPos.x, camPos.y);
 		camFollowPos = new FlxObject(0, 0, 1, 1);
 		camFollowPos.setPosition(camPos.x, camPos.y);
-		
+
 		add(camFollow);
 		add(camFollowPos);
 
@@ -308,7 +309,7 @@ class PlayState extends MusicBeatState
 		Conductor.mapBPMChanges(songData);
 		Conductor.songPosition = Conductor.crochet * -5;
 
-		if(!inCutscene)
+		if (!inCutscene)
 			startCountdown();
 
 		// do createPost function for any running scripts
@@ -319,18 +320,18 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
-		if(health < minHealth)
+		if (health < minHealth)
 			health = minHealth;
 
-		if(health > maxHealth)
+		if (health > maxHealth)
 			health = maxHealth;
-		
+
 		super.update(elapsed);
 
 		callOnHScripts("update", [elapsed]);
 
 		physicsUpdateTimer += elapsed;
-		if(physicsUpdateTimer > 1 / 60)
+		if (physicsUpdateTimer > 1 / 60)
 		{
 			physicsUpdate();
 			callOnHScripts("physicsUpdate");
@@ -339,8 +340,8 @@ class PlayState extends MusicBeatState
 
 		Conductor.songPosition += FlxG.elapsed * 1000;
 
-		if(Controls.isPressed("BACK", JUST_PRESSED))
-		{			
+		if (Controls.isPressed("BACK", JUST_PRESSED))
+		{
 			goBackToMenu();
 		}
 
@@ -354,16 +355,16 @@ class PlayState extends MusicBeatState
 		FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, 0.95);
 		camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95);
 
-		if(!endingSong)
+		if (!endingSong)
 		{
-			for(section in songData.notes)
+			for (section in songData.notes)
 			{
-				for(songNotes in section.sectionNotes)
+				for (songNotes in section.sectionNotes)
 				{
 					var daStrumTime:Float = songNotes[0] + Init.getOption('note-offset');
-					
+
 					// Spawn the notes as the song goes on
-					if((daStrumTime - Conductor.songPosition) < 2500)
+					if ((daStrumTime - Conductor.songPosition) < 2500)
 					{
 						var daNoteData:Int = Std.int(songNotes[1] % songData.keyCount);
 
@@ -383,25 +384,28 @@ class PlayState extends MusicBeatState
 						swagNote.mustPress = gottaHitNote;
 						swagNote.sustainLength = songNotes[2];
 						swagNote.downscrollNote = Init.getOption("downscroll");
-						
+
 						swagNote.x = -1000;
 						swagNote.y = -1000;
 
 						var susLength:Float = swagNote.sustainLength / Conductor.stepCrochet;
 						var floorSus:Int = Math.floor(susLength);
-						
-						if(floorSus > 0)
+
+						if (floorSus > 0)
 						{
 							for (susNote in 0...floorSus)
 							{
 								var isEnd:Bool = false;
-								
-								if(susNote == floorSus - 1)
+
+								if (susNote == floorSus - 1)
 									isEnd = true;
 
 								oldNote = UI.notes.members[Std.int(UI.notes.length - 1)];
 
-								var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + (Conductor.stepCrochet / FlxMath.roundDecimal(scrollSpeed, 2)), daNoteData, uiSkin, true, isEnd);
+								var sustainNote:Note = new Note(daStrumTime
+									+ (Conductor.stepCrochet * susNote)
+									+ (Conductor.stepCrochet / FlxMath.roundDecimal(scrollSpeed, 2)),
+									daNoteData, uiSkin, true, isEnd);
 								sustainNote.prevNote = oldNote;
 								sustainNote.mustPress = gottaHitNote;
 								sustainNote.downscrollNote = Init.getOption("downscroll");
@@ -424,18 +428,20 @@ class PlayState extends MusicBeatState
 		}
 
 		var bruj:Int = Std.int(curStep / 16);
-		if(bruj < 0)
+		if (bruj < 0)
 			bruj = 0;
-		if(bruj > songData.notes.length - 1)
+		if (bruj > songData.notes.length - 1)
 			bruj = songData.notes.length - 1;
 
-		if(songData.notes[bruj] != null)
+		if (songData.notes[bruj] != null)
 		{
 			var curSection = bruj;
-			if (curSection != lastSection) {
+			if (curSection != lastSection)
+			{
 				// section reset stuff
 				var lastMustHit:Bool = songData.notes[lastSection].mustHitSection;
-				if (songData.notes[curSection].mustHitSection != lastMustHit) {
+				if (songData.notes[curSection].mustHitSection != lastMustHit)
+				{
 					camDisplaceX = 0;
 					camDisplaceY = 0;
 				}
@@ -449,8 +455,7 @@ class PlayState extends MusicBeatState
 				var getCenterX = char.getMidpoint().x + 100;
 				var getCenterY = char.getMidpoint().y - 100;
 
-				camFollow.setPosition(getCenterX + camDisplaceX + char.cameraPosition[0],
-					getCenterY + camDisplaceY + char.cameraPosition[1]);
+				camFollow.setPosition(getCenterX + camDisplaceX + char.cameraPosition[0], getCenterY + camDisplaceY + char.cameraPosition[1]);
 			}
 			else
 			{
@@ -459,8 +464,7 @@ class PlayState extends MusicBeatState
 				var getCenterX = char.getMidpoint().x - 100;
 				var getCenterY = char.getMidpoint().y - 100;
 
-				camFollow.setPosition(getCenterX + camDisplaceX - char.cameraPosition[0],
-					getCenterY + camDisplaceY + char.cameraPosition[1]);
+				camFollow.setPosition(getCenterX + camDisplaceX - char.cameraPosition[0], getCenterY + camDisplaceY + char.cameraPosition[1]);
 			}
 		}
 
@@ -477,7 +481,7 @@ class PlayState extends MusicBeatState
 	public function startCountdown()
 	{
 		countdownActive = true;
-		
+
 		var countdownGraphics:Map<String, Dynamic> = [
 			"ready" => GenesisAssets.getAsset('ui/skins/${UI.opponentStrums.skin}/countdown/ready', IMAGE),
 			"set" => GenesisAssets.getAsset('ui/skins/${UI.opponentStrums.skin}/countdown/set', IMAGE),
@@ -503,14 +507,14 @@ class PlayState extends MusicBeatState
 		{
 			if (gf != null && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing"))
 				gf.dance();
-			
+
 			if (bf.animation.curAnim != null && !bf.animation.curAnim.name.startsWith('sing'))
 				bf.dance();
-			
+
 			if (dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing'))
 				dad.dance();
 
-			switch(swagCounter)
+			switch (swagCounter)
 			{
 				case 0:
 					Conductor.songPosition = Conductor.crochet * -4;
@@ -583,14 +587,14 @@ class PlayState extends MusicBeatState
 					});
 				case 4:
 					Conductor.songPosition = 0;
-					
+
 					FlxG.sound.playMusic(cachedSong["inst"], 1, false);
 					FlxG.sound.music.onComplete = endSong;
 
-					if(cachedSong["voices"] != null)
+					if (cachedSong["voices"] != null)
 						voices = new FlxSound().loadEmbedded(cachedSong["voices"]);
 
-					if(cachedSong["voices"] != null)
+					if (cachedSong["voices"] != null)
 					{
 						voices.play();
 						FlxG.sound.list.add(voices);
@@ -618,8 +622,8 @@ class PlayState extends MusicBeatState
 		endingSong = true;
 
 		Highscore.saveScore(songData.song.toLowerCase(), songScore, curDifficulty);
-		
-		if(isStoryMode)
+
+		if (isStoryMode)
 		{
 			campaignScore += songScore;
 			campaignMisses += songMisses;
@@ -646,11 +650,11 @@ class PlayState extends MusicBeatState
 	function goBackToMenu()
 	{
 		endingSong = true;
-		
+
 		voices.stop();
 		voices.kill();
 		voices.destroy();
-		
+
 		FlxG.sound.playMusic(freakyMenu);
 
 		persistentUpdate = false;
@@ -658,9 +662,9 @@ class PlayState extends MusicBeatState
 
 		// Story Mode doesn't exist yet so it just takes you to Freeplay instead
 		/*if(isStoryMode)
-			States.switchState(this, new StoryMenu());
-		else*/
-			States.switchState(this, new FreeplayMenu());
+				States.switchState(this, new StoryMenu());
+			else */
+		States.switchState(this, new FreeplayMenu());
 	}
 
 	override public function beatHit()
@@ -670,14 +674,14 @@ class PlayState extends MusicBeatState
 
 		if (gf != null && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing"))
 			gf.dance();
-		
+
 		if (bf.animation.curAnim != null && !bf.animation.curAnim.name.startsWith('sing'))
 			bf.dance();
-		
+
 		if (dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing'))
 			dad.dance();
 
-		if(camZooming && curBeat % 4 == 0)
+		if (camZooming && curBeat % 4 == 0)
 		{
 			FlxG.camera.zoom += 0.015;
 			camHUD.zoom += 0.05;
@@ -692,11 +696,11 @@ class PlayState extends MusicBeatState
 		UI.stepHit();
 
 		var bruj:Int = Std.int(curStep / 16);
-		if(bruj < 0)
+		if (bruj < 0)
 			bruj = 0;
-		if(bruj > songData.notes.length - 1)
+		if (bruj > songData.notes.length - 1)
 			bruj = songData.notes.length - 1;
-		
+
 		if (songData.notes[bruj] != null)
 		{
 			if (songData.notes[bruj].changeBPM)
@@ -721,24 +725,25 @@ class PlayState extends MusicBeatState
 		trace('new vocal time ${Conductor.songPosition}');
 	}
 
-    function setupCameras()
-    {
-        FlxG.cameras.reset();
-        camGame = FlxG.camera;
-        camHUD = new FlxCamera();
-        camOther = new FlxCamera();
-        camHUD.bgColor = 0x0;
-        camOther.bgColor = 0x0;
+	function setupCameras()
+	{
+		FlxG.cameras.reset();
+		camGame = FlxG.camera;
+		camHUD = new FlxCamera();
+		camOther = new FlxCamera();
+		camHUD.bgColor = 0x0;
+		camOther.bgColor = 0x0;
 
-        FlxG.cameras.add(camHUD, false);
-        FlxG.cameras.add(camOther, false);
-    }
+		FlxG.cameras.add(camHUD, false);
+		FlxG.cameras.add(camOther, false);
+	}
 
 	public function callOnHScripts(func:String, ?args:Array<Dynamic>)
 	{
-		if(endingSong) return;
-		
-		for(script in scripts)
+		if (endingSong)
+			return;
+
+		for (script in scripts)
 		{
 			script.callFunction(func, args);
 		}

@@ -12,7 +12,6 @@ import openfl.display.Sprite;
 import openfl.events.UncaughtErrorEvent;
 import states.TitleState;
 import ui.GenesisFPS;
-
 #if sys
 import sys.FileSystem;
 import sys.io.File;
@@ -21,7 +20,7 @@ import sys.io.File;
 class Main extends Sprite
 {
 	public static var curState:Class<FlxState> = Init; // The FlxState the game starts with.
-	
+
 	public var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	public var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	public var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
@@ -49,7 +48,7 @@ class Main extends Sprite
 			gameWidth = Math.ceil(stageWidth / zoom);
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
-		
+
 		game = new FlxGame(gameWidth, gameHeight, curState, zoom, framerate, framerate, skipSplash, startFullscreen);
 		addChild(game);
 
@@ -60,7 +59,7 @@ class Main extends Sprite
 		FlxG.mouse.useSystemCursor = true; // Use system cursor because it's prettier
 		FlxG.mouse.visible = false; // Hide mouse on start
 	}
-	
+
 	// makes the game tell yoiu things when it crashes, i think!!
 	function onCrash(e:UncaughtErrorEvent)
 	{
@@ -98,7 +97,7 @@ class Main extends Sprite
 
 		// display a message then die
 		Application.current.window.alert(errMsg, "Something went wrong!");
-		//DiscordClient.shutdown();
+		// DiscordClient.shutdown();
 		Sys.exit(1);
 		#end
 	}

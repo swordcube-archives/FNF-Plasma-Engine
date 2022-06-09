@@ -19,22 +19,23 @@ class MusicBeatState extends FlxUIState
 
 	public var curStep:Int = 0;
 	public var curBeat:Int = 0;
+
 	/*private var controls(get, never):Controls;
 
-	inline function get_controls():Controls
-		return PlayerSettings.player1.controls;*/
-
+		inline function get_controls():Controls
+			return PlayerSettings.player1.controls; */
 	public var toasts:FlxTypedGroup<NotificationToast>;
 
 	// class create event
 	override function create()
 	{
-		if(!FlxTransitionableState.skipNextTransOut)
+		if (!FlxTransitionableState.skipNextTransOut)
 			openSubState(new FNFTransition(0.8, true));
 
 		GenesisAssets.keyedAssets.clear(); // clears images from memory or smtsh
 
-		FlxG.sound.list.forEachDead(function(sound:FlxSound) { // clears sounds from memory
+		FlxG.sound.list.forEachDead(function(sound:FlxSound)
+		{ // clears sounds from memory
 			FlxG.sound.list.remove(sound, true);
 			sound.stop();
 			sound.kill();
@@ -63,12 +64,14 @@ class MusicBeatState extends FlxUIState
 		FlxG.stage.frameRate = 240;
 
 		var i:Int = 0;
-		toasts.forEachAlive(function(t:NotificationToast) {
+		toasts.forEachAlive(function(t:NotificationToast)
+		{
 			t.y = 20 + (i * (t.height + 20));
 			i++;
 		});
 
-		toasts.forEachDead(function(t:NotificationToast) {
+		toasts.forEachDead(function(t:NotificationToast)
+		{
 			toasts.remove(t, true);
 		});
 
@@ -80,27 +83,29 @@ class MusicBeatState extends FlxUIState
 		updateCurStep();
 		updateBeat();
 
-		// delta time bullshit 
+		// delta time bullshit
 		var trueStep:Int = curStep;
 		for (i in storedSteps)
 			if (i < oldStep)
 				storedSteps.remove(i);
-		for (i in oldStep...trueStep) {
-			if (!storedSteps.contains(i) && i > 0) {
+		for (i in oldStep...trueStep)
+		{
+			if (!storedSteps.contains(i) && i > 0)
+			{
 				curStep = i;
 				stepHit();
 				skippedSteps.push(i);
 			}
 		}
-		if (skippedSteps.length > 0) {
-			//trace('skipped steps $skippedSteps');
+		if (skippedSteps.length > 0)
+		{
+			// trace('skipped steps $skippedSteps');
 			skippedSteps = [];
 		}
 		curStep = trueStep;
 
 		//
-		if (oldStep != curStep && curStep > 0 
-			&& !storedSteps.contains(curStep)) 
+		if (oldStep != curStep && curStep > 0 && !storedSteps.contains(curStep))
 			stepHit();
 		oldStep = curStep;
 	}
@@ -162,11 +167,11 @@ class MusicBeatSubState extends FlxUISubState
 
 	private var curStep:Int = 0;
 	private var curBeat:Int = 0;
+
 	/*private var controls(get, never):Controls;
 
-	inline function get_controls():Controls
-		return PlayerSettings.player1.controls;*/
-
+		inline function get_controls():Controls
+			return PlayerSettings.player1.controls; */
 	override function update(elapsed:Float)
 	{
 		// everyStep();

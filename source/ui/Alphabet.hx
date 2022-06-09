@@ -131,7 +131,9 @@ class Alphabet extends FlxSpriteGroup
 			var isNumber:Bool = AlphaCharacter.numbers.contains(character);
 			var isSymbol:Bool = AlphaCharacter.symbols.contains(character);
 
-			if ((AlphaCharacter.alphabet.indexOf(character.toLowerCase()) != -1) || (AlphaCharacter.numbers.contains(character)) || (AlphaCharacter.symbols.contains(character)))
+			if ((AlphaCharacter.alphabet.indexOf(character.toLowerCase()) != -1)
+				|| (AlphaCharacter.numbers.contains(character))
+				|| (AlphaCharacter.symbols.contains(character)))
 			{
 				if (xPosResetted)
 				{
@@ -341,35 +343,35 @@ class AlphaCharacter extends FlxSprite
 
 	public function createBold(letter:String)
 	{
-		//if (AlphaCharacter.alphabet.indexOf(letter.toLowerCase()) != -1)
-		//{
-			// or just load regular text
-			animation.addByPrefix(letter, letter.toUpperCase() + " bold0", 24);
-			animation.play(letter);
-			scale.set(textSize, textSize);
-			updateHitbox();
+		// if (AlphaCharacter.alphabet.indexOf(letter.toLowerCase()) != -1)
+		// {
+		// or just load regular text
+		animation.addByPrefix(letter, letter.toUpperCase() + " bold0", 24);
+		animation.play(letter);
+		scale.set(textSize, textSize);
+		updateHitbox();
 
-			switch (letter)
-			{
-				case "'":
-					y -= 20 * textSize;
-				case '-':
-					//x -= 35 - (90 * (1.0 - textSize));
-					y += 20 * textSize;
-				case '(':
-					x -= 65 * textSize;
-					y -= 5 * textSize;
-					offset.x = -58 * textSize;
-				case ')':
-					x -= 20 / textSize;
-					y -= 5 * textSize;
-					offset.x = 12 * textSize;
-				case '.':
-					y += 45 * textSize;
-					x += 5 * textSize;
-					offset.x += 3 * textSize;
-			}
-		//}
+		switch (letter)
+		{
+			case "'":
+				y -= 20 * textSize;
+			case '-':
+				// x -= 35 - (90 * (1.0 - textSize));
+				y += 20 * textSize;
+			case '(':
+				x -= 65 * textSize;
+				y -= 5 * textSize;
+				offset.x = -58 * textSize;
+			case ')':
+				x -= 20 / textSize;
+				y -= 5 * textSize;
+				offset.x = 12 * textSize;
+			case '.':
+				y += 45 * textSize;
+				x += 5 * textSize;
+				offset.x += 3 * textSize;
+		}
+		// }
 	}
 
 	public function createLetter(letter:String):Void
@@ -390,7 +392,7 @@ class AlphaCharacter extends FlxSprite
 			case "'":
 				y -= 20 * textSize;
 			case '-':
-				//x -= 35 - (90 * (1.0 - textSize));
+				// x -= 35 - (90 * (1.0 - textSize));
 				y += 20 * textSize;
 			case '(':
 				x -= 65 * textSize;

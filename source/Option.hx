@@ -20,7 +20,8 @@ class Option
 	public var maximum:Float = 0; // Specifies what the maximum value is for the NUMBER type.
 	public var values:Array<Dynamic> = []; // Specifies what values you can choose from for the ARRAY type.
 
-	public function new(type:OptionType, title:String, desc:String, defaultValue:Dynamic, ?decimals:Int = 0, ?multiplier:Null<Float>, ?minimum:Null<Float>, ?maximum:Null<Float>, ?values:Array<Dynamic>)
+	public function new(type:OptionType, title:String, desc:String, defaultValue:Dynamic, ?decimals:Int = 0, ?multiplier:Null<Float>, ?minimum:Null<Float>,
+			?maximum:Null<Float>, ?values:Array<Dynamic>)
 	{
 		this.type = type;
 		this.title = title;

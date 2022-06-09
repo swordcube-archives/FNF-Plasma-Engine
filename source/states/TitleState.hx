@@ -29,13 +29,13 @@ class TitleState extends MusicBeatState
 	var gfDance:FlxSprite;
 	var danceLeft:Bool = false;
 	var titleText:FlxSprite;
-	
+
 	override public function create()
 	{
 		super.create();
 
-        persistentUpdate = true;
-        persistentDraw = true;
+		persistentUpdate = true;
+		persistentDraw = true;
 
 		freakyMenu = GenesisAssets.getAsset('freakyMenu', MUSIC);
 
@@ -84,14 +84,14 @@ class TitleState extends MusicBeatState
 		new FlxTimer().start(1, function(tmr:FlxTimer)
 		{
 			startIntro();
-			if(alreadySkipped)
+			if (alreadySkipped)
 				skipIntro();
 		});
 	}
 
 	function startIntro()
 	{
-		if(!startedIntro)
+		if (!startedIntro)
 		{
 			FlxG.sound.playMusic(freakyMenu);
 			FlxG.sound.music.fadeIn(4, 0, 0.7);
@@ -122,16 +122,16 @@ class TitleState extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		if(Controls.isPressed("ACCEPT", JUST_PRESSED))
+		if (Controls.isPressed("ACCEPT", JUST_PRESSED))
 		{
-			if(!skippedIntro)
+			if (!skippedIntro)
 				skipIntro();
 			else
 			{
-				if(!confirmed)
+				if (!confirmed)
 				{
 					confirmed = true;
-					
+
 					titleText.animation.play('press');
 					FlxG.sound.play(GenesisAssets.getAsset('menus/confirmMenu', SOUND));
 					FlxG.camera.flash(FlxColor.WHITE, 2);
@@ -144,9 +144,9 @@ class TitleState extends MusicBeatState
 			}
 		}
 
-		if(startedIntro || skippedIntro)
+		if (startedIntro || skippedIntro)
 		{
-			if(FlxG.sound.music != null && FlxG.sound.music.playing)
+			if (FlxG.sound.music != null && FlxG.sound.music.playing)
 				Conductor.songPosition = FlxG.sound.music.time;
 			else
 				Conductor.songPosition += FlxG.elapsed * 1000;
@@ -158,16 +158,16 @@ class TitleState extends MusicBeatState
 		super.beatHit();
 
 		danceLeft = !danceLeft;
-		if(danceLeft)
+		if (danceLeft)
 			gfDance.animation.play("danceLeft", true);
 		else
 			gfDance.animation.play("danceRight", true);
 
 		logo.animation.play("bump", true);
-		
-		if(!skippedIntro)
+
+		if (!skippedIntro)
 		{
-			switch(curBeat)
+			switch (curBeat)
 			{
 				case 1:
 					createCoolText(['ninjamuffin99', 'phantomArcade', 'kawaisprite', 'evilsk8er']);
@@ -232,7 +232,7 @@ class TitleState extends MusicBeatState
 		if (!skippedIntro)
 		{
 			alreadySkipped = true;
-			
+
 			remove(ngSpr);
 
 			FlxG.camera.flash(FlxColor.WHITE, 4);

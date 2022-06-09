@@ -13,18 +13,17 @@ import openfl.text.TextFormat;
  * FPS class extension to display memory usage.
  * @author Kirill Poletaev
  */
-
 class GenesisFPS extends TextField
 {
-    //                                      fps    mem    version
-    public var infoDisplayed:Array<Bool> = [true, true, false];
+	//                                      fps    mem    version
+	public var infoDisplayed:Array<Bool> = [true, true, false];
 
 	public var memPeak:Float = 0;
-    public var currentFPS:Int = 0;
+	public var currentFPS:Int = 0;
 
-    var fpsCounter:FPS;
+	var fpsCounter:FPS;
 
-	public function new(inX:Float = 10.0, inY:Float = 10.0, inCol:Int = 0x000000, ?font:String) 
+	public function new(inX:Float = 10.0, inY:Float = 10.0, inCol:Int = 0x000000, ?font:String)
 	{
 		super();
 
@@ -32,12 +31,12 @@ class GenesisFPS extends TextField
 		y = inY;
 		selectable = false;
 
-        var font = GenesisAssets.getAsset('vcr.ttf', FONT); // default font is usually _sans, but vcr looks nicer
+		var font = GenesisAssets.getAsset('vcr.ttf', FONT); // default font is usually _sans, but vcr looks nicer
 		defaultTextFormat = new TextFormat(font, 14, inCol);
 
-        fpsCounter = new FPS(10000, 10000, inCol);
-        fpsCounter.visible = false;
-        Lib.current.addChild(fpsCounter);
+		fpsCounter = new FPS(10000, 10000, inCol);
+		fpsCounter.visible = false;
+		Lib.current.addChild(fpsCounter);
 
 		addEventListener(Event.ENTER_FRAME, onEnter);
 		width = FlxG.width;
@@ -46,59 +45,56 @@ class GenesisFPS extends TextField
 
 	private function onEnter(event:Event)
 	{
-        currentFPS = fpsCounter.currentFPS;
+		currentFPS = fpsCounter.currentFPS;
 
-        infoDisplayed = [
-            Init.getOption('fps-counter'),
-            Init.getOption('memory-counter'),
-            false
-        ];
+		infoDisplayed = [Init.getOption('fps-counter'), Init.getOption('memory-counter'), false];
 
-        if(visible)
-        {
-            text = "";
+		if (visible)
+		{
+			text = "";
 
-            for(i in 0...infoDisplayed.length)
-            {
-                if(infoDisplayed[i])
-                {
-                    switch(i)
-                    {
-                        case 0:
-                            // FPS
-                            fps_Function();
-                        case 1:
-                            // Memory
-                            memory_Function();
-                        case 2:
-                            // Version
-                            version_Function();
-                    }
+			for (i in 0...infoDisplayed.length)
+			{
+				if (infoDisplayed[i])
+				{
+					switch (i)
+					{
+						case 0:
+							// FPS
+							fps_Function();
+						case 1:
+							// Memory
+							memory_Function();
+						case 2:
+							// Version
+							version_Function();
+					}
 
-                    text += "\n";
-                }
-            }
-        }
-        else
-            text = "";
+					text += "\n";
+				}
+			}
+		}
+		else
+			text = "";
 	}
 
-    function fps_Function()
-    {
-        text += "FPS: " + currentFPS;
-    }
+	function fps_Function()
+	{
+		text += "FPS: " + currentFPS;
+	}
 
-    function memory_Function()
-    {
-		var mem:Float = Math.abs(Math.round(System.totalMemory / 1024 / 1024 * 100)/100);
-		
-		if(mem > memPeak) memPeak = mem;
+	function memory_Function()
+	{
+		var mem:Float = Math.abs(Math.round(System.totalMemory / 1024 / 1024 * 100) / 100);
+
+		if (mem > memPeak)
+			memPeak = mem;
 
 		text += "MEM: " + mem + " MB\n" + "MEM peak: " + memPeak + " MB";
-    }
+	}
 
-    function version_Function()
-    {
-        text += "Version: " + Application.current.meta.get('version');
-    }
+	function version_Function()
+	{
+		text += "Version: " + Application.current.meta.get('version');
+	}
 }

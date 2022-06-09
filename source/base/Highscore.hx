@@ -6,15 +6,15 @@ using StringTools;
 
 class Highscore
 {
-    public static var songScores:Map<String, Int> = new Map<String, Int>();
+	public static var songScores:Map<String, Int> = new Map<String, Int>();
 
-    public static function init()
-    {
-        if(FlxG.save.data.songScores != null)
-            songScores = FlxG.save.data.songScores;
-    }
+	public static function init()
+	{
+		if (FlxG.save.data.songScores != null)
+			songScores = FlxG.save.data.songScores;
+	}
 
-    // Week Scores
+	// Week Scores
 	public static function getWeekScore(week:Int, diff:String):Int
 	{
 		if (!songScores.exists(formatSong('week' + week, diff)))
@@ -36,7 +36,7 @@ class Highscore
 			setScore(daWeek, score);
 	}
 
-    // Song Scores
+	// Song Scores
 	public static function getScore(song:String, diff:String):Int
 	{
 		if (!songScores.exists(formatSong(song, diff)))
@@ -65,7 +65,7 @@ class Highscore
 			setScore(daSong, score);
 	}
 
-    // Formatting
+	// Formatting
 	public static function formatSong(song:String, diff:String):String
 	{
 		return song.replace(" ", "-") + '-' + diff;

@@ -10,7 +10,8 @@ using StringTools;
 
 // GE Character Type
 
-typedef CharacterData = {
+typedef CharacterData =
+{
 	var animations:Array<CharacterAnim>;
 	var healthIcon:String;
 	var healthBarColor:String;
@@ -23,7 +24,8 @@ typedef CharacterData = {
 	var deathCharacter:String;
 };
 
-typedef CharacterAnim = {
+typedef CharacterAnim =
+{
 	var animName:String;
 	var animPrefix:String;
 	var animOffsets:Array<Float>;
@@ -33,7 +35,8 @@ typedef CharacterAnim = {
 };
 
 // Psych Character Type
-typedef PsychCharacter = {
+typedef PsychCharacter =
+{
 	var animations:Array<PsychCharacterAnim>;
 	var no_antialiasing:Bool;
 	var image:String;
@@ -47,7 +50,8 @@ typedef PsychCharacter = {
 	var deathCharacter:String;
 };
 
-typedef PsychCharacterAnim = {
+typedef PsychCharacterAnim =
+{
 	var offsets:Array<Float>;
 	var loop:Bool;
 	var fps:Int;
@@ -73,15 +77,9 @@ class Character extends FNFSprite
 	public var singDuration:Float = 0;
 	public var holdTimer:Float = 0;
 
-	public var gfLikeCharacters:Array<String> = [
-		"gf",
-		"spooky"
-	];
+	public var gfLikeCharacters:Array<String> = ["gf", "spooky"];
 
-	public var cameraPosition:Array<Float> = [
-		0,
-		0
-	];
+	public var cameraPosition:Array<Float> = [0, 0];
 
 	public var script:HScript;
 
@@ -94,19 +92,19 @@ class Character extends FNFSprite
 
 		// Switch case is here if you wanna hardcode your character
 		// For whatever reason
-		switch(curCharacter)
+		switch (curCharacter)
 		{
 			default:
 				var readJson:Dynamic = Json.parse(GenesisAssets.getAsset('images/characters/jsons/$curCharacter.json', TEXT));
-				
-				if(readJson.image != null) // Checks if the char is a Psych one then does some cool magic
+
+				if (readJson.image != null) // Checks if the char is a Psych one then does some cool magic
 				{
 					var psychJson:PsychCharacter = readJson;
 
 					var deathCharacter:String = "bf-dead";
-					if(psychJson.deathCharacter != null)
+					if (psychJson.deathCharacter != null)
 						deathCharacter = psychJson.deathCharacter;
-					
+
 					// Convert everything (except anims) in a psych json to
 					// GE format, We convert anims after setting the json here
 					json = {
@@ -123,7 +121,7 @@ class Character extends FNFSprite
 					};
 
 					// Convert the animations to GE format
-					for(psychAnim in psychJson.animations)
+					for (psychAnim in psychJson.animations)
 					{
 						json.animations.push({
 							"animName": psychAnim.anim,
@@ -145,9 +143,9 @@ class Character extends FNFSprite
 
 				var anims:Array<Dynamic> = json.animations;
 
-				for(anim in anims)
+				for (anim in anims)
 				{
-					if(anim.animIndices != null && anim.animIndices.length > 0)
+					if (anim.animIndices != null && anim.animIndices.length > 0)
 						animation.addByIndices(anim.animName, anim.animPrefix, anim.animIndices, '', anim.fps, anim.looped);
 					else
 						animation.addByPrefix(anim.animName, anim.animPrefix, anim.fps, anim.looped);
@@ -155,7 +153,7 @@ class Character extends FNFSprite
 					addOffset(anim.animName, anim.animOffsets[0], anim.animOffsets[1]);
 				}
 
-				if(json.antiAliasing)
+				if (json.antiAliasing)
 					antialiasing = Init.getOption('anti-aliasing');
 				else
 					antialiasing = false;
@@ -173,13 +171,12 @@ class Character extends FNFSprite
 				healthBarColor = json.healthBarColor;
 		}
 
-		
-		if(GenesisAssets.exists('images/characters/scripts/$curCharacter/script.hx', HSCRIPT))
+		if (GenesisAssets.exists('images/characters/scripts/$curCharacter/script.hx', HSCRIPT))
 		{
 			script = new HScript('images/characters/scripts/$curCharacter/script.hx');
 			script.state = PlayState.instance;
 			script.start();
-			
+
 			script.callFunction("createCharacter", [curCharacter, isPlayer]);
 
 			PlayState.instance.scripts.push(script);
@@ -187,7 +184,7 @@ class Character extends FNFSprite
 
 		dance();
 		animation.finish();
-    }
+	}
 
 	public var heyTimer:Float = 0;
 	public var specialAnim:Bool = false;
@@ -195,20 +192,21 @@ class Character extends FNFSprite
 	override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
-	
-		if(heyTimer > 0)
+
+		if (heyTimer > 0)
 		{
 			heyTimer -= elapsed;
-			if(heyTimer <= 0)
+			if (heyTimer <= 0)
 			{
-				if(specialAnim && animation.curAnim.name == 'hey' || animation.curAnim.name == 'cheer')
+				if (specialAnim && animation.curAnim.name == 'hey' || animation.curAnim.name == 'cheer')
 				{
 					specialAnim = false;
 					dance();
 				}
 				heyTimer = 0;
 			}
-		} else if(specialAnim && animation.curAnim.finished)
+		}
+		else if (specialAnim && animation.curAnim.finished)
 		{
 			specialAnim = false;
 			dance();
@@ -224,21 +222,21 @@ class Character extends FNFSprite
 				}
 			case 'pico-speaker':
 				/*if (animationNotes.length > 0 && Conductor.songPosition > animationNotes[0][0])
-				{
-					//trace("played shoot anim" + animationNotes[0][1]);
-					var shotDirection:Int = 1;
-					if (animationNotes[0][1] >= 2)
 					{
-						shotDirection = 3;
+						//trace("played shoot anim" + animationNotes[0][1]);
+						var shotDirection:Int = 1;
+						if (animationNotes[0][1] >= 2)
+						{
+							shotDirection = 3;
+						}
+						shotDirection += FlxG.random.int(0, 1);
+						
+						playAnim('shoot' + shotDirection, true);
+						animationNotes.shift();
 					}
-					shotDirection += FlxG.random.int(0, 1);
-					
-					playAnim('shoot' + shotDirection, true);
-					animationNotes.shift();
-				}
-				if (animation.curAnim.finished)
-				{
-					playAnim(animation.curAnim.name, false, false, animation.curAnim.frames.length - 3);
+					if (animation.curAnim.finished)
+					{
+						playAnim(animation.curAnim.name, false, false, animation.curAnim.frames.length - 3);
 				}*/
 		}
 
@@ -254,7 +252,7 @@ class Character extends FNFSprite
 			}
 		}
 
-		if(animation.curAnim.finished && animation.getByName(animation.curAnim.name + '-loop') != null)
+		if (animation.curAnim.finished && animation.getByName(animation.curAnim.name + '-loop') != null)
 			playAnim(animation.curAnim.name + '-loop');
 	}
 
@@ -267,23 +265,23 @@ class Character extends FNFSprite
 			switch (curCharacter)
 			{
 				case 'pico-speaker':
-					// do nothing LOL
+				// do nothing LOL
 				case 'tankman':
 					if (!animation.curAnim.name.endsWith('DOWN-alt'))
 						playAnim('idle');
 				default:
-					if(animOffsets.exists('danceLeft') && animOffsets.exists('danceRight'))
+					if (animOffsets.exists('danceLeft') && animOffsets.exists('danceRight'))
 					{
-						if(animation.curAnim == null || !animation.curAnim.name.startsWith('hair'))
+						if (animation.curAnim == null || !animation.curAnim.name.startsWith('hair'))
 						{
 							danced = !danced;
 
-							if(animation.curAnim != null && animation.curAnim.name == "singLEFT")
+							if (animation.curAnim != null && animation.curAnim.name == "singLEFT")
 								danced = false;
 
-							if(animation.curAnim != null && animation.curAnim.name == "singRIGHT")
+							if (animation.curAnim != null && animation.curAnim.name == "singRIGHT")
 								danced = true;
-		
+
 							if (danced)
 								playAnim('danceRight');
 							else

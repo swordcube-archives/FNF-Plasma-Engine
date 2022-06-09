@@ -19,8 +19,8 @@ class CheckboxThingie extends FNFSprite
 		animation.addByPrefix('static', 'Check Box unselected', 24, false);
 		animation.addByPrefix('checked', 'Check Box selecting animation', 24, false);
 
-        addOffset('checked', 17, 70);
-        addOffset('static');
+		addOffset('checked', 17, 70);
+		addOffset('static');
 
 		antialiasing = Init.getOption('anti-aliasing');
 		setGraphicSize(Std.int(width * 0.7));
@@ -30,24 +30,24 @@ class CheckboxThingie extends FNFSprite
 		refreshAnim(state);
 	}
 
-    override public function update(elapsed:Float)
-    {
-        super.update(elapsed);
+	override public function update(elapsed:Float)
+	{
+		super.update(elapsed);
 
-        if(sprTracker != null)
-        {
-            if(copyAlpha)
-                alpha = sprTracker.alpha;
-            
-            setPosition(sprTracker.x + offsetX, sprTracker.y + offsetY);
-        }
-    }
+		if (sprTracker != null)
+		{
+			if (copyAlpha)
+				alpha = sprTracker.alpha;
 
-    public function refreshAnim(state:Bool = false)
-    {
-        if(state)
-            playAnim('checked', true);
-        else
-            playAnim('static', true);
-    }
+			setPosition(sprTracker.x + offsetX, sprTracker.y + offsetY);
+		}
+	}
+
+	public function refreshAnim(state:Bool = false)
+	{
+		if (state)
+			playAnim('checked', true);
+		else
+			playAnim('static', true);
+	}
 }
