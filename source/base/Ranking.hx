@@ -48,7 +48,7 @@ class Ranking
 		{
 			// biggest Haccuracy
 			var bigHacc:Int = 0;
-			var leRank:String = '';
+			var leRank:String = "";
 
 			for (minAccuracy => rank in ranks)
 			{
