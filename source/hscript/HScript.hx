@@ -7,7 +7,13 @@ import base.SongLoader;
 import flixel.FlxG;
 import hscript.Interp;
 import hscript.Parser;
+import states.FreeplayMenu;
+import states.MainMenu;
+import states.ModState;
+import states.ModsMenu;
+import states.OptionsMenu;
 import states.PlayState;
+import states.TitleState;
 import ui.Alphabet;
 import ui.HealthIcon;
 import ui.NotificationToast;
@@ -47,7 +53,10 @@ class HScript
 		interp.variables.set("GenesisAssets", HScriptGenesisAssets);
 		interp.variables.set("FlxSprite", flixel.FlxSprite);
 		interp.variables.set("FNFSprite", funkin.FNFSprite);
+		interp.variables.set("FlxSound", flixel.system.FlxSound);
 		interp.variables.set("FlxMath", flixel.math.FlxMath);
+		interp.variables.set("FlxText", flixel.text.FlxText);
+		interp.variables.set("FlxAxes", flixel.util.FlxAxes);
 		interp.variables.set("Math", Math);
 		interp.variables.set("Std", Std);
 
@@ -58,11 +67,21 @@ class HScript
 		interp.variables.set("NoteSplash", NoteSplash);
 		interp.variables.set("HealthIcon", HealthIcon);
 		interp.variables.set("Init", Init);
-		interp.variables.set("PlayState", PlayState);
 		interp.variables.set("Conductor", Conductor);
 		interp.variables.set("CoolUtil", CoolUtil);
 		interp.variables.set("Stage", null);
 		// use stage.addSprite(sprite, "layerTypeHere") to add shit to the stage
+
+		// states
+		interp.variables.set("TitleState", TitleState);
+		interp.variables.set("MainMenu", MainMenu);
+		//interp.variables.set("StoryMenu", StoryMenu);
+		interp.variables.set("FreeplayMenu", FreeplayMenu);
+		interp.variables.set("PlayState", PlayState);
+		interp.variables.set("ModsMenu", ModsMenu);
+		interp.variables.set("ModState", ModState);
+		interp.variables.set("OptionsMenu", OptionsMenu);
+		interp.variables.set("States", States);
 
 		// function shits
 

@@ -274,7 +274,12 @@ class OptionsMenu extends MusicBeatState
 				else
 					holdTimer = 0;
 			default:
-				trace("your mother");
+				doNothing();
 		}
+	}
+
+	function doNothing()
+	{
+		// does exactly what it says it does, nothing.
 	}
 }

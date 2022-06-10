@@ -182,11 +182,11 @@ class ModSelection extends FlxSpriteGroup
 
 		icon.setPosition(bg.x + 20, bg.y + 20);
 
-		var modName:FlxText = new FlxText(icon.x + (icon.width + 20), bg.y, 0, json.name, 48);
+		var modName:FlxText = new FlxText(icon.x + (icon.width + 20), 20, 0, json.name, 48);
 		modName.setFormat(GenesisAssets.getAsset('vcr.ttf', FONT), 48, FlxColor.WHITE, LEFT);
 		add(modName);
 
-		var modDesc:FlxText = new FlxText(modName.x, modName.y + 30, bg.width - (icon.width + 20), json.description, 24);
+		var modDesc:FlxText = new FlxText(modName.x, 70, bg.width - (icon.width + 20), json.description, 24);
 		modDesc.setFormat(GenesisAssets.getAsset('vcr.ttf', FONT), 24, FlxColor.WHITE, LEFT);
 		add(modDesc);
 
@@ -197,7 +197,7 @@ class ModSelection extends FlxSpriteGroup
 
 		toggledBG = new FlxSprite().makeGraphic(Std.int(width), Std.int(height), FlxColor.WHITE);
 		toggledBG.color = FlxColor.RED;
-		toggledBG.setPosition(bg.x + (bg.width - (width + 20)), bg.y + (bg.height - (height + 20)));
+		toggledBG.setPosition(bg.x + (bg.width - (width + 20)), 0 + (bg.height - (height)));
 		add(toggledBG);
 
 		toggledText = new FlxText(toggledBG.x, toggledBG.y, width, '[ OFF ]', 28);
