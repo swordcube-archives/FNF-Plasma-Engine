@@ -1,5 +1,6 @@
 package ui.playState;
 
+import base.Ranking;
 import base.Conductor;
 import base.Controls;
 import base.ManiaShit;
@@ -496,10 +497,9 @@ class UI extends FlxGroup
 			daNote.wasGoodHit = true;
 
 			PlayState.instance.combo++;
-			popUpScore(daNote.strumTime, daNote);
+			popUpScore(daNote);
 
 			PlayState.instance.voices.volume = 1;
-			PlayState.instance.health += 0.023;
 
 			if (!PlayState.instance.bf.specialAnim)
 			{
@@ -513,35 +513,27 @@ class UI extends FlxGroup
 		}
 	}
 
-	public function popUpScore(strumTime:Float, daNote:Note)
+	public function popUpScore(daNote:Note)
 	{
 		// Accuracy Shit
-		var ratingStr:String = Ranking.judgeNote(strumTime);
+		var ratingStr:String = Ranking.judgeNote(daNote.strumTime);
+		daNote.noteRating = ratingStr;
 
-		switch (ratingStr)
-		{
-			case "marvelous" | "sick":
-				PlayState.instance.songScore += Ranking.getRatingScore(ratingStr);
-				PlayState.instance.totalHit += 1;
-
-				if (!Init.getOption('disable-note-splashes'))
-				{
-					var strum:StrumNote = playerStrums.members[daNote.noteData];
-					var newSplash:NoteSplash = new NoteSplash(strum.x, strum.y, ManiaShit.letterDirections[PlayState.songData.keyCount][daNote.noteData]);
-					add(newSplash);
-				}
-			case "good":
-				PlayState.instance.songScore += Ranking.getRatingScore(ratingStr);
-				PlayState.instance.totalHit += 0.7;
-			case "bad":
-				PlayState.instance.songScore += Ranking.getRatingScore(ratingStr);
-				PlayState.instance.totalHit += 0.45;
-			case "shit":
-				PlayState.instance.health -= 0.15;
-				PlayState.instance.songScore += Ranking.getRatingScore(ratingStr);
-		}
-
+		var judge:Judgement = Ranking.judgements.get(ratingStr);
+		PlayState.instance.songScore += judge.score;
+		if (judge.mod != null)
+			PlayState.instance.totalHit += judge.mod;
 		PlayState.instance.totalNotes += 1;
+		if (judge.health != null)
+			PlayState.instance.health += judge.health;
+		else
+			PlayState.instance.health += 0.023;
+
+		if (!Init.getOption('disable-note-splashes') && judge.noteSplash != null && judge.noteSplash)
+		{
+			var strum:StrumNote = playerStrums.members[daNote.noteData];
+			add(new NoteSplash(strum.x, strum.y, ManiaShit.letterDirections[PlayState.songData.keyCount][daNote.noteData]));
+		}
 
 		// Spawning the Rating & Combo
 		var coolObject:FlxObject = new FlxObject(FlxG.width * 0.35);

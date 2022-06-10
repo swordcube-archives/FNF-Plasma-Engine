@@ -715,14 +715,14 @@ class PlayState extends MusicBeatState
 
 	public function resyncVocals():Void
 	{
-		trace('resyncing vocal time ${voices.time}');
+		// trace('resyncing vocal time ${voices.time}');
 		FlxG.sound.music.pause();
 		voices.pause();
 		Conductor.songPosition = FlxG.sound.music.time;
 		voices.time = Conductor.songPosition;
 		FlxG.sound.music.play();
 		voices.play();
-		trace('new vocal time ${Conductor.songPosition}');
+		// trace('new vocal time ${Conductor.songPosition}');
 	}
 
 	function setupCameras()

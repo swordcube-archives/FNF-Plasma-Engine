@@ -60,7 +60,7 @@ class HealthIcon extends FlxSprite
 				if (width == height * i)
 				{
 					icons = i;
-					trace("detected " + icons + " icons");
+					// trace("detected " + icons + " icons");
 					break;
 				}
 				i++;
@@ -69,7 +69,7 @@ class HealthIcon extends FlxSprite
 				if (i > 100)
 				{
 					icons = 2;
-					trace("failed to detect icon count, icon count is now " + icons);
+					// trace("failed to detect icon count, icon count is now " + icons);
 					break;
 				}
 			}

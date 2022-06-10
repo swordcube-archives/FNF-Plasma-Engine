@@ -12,19 +12,24 @@ class Note extends FlxSprite
 	public var strumTime:Float = 0;
 
 	public var inEditor:Bool = false;
+
 	public var mustPress:Bool = false;
 	public var noteData:Int = 0;
+	public var noteRating:String;
+
 	public var canBeHit:Bool = false;
 	public var tooLate:Bool = false;
 	public var wasGoodHit:Bool = false;
 	public var ignoreNote:Bool = false;
 	public var hitByOpponent:Bool = false;
 	public var noteWasHit:Bool = false;
+
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
 	public var isEndOfSustain:Bool = false;
-	public var earlyHitMult:Float = 1;
 	public var prevNote:Note;
+
+	public var earlyHitMult:Float = 1;
 
 	public var originalHeightForCalcs:Float = 6;
 

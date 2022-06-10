@@ -18,7 +18,7 @@ class States
 			{
 				FlxG.switchState(newState);
 			};
-			return trace('changed state');
+			return;
 		}
 		FlxG.switchState(newState);
 	}

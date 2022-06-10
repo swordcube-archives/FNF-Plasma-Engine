@@ -2,63 +2,82 @@ package base;
 
 import states.PlayState;
 
+typedef Judgement =
+{
+	var time:Float;
+	var score:Int;
+	var ?noteSplash:Bool;
+	var ?mod:Float;
+	var ?health:Float;
+}
+
 class Ranking
 {
+	public static final judgements:Map<String, Judgement> = [
+		"marvelous" => {
+			time: 39.25,
+			score: 300,
+			noteSplash: true,
+			mod: 1
+		},
+		"sick" => {
+			time: 43.5,
+			score: 300,
+			noteSplash: true,
+			mod: 1
+		},
+		"good" => {time: 73.5, score: 200, mod: 0.7},
+		"bad" => {time: 125, score: 100, mod: 0.4},
+		"shit" => {time: 150, score: 50, health: -0.15}
+	];
+
+	static final ranks:Map<Int, String> = [
+		100 => "S+",
+		90 => "S",
+		80 => "A",
+		70 => "B",
+		60 => "C",
+		50 => "D",
+		40 => "E",
+		30 => "F"
+	];
+
 	public static function getRank(accuracy:Float)
 	{
-		var ranking:String = "N/A";
-
 		if (PlayState.instance.totalNotes > 0)
 		{
-			var conditions:Array<Array<Dynamic>> = [
-				[accuracy >= 100, "S+"], // S+
-				[accuracy >= 90, "S"], // S
-				[accuracy >= 80, "A"], // A
-				[accuracy >= 70, "B"], // B
-				[accuracy >= 60, "C"], // C
-				[accuracy >= 50, "D"], // D
-				[accuracy >= 40, "E"], // E
-				[accuracy <= 30, "F"], // F
-			];
+			// biggest Haccuracy
+			var bigHacc:Int = 0;
+			var leRank:String = '';
 
-			for (condition in conditions)
+			for (minAccuracy => rank in ranks)
 			{
-				var boolResult:Bool = condition[0];
-				ranking = condition[1];
-
-				if (boolResult == true)
-					break;
+				if (minAccuracy <= accuracy && minAccuracy >= bigHacc)
+				{
+					bigHacc = minAccuracy;
+					leRank = rank;
+				}
 			}
+
+			return leRank;
 		}
 
-		return ranking;
+		return "N/A";
 	}
 
-	public static function judgeNote(strumTime:Float):String
+	public static function judgeNote(strumTime:Float)
 	{
-		var noteTime = Conductor.songPosition - strumTime;
+		var noteDiff:Float = Math.abs(Conductor.songPosition - strumTime);
+		var lastJudge:String = "";
 
-		var judgementWindows:Map<String, Float> = ["sick" => 22.5, "good" => 45, "bad" => 85, "shit" => 100];
+		for (name => judge in judgements)
+		{
+			if (noteDiff >= judge.time)
+				return name;
+			else
+				lastJudge = name;
+		}
 
-		if (Math.abs(noteTime) >= judgementWindows["shit"])
-			return "shit";
-
-		if (Math.abs(noteTime) >= judgementWindows["bad"])
-			return "bad";
-
-		if (Math.abs(noteTime) >= judgementWindows["good"])
-			return "good";
-
-		if (Math.abs(noteTime) >= judgementWindows["sick"])
-			return "sick";
-
-		return "marvelous";
-	}
-
-	public static function getRatingScore(rating:String)
-	{
-		var scores:Map<String, Int> = ["marvelous" => 300, "sick" => 300, "good" => 200, "bad" => 100, "shit" => 50];
-
-		return scores[rating];
+		return lastJudge;
 	}
 }

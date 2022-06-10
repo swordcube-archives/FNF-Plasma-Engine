@@ -70,7 +70,7 @@ class Init extends MusicBeatState
 		{
 			for (key in options.get(_key).keys())
 			{
-				trace("KEY DETECTED: " + key);
+				// trace("KEY DETECTED: " + key);
 
 				if (Reflect.getProperty(FlxG.save.data, key) == null)
 					Reflect.setProperty(FlxG.save.data, key, options.get(_key).get(key).defaultValue);
