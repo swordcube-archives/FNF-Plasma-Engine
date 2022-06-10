@@ -1,10 +1,11 @@
-# Genesis Engine
+# 🎮 Genesis Engine
 
 An FNF engine designed to be lightweight and easy to mod.
 
-LUA support is not in Genesis Engine, instead, HScript is used. You use `.hx` files as a replacement.
+You can use `.hx` files to make modcharts, stages, custom UI's, and more!
+Soon you ***might*** be able to use `.hx` files to customize existing menus and make custom states!
 
-# Building the game
+# 🖥️ Building the game
 
 Step 1. [Install git-scm](https://git-scm.com/downloads) if you don't have it already.
 
