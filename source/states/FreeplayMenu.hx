@@ -90,7 +90,7 @@ class FreeplayMenu extends MusicBeatState
 		// I want to change this later, i have like no time rn lol
 		for (mod in GenesisAssets.mods)
 		{
-			if (GenesisAssets.getModActive(mod) == true)
+			if (GenesisAssets.getModActive(mod))
 			{
 				var modsJson:SongListJson = Json.parse(GenesisAssets.getAsset('data/freeplaySongs.json', TEXT, mod));
 
@@ -201,7 +201,7 @@ class FreeplayMenu extends MusicBeatState
 
 		FlxG.sound.play(scrollMenu);
 
-		songList.forEach(function(text:Alphabet)
+		songList.forEachAlive(function(text:Alphabet)
 		{
 			text.targetY = text.ID - curSelected;
 			if (curSelected == text.ID)

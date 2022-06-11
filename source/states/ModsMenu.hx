@@ -219,8 +219,8 @@ class ModSelection extends FlxSpriteGroup
 
 	function refreshToggled()
 	{
-		toggledBG.color = GenesisAssets.getModActive(mod) == true ? FlxColor.fromString("#46c780") : FlxColor.fromString("#c74646");
-		toggledText.text = GenesisAssets.getModActive(mod) == true ? "[ ON ]" : "[ OFF ]";
+		toggledBG.color = GenesisAssets.getModActive(mod) ? FlxColor.fromString("#46c780") : FlxColor.fromString("#c74646");
+		toggledText.text = GenesisAssets.getModActive(mod) ? "[ ON ]" : "[ OFF ]";
 		toggledText.setPosition(toggledBG.x, toggledBG.y + (toggledText.height / 4));
 	}
 }

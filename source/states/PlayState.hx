@@ -200,7 +200,7 @@ class PlayState extends MusicBeatState
 		#if MODS_ALLOWED
 		for (mod in GenesisAssets.mods)
 		{
-			if (GenesisAssets.activeMods.get(mod) == true)
+			if (GenesisAssets.activeMods.get(mod))
 			{
 				if (FileSystem.exists('${GenesisAssets.cwd}mods/$mod/scripts'))
 				{
@@ -388,8 +388,7 @@ class PlayState extends MusicBeatState
 						swagNote.x = -1000;
 						swagNote.y = -1000;
 
-						var susLength:Float = swagNote.sustainLength / Conductor.stepCrochet;
-						var floorSus:Int = Math.floor(susLength);
+						var floorSus:Int = Math.floor(swagNote.sustainLength / Conductor.stepCrochet);
 
 						if (floorSus > 0)
 						{
@@ -468,7 +467,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		var lerpVal = cameraSpeed * 0.1;
+		var lerpVal:Float = cameraSpeed * 0.04;
 		camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
 	}
 

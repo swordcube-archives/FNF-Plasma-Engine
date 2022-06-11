@@ -138,24 +138,10 @@ class Note extends FlxSprite
 		if (PlayState.instance.scrollSpeed != scrollSpeed)
 			updateScale();
 
-		calculateCanBeHit();
-
-		if (tooLate && !inEditor)
-		{
-			if (alpha > 0.3)
-				alpha = 0.3;
-		}
-	}
-
-	public function calculateCanBeHit()
-	{
 		if (mustPress)
 		{
-			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
-				&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * earlyHitMult))
-				canBeHit = true;
-			else
-				canBeHit = false;
+			canBeHit = strumTime > Conductor.songPosition - Conductor.safeZoneOffset
+				&& strumTime < Conductor.songPosition + Conductor.safeZoneOffset * earlyHitMult;
 
 			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit)
 				tooLate = true;
@@ -164,14 +150,16 @@ class Note extends FlxSprite
 		{
 			canBeHit = false;
 
-			if (strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * earlyHitMult))
-			{
-				if (prevNote != null)
-				{
-					if ((isSustainNote && prevNote.wasGoodHit) || strumTime <= Conductor.songPosition)
-						wasGoodHit = true;
-				}
-			}
+			if (strumTime < Conductor.songPosition + Conductor.safeZoneOffset * earlyHitMult
+				&& (isSustainNote && prevNote.wasGoodHit)
+				|| strumTime <= Conductor.songPosition)
+				wasGoodHit = true;
+		}
+
+		if (tooLate && !inEditor)
+		{
+			if (alpha > 0.3)
+				alpha = 0.3;
 		}
 	}
 }

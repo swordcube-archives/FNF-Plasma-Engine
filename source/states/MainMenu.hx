@@ -150,7 +150,7 @@ class MainMenu extends MusicBeatState
 
 				selected = true;
 
-				menuButtons.forEach(function(spr:FlxSprite)
+				menuButtons.forEachAlive(function(spr:FlxSprite)
 				{
 					if (curSelected != spr.ID)
 					{
@@ -204,7 +204,7 @@ class MainMenu extends MusicBeatState
 
 		FlxG.sound.play(scrollMenu);
 
-		menuButtons.forEach(function(spr:FlxSprite)
+		menuButtons.forEachAlive(function(spr:FlxSprite)
 		{
 			spr.animation.play('idle');
 			spr.updateHitbox();

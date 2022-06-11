@@ -263,7 +263,7 @@ class GenesisAssets
 		{
 			for (_mod in mods)
 			{
-				if (activeMods.get(_mod) == true)
+				if (activeMods.get(_mod))
 				{
 					if (FileSystem.exists('${cwd}mods/$_mod/$basePath'))
 					{
@@ -343,7 +343,7 @@ class GenesisAssets
 		{
 			for (_mod in mods)
 			{
-				if (activeMods.get(_mod) == true)
+				if (activeMods.get(_mod))
 				{
 					if (FileSystem.exists('${cwd}mods/$_mod/$basePath'))
 					{

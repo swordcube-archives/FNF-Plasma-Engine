@@ -15,7 +15,7 @@ class Ranking
 {
 	public static final judgements:Map<String, Judgement> = [
 		"marvelous" => {
-			time: 39.25,
+			time: 40.75,
 			score: 300,
 			noteSplash: true,
 			mod: 1
