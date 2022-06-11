@@ -244,8 +244,24 @@ class UI extends FlxGroup
 				}
 			}
 
-			if (!daNote.mustPress && daNote.wasGoodHit)
-				opponentNoteHit(daNote);
+			// dude whatever the fuck you did made the opponent anims look weird as hell
+			if (!daNote.mustPress)
+			{
+				if (daNote.isSustainNote)
+				{
+					if (Conductor.songPosition >= (daNote.strumTime + (Conductor.safeZoneOffset / 4)))
+					{
+						opponentNoteHit(daNote);
+					}
+				}
+				else
+				{
+					if (Conductor.songPosition >= daNote.strumTime)
+					{
+						opponentNoteHit(daNote);
+					}
+				}
+			}
 
 			if (!Init.getOption('botplay') && Conductor.songPosition - daNote.strumTime > Conductor.safeZoneOffset)
 			{
@@ -293,12 +309,12 @@ class UI extends FlxGroup
 		PlayState.instance.dad.playAnim(ManiaShit.singAnims[PlayState.songData.keyCount][daNote.noteData], true);
 
 		opponentStrums.members[daNote.noteData].playAnim("confirm", true);
-		if (!daNote.isSustainNote)
-		{
-			notes.remove(daNote, true);
-			daNote.kill();
-			daNote.destroy();
-		}
+		notes.remove(daNote, true);
+		daNote.kill();
+		daNote.destroy();
+		
+		// dude doing this makes the sustain anims look weird as hell
+		// what the fuck
 	}
 
 	function keyShit()
