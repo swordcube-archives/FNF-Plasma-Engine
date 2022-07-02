@@ -1,6 +1,0 @@
-{
-    "name": "Example Mod",
-    "description": "This is a mod you can use as a base for your own mods! There is an example song in freeplay to try out! Disable this mod to get rid of the example song.",
-    "enabledByDefault": true,
-    "color": "#30a7be"
-}

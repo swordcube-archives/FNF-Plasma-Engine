@@ -1,86 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="FNF: Genesis Engine" file="GenesisEngine" main="Main" version="1.0.0a" company="swordcube" />
-
-	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
-		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
+	<app title="FNF: Genesis Engine" file="GenesisEngine" packageName="com.swordcube.genesisengine" package="com.swordcube.genesisengine" main="Main" version="0.1.0-a" company="swordcube" />
 	<app preloader="flixel.system.FlxPreloader" />
-
-	<!--Minimum without FLX_NO_GAMEPAD: 11.8, without FLX_NO_NATIVE_CURSOR: 11.2-->
 	<set name="SWF_VERSION" value="11.8" />
 
 	<!-- ____________________________ Window Settings ___________________________ -->
 
-	<!--These window settings apply to all targets-->
-	<window width="1280" height="720" fps="60" background="#000000" hardware="true" vsync="false" />
-
-	<!--HTML5-specific-->
+	<window width="1280" height="720" fps="" background="#000000" hardware="true" vsync="false" />
 	<window if="html5" resizable="true" />
-
-	<!--Desktop-specific-->
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" />
-
-	<!--Mobile-specific-->
 	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" />
-
-	<!-- ____________________________ Engine Settings ___________________________ -->
-
-	<define name="MODS_ALLOWED" unless="html5"/>
-	<define name="CHECK_FOR_UPDATES"/>
-	<define name="ACHIEVEMENTS_ALLOWED"/>
-	<define name="VIDEOS_ALLOWED" unless="32bits"/>
-
-	<define name="PRELOAD_ALL" unless="web" />
-	<define name="NO_PRELOAD_ALL" unless="PRELOAD_ALL"/>
-
-	<section if="PRELOAD_ALL">
-		<library name="songs"   preload="true" />
-		<library name="images"   preload="true" />
-	</section>
-	
-	<section if="NO_PRELOAD_ALL">
-		<library name="songs"   preload="false" />
-		<library name="images"   preload="false" />
-	</section>
-
-	<assets path="assets/songs"  library="songs"/>
-	<assets path="assets/images" library="images"/>
 
 	<!-- _____________________________ Path Settings ____________________________ -->
 
-	<set name="BUILD_DIR" value="export/debug" if="debug" />
+	<set name="BUILD_DIR" value="export" />
+	<set name="BUILD_DIR" value="export/debug" if="debug"/>
 	<set name="BUILD_DIR" value="export/release" unless="debug" />
-	<set name="BUILD_DIR" value="export/32bit" if="32bit" />
-	
+
 	<source path="source" />
 	<assets path="assets" />
-	<assets path='example_mods' rename='mods' embed='false' if="MODS_ALLOWED"/>
+	<assets path="mods" />
+
+	<!-- ____________________________ Engine Settings ___________________________ -->
+
+	<define name="MODS_ALLOWED" unless="web" />
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />
-	<haxedev set='webgl' />
-
 	<haxelib name="flixel-addons" />
 	<haxelib name="flixel-ui" />
 	<haxelib name="hscript" />
 	<haxelib name="discord_rpc" />
+
+	<haxedev set='webgl' />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
 	<haxedef name="FLX_NO_MOUSE" if="mobile" />
 	<haxedef name="FLX_NO_KEYBOARD" if="mobile" />
 	<haxedef name="FLX_NO_TOUCH" if="desktop" />
-
+	
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 
-	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
+	<!-- _________________________________ Icons ________________________________-->
 
-	<!-- _________________________________ Icons ________________________________ -->
+	<icon path="art/gameIcon/16x.png" size="16" />
+	<icon path="art/gameIcon/32x.png" size="32" />
+	<icon path="art/gameIcon/64x.png" size="64" />
+	<icon path="art/gameIcon/128x.png" size="128" />
+	<icon path="art/gameIcon/256x.png" />
 
-	<icon path="art/gameIcon.png" />
 </project>

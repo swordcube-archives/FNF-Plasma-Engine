@@ -1,0 +1,23 @@
+Test:bf-pixel:#68b1e8:normal:DEBUG_ONLY
+Tutorial:gf:#9271fd:easy,normal,hard
+Bopeebo:dad:#9271fd:easy,normal,hard
+Fresh:dad:#9271fd:easy,normal,hard
+Dad Battle:dad:#9271fd:easy,normal,hard
+Spookeez:spooky:#223344:easy,normal,hard
+South:spooky:#223344:easy,normal,hard
+Monster:monster:#223344:easy,normal,hard
+Pico:pico:#941653:easy,normal,hard
+Philly Nice:pico:#941653:easy,normal,hard
+Blammed:pico:#941653:easy,normal,hard
+Satin Panties:mom:#FC96D7:easy,normal,hard
+High:mom:#FC96D7:easy,normal,hard
+M.I.L.F:mom:#FC96D7:easy,normal,hard
+Cocoa:parents-christmas:#A0D1FF:easy,normal,hard
+Eggnog:parents-christmas:#A0D1FF:easy,normal,hard
+Winter Horrorland:monster:#A0D1FF:easy,normal,hard
+Senpai:senpai:#FF78BF:easy,normal,hard
+Roses:senpai:#FF78BF:easy,normal,hard
+Thorns:spirit:#FF78BF:easy,normal,hard
+Ugh:tankman:#F6B604:easy,normal,hard
+Guns:tankman:#F6B604:easy,normal,hard
+Stress:tankman:#F6B604:easy,normal,hard
