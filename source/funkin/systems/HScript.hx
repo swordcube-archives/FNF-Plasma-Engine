@@ -94,12 +94,15 @@ class HScript
 		interp.variables.set("otherScripts", otherScripts);
 
 		// playstate local shit
-		interp.variables.set("bf", PlayState.bf);
-		interp.variables.set("gf", PlayState.gf);
-		interp.variables.set("dad", PlayState.dad);
+		if(PlayState.instance != null)
+		{
+			interp.variables.set("bf", PlayState.bf);
+			interp.variables.set("gf", PlayState.gf);
+			interp.variables.set("dad", PlayState.dad);
 
-		interp.variables.set("removeDefaultStage", null);
-		interp.variables.set("startCountdown", PlayState.instance.startCountdown);
+			interp.variables.set("removeDefaultStage", null);
+			interp.variables.set("startCountdown", PlayState.instance.startCountdown);
+		}
 
 		interp.variables.set("import", function(className:String)
 		{

@@ -130,6 +130,11 @@ class MainMenu extends FunkinState
 
 		if (!selected)
 		{
+			#if debug
+			if (FlxG.keys.justPressed.C)
+				switchState(new CharacterEditor());
+			#end
+			
 			if (UIControls.justPressed("BACK"))
 			{
 				FlxG.sound.play(cancelMenu);

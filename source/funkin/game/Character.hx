@@ -47,6 +47,8 @@ class Character extends FunkinSprite
             charPath = Paths.characterHX("bf");
         }
 
+        trace(charPath);
+
         script = new HScript(charPath);
         script.interp.variables.set("character", this);
         script.start();

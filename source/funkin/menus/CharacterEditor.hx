@@ -5,6 +5,7 @@ import flixel.FlxG;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.math.FlxMath;
+import flixel.ui.FlxButton;
 import funkin.game.Boyfriend;
 import funkin.game.Character;
 import funkin.game.FunkinState;
@@ -34,11 +35,13 @@ class CharacterEditor extends FunkinState
 
     var animationUIBase:FlxUI = new FlxUI();
     var animationDropdown:FlxUIDropDownMenuCustom;
+    var addAnimBTN:FlxButton;
+    var removeAnimBTN:FlxButton;
 
     #if MODS_ALLOWED
     var characterList:Array<String> = FunkinAssets.getText(Paths.txt("data/characterList"), softmod.SoftMod.modsList[GlobalVariables.selectedMod], true).split("\n");
     #else
-    var characterList:Array<String> = FunkinAssets.getText(Paths.txt("data/characterList"));
+    var characterList:Array<String> = FunkinAssets.getText(Paths.txt("data/characterList")).split("\n");
     #end
 
     override public function create()
@@ -82,13 +85,24 @@ class CharacterEditor extends FunkinState
 
         animationUIBase.cameras = [camHUD];
         create_UI();
+
+        //animationDropdown.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(getAnimationArray(), true));
+    }
+
+    function getAnimationArray()
+    {
+        var array:Array<String> = [];
+        for(key in character.animOffsets.keys())
+            array.push(key);
+        return array;
     }
 
     function create_UI()
     {
+        // prepare
         var uiBox = new FlxUITabMenu(null, [], false);
 
-        uiBox.resize(300, 50);
+        uiBox.resize(330, 50);
         uiBox.x = (FlxG.width - uiBox.width) - 10;
         uiBox.y = 10;
         uiBox.scrollFactor.set();
@@ -96,12 +110,26 @@ class CharacterEditor extends FunkinState
         
         animationUIBase.add(uiBox);
 
-        animationDropdown = new FlxUIDropDownMenuCustom(15, 15, FlxUIDropDownMenuCustom.makeStrIdLabelArray(characterList, true), function(id:String) {
-            var charToLoad:String = characterList[Std.parseInt(id)];
-            trace(charToLoad);
+        // add the objects
+        animationDropdown = new FlxUIDropDownMenuCustom(15, 15, FlxUIDropDownMenuCustom.makeStrIdLabelArray(getAnimationArray(), true), function(id:String) {
+            var animToLoad:String = getAnimationArray()[Std.parseInt(id)];
+            character.playAnim(animToLoad, true);
         });
-
         uiBox.add(animationDropdown);
+
+        var animBTNX = 15 + (animationDropdown.width + 10);
+        var animBTNY = 15;
+        addAnimBTN = new FlxButton(animBTNX, animBTNY, "Add", function() {
+            var crashTheGame:Dynamic = null;
+            crashTheGame.someRandomFunction();
+        });
+        uiBox.add(addAnimBTN);
+
+        removeAnimBTN = new FlxButton(animBTNX + (addAnimBTN.width + 10), animBTNY, "Remove", function() {
+            var crashTheGame:Dynamic = null;
+            crashTheGame.someRandomFunction();
+        });
+        uiBox.add(removeAnimBTN);
         
         // add the base
         add(animationUIBase);

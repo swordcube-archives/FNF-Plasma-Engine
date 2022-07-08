@@ -386,6 +386,8 @@ class AlphaCharacter extends FlxSprite
 				y += 45 * textSize;
 				x += 5 * textSize;
 				offset.x += 3 * textSize;
+			case '?':
+				animation.addByPrefix(letter, 'QUESTION MARK bold', 24);
             default:
                 animation.addByPrefix(letter, letter.toUpperCase() + " bold0", 24);
                 animation.play(letter);

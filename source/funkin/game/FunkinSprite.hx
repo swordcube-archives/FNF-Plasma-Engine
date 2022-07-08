@@ -4,6 +4,7 @@ import flixel.FlxSprite;
 
 class FunkinSprite extends FlxSprite
 {
+    public var animList:Array<String> = [];
     public var animOffsets:Map<String, Array<Float>> = [];
 
     public function new(x:Float, y:Float)
@@ -23,9 +24,12 @@ class FunkinSprite extends FlxSprite
     **/
     public function addAnimByPrefix(name:String, prefix:String, fps:Int, looped:Bool = false, ?offsets:Null<Array<Float>>)
     {
+        animList.push(name);
         animation.addByPrefix(name, prefix, fps, looped);
         if(offsets != null)
             animOffsets.set(name, offsets);
+        else
+            animOffsets.set(name, [0, 0]);
     }
 
     /**
@@ -39,9 +43,12 @@ class FunkinSprite extends FlxSprite
     **/
     public function addAnimByIndices(name:String, prefix:String, indices:Array<Int>, fps:Int, looped:Bool = false, ?offsets:Null<Array<Float>>)
     {
+        animList.push(name);
         animation.addByIndices(name, prefix, indices, "", fps, looped);
         if(offsets != null)
             animOffsets.set(name, offsets);
+        else
+            animOffsets.set(name, [0, 0]);
     }
 
     /**
@@ -60,5 +67,21 @@ class FunkinSprite extends FlxSprite
             animOffsets.set(name, [0, 0]);
             offset.set(0, 0);
         }
+    }
+
+    /**
+        Removes an animation. That's it.
+
+        @param anim      The thing to remove.
+    **/
+    public function removeAnim(anim:String)
+    {
+        if(animation.exists(anim))
+            animation.remove(anim);
+        
+        if(animList.contains(anim))
+            animList.remove(anim);
+
+        playAnim(animList[0], true);
     }
 }
