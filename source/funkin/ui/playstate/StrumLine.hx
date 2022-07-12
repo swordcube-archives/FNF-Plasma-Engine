@@ -229,49 +229,46 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
         // clipRect shit!!
         // (taken from kade engine because fuck you!)
-        notes.forEachAlive(function(note:Note) {         
-            if(note.isSustain)
+        notes.forEachAlive(function(note:Note) {
+            if(note.downScroll)
             {
-                if(note.downScroll)
+                if(note.isSustain)
                 {
-                    if(note.isSustain)
+                    note.y -= note.height - stepHeight;
+                    
+                    if ((PlayState.instance.botPlay
+                        || !hasInput
+                        || hasInput && pressed[note.noteData])
+                        && note.y - note.offset.y * note.scale.y + note.height >= (this.y + Note.swagWidth / 2))
                     {
-                        note.y -= note.height - stepHeight;
-                        
-                        if ((PlayState.instance.botPlay
-                            || !hasInput
-                            || hasInput && pressed[note.noteData])
-                            && note.y - note.offset.y * note.scale.y + note.height >= (this.y + Note.swagWidth / 2))
-                        {
-                            // Clip to strumline
-                            var swagRect = new FlxRect(0, 0, note.frameWidth * 2, note.frameHeight * 2);
-                            swagRect.height = (members[note.noteData].y
-                                + Note.swagWidth / 2
-                                - note.y) / note.scale.y;
-                            swagRect.y = note.frameHeight - swagRect.height;
+                        // Clip to strumline
+                        var swagRect = new FlxRect(0, 0, note.frameWidth * 2, note.frameHeight * 2);
+                        swagRect.height = (members[note.noteData].y
+                            + Note.swagWidth / 2
+                            - note.y) / note.scale.y;
+                        swagRect.y = note.frameHeight - swagRect.height;
 
-                            note.clipRect = swagRect;
-                        }
+                        note.clipRect = swagRect;
                     }
                 }
-                else
+            }
+            else
+            {
+                if(note.isSustain)
                 {
-                    if(note.isSustain)
+                    if ((PlayState.instance.botPlay
+                        || !hasInput
+                        || hasInput && pressed[note.noteData])
+                        && note.y + note.offset.y * note.scale.y <= (this.y + Note.swagWidth / 2))
                     {
-                        if ((PlayState.instance.botPlay
-                            || !hasInput
-                            || hasInput && pressed[note.noteData])
-                            && note.y + note.offset.y * note.scale.y <= (this.y + Note.swagWidth / 2))
-                        {
-                            // Clip to strumline
-                            var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
-                            swagRect.y = (members[note.noteData].y
-                                + Note.swagWidth / 2
-                                - note.y) / note.scale.y;
-                            swagRect.height -= swagRect.y;
+                        // Clip to strumline
+                        var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
+                        swagRect.y = (members[note.noteData].y
+                            + Note.swagWidth / 2
+                            - note.y) / note.scale.y;
+                        swagRect.height -= swagRect.y;
 
-                            note.clipRect = swagRect;
-                        }
+                        note.clipRect = swagRect;
                     }
                 }
             }

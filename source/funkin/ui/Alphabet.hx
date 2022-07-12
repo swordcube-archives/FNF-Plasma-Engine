@@ -384,8 +384,6 @@ class AlphaCharacter extends FlxSprite
                 scale.set(textSize, textSize);
                 updateHitbox();
 				y += 45 * textSize;
-				x += 5 * textSize;
-				offset.x += 3 * textSize;
 			case '?':
 				animation.addByPrefix(letter, 'QUESTION MARK bold', 24);
             default:

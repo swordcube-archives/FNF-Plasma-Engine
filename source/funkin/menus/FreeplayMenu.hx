@@ -1,18 +1,16 @@
 package funkin.menus;
 
-#if MODS_ALLOWED
-import funkin.game.GlobalVariables;
-import funkin.ui.menus.ModSelector;
-#end
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import funkin.game.FunkinState;
 import funkin.game.PlayState;
 import funkin.game.Song;
+import funkin.systems.Conductor;
 import funkin.systems.FunkinAssets;
 import funkin.systems.Paths;
 import funkin.systems.UIControls;
@@ -20,13 +18,17 @@ import funkin.ui.Alphabet;
 import funkin.ui.HealthIcon;
 
 using StringTools;
+#if MODS_ALLOWED
+import funkin.game.GlobalVariables;
+import funkin.ui.menus.ModSelector;
+#end
 
 typedef FreeplaySongData = {
     var songName:String;
     var icon:String;
     var bgColor:String;
     var difficulties:Array<String>;
-    var debugOnly:Null<String>;
+    var songBPM:Float;
 };
 
 class FreeplayMenu extends FunkinState
@@ -52,10 +54,14 @@ class FreeplayMenu extends FunkinState
     #if MODS_ALLOWED
     var modSelector:ModSelector;
     #end
+
+    var vocals:FlxSound = new FlxSound();
     
     override public function create()
     {
         super.create();
+
+        FlxG.sound.list.add(vocals);
 
 		if (FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
 			FlxG.sound.playMusic(FunkinAssets.getSound(Paths.music('freakyMenu')));
@@ -111,13 +117,13 @@ class FreeplayMenu extends FunkinState
         {
             var item:Array<String> = thing.split(":");
             //Reference:
-            //Test:bf-pixel:#68b1e8:normal:DEBUG_ONLY
+            //Test:bf-pixel:#68b1e8:normal:150
             songList.push({
                 songName: item[0].trim(),
                 icon: item[1].trim(),
                 bgColor: item[2].trim(),
                 difficulties: item[3].split(","),
-                debugOnly: item[4].trim(),
+                songBPM: Std.parseFloat(item[4].trim()),
             });
         }
 
@@ -127,14 +133,6 @@ class FreeplayMenu extends FunkinState
             song.destroy();
         });
         songs.clear();
-
-        #if !debug
-        for(song in songList)
-        {
-            if(song.debugOnly != null)
-                songList.remove(song);
-        }
-        #end
 
         for(i in 0...songList.length)
         {
@@ -177,10 +175,11 @@ class FreeplayMenu extends FunkinState
 		positionHighscore();
     }
 
+    var curPlaying:String = "";
+    var hasVoices:Bool = false;
+
     override public function update(elapsed:Float)
     {
-        super.update(elapsed);
-
         updateScore();
 
         var bgColorSpeed:Float = delta * 2;
@@ -198,17 +197,55 @@ class FreeplayMenu extends FunkinState
 
         menuBG.color = FlxColor.fromRGB(Std.int(lerpValues[0]), Std.int(lerpValues[1]), Std.int(lerpValues[2]));
 
+        if(FlxG.sound.music != null && FlxG.sound.music.playing)
+            Conductor.position = FlxG.sound.music.time;
+
+        super.update(elapsed);
+
         if(UIControls.justPressed("BACK"))
         {
+            FlxG.sound.music.stop();
+            vocals.stop();
+            
             FlxG.sound.play(cancelMenu);
             switchState(new MainMenu());
         }
 
-        if(UIControls.justPressed("ACCEPT"))
+        if(FlxG.keys.justPressed.SPACE && curPlaying != songList[curSelected].songName)
+        {
+            hasVoices = FunkinAssets.exists(Paths.voices(songList[curSelected].songName));
+
+            Conductor.changeBPM(songList[curSelected].songBPM);
+            
+            curPlaying = songList[curSelected].songName;
+
+            FlxG.sound.music.stop();
+            vocals.stop();
+            
+            FlxG.sound.playMusic(FunkinAssets.getSound(Paths.inst(songList[curSelected].songName)), 0);
+            if(hasVoices)
+                vocals.loadEmbedded(FunkinAssets.getSound(Paths.voices(songList[curSelected].songName)));
+
+            FlxG.sound.music.pause();
+            FlxG.sound.music.time = 0;
+            FlxG.sound.music.play();
+
+            FlxG.sound.music.fadeIn(1, 0, 1);
+
+            if(hasVoices)
+            {
+                vocals.time = 0;
+                vocals.volume = 0;
+                vocals.play();
+                vocals.fadeIn(1, 0, 1);
+            }
+        }
+        else if(UIControls.justPressed("ACCEPT"))
         {
             FlxG.sound.music.stop();
+            vocals.stop();
             
-            PlayState.songJSON = SongLoader.getJSON(songList[curSelected].songName.toLowerCase(), songList[curSelected].difficulties[curDifficulty].trim());
+            PlayState.songJSON = SongLoader.getJSON(songList[curSelected].songName, songList[curSelected].difficulties[curDifficulty].trim());
             switchState(new PlayState());
         }
 
@@ -264,6 +301,44 @@ class FreeplayMenu extends FunkinState
 		diffText.text = '< ' + PlayState.curDifficulty.toUpperCase() + ' >';
 		positionHighscore();
 	}
+
+    override public function beatHit()
+    {
+        super.beatHit();
+        
+        var song:FreeplaySongUI = songs.members[curSelected];
+        if(song.targetY == 0 && song.songName == curPlaying)
+            song.icon.scale.set(1.2, 1.2);
+    }
+
+    override public function stepHit()
+    {
+        super.stepHit();
+        
+        if(hasVoices)
+        {
+            if(!(Conductor.isAudioSynced(FlxG.sound.music) && Conductor.isAudioSynced(vocals)))
+            {
+                FlxG.sound.music.pause();
+                vocals.pause();
+
+                FlxG.sound.music.time = Conductor.position;
+                vocals.time = Conductor.position;
+
+                FlxG.sound.music.play();
+                vocals.play();
+            }
+        }
+        else
+        {
+            if(!Conductor.isAudioSynced(FlxG.sound.music))
+            {
+                FlxG.sound.music.pause();
+                FlxG.sound.music.time = Conductor.position;
+                FlxG.sound.music.play();
+            }
+        }
+    }
 }
 
 class FreeplaySongUI extends FlxGroup
@@ -271,6 +346,7 @@ class FreeplaySongUI extends FlxGroup
     public var targetY:Int = 0;
     public var alphabet:Alphabet;
     public var icon:HealthIcon;
+    public var songName:String = "";
 
     public function new(x:Float, y:Float, targetY:Int, songName:String = "Test", icon:String = "bf")
     {
@@ -280,6 +356,8 @@ class FreeplaySongUI extends FlxGroup
         alphabet.isMenuItem = true;
         add(alphabet);
         
+        this.songName = songName;
+        this.targetY = targetY;
         this.icon = new HealthIcon(icon);
         this.icon.sprTracker = alphabet;
         add(this.icon);
@@ -289,5 +367,9 @@ class FreeplaySongUI extends FlxGroup
     {
         alphabet.targetY = targetY;
         super.update(elapsed);
+
+        var curState:Dynamic = FlxG.state;
+        var scale:Float = FlxMath.lerp(icon.scale.x, 1, curState.delta * 9.6);
+        icon.scale.set(scale, scale);
     }
 }

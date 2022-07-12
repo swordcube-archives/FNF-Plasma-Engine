@@ -36,7 +36,7 @@ class UI extends flixel.group.FlxGroup
 
         instance = this;
 
-        var arrowOffset:Float = 18.0;
+        var arrowOffset:Float = 10.0;
         var arrowSpacing:Float = 300.0;
 
         var strumY:Float = 60;
@@ -77,13 +77,13 @@ class UI extends flixel.group.FlxGroup
 		add(healthBar);
 
 		// Icons
-		iconP2 = new HealthIcon(PlayState.SONG.player2);
-		iconP2.y = healthBar.y - (iconP2.height / 2);
-		add(iconP2);
-
 		iconP1 = new HealthIcon(PlayState.SONG.player1, true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);
 		add(iconP1);
+		
+		iconP2 = new HealthIcon(PlayState.SONG.player2);
+		iconP2.y = healthBar.y - (iconP2.height / 2);
+		add(iconP2);
 
 		scoreTxt = new FlxText(0, healthBarBG.y + 35, FlxG.width, "", 16);
 		scoreTxt.setFormat(Paths.font("vcr"), 16, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);

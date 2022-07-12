@@ -126,7 +126,7 @@ class PlayState extends FunkinState
 		FlxG.sound.music.stop();
 
 		if(songJSON == null)
-			songJSON = SongLoader.getJSON("test");
+			songJSON = SongLoader.getJSON("tutorial");
 
 		SONG = songJSON.song;
 
@@ -515,6 +515,9 @@ class PlayState extends FunkinState
 					var strumLine:StrumLine = mustPress ? UI.playerStrums : UI.opponentStrums;
 					
 					var susLength:Int = Math.floor(note[2] / Conductor.stepCrochet);
+					if(susLength <= 2)
+						susLength = 0;
+					
 					for(susNote in 0...susLength)
 					{
 						var newSusNote:Note = new Note(-9999, -9999, true, SONG.keyCount, daNoteData, uiSkin);
