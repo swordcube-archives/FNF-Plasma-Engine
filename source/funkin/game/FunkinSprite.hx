@@ -7,7 +7,7 @@ class FunkinSprite extends FlxSprite
     public var animList:Array<String> = [];
     public var animOffsets:Map<String, Array<Float>> = [];
 
-    public function new(x:Float, y:Float)
+    public function new(x:Float = 0, y:Float = 0)
     {
         super(x, y);
 
@@ -81,6 +81,9 @@ class FunkinSprite extends FlxSprite
         
         if(animList.contains(anim))
             animList.remove(anim);
+
+        if(animOffsets.exists(anim))
+            animOffsets.remove(anim);
 
         playAnim(animList[0], true);
     }

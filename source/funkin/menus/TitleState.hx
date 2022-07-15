@@ -56,7 +56,7 @@ class TitleState extends FunkinState
 		ngSpr.setGraphicSize(Std.int(ngSpr.width * 0.8));
 		ngSpr.updateHitbox();
 		ngSpr.screenCenter(X);
-		ngSpr.antialiasing = Preferences.antiAliasing;
+		ngSpr.antialiasing = Preferences.getOption("antiAliasing");
 
 		logo.frames = FunkinAssets.getSparrow("title/funkinLogo");
 		logo.addAnimByPrefix("bump", "logo bumpin", 24, false);

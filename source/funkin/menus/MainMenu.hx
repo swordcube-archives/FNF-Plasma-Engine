@@ -62,7 +62,7 @@ class MainMenu extends FunkinState
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
 		menuBG.scrollFactor.set(0, 0.1);
-		menuBG.antialiasing = Preferences.antiAliasing;
+		menuBG.antialiasing = Preferences.getOption("antiAliasing");
 		add(menuBG);
 
 		menuBGMagenta = new FlxSprite().loadGraphic(FunkinAssets.getImage(Paths.image('menus/menuBGDesat')));
@@ -71,7 +71,7 @@ class MainMenu extends FunkinState
 		menuBGMagenta.screenCenter();
 		menuBGMagenta.scrollFactor.set(menuBG.scrollFactor.x, menuBG.scrollFactor.y);
 		menuBGMagenta.visible = false;
-		menuBGMagenta.antialiasing = Preferences.antiAliasing;
+		menuBGMagenta.antialiasing = Preferences.getOption("antiAliasing");
 		menuBGMagenta.color = 0xFFfd719b;
 		add(menuBGMagenta);
 
@@ -92,7 +92,7 @@ class MainMenu extends FunkinState
 			if (menuOptions.length < 5)
 				scr = 0;
 			menuItem.scrollFactor.set(0, scr);
-			menuItem.antialiasing = Preferences.antiAliasing;
+			menuItem.antialiasing = Preferences.getOption("antiAliasing");
 			menuItem.updateHitbox();
 			menuButtons.add(menuItem);
 		}

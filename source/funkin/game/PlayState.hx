@@ -91,6 +91,8 @@ class PlayState extends FunkinState
 	// Score & Accuracy
 	public var songScore:Int = 0;
 	public var songAccuracy:Float = 0.0;
+
+	public var combo:Int = 0;
 	
 	public var totalNotes:Int = 0;
 	public var totalHit:Float = 0.0;
@@ -153,7 +155,7 @@ class PlayState extends FunkinState
 
 		setupCameras();
 
-		downScroll = Preferences.downScroll;
+		downScroll = Preferences.getOption("downScroll");
 
 		uiSkinJson = Json.parse(FunkinAssets.getText(Paths.json('images/ui/skins/$uiSkin/config')));
 
@@ -165,6 +167,7 @@ class PlayState extends FunkinState
 
 		// Make Dad and GF real
 		dad = new Character(stage.dadPosition.x, stage.dadPosition.y, SONG.player2);
+		dad.isPlayer = false;
 
 		var gfVersion:String = "gf";
 

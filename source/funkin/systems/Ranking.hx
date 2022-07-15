@@ -5,6 +5,7 @@ import haxe.iterators.ArrayIterator;
 
 typedef Judgement =
 {
+	var name:String;
 	var time:Float;
 	var score:Int;
 	var ?noteSplash:Bool;
@@ -14,22 +15,46 @@ typedef Judgement =
 
 class Ranking
 {
-	public static var judgements:Map<String, Judgement> = [
-		"marvelous" => {
-			time: 40.75,
+	// This is an array because haxeflixel maps suck pure ASS with ordering
+	// Like actually it does
+	public static var judgements:Array<Judgement> = [
+		// marvelous
+		{
+			name: "marvelous",
+			time: 20.35,
 			score: 300,
 			noteSplash: true,
 			mod: 1
 		},
-		"sick" => {
+		// sick
+		{
+			name: "sick",
 			time: 43.5,
 			score: 300,
 			noteSplash: true,
 			mod: 0.95
 		},
-		"good" => {time: 73.5, score: 200, mod: 0.7},
-		"bad" => {time: 125, score: 100, mod: 0.4},
-		"shit" => {time: 150, score: 50, health: -0.15}
+		// good
+		{
+			name: "good",
+			time: 73.5, 
+			score: 200, 
+			mod: 0.7
+		},
+		// bad
+		{
+			name: "bad",
+			time: 125, 
+			score: 100, 
+			mod: 0.4
+		},
+		// shit
+		{
+			name: "shit",
+			time: 150, 
+			score: 50, 
+			health: -0.15
+		}
 	];
 
 	static var ranks:Map<Int, String> = [
@@ -67,24 +92,34 @@ class Ranking
 		return "N/A";
 	}
 
+	public static function getInfo(rating:String):Judgement
+	{
+		var judgement:Judgement = null;
+		for(judge in judgements)
+		{
+			if(judge.name == rating)
+			{
+				judgement = judge;
+				break;
+			}
+		}
+
+		return judgement;
+	}
+
 	public static function judgeNote(strumTime:Float)
 	{
 		var noteDiff:Float = Math.abs(Conductor.position - strumTime);
 		var lastJudge:String = "no";
 		
-		for(key => judge in judgements)
+		for(judge in judgements)
 		{
-			if(noteDiff >= judge.time && lastJudge == "no")
-				lastJudge = key;
+			if(noteDiff <= judge.time && lastJudge == "no")
+				lastJudge = judge.name;
 		}
-
-		// because map keys are iterators >:((((((( grrrr
-		var keys:Array<String> = [];
-		for(key in judgements.keys())
-			keys.push(key);
 		
 		if(lastJudge == "no")
-			lastJudge = keys[keys.length - 1];
+			lastJudge = judgements[judgements.length - 1].name;
 		
 		return lastJudge;
 	}
