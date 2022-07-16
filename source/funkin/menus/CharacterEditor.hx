@@ -164,7 +164,7 @@ class CharacterEditor extends FunkinState
                 }
             } else {
                 for(i in 0...FlxG.mouse.wheel) {
-                    newZoom *= 4 / 3;
+                    newZoom *= 1.3;
                 }
             }
             FlxG.camera.zoom = FlxMath.bound(newZoom, 0.1, 10);
