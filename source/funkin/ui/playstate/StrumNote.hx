@@ -45,9 +45,9 @@ class StrumNote extends FunkinSprite
 
     public function changeSkin(skin:String)
     {
-        json = Json.parse(FunkinAssets.getText(Paths.json("images/ui/skins/default/config")));
+        json = Json.parse(FunkinAssets.getText(Paths.json('images/ui/skins/$skin/config')));
         
-        frames = FunkinAssets.getSparrow("ui/skins/default/strums");
+        frames = FunkinAssets.getSparrow('ui/skins/$skin/strums');
         addAnimByPrefix("static", Note.arrowDirections[keyCount][noteData] + " static0", 24, true);
         addAnimByPrefix("press", Note.arrowDirections[keyCount][noteData] + " press0", 24, false);
         addAnimByPrefix("confirm", Note.arrowDirections[keyCount][noteData] + " confirm0", 24, false);
@@ -55,6 +55,8 @@ class StrumNote extends FunkinSprite
         scale.set(json.arrowScale, json.arrowScale);
         updateHitbox();
 
+        antialiasing = json.skinType != "pixel";
+        
         playAnim("static");
     }
 

@@ -2,21 +2,25 @@ package;
 
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
+import flixel.util.typeLimit.OneOfTwo;
 
 class Preferences
 {
-    public static var binds4k:Array<Array<FlxKey>> = [
-        [A, S, W, D],
-        [LEFT, DOWN, UP, RIGHT],
+    public static var options:Map<String, Dynamic> = [
+        // Keybinds
+        "binds4k"        => [
+            [A, S, W, D],
+            [LEFT, DOWN, UP, RIGHT],
+        ],
+
+        // Options
+        "downScroll"     => false,
+        "centeredNotes"  => false,
+        "antiAliasing"   => false,
+        "opaqueSustains" => false,
     ];
 
-    public static var downScroll:Bool = false;
-    public static var centeredNotes:Bool = false;
-
-    public static var antiAliasing:Bool = true;
-
-    public static var opaqueSustains:Bool = false;
-
+    // Functions
     public static function init()
     {
         FlxG.save.bind("swordcube", "genesis-options");
@@ -24,25 +28,30 @@ class Preferences
         if(FlxG.save.data.volume != null)
             FlxG.sound.volume = FlxG.save.data.volume;
         
-        initOption("binds4k");
-        initOption("downScroll");
-        initOption("centeredNotes");
-        initOption("antiAliasing");
-        initOption("opaqueSustains");
-    }
-
-    public static function initOption(option:String)
-    {
-        var saveData:Dynamic = Reflect.getProperty(FlxG.save.data, option);
-        if(saveData != null)
-            Reflect.setProperty(Preferences, option, saveData);
-        else
+        for(option in options.keys())
         {
-            Reflect.setProperty(FlxG.save.data, option, Reflect.getProperty(Preferences, option));
-            FlxG.save.flush();
+            if(Reflect.getProperty(FlxG.save.data, option) == null)
+            {
+                Reflect.setProperty(FlxG.save.data, option, options[option]);
+                FlxG.save.flush();
+            }
+            else
+                options[option] = Reflect.getProperty(FlxG.save.data, option);
         }
     }
 
     public static function getOption(option:String):Dynamic
-        return Reflect.getProperty(Preferences, option);
+    {
+        if(options.exists(option))
+            return options[option];
+        
+        return null;
+    }
+
+    public static function setOption(option:String, value:Dynamic)
+    {
+        options[option] = value;
+        Reflect.setProperty(FlxG.save.data, option, value);
+        FlxG.save.flush();
+    }
 }

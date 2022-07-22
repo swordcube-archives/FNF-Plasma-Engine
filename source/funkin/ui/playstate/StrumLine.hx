@@ -102,9 +102,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
         if(hasInput)
         {
-            // REPLACE WITH BINDS FROM OPTIONS WHEN OPTIONS GET ADDED!
-            var binds:Array<FlxKey> = Preferences.getOption("binds4k")[0];
-            var bindsAlt:Array<FlxKey> = Preferences.getOption("binds4k")[1];
+            var binds:Array<FlxKey> = Preferences.getOption('binds${PlayState.SONG.keyCount}k')[0];
+            var bindsAlt:Array<FlxKey> = Preferences.getOption('binds${PlayState.SONG.keyCount}k')[1];
 
             for(i in 0...PlayState.SONG.keyCount)
             {
@@ -149,15 +148,22 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                             PlayState.instance.health += 0.023;
                             PlayState.instance.refreshHealth();
 
+                            PlayState.instance.combo++;
+
                             var rating:String = Ranking.judgeNote(note.strumTime);
-                            PlayState.instance.totalHit += Ranking.judgements[rating].mod;
+                            var judgementInfo:Judgement = Ranking.getInfo(rating);
+
+                            var ratingDisplay:RatingDisplay = new RatingDisplay(rating, PlayState.instance.combo);
+                            PlayState.UI.add(ratingDisplay);
+
+                            PlayState.instance.totalHit += judgementInfo.mod;
                             PlayState.instance.totalNotes++;
 
-                            PlayState.instance.songScore += Ranking.judgements[rating].score;
+                            PlayState.instance.songScore += judgementInfo.score;
 
-                            if(Ranking.judgements[rating].health != null)
+                            if(judgementInfo.health != null)
                             {
-                                PlayState.instance.health += Ranking.judgements[rating].health;
+                                PlayState.instance.health += judgementInfo.health;
                                 PlayState.instance.refreshHealth();
                             }
 
@@ -199,6 +205,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                         
                         PlayState.instance.totalNotes++;
                         PlayState.instance.songMisses++;
+
+                        PlayState.instance.combo = 0;
 
                         PlayState.instance.health -= 0.0475;
                         PlayState.instance.refreshHealth();

@@ -71,7 +71,10 @@ class Note extends FunkinSprite
         scale.set(json.arrowScale, json.arrowScale);
         updateHitbox();
 
-        playAnim("normal");
+        antialiasing = json.skinType != "pixel";
+
+        if(animation.curAnim == null || animation.curAnim != null && (animation.curAnim.name != "hold" || animation.curAnim.name != "tail"))
+            playAnim("normal");
     }
 
     public var animFinished:Bool = false;
@@ -84,7 +87,7 @@ class Note extends FunkinSprite
 
         if(isSustain)
         {
-            if(!Preferences.opaqueSustains)
+            if(!Preferences.getOption("opaqueSustains"))
                 alpha = 0.6;
             
             noteYOff = Math.round(-stepHeight + swagWidth * 0.5);

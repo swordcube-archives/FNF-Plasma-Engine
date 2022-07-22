@@ -71,7 +71,7 @@ class FreeplayMenu extends FunkinState
 		cancelMenu = FunkinAssets.getSound(Paths.sound('menus/cancelMenu'));
 
 		menuBG = new FlxSprite().loadGraphic(FunkinAssets.getImage(Paths.image('menus/menuBGDesat')));
-		menuBG.antialiasing = Preferences.antiAliasing;
+		menuBG.antialiasing = Preferences.getOption("antiAliasing");
 		add(menuBG);
 
         songs = new FlxTypedGroup<FreeplaySongUI>();
