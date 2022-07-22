@@ -15,6 +15,8 @@ import funkin.systems.UIControls;
 import openfl.display.BitmapData;
 import softmod.SoftMod;
 
+using StringTools;
+
 class ModSelector extends FlxGroup
 {
     public var onChangeSelection:Void->Void;
@@ -88,7 +90,13 @@ class ModSelector extends FlxGroup
 
         var curMod:String = SoftMod.modsList[GlobalVariables.selectedMod];
 
-        var iconBMP:BitmapData = BitmapData.fromFile('${Sys.getCwd()}${SoftMod.modsFolder}/${curMod}/softmod_icon.png');
+        #if windows
+        var path:String = '${Sys.getCwd()}${SoftMod.modsFolder}/${curMod}/softmod_icon.png'.replace("/", "\\");
+        #else
+        var path:String = '${Sys.getCwd()}${SoftMod.modsFolder}/${curMod}/softmod_icon.png';
+        #end
+
+        var iconBMP:BitmapData = BitmapData.fromFile(path);
         if(iconBMP != null)
         {
             icon.loadGraphic(FlxGraphic.fromBitmapData(iconBMP));

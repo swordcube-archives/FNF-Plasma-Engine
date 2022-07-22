@@ -140,11 +140,31 @@ class FunkinAssets
     {
         if(!sounds.exists(path))
         {
+            var dumbPath = path;
+            
+            #if MODS_ALLOWED
+            for(_mod in SoftMod.modsList)
+            {
+                if(SoftMod.modsList[GlobalVariables.selectedMod] == _mod)
+                {
+                    var _path = '${Sys.getCwd()}${SoftMod.modsFolder}/$_mod/${path.split('assets/')[1]}';
+                    if(sys.FileSystem.exists(_path))
+                        dumbPath = _path;
+                }
+            }
+            #end
+
+            #if windows
+            var goodPath = dumbPath.replace("/", "\\");
+            #else
+            var goodPath = dumbPath;
+            #end
+
             #if sys
-            sounds.set(path, Sound.fromFile(path));
+            sounds.set(path, Sound.fromFile(goodPath));
             #else
             @:privateAccess
-            sounds.set(path, new FlxSound().loadEmbedded(path)._sound);
+            sounds.set(path, new FlxSound().loadEmbedded(goodPath)._sound);
             #end
         }
 

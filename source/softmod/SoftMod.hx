@@ -57,7 +57,13 @@ class SoftMod
 
         for(folder in modsList)
         {
+            // windows can go suck a dick with it's weird ass backslash bullshit
+            #if windows
+            var path:String = '${Sys.getCwd()}$modsFolder/$folder/softmod_info.json'.replace("/", "\\");
+            #else
             var path:String = '${Sys.getCwd()}$modsFolder/$folder/softmod_info.json';
+            #end
+            
             if(FileSystem.exists(path))
             {
                 var content:ModJSON = haxe.Json.parse(File.getContent(path));
