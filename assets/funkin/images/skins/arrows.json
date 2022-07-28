@@ -1,0 +1,18 @@
+{
+    "skin_type": "default",
+    "note_assets": "arrows/NOTE_assets",
+    
+    "strum_scale": 0.7,
+    "note_scale": 0.7,
+
+    "rating_assets_folder": "ratings/default",
+    "rating_scale": 0.7,
+
+    "combo_assets_folder": "combo/default",
+    "combo_scale": 0.5,
+
+    "countdown_3_asset": "countdown/preready",
+    "countdown_2_asset": "countdown/ready",
+    "countdown_1_asset": "countdown/set",
+    "countdown_go_asset": "countdown/go"
+}

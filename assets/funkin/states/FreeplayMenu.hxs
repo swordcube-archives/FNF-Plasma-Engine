@@ -1,0 +1,27 @@
+var scrollMenu:Sound;
+var cancelMenu:Sound;
+
+var bg:FlxSprite;
+
+var songs:Array<Dynamic> = [];
+
+function create()
+{
+    scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
+    cancelMenu = FNFAssets.getSound(AssetPaths.sound("menus/cancelMenu"));
+
+    bg = new FlxSprite().loadGraphic(FNFAssets.getImage(AssetPaths.image('menuBGDesat')));
+    add(bg);
+
+    songs = Json.parse(FNFAssets.getText(AssetPaths.json("freeplaySongs"))).songs;
+    trace(songs);
+}
+
+function update()
+{
+    if(UIControls.justPressed("BACK"))
+    {
+        FlxG.sound.play(cancelMenu);
+        Main.switchState(new MainMenu());
+    }
+}

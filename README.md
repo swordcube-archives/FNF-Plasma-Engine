@@ -2,7 +2,7 @@
 
 An FNF engine designed to be lightweight and easy to mod.
 
-You can use `.hx` files to make modcharts, stages, custom UI's, characters, and custom states!
+You can use `.hx` files to make modcharts, stages, characters, states, pretty much anything!
 
 # 🖥️ Building the game
 
@@ -14,8 +14,7 @@ Step 3. [Install HaxeFlixel](https://haxeflixel.com/documentation/install-haxefl
 
 Step 4. Run these commands to install the libraries required:
 ```
-haxelib install flixel
-haxelib install hscript
+haxelib git hscript-improved https://github.com/YoshiCrafter29/hscript-improved
 haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addons
 haxelib git flixel-ui https://github.com/HaxeFlixel/flixel-ui
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc

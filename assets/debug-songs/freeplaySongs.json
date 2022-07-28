@@ -1,0 +1,11 @@
+{
+    "song": "Test",
+    "displayname": null,
+    "difficulties": [
+        "Easy",
+        "Normal",
+        "Hard"
+    ],
+    "icon": "bf-pixel",
+    "color": "#68b1e8"
+}

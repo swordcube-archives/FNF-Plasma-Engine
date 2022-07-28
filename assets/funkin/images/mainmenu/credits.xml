@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="Credits.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="basic0000" x="1" y="526" width="489" height="116"/>
+	<SubTexture name="basic0001" x="1" y="526" width="489" height="116"/>
+	<SubTexture name="basic0002" x="1" y="526" width="489" height="116"/>
+	<SubTexture name="basic0003" x="1" y="643" width="489" height="116"/>
+	<SubTexture name="basic0004" x="1" y="643" width="489" height="116"/>
+	<SubTexture name="basic0005" x="1" y="643" width="489" height="116"/>
+	<SubTexture name="basic0006" x="1" y="760" width="489" height="116"/>
+	<SubTexture name="basic0007" x="1" y="760" width="489" height="116"/>
+	<SubTexture name="white0000" x="1" y="1" width="649" height="174"/>
+	<SubTexture name="white0001" x="1" y="176" width="649" height="174"/>
+	<SubTexture name="white0002" x="1" y="351" width="649" height="174"/>
+</TextureAtlas>
