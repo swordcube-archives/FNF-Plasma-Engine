@@ -3,7 +3,7 @@
         {
             "name": "Tutorial",
             "icon": "gf",
-            "color": "#9271FD",
+            "color": [146, 113, 253],
             "difficulties": [
                 "easy",
                 "normal",
@@ -13,7 +13,7 @@
         {
             "name": "Bopeebo",
             "icon": "dad",
-            "color": "#9271FD",
+            "color": [146, 113, 253],
             "difficulties": [
                 "easy",
                 "normal",
@@ -23,7 +23,7 @@
         {
             "name": "Fresh",
             "icon": "dad",
-            "color": "#9271FD",
+            "color": [146, 113, 253],
             "difficulties": [
                 "easy",
                 "normal",
@@ -33,7 +33,7 @@
         {
             "name": "Dad Battle",
             "icon": "dad",
-            "color": "#9271FD",
+            "color": [146, 113, 253],
             "difficulties": [
                 "easy",
                 "normal",

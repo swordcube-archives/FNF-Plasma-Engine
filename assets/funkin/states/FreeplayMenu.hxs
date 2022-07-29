@@ -27,6 +27,7 @@ function create()
     add(grpIcons);
 
     var i:Int = 0;
+
     for(song in songs)
     {
         var displayName:String = song.displayname != null ? song.displayname : song.name;
@@ -47,22 +48,20 @@ function create()
 }
 
 var bgColor:Array<Float> = [
-    0,
-    0,
-    0
+    255,
+    255,
+    255
 ];
 
 function update()
 {
-    var time:Float = Main.deltaTime * 9;
+    var time:Float = Main.deltaTime * 9.0;
 
-    var color = FlxColor.fromString(StringTools.trim(songs[curSelected].color));
-    bgColor[0] = FlxMath.lerp(bgColor[0], color.red, time);
-    bgColor[1] = FlxMath.lerp(bgColor[1], color.green, time);
-    bgColor[2] = FlxMath.lerp(bgColor[2], color.blue, time);
+    var color = songs[curSelected].color;
 
-    trace(StringTools.trim(songs[curSelected].color));
-    trace(color);
+    bgColor[0] = FlxMath.lerp(bgColor[0], color[0], time);
+    bgColor[1] = FlxMath.lerp(bgColor[1], color[1], time);
+    bgColor[2] = FlxMath.lerp(bgColor[2], color[2], time);
 
     bg.color = FlxColor.fromRGB(Std.int(bgColor[0]), Std.int(bgColor[1]), Std.int(bgColor[2]));
 
@@ -82,13 +81,15 @@ function update()
 function changeSelection(change:Int)
 {
     curSelected += change;
-    if(curSelected < 0)
-        curSelected = grpSongs.length-1;
 
-    if(curSelected > grpSongs.length-1)
+    if(curSelected < 0)
+        curSelected = grpSongs.length - 1;
+
+    if(curSelected > grpSongs.length - 1)
         curSelected = 0;
 
     var i:Int = 0;
+
     for(song in grpSongs.members)
     {
         song.targetY = i - curSelected;
