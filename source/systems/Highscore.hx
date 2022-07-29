@@ -20,6 +20,9 @@ class Highscore
     public static function getScore(thing:String, ?packOverride:Null<String>):Int
     {
         var packToUse:String = packOverride != null ? packOverride : AssetPaths.currentPack;
+        if(scores.get(thing+":"+packToUse) == null)
+            setScore(thing, 0, packOverride);
+        
         return scores.get(thing+":"+packToUse);
     }
 
