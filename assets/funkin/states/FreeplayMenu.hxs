@@ -2,26 +2,100 @@ var scrollMenu:Sound;
 var cancelMenu:Sound;
 
 var bg:FlxSprite;
+var grpSongs:FlxGroup;
+var grpIcons:FlxGroup;
 
 var songs:Array<Dynamic> = [];
+
+var curSelected:Int = 0;
 
 function create()
 {
     scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
     cancelMenu = FNFAssets.getSound(AssetPaths.sound("menus/cancelMenu"));
 
-    bg = new FlxSprite().loadGraphic(FNFAssets.getImage(AssetPaths.image('menuBGDesat')));
+    bg = new FlxSprite();
+    bg.loadGraphic(FNFAssets.getImage(AssetPaths.image('menuBGDesat')));
     add(bg);
 
     songs = Json.parse(FNFAssets.getText(AssetPaths.json("freeplaySongs"))).songs;
-    trace(songs);
+
+    grpSongs = new FlxGroup();
+    add(grpSongs);
+
+    grpIcons = new FlxGroup();
+    add(grpIcons);
+
+    var i:Int = 0;
+    for(song in songs)
+    {
+        var displayName:String = song.displayname != null ? song.displayname : song.name;
+
+        var songText:Alphabet = new Alphabet(0, (70 * i) + 30, displayName, true, false);
+        songText.isMenuItem = true;
+        songText.targetY = i;
+        grpSongs.add(songText);
+
+        var icon:HealthIcon = new HealthIcon(song.icon);
+        icon.sprTracker = songText;
+        grpIcons.add(icon);
+
+        i += 1;
+    }
+
+    changeSelection(0);
 }
+
+var bgColor:Array<Float> = [
+    0,
+    0,
+    0
+];
 
 function update()
 {
+    var time:Float = Main.deltaTime * 9;
+
+    var color = FlxColor.fromString(StringTools.trim(songs[curSelected].color));
+    bgColor[0] = FlxMath.lerp(bgColor[0], color.red, time);
+    bgColor[1] = FlxMath.lerp(bgColor[1], color.green, time);
+    bgColor[2] = FlxMath.lerp(bgColor[2], color.blue, time);
+
+    trace(StringTools.trim(songs[curSelected].color));
+    trace(color);
+
+    bg.color = FlxColor.fromRGB(Std.int(bgColor[0]), Std.int(bgColor[1]), Std.int(bgColor[2]));
+
     if(UIControls.justPressed("BACK"))
     {
         FlxG.sound.play(cancelMenu);
         Main.switchState(new MainMenu());
     }
+
+    if(UIControls.justPressed("UP"))
+        changeSelection(-1);
+
+    if(UIControls.justPressed("DOWN"))
+        changeSelection(1);
+}
+
+function changeSelection(change:Int)
+{
+    curSelected += change;
+    if(curSelected < 0)
+        curSelected = grpSongs.length-1;
+
+    if(curSelected > grpSongs.length-1)
+        curSelected = 0;
+
+    var i:Int = 0;
+    for(song in grpSongs.members)
+    {
+        song.targetY = i - curSelected;
+        song.alpha = curSelected == i ? 1 : 0.6;
+
+        i += 1;
+    }
+
+    FlxG.sound.play(scrollMenu);
 }
