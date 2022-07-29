@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
 import systems.ExtraKeys;
+import systems.Highscore;
 import systems.MusicBeat;
 
 enum SettingType {
@@ -153,6 +154,9 @@ class Init extends MusicBeatState
         if(FlxG.save.data.volume != null)
             FlxG.sound.volume = FlxG.save.data.volume;
 
+        // Initialize highscore
+        Highscore.init();
+
         initializeSettings();
 
 		FlxG.mouse.useSystemCursor = true; // Makes the game use the system cursor because it looks nicer.
@@ -160,7 +164,6 @@ class Init extends MusicBeatState
 		FlxG.fixedTimestep = false;        // Makes the game not run dependent of FPS.
 
         // Start the game
-        trace("STARTING GAME!");
         Main.switchState(new states.TitleState());
     }
 

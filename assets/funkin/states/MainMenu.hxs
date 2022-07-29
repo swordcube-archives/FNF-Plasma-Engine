@@ -25,6 +25,9 @@ var engineTxt:FlxText;
 
 function create()
 {
+    state.persistentUpdate = true;
+    state.persistentDraw = true;
+
     scrollMenu = FNFAssets.getSound(AssetPaths.sound('menus/scrollMenu'));
     cancelMenu = FNFAssets.getSound(AssetPaths.sound('menus/cancelMenu'));
     confirmMenu = FNFAssets.getSound(AssetPaths.sound('menus/confirmMenu'));

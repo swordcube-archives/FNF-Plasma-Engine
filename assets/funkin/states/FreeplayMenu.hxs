@@ -7,7 +7,14 @@ var grpIcons:FlxGroup;
 
 var songs:Array<Dynamic> = [];
 
+var scoreBG:FlxSprite;
+var scoreText:FlxText;
+var diffText:FlxText;
+var lerpScore:Float = 0;
+var intendedScore:Int = 0;
+
 var curSelected:Int = 0;
+var curDifficulty:Int = 1;
 
 function create()
 {
@@ -16,6 +23,7 @@ function create()
 
     bg = new FlxSprite();
     bg.loadGraphic(FNFAssets.getImage(AssetPaths.image('menuBGDesat')));
+    bg.antialiasing = Init.trueSettings.get("Antialiasing");
     add(bg);
 
     songs = Json.parse(FNFAssets.getText(AssetPaths.json("freeplaySongs"))).songs;
@@ -44,7 +52,43 @@ function create()
         i += 1;
     }
 
+    scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
+    scoreText.setFormat(AssetPaths.font("vcr"), 32, FlxColor.WHITE, FlxTextAlign.RIGHT);
+
+    scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(1, 66, 0xFF000000);
+    scoreBG.antialiasing = false;
+    scoreBG.alpha = 0.6;
+    add(scoreBG);
+
+    diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
+    diffText.font = scoreText.font;
+    add(diffText);
+
+    add(scoreText);
+
+    positionHighscore();
+
     changeSelection(0);
+    changeDifficulty(0);
+}
+
+function updateScore()
+{
+    intendedScore = Highscore.getScore(songs[curSelected].name, StringTools.trim(songs[curSelected].difficulties[curDifficulty]));
+
+    lerpScore = FlxMath.lerp(lerpScore, intendedScore, Main.deltaTime * 7);
+
+    scoreText.text = "PERSONAL BEST:" + Math.round(lerpScore);
+    positionHighscore();
+}
+
+function positionHighscore()
+{
+    scoreText.x = FlxG.width - scoreText.width - 6;
+    scoreBG.scale.x = FlxG.width - scoreText.x + 6;
+    scoreBG.x = FlxG.width - scoreBG.scale.x / 2;
+    diffText.x = scoreBG.x + scoreBG.width / 2;
+    diffText.x -= diffText.width / 2;
 }
 
 var bgColor:Array<Float> = [
@@ -65,6 +109,8 @@ function update()
 
     bg.color = FlxColor.fromRGB(Std.int(bgColor[0]), Std.int(bgColor[1]), Std.int(bgColor[2]));
 
+    updateScore();
+
     if(UIControls.justPressed("BACK"))
     {
         FlxG.sound.play(cancelMenu);
@@ -76,6 +122,33 @@ function update()
 
     if(UIControls.justPressed("DOWN"))
         changeSelection(1);
+
+    if(UIControls.justPressed("LEFT"))
+        changeDifficulty(-1);
+
+    if(UIControls.justPressed("RIGHT"))
+        changeDifficulty(1);
+
+    if(UIControls.justPressed("ACCEPT"))
+    {
+        PlayState.SONG = SongLoader.getJSON(songs[curSelected].name, songs[curSelected].difficulties[curDifficulty]);
+        Main.switchState(new PlayState());
+    }
+}
+
+function changeDifficulty(change:Int)
+{
+    curDifficulty += change;
+
+    if(curDifficulty < 0)
+        curDifficulty = songs[curSelected].difficulties.length - 1;
+
+    if(curDifficulty > songs[curSelected].difficulties.length - 1)
+        curDifficulty = 0;
+
+    diffText.text = "< " + songs[curSelected].difficulties[curDifficulty].toUpperCase() + " >";
+
+    updateScore();
 }
 
 function changeSelection(change:Int)

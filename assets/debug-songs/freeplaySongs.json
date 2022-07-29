@@ -2,9 +2,9 @@
     "song": "Test",
     "displayname": null,
     "difficulties": [
-        "Easy",
-        "Normal",
-        "Hard"
+        "easy",
+        "normal",
+        "hard"
     ],
     "icon": "bf-pixel",
     "color": "#68b1e8"

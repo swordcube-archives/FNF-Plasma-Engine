@@ -139,12 +139,12 @@ function update(elapsed:Float)
             {
                 lean = true;
                 FlxG.sound.play(confirmMenu);
+                FlxG.camera.flash(0xFFFFFFFF, 2);
                 titleText.animation.play("confirm", true);
 
                 new FlxTimer().start(1, function(tmr:FlxTimer) {
                     state.persistentUpdate = true;
                     state.persistentDraw = true;
-                    FlxG.camera.flash(0xFFFFFFFF, 2);
                     Main.switchState(new MainMenu());
                 });
             }

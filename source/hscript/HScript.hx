@@ -148,6 +148,7 @@ class HScript
             setVariable("Alphabet", ui.Alphabet);
             setVariable("SongLoader", gameplay.Song.SongLoader);
 
+            setVariable("Highscore", systems.Highscore);
             setVariable("HealthIcon", ui.HealthIcon);
 
             // Game states
