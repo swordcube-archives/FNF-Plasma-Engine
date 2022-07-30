@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 import flixel.input.keyboard.FlxKey;
+import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import states.PlayState;
@@ -61,12 +62,14 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                 if(FlxG.keys.checkStatus(key, JUST_PRESSED))
                 {
                     strum.setColor();
+                    strum.colorSwap.enabled.value = [true];
                     strum.playAnim("press", true);
                     strum.alpha = 1;
                 }
 
                 if(FlxG.keys.checkStatus(key, JUST_RELEASED))
                 {
+                    strum.colorSwap.enabled.value = [false];
                     strum.resetColor();
                     strum.playAnim("static", true);
                     strum.alpha = Init.trueSettings.get("Opaque Strums") ? 1 : 0.75;
@@ -75,11 +78,28 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                 i++;
             }
         }
+        else
+        {
+            for(strum in members)
+            {
+                if(strum.animation.curAnim != null && strum.animation.curAnim.name == "confirm" && strum.animation.curAnim.finished)
+                {
+                    strum.resetColor();
+                    strum.colorSwap.enabled.value = [false];
+                    strum.alpha = Init.trueSettings.get("Opaque Strums") ? 1 : 0.75;
+                    strum.playAnim("static");
+                }
+            }
+        }
+
+        var stepHeight = (0.45 * Conductor.stepCrochet * PlayState.current.scrollSpeed);
 
         var possibleNotes:Array<Note> = [];
         notes.forEachAlive(function(note:Note) {
             note.x = members[note.noteData].x;
-            note.y = members[note.noteData].y - (0.45 * (Conductor.position - note.strumTime) * PlayState.current.scrollSpeed);
+            
+            var scrollAmount:Float = (note.isDownScroll ? -1 : 1) * 0.45;
+            note.y = members[note.noteData].y - (scrollAmount * (Conductor.position - note.strumTime) * PlayState.current.scrollSpeed);
             
             if(hasInput)
             {
@@ -90,14 +110,29 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                     note.destroy();
                 }
 
+                if(note.isSustain && (Conductor.position - note.strumTime) >= 0.0)
+                {
+                    members[note.noteData].setColor();
+                    members[note.noteData].colorSwap.enabled.value = [true];
+                    members[note.noteData].playAnim("confirm", true);
+                    notes.remove(note, true);
+                    note.kill();
+                    note.destroy();
+                }
+
                 // Make the note possible to hit if it's in the safe zone to be hit.
-                if((Conductor.position - note.strumTime) > -Conductor.safeZoneOffset)
+                // If it's a sustain, it will automatically get hit
+                if(!note.isSustain && ((Conductor.position - note.strumTime) > -Conductor.safeZoneOffset))
                     possibleNotes.push(note);
             }
             else
             {
                 if((Conductor.position - note.strumTime) >= 0.0)
                 {
+                    members[note.noteData].alpha = 1;
+                    members[note.noteData].setColor();
+                    members[note.noteData].colorSwap.enabled.value = [true];
+                    members[note.noteData].playAnim("confirm", true);
                     notes.remove(note, true);
                     note.kill();
                     note.destroy();
@@ -105,10 +140,13 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
             }
         });
 
+        var justPressed:Array<Bool> = [];
+        var pressed:Array<Bool> = [];
+
         if(hasInput)
         {
-            var justPressed:Array<Bool> = [];
-            var pressed:Array<Bool> = [];
+            justPressed = [];
+            pressed = [];
 
             for(i in 0...keyCount)
             {
@@ -133,6 +171,54 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                 }
             }
         }
+
+        notes.forEachAlive(function(note:Note) {
+            if(note.isDownScroll)
+            {
+                if(note.isSustain)
+                {
+                    note.y -= note.height - stepHeight;
+                    note.y += 10;
+                    
+                    if ((PlayState.current.botPlay
+                        || !hasInput
+                        || hasInput && pressed[note.noteData])
+                        && note.y - note.offset.y * note.scale.y + note.height >= (this.y + Note.swagWidth / 2))
+                    {
+                        // Clip to strumline
+                        var swagRect = new FlxRect(0, 0, note.frameWidth * 2, note.frameHeight * 2);
+                        swagRect.height = (members[note.noteData].y
+                            + Note.swagWidth / 2
+                            - note.y) / note.scale.y;
+                        swagRect.y = note.frameHeight - swagRect.height;
+
+                        note.clipRect = swagRect;
+                    }
+                }
+            }
+            else
+            {
+                if(note.isSustain)
+                {
+                    note.y += 15;
+                    
+                    if ((PlayState.current.botPlay
+                        || !hasInput
+                        || hasInput && pressed[note.noteData])
+                        && note.y + note.offset.y * note.scale.y <= (this.y + Note.swagWidth / 2))
+                    {
+                        // Clip to strumline
+                        var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
+                        swagRect.y = (members[note.noteData].y
+                            + Note.swagWidth / 2
+                            - note.y) / note.scale.y;
+                        swagRect.height -= swagRect.y;
+
+                        note.clipRect = swagRect;
+                    }
+                }
+            }
+        });
     }
 
     function goodNoteHit(note:Note)

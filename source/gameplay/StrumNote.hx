@@ -29,11 +29,13 @@ typedef ArrowSkin = {
 class StrumNote extends FNFSprite
 {
     public var parent:StrumLine;
+
+    public var keyCount:Int = 4;
     public var noteData:Int = 0;
     
     public var json:ArrowSkin;
 
-    public var colorSwap:ColorSwap = new ColorSwap();
+    public var colorSwap:ColorSwap = new ColorSwap(255, 255, 255);
     
     public function new(x:Float, y:Float, noteData:Int = 0)
     {
@@ -41,21 +43,19 @@ class StrumNote extends FNFSprite
 
         this.noteData = noteData;
 
-        shader = colorSwap.shader;
+        shader = colorSwap;
+        colorSwap.enabled.value = [false];
     }
 
     public function setColor()
     {
-        colorSwap.hue = Init.arrowColors[parent.keyCount-1][noteData][0]/360;
-        colorSwap.saturation = Init.arrowColors[parent.keyCount-1][noteData][1]/100;
-        colorSwap.brightness = Init.arrowColors[parent.keyCount-1][noteData][2]/100;
+        var colorArray = Init.arrowColors[parent != null ? parent.keyCount-1 : keyCount-1][noteData];
+        colorSwap.setColors(colorArray[0], colorArray[1], colorArray[2]);
     }
 
     public function resetColor()
     {
-        colorSwap.hue = 0;
-        colorSwap.saturation = 0;
-        colorSwap.brightness = 0;
+        colorSwap.setColors(255, 255, 255);
     }
 
     public function loadSkin(skin:String)

@@ -120,7 +120,6 @@ class HScript
             setVariable("UIControls", systems.UIControls);
             
             setVariable("ColorSwap", shaders.ColorSwap);
-            setVariable("ColorSwapShader", shaders.ColorSwap.ColorSwapShader);
 
             setVariable("Conductor", systems.Conductor);
             setVariable("AssetPaths", AssetPaths);

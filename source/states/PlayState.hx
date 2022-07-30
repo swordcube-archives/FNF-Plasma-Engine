@@ -42,16 +42,20 @@ class PlayState extends MusicBeatState
 
 	public var followLerp:Float = 0.45;
 
-	// Misc
-	public var scripts:Array<HScript> = [];
-	public var UI:GameplayUI;
-
-	public var startedSong:Bool = false;
-
+	// Music & Sounds
+	public var freakyMenu:Sound = FNFAssets.returnAsset(SOUND, AssetPaths.music("freakyMenu"));
 	public var loadedSong:Map<String, Sound> = [];
 	public var vocals:FlxSound = new FlxSound();
 
 	public var hasVocals:Bool = true;
+
+	// Misc
+	public var botPlay:Bool = Init.trueSettings.get("Botplay");
+	public var scripts:Array<HScript> = [];
+	public var UI:GameplayUI;
+
+	public var startedSong:Bool = false;
+	public var endingSong:Bool = false;
 
 	public var scrollSpeed:Float = 1.0;
 	
@@ -106,7 +110,13 @@ class PlayState extends MusicBeatState
 		super.update(elapsed);
 
 		if(UIControls.justPressed("BACK"))
+		{
+			endingSong = true;
+
+			vocals.stop();
+			FlxG.sound.playMusic(freakyMenu);
 			Main.switchState(getMenuToSwitchTo());
+		}
 
 		Conductor.position += elapsed * 1000.0;
 		if(Conductor.position >= 0.0 && !startedSong)
@@ -127,11 +137,13 @@ class PlayState extends MusicBeatState
 				for(note in section.sectionNotes)
 				{
 					var strumTime:Float = note[0] + Init.trueSettings.get("Note Offset");
-					if((strumTime - Conductor.position) < 1000)
+					if((strumTime - Conductor.position) < 2500)
 					{
 						var gottaHitNote:Bool = section.mustHitSection;
 						if (note[1] > (SONG.keyCount - 1))
 							gottaHitNote = !section.mustHitSection;
+
+						var arrowSkin:String = "arrows";
 
 						var newNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount);
 						newNote.strumTime = strumTime;
@@ -141,7 +153,41 @@ class PlayState extends MusicBeatState
 						strumLine.notes.add(newNote);
 
 						newNote.parent = strumLine;
-						newNote.loadSkin("arrows");
+						newNote.loadSkin(arrowSkin);
+
+						// sustain
+						var susLength:Float = note[2] / Conductor.stepCrochet;
+
+						if(susLength > 0)
+						{
+							var susNote:Int = 0;
+							for(i in 0...Math.floor(susLength))
+							{
+								var newSusNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount, true);
+								newSusNote.strumTime = strumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
+								newSusNote.mustPress = gottaHitNote;
+
+								var strumLine:StrumLine = gottaHitNote ? UI.playerStrums : UI.opponentStrums;
+								strumLine.notes.add(newSusNote);
+		
+								newSusNote.parent = strumLine;
+								newSusNote.loadSkin(arrowSkin);
+								susNote++;
+							}
+
+							// end piece
+							var newSusNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount, true);
+							newSusNote.strumTime = strumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
+							newSusNote.mustPress = gottaHitNote;
+
+							var strumLine:StrumLine = gottaHitNote ? UI.playerStrums : UI.opponentStrums;
+							strumLine.notes.add(newSusNote);
+
+							newSusNote.parent = strumLine;
+							newSusNote.loadSkin(arrowSkin);
+
+							newSusNote.playAnim("tail");
+						}
 
 						section.sectionNotes.remove(note);
 					}
@@ -164,6 +210,9 @@ class PlayState extends MusicBeatState
 	override function beatHit()
 	{
 		super.beatHit();
+
+		// Stop the function from running if the song is ending
+		if(endingSong) return;
 
 		// Resync song if it gets out of sync with song position
 		if(hasVocals)

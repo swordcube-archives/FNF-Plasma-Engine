@@ -1,219 +1,82 @@
 package shaders;
 
-import flixel.system.FlxAssets.FlxShader;
+class ColorSwap extends FlxFixedShader {
+    @:glFragmentSource('#pragma header
 
-/**
- * Cool Shader by ShadowMario that changes RGB based on HSV.
- */
-class ColorSwap {
-	public var shader(default, null):ColorSwapShader = new ColorSwapShader();
-	public var hue(default, set):Float = 0;
-	public var saturation(default, set):Float = 0;
-	public var brightness(default, set):Float = 0;
+        uniform float r;
+        uniform float g;
+        uniform float b;
+        uniform bool enabled;
+        
+        uniform bool blurEnabled;
+        uniform float x;
+        uniform float y;
+        uniform int passes;
+        
+        void main() {
+            vec2 coordinates = openfl_TextureCoordv;
+            vec4 finalColor = flixel_texture2D(bitmap, openfl_TextureCoordv);
+            if (enabled) {
+                if (blurEnabled) {
+                    // real stuff
+                    float r = 0;
+                    float g = 0;
+                    float b = 0;
+                    float a = 0;
+                    float t = 0;
+            
+                    float realX = x / openfl_TextureSize.x;
+                    float realY = y / openfl_TextureSize.y;
+                    for (int i = -passes; i < passes; ++i) {
+                        vec4 color = flixel_texture2D(bitmap, vec2(openfl_TextureCoordv.x + (i * realX / passes), openfl_TextureCoordv.y + (i * realY / passes)));
+                        r += color.r;
+                        g += color.g;
+                        b += color.b;
+                        a += color.a;
+                        ++t;
+                    }
+            
+                    finalColor = vec4(r / t, g / t, b / t, a / t);
+                }
 
-	private function set_hue(value:Float) {
-		hue = value;
-		shader.uTime.value[0] = hue;
-		return hue;
-	}
+                float diff = finalColor.r - ((finalColor.g + finalColor.b) / 2.0);
+                gl_FragColor = vec4(((finalColor.g + finalColor.b) / 2.0) + (r * diff), finalColor.g + (g * diff), finalColor.b + (b * diff), finalColor.a);
+                
+            } else {
+                if (blurEnabled) {
+                    // real stuff
+                    float r = 0;
+                    float g = 0;
+                    float b = 0;
+                    float a = 0;
+                    float t = 0;
+            
+                    float realX = x / openfl_TextureSize.x;
+                    float realY = y / openfl_TextureSize.y;
+                    for (int i = -passes; i < passes; ++i) {
+                        vec4 color = flixel_texture2D(bitmap, vec2(openfl_TextureCoordv.x + (i * realX / passes), openfl_TextureCoordv.y + (i * realY / passes)));
+                        r += color.r;
+                        g += color.g;
+                        b += color.b;
+                        a += color.a;
+                        ++t;
+                    }
+                    finalColor = vec4(r / t, g / t, b / t, a / t);
+                }
+                gl_FragColor = finalColor;
+            }
+            
+        }
+    ')
+    public function new(r:Int, g:Int, b:Int, motion_blur:Null<Bool> = null, passes:Int = 10) {
+        super();
+        setColors(r, g, b);
+        this.enabled.value = [true];
+    }
 
-	private function set_saturation(value:Float) {
-		saturation = value;
-		shader.uTime.value[1] = saturation;
-		return saturation;
-	}
-
-	private function set_brightness(value:Float) {
-		brightness = value;
-		shader.uTime.value[2] = brightness;
-		return brightness;
-	}
-
-	public function new()
-	{
-		shader.uTime.value = [0, 0, 0];
-		shader.awesomeOutline.value = [false];
-	}
-}
-
-class ColorSwapShader extends FlxShader {
-	@:glFragmentSource('
-		varying float openfl_Alphav;
-		varying vec4 openfl_ColorMultiplierv;
-		varying vec4 openfl_ColorOffsetv;
-		varying vec2 openfl_TextureCoordv;
-
-		uniform bool openfl_HasColorTransform;
-		uniform vec2 openfl_TextureSize;
-		uniform sampler2D bitmap;
-
-		uniform bool hasTransform;
-		uniform bool hasColorTransform;
-
-		vec4 flixel_texture2D(sampler2D bitmap, vec2 coord)
-		{
-			vec4 color = texture2D(bitmap, coord);
-			if (!hasTransform)
-			{
-				return color;
-			}
-
-			if (color.a == 0.0)
-			{
-				return vec4(0.0, 0.0, 0.0, 0.0);
-			}
-
-			if (!hasColorTransform)
-			{
-				return color * openfl_Alphav;
-			}
-
-			color = vec4(color.rgb / color.a, color.a);
-
-			mat4 colorMultiplier = mat4(0);
-			colorMultiplier[0][0] = openfl_ColorMultiplierv.x;
-			colorMultiplier[1][1] = openfl_ColorMultiplierv.y;
-			colorMultiplier[2][2] = openfl_ColorMultiplierv.z;
-			colorMultiplier[3][3] = openfl_ColorMultiplierv.w;
-
-			color = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);
-
-			if (color.a > 0.0)
-			{
-				return vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);
-			}
-			return vec4(0.0, 0.0, 0.0, 0.0);
-		}
-
-		uniform vec3 uTime;
-		uniform bool awesomeOutline;
-
-		const float offset = 1.0 / 128.0;
-		vec3 normalizeColor(vec3 color)
-		{
-			return vec3(
-				color[0] / 255.0,
-				color[1] / 255.0,
-				color[2] / 255.0
-			);
-		}
-
-		vec3 rgb2hsv(vec3 c)
-		{
-			vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
-			vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
-			vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
-
-			float d = q.x - min(q.w, q.y);
-			float e = 1.0e-10;
-			return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
-		}
-
-		vec3 hsv2rgb(vec3 c)
-		{
-			vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-			vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-			return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-		}
-
-		void main()
-		{
-			vec4 color = flixel_texture2D(bitmap, openfl_TextureCoordv);
-
-			vec4 swagColor = vec4(rgb2hsv(vec3(color[0], color[1], color[2])), color[3]);
-
-			// [0] is the hue???
-			swagColor[0] = swagColor[0] + uTime[0];
-			swagColor[1] = swagColor[1] + uTime[1];
-			swagColor[2] = swagColor[2] * (1.0 + uTime[2]);
-			
-			if(swagColor[1] < 0.0)
-			{
-				swagColor[1] = 0.0;
-			}
-			else if(swagColor[1] > 1.0)
-			{
-				swagColor[1] = 1.0;
-			}
-
-			color = vec4(hsv2rgb(vec3(swagColor[0], swagColor[1], swagColor[2])), swagColor[3]);
-
-			if (awesomeOutline)
-			{
-				 // Outline bullshit?
-				vec2 size = vec2(3, 3);
-
-				if (color.a <= 0.5) {
-					float w = size.x / openfl_TextureSize.x;
-					float h = size.y / openfl_TextureSize.y;
-					
-					if (flixel_texture2D(bitmap, vec2(openfl_TextureCoordv.x + w, openfl_TextureCoordv.y)).a != 0.
-					|| flixel_texture2D(bitmap, vec2(openfl_TextureCoordv.x - w, openfl_TextureCoordv.y)).a != 0.
-					|| flixel_texture2D(bitmap, vec2(openfl_TextureCoordv.x, openfl_TextureCoordv.y + h)).a != 0.
-					|| flixel_texture2D(bitmap, vec2(openfl_TextureCoordv.x, openfl_TextureCoordv.y - h)).a != 0.)
-						color = vec4(1.0, 1.0, 1.0, 1.0);
-				}
-			}
-			gl_FragColor = color;
-
-			/* 
-			if (color.a > 0.5)
-				gl_FragColor = color;
-			else
-			{
-				float a = flixel_texture2D(bitmap, vec2(openfl_TextureCoordv + offset, openfl_TextureCoordv.y)).a +
-						  flixel_texture2D(bitmap, vec2(openfl_TextureCoordv, openfl_TextureCoordv.y - offset)).a +
-						  flixel_texture2D(bitmap, vec2(openfl_TextureCoordv - offset, openfl_TextureCoordv.y)).a +
-						  flixel_texture2D(bitmap, vec2(openfl_TextureCoordv, openfl_TextureCoordv.y + offset)).a;
-				if (color.a < 1.0 && a > 0.0)
-					gl_FragColor = vec4(0.0, 0.0, 0.0, 0.8);
-				else
-					gl_FragColor = color;
-			} */
-		}')
-	@:glVertexSource('
-		attribute float openfl_Alpha;
-		attribute vec4 openfl_ColorMultiplier;
-		attribute vec4 openfl_ColorOffset;
-		attribute vec4 openfl_Position;
-		attribute vec2 openfl_TextureCoord;
-
-		varying float openfl_Alphav;
-		varying vec4 openfl_ColorMultiplierv;
-		varying vec4 openfl_ColorOffsetv;
-		varying vec2 openfl_TextureCoordv;
-
-		uniform mat4 openfl_Matrix;
-		uniform bool openfl_HasColorTransform;
-		uniform vec2 openfl_TextureSize;
-
-		attribute float alpha;
-		attribute vec4 colorMultiplier;
-		attribute vec4 colorOffset;
-		uniform bool hasColorTransform;
-		
-		void main(void)
-		{
-			openfl_Alphav = openfl_Alpha;
-			openfl_TextureCoordv = openfl_TextureCoord;
-
-			if (openfl_HasColorTransform) {
-				openfl_ColorMultiplierv = openfl_ColorMultiplier;
-				openfl_ColorOffsetv = openfl_ColorOffset / 255.0;
-			}
-
-			gl_Position = openfl_Matrix * openfl_Position;
-
-			openfl_Alphav = openfl_Alpha * alpha;
-			if (hasColorTransform)
-			{
-				openfl_ColorOffsetv = colorOffset / 255.0;
-				openfl_ColorMultiplierv = colorMultiplier;
-			}
-		}')
-
-	public function new()
-	{
-		super();
-	}
+    public function setColors(r:Int, g:Int, b:Int) {
+        this.r.value = [r / 255];
+        this.g.value = [g / 255];
+        this.b.value = [b / 255];
+    }
 }

@@ -3,7 +3,9 @@ package gameplay;
 import gameplay.StrumNote;
 import haxe.Json;
 import shaders.ColorSwap;
+import states.PlayState;
 import sys.FileSystem;
+import systems.Conductor;
 import systems.ExtraKeys;
 import systems.FNFSprite;
 
@@ -25,30 +27,47 @@ class Note extends FNFSprite
 
     public var isDownScroll:Bool = Init.trueSettings.get("Downscroll");
 
-    public var colorSwap:ColorSwap = new ColorSwap();
+    public var colorSwap:ColorSwap = new ColorSwap(255, 255, 255);
+
+    public var noteYOff:Int = 0;
     
     public function new(x:Float, y:Float, noteData:Int = 0, isSustain:Bool = false)
     {
         super(x, y);
 
         this.noteData = noteData;
+        this.isSustain = isSustain;
 
-        shader = colorSwap.shader;
+        shader = colorSwap;
         setColor();
     }
 
     public function setColor()
     {
-        colorSwap.hue = Init.arrowColors[parent != null ? parent.keyCount-1 : keyCount-1][noteData][0]/360;
-        colorSwap.saturation = Init.arrowColors[parent != null ? parent.keyCount-1 : keyCount-1][noteData][1]/100;
-        colorSwap.brightness = Init.arrowColors[parent != null ? parent.keyCount-1 : keyCount-1][noteData][2]/100;
+        var colorArray = Init.arrowColors[parent != null ? parent.keyCount-1 : keyCount-1][noteData];
+        colorSwap.setColors(colorArray[0], colorArray[1], colorArray[2]);
     }
 
     public function resetColor()
     {
-        colorSwap.hue = 0;
-        colorSwap.saturation = 0;
-        colorSwap.brightness = 0;
+        colorSwap.setColors(255, 255, 255);
+    }
+
+    override function update(elapsed:Float)
+    {
+        super.update(elapsed);
+
+		var stepHeight = ((0.45 * Conductor.stepCrochet) * PlayState.current.scrollSpeed);
+
+        if(isSustain)
+        {
+            noteYOff = Math.round(-stepHeight + swagWidth * 0.5);
+            updateHitbox();
+            offsetX();
+        }
+
+        if(isSustain && animation.curAnim != null && animation.curAnim.name != "tail")
+            scale.y = 0.7 * ((Conductor.stepCrochet / 100 * 1.5) * PlayState.current.scrollSpeed);
     }
 
     public function loadSkin(skin:String)
@@ -71,7 +90,10 @@ class Note extends FNFSprite
 
             playAnim("normal");
             if(isSustain)
+            {
+                alpha = Init.trueSettings.get("Opaque Sustains") ? 1 : 0.6;
                 playAnim("hold");
+            }
         }
         else
             Main.print("error", "Skin JSON file at "+path+" doesn't exist!");
@@ -95,5 +117,19 @@ class Note extends FNFSprite
 		}
 		else
 			centerOffsets();
+    }
+
+    function offsetX()
+    {
+		if (json.skin_type != "pixel")
+        {
+            offset.x = frameWidth / 2;
+
+            var scale = json.note_scale;
+
+            offset.x -= 156 * (scale / 2);
+        }
+        else
+            offset.x = (frameWidth - width) * 0.5;
     }
 }
