@@ -21,7 +21,6 @@ var camFollowPos:FlxObject;
 var curSelected:Int = 0;
 
 var engineVersion:String = "Genesis Engine v"+Main.engineVersion;
-var engineTxt:FlxText;
 
 function create()
 {
@@ -69,10 +68,19 @@ function create()
         menuButtons.add(button);
     }
 
-    engineTxt = new FlxText(5, FlxG.height - 25, 0, engineVersion);
-    engineTxt.setFormat(AssetPaths.font("vcr"), 16, FlxColor.WHITE, FlxTextAlign.LEFT);
+    var modPackJSON = Json.parse(FNFAssets.getText(AssetPaths.json("pack")));
+
+    var modTxt:FlxText = new FlxText(5, FlxG.height - 25, 0, "Current Mod: "+modPackJSON.name+" - Press TAB to switch");
+    modTxt.setFormat(AssetPaths.font("vcr"), 16, FlxColor.WHITE, FlxTextAlign.LEFT);
+    modTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
+    modTxt.scrollFactor.set();
+    add(modTxt);
+
+    var engineTxt:FlxText = new FlxText(0, FlxG.height - 25, 0, engineVersion);
+    engineTxt.setFormat(AssetPaths.font("vcr"), 16, FlxColor.WHITE, FlxTextAlign.RIGHT);
     engineTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
     engineTxt.scrollFactor.set();
+    engineTxt.x = FlxG.width - (engineTxt.width + 5);
     add(engineTxt);
 
     camFollow = new FlxObject(menuButtons.members[0].x, menuButtons.members[0].y, 1, 1);
@@ -89,6 +97,9 @@ var accepted:Bool = false;
 
 function update()
 {
+    if(FlxG.keys.justPressed.TAB)
+        state.openSubState(new ModSelectionMenu());
+        
     camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, Main.deltaTime * 9), FlxMath.lerp(camFollowPos.y, camFollow.y, Main.deltaTime * 9));
 
     if(!accepted)

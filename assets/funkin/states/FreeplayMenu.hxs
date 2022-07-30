@@ -1,4 +1,5 @@
-var scrollMenu:Sound;
+import sys.FileSystem;
+
 var cancelMenu:Sound;
 
 var bg:FlxSprite;
@@ -15,6 +16,8 @@ var intendedScore:Int = 0;
 
 var curSelected:Int = 0;
 var curDifficulty:Int = 1;
+
+var curPlaying:String = "";
 
 function create()
 {
@@ -66,6 +69,22 @@ function create()
 
     add(scoreText);
 
+    var dumbStripThing = new FlxSprite(0, FlxG.height - 30);
+    dumbStripThing.makeGraphic(FlxG.width, 30, FlxColor.BLACK);
+    dumbStripThing.alpha = 0.6;
+    add(dumbStripThing);
+
+    var dumbText = new FlxText(0, dumbStripThing.y + 5, 0, "Press SPACE to listen to the selected song.", 16);
+    dumbText.setFormat(AssetPaths.font("vcr"), 16, FlxColor.WHITE, FlxTextAlign.RIGHT);
+    dumbText.x = FlxG.width - (dumbText.width + 5);
+    add(dumbText);
+
+    var modPackJSON = Json.parse(FNFAssets.getText(AssetPaths.json("pack")));
+
+    var dumbText = new FlxText(5, dumbStripThing.y + 5, 0, "Current Mod: "+modPackJSON.name+" - Press TAB to switch", 16);
+    dumbText.setFormat(AssetPaths.font("vcr"), 16, FlxColor.WHITE, FlxTextAlign.LEFT);
+    add(dumbText);
+
     positionHighscore();
 
     changeSelection(0);
@@ -99,7 +118,10 @@ var bgColor:Array<Float> = [
 
 function update()
 {
-    var time:Float = Main.deltaTime * 9.0;
+    if(FlxG.keys.justPressed.TAB)
+        state.openSubState(new ModSelectionMenu());
+    
+    var time:Float = Main.deltaTime * 9;
 
     var color = songs[curSelected].color;
 
@@ -129,9 +151,25 @@ function update()
     if(UIControls.justPressed("RIGHT"))
         changeDifficulty(1);
 
-    if(UIControls.justPressed("ACCEPT"))
+    if(FlxG.keys.justPressed.SPACE && curPlaying != songs[curSelected].name)
+    {
+        FlxG.sound.music.stop();
+
+        curPlaying = songs[curSelected].name;
+
+        FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.songInst(songs[curSelected].name)), 0, true);
+
+        FlxG.sound.music.pause();
+        FlxG.sound.music.time = 0;
+        FlxG.sound.music.play();
+
+        FlxG.sound.music.fadeIn(1, 0, 1);
+    }
+    else if(UIControls.justPressed("ACCEPT"))
     {
         PlayState.SONG = SongLoader.getJSON(songs[curSelected].name, songs[curSelected].difficulties[curDifficulty]);
+        PlayState.currentDifficulty = songs[curSelected].difficulties[curDifficulty];
+        
         Main.switchState(new PlayState());
     }
 }

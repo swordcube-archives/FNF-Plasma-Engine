@@ -15,6 +15,7 @@ import openfl.media.Sound;
 import sys.FileSystem;
 import systems.Conductor;
 import systems.MusicBeat;
+import systems.UIControls;
 
 class PlayState extends MusicBeatState
 {
@@ -22,6 +23,7 @@ class PlayState extends MusicBeatState
 	public static var current:PlayState;
 
 	// Song
+	public static var isStoryMode:Bool = false;
 	public static var SONG:Song = SongLoader.getJSON("m.i.l.f", "hard");
 	public static var currentDifficulty:String = "hard";
 
@@ -91,9 +93,20 @@ class PlayState extends MusicBeatState
 		add(UI);
 	}
 
+	function getMenuToSwitchTo()
+	{
+		if(isStoryMode)
+			return new FreeplayMenu(); // will be changed soon
+		else
+			return new FreeplayMenu();
+	}
+
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+
+		if(UIControls.justPressed("BACK"))
+			Main.switchState(getMenuToSwitchTo());
 
 		Conductor.position += elapsed * 1000.0;
 		if(Conductor.position >= 0.0 && !startedSong)

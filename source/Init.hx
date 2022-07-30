@@ -163,6 +163,8 @@ class Init extends MusicBeatState
 		FlxG.mouse.visible = false;        // Hide the mouse cursor by default.
 		FlxG.fixedTimestep = false;        // Makes the game not run dependent of FPS.
 
+        FlxG.keys.preventDefaultKeys = [TAB]; // Prevents tab from unfocusing the game.
+
         // Start the game
         Main.switchState(new states.TitleState());
     }

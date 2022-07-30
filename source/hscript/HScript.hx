@@ -145,7 +145,9 @@ class HScript
             setVariable("Main", Main);
             setVariable("Init", Init);
             setVariable("Transition", Transition);
+
             setVariable("Alphabet", ui.Alphabet);
+
             setVariable("SongLoader", gameplay.Song.SongLoader);
 
             setVariable("Highscore", systems.Highscore);
@@ -157,6 +159,9 @@ class HScript
             setVariable("FreeplayMenu", states.FreeplayMenu);
 
             setVariable("PlayState", PlayState);
+
+            // Game substates
+            setVariable("ModSelectionMenu", substates.ModSelectionMenu);
 
             program = parser.parseString(script);
 

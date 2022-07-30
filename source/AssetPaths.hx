@@ -1,4 +1,5 @@
 import FNFAssets;
+import flixel.FlxG;
 import sys.FileSystem;
 
 using StringTools;
@@ -48,7 +49,7 @@ class AssetPaths
         var goodPath:String = asset('fonts/$path$fontExt', packOverride);
         if(!FileSystem.exists(goodPath))
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
-            goodPath = path.replace('assets/${packToUse}', 'assets/funkin');
+            goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
 
         return goodPath;
     }
@@ -61,7 +62,12 @@ class AssetPaths
     **/
     public static function txt(path:String, packOverride:Null<String> = null):String
     {
-        return asset('$path.txt', packOverride);
+        var goodPath:String = asset('$path.txt', packOverride);
+        if(!FileSystem.exists(goodPath))
+            // Try to get the asset from funkin (default pack) if it doesn't exist in current
+            goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
+
+        return goodPath;
     }
 
     /**
@@ -72,7 +78,12 @@ class AssetPaths
     **/
     public static function json(path:String, packOverride:Null<String> = null):String
     {
-        return asset('$path.json', packOverride);
+        var goodPath:String = asset('$path.json', packOverride);
+        if(!FileSystem.exists(goodPath))
+            // Try to get the asset from funkin (default pack) if it doesn't exist in current
+            goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
+
+        return goodPath;
     }
 
     /**
@@ -83,7 +94,12 @@ class AssetPaths
     **/
     public static function xml(path:String, packOverride:Null<String> = null):String
     {
-        return asset('$path.xml', packOverride);
+        var goodPath:String = asset('$path.xml', packOverride);
+        if(!FileSystem.exists(goodPath))
+            // Try to get the asset from funkin (default pack) if it doesn't exist in current
+            goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
+
+        return goodPath;
     }
 
     /**
@@ -94,7 +110,12 @@ class AssetPaths
     **/
     public static function hxs(path:String, packOverride:Null<String> = null):String
     {
-        return asset('$path.hxs', packOverride);
+        var goodPath:String = asset('$path.hxs', packOverride);
+        if(!FileSystem.exists(goodPath))
+            // Try to get the asset from funkin (default pack) if it doesn't exist in current
+            goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
+
+        return goodPath;
     }
 
     /**
@@ -106,7 +127,12 @@ class AssetPaths
     **/
     public static function image(path:String, imageExt:ImageExt = PNG, packOverride:Null<String> = null):String
     {
-        return asset('images/$path$imageExt', packOverride);
+        var goodPath:String = asset('images/$path$imageExt', packOverride);
+        if(!FileSystem.exists(goodPath))
+            // Try to get the asset from funkin (default pack) if it doesn't exist in current
+            goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
+            
+        return goodPath;
     }
 
     /**
@@ -118,8 +144,24 @@ class AssetPaths
     **/
     public static function sound(path:String, soundExt:SoundExt = OGG, packOverride:Null<String> = null):String
     {
-        return asset('sounds/$path$soundExt', packOverride);
+        var goodPath:String = asset('sounds/$path$soundExt', packOverride);
+        if(!FileSystem.exists(goodPath))
+            // Try to get the asset from funkin (default pack) if it doesn't exist in current
+            goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
+
+        return goodPath;
     }
+
+    /**
+        Basically `AssetPaths.sound` but with a random number from `min` to `max` at the end of the `path`.
+
+        @param min                    The minimum number for the random number.
+        @param max                    The maximum number for the random number.
+    **/
+    public static function soundRandom(path:String, min:Int, max:Int, soundExt:SoundExt = OGG, packOverride:Null<String> = null)
+	{
+		return sound(path + FlxG.random.int(min, max), soundExt, packOverride);
+	}
 
     /**
         Turns `path` into `assets/somePack/music/path.ext` (.ext can be: .ogg, .mp3, & .wav)
@@ -130,7 +172,12 @@ class AssetPaths
     **/
     public static function music(path:String, soundExt:SoundExt = OGG, packOverride:Null<String> = null):String
     {
-        return asset('music/$path$soundExt', packOverride);
+        var goodPath:String = asset('music/$path$soundExt', packOverride);
+        if(!FileSystem.exists(goodPath))
+            // Try to get the asset from funkin (default pack) if it doesn't exist in current
+            goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
+
+        return goodPath;
     }
 
     /**
@@ -142,7 +189,12 @@ class AssetPaths
     **/
     public static function songInst(song:String, soundExt:SoundExt = OGG, packOverride:Null<String> = null):String
     {
-        return asset('songs/$song/Inst$soundExt', packOverride);
+        var goodPath:String = asset('songs/$song/Inst$soundExt', packOverride);
+        if(!FileSystem.exists(goodPath))
+            // Try to get the asset from funkin (default pack) if it doesn't exist in current
+            goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
+
+        return goodPath;
     }
 
     /**
@@ -154,6 +206,11 @@ class AssetPaths
     **/
     public static function songVoices(song:String, soundExt:SoundExt = OGG, packOverride:Null<String> = null):String
     {
-        return asset('songs/$song/Voices$soundExt', packOverride);
+        var goodPath:String = asset('songs/$song/Voices$soundExt', packOverride);
+        if(!FileSystem.exists(goodPath))
+            // Try to get the asset from funkin (default pack) if it doesn't exist in current
+            goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
+
+        return goodPath;
     }
 }

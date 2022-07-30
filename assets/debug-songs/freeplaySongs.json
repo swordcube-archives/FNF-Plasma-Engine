@@ -1,11 +1,12 @@
 {
-    "song": "Test",
-    "displayname": null,
-    "difficulties": [
-        "easy",
-        "normal",
-        "hard"
-    ],
-    "icon": "bf-pixel",
-    "color": "#68b1e8"
+    "songs": [
+        {
+            "name": "Test",
+            "difficulties": [
+                "normal"
+            ],
+            "icon": "bf-pixel",
+            "color": [104, 177, 232]
+        }
+    ]
 }
