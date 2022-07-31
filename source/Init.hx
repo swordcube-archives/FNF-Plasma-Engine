@@ -13,6 +13,7 @@ enum SettingType {
 }
 
 typedef OptionData = {
+    var page:String;
     var name:String;
     var description:String;
     var type:SettingType;
@@ -40,30 +41,35 @@ class Init extends MusicBeatState
     **/
     public static var settings:Array<OptionData> = [
         {
+            page: "Preferences",
             name: "Downscroll",
             description: "Makes your notes scroll downwards instead of upwards.",
             type: Checkbox,
             defaultValue: false
         },
         {
+            page: "Preferences",
             name: "Centered Notes",
             description: "Makes your notes centered and hides the opponent's notes.",
             type: Checkbox,
             defaultValue: false
         },
         {
+            page: "Preferences",
             name: "Ghost Tapping",
             description: "Allows you to hit notes that don't exist.",
             type: Checkbox,
             defaultValue: true
         },
         {
+            page: "Preferences",
             name: "Botplay",
             description: "Makes the game play itself for you.",
             type: Checkbox,
             defaultValue: true
         },
         {
+            page: "Preferences",
             name: "Note Offset",
             description: "Change how early or late your notes spawn. (Negative = Earlier, Positive = Later)",
             type: Number,
@@ -73,6 +79,7 @@ class Init extends MusicBeatState
             decimals: 2
         },
         {
+            page: "Preferences",
             name: "Scroll Speed",
             description: "Change how fast the notes go on screen. (In seconds)",
             type: Number,
@@ -82,36 +89,42 @@ class Init extends MusicBeatState
             decimals: 1
         },
         {
+            page: "Appearance",
             name: "Photosensitive Mode",
             description: "Disables photosensitive content such as flashing lights. (May not work on some mods!)",
             type: Checkbox,
             defaultValue: false
         },
         {
+            page: "Appearance",
             name: "Antialiasing",
             description: "Gives the game extra performance at the cost of worse looking graphics.",
             type: Checkbox,
             defaultValue: true
         },
         {
+            page: "Appearance",
             name: "Opaque Strums",
             description: "Makes the strums opaque instead of transparent.",
             type: Checkbox,
             defaultValue: false
         },
         {
+            page: "Appearance",
             name: "Opaque Sustains",
             description: "Makes sustains opaque instead of transparent.",
             type: Checkbox,
             defaultValue: false
         },
         {
+            page: "Appearance",
             name: "Note Splashes",
             description: "Makes a firework effect appear when you hit a \"SiCK!!\" note.",
             type: Checkbox,
             defaultValue: true
         },
         {
+            page: "Appearance",
             name: "Arrow Skin",
             description: "Change the skin your arrows use.",
             type: Selector,
@@ -230,6 +243,14 @@ class Init extends MusicBeatState
         }
         FlxG.save.data.keyBinds = keyBinds;
         trace('SAVED KEYBINDS!');
+
+        for(i in 0...ExtraKeys.arrowInfo.length)
+        {
+            Reflect.setProperty(FlxG.save.data, "arrowColors"+(i+1)+"k", arrowColors.get(i));
+            FlxG.save.flush();
+        }
+        trace('SAVED ARROW COLORS!');
+
         trace('ALL SETTINGS SAVED!');
     }
 }

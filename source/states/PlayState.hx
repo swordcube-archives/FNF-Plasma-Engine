@@ -145,16 +145,6 @@ class PlayState extends MusicBeatState
 
 						var arrowSkin:String = "arrows";
 
-						var newNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount);
-						newNote.strumTime = strumTime;
-						newNote.mustPress = gottaHitNote;
-						
-						var strumLine:StrumLine = gottaHitNote ? UI.playerStrums : UI.opponentStrums;
-						strumLine.notes.add(newNote);
-
-						newNote.parent = strumLine;
-						newNote.loadSkin(arrowSkin);
-
 						// sustain
 						var susLength:Float = note[2] / Conductor.stepCrochet;
 
@@ -188,6 +178,16 @@ class PlayState extends MusicBeatState
 
 							newSusNote.playAnim("tail");
 						}
+
+						var newNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount);
+						newNote.strumTime = strumTime;
+						newNote.mustPress = gottaHitNote;
+						
+						var strumLine:StrumLine = gottaHitNote ? UI.playerStrums : UI.opponentStrums;
+						strumLine.notes.add(newNote);
+
+						newNote.parent = strumLine;
+						newNote.loadSkin(arrowSkin);
 
 						section.sectionNotes.remove(note);
 					}

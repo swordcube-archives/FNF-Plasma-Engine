@@ -163,12 +163,11 @@ function switchToOtherStateShit()
     {
         case 'story-mode':
             trace("story mode = unimplemented");
-            //Main.switchState(new StoryMenuState());
+            //Main.switchState(new StoryMenuMenu());
         case 'freeplay':
             Main.switchState(new FreeplayMenu());
         case 'options':
-            trace("options menu = unimplemented");
-            //Main.switchState(new OptionsState());
+            Main.switchState(new OptionsMenu());
     }
 }
 

@@ -59,15 +59,16 @@ class Note extends FNFSprite
 
 		var stepHeight = ((0.45 * Conductor.stepCrochet) * PlayState.current.scrollSpeed);
 
+        if(isSustain && animation.curAnim != null && animation.curAnim.name != "tail")
+            scale.y = 0.7 * ((Conductor.stepCrochet / 100 * 1.5) * PlayState.current.scrollSpeed);
+
         if(isSustain)
         {
+            flipY = isDownScroll;
             noteYOff = Math.round(-stepHeight + swagWidth * 0.5);
             updateHitbox();
             offsetX();
         }
-
-        if(isSustain && animation.curAnim != null && animation.curAnim.name != "tail")
-            scale.y = 0.7 * ((Conductor.stepCrochet / 100 * 1.5) * PlayState.current.scrollSpeed);
     }
 
     public function loadSkin(skin:String)

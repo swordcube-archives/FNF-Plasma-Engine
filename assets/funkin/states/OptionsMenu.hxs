@@ -1,0 +1,361 @@
+import flixel.FlxObject;
+
+var bg:FlxSprite;
+var scrollMenu:Sound;
+var confirmMenu:Sound;
+var cancelMenu:Sound;
+
+var pageText:Alphabet;
+
+var grpCheckbox:FlxGroup;
+var grpAlphabet:FlxGroup;
+var grpAlphabet2:FlxGroup;
+var grpAlphabet3:FlxGroup;
+
+var pages:Array<String> = [
+    "Preferences",
+    "Appearance",
+    "Controls"
+];
+
+var optionTypes:Array<Dynamic> = [];
+
+var pageContents:Map<String, Array<Dynamic>> = [];
+
+var curPage:Int = 0;
+var curSelected:Int = 0;
+
+var camFollow:FlxObject;
+var camFollowPos:FlxObject;
+
+var descBox:FlxSprite;
+var descText:FlxSprite;
+
+function getOptionsFromPage(page:String)
+{
+    var options:Array<Dynamic> = [];
+    for(option in Init.settings)
+    {
+        if(option.page == page)
+            options.push(option);
+    }
+    return options;
+}
+
+function create()
+{
+    pageContents = [
+        "Preferences"     => getOptionsFromPage("Preferences"),
+        "Appearance"      => getOptionsFromPage("Appearance"),
+        "Controls"        => getOptionsFromPage("Controls"),
+    ];
+
+    scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
+    confirmMenu = FNFAssets.getSound(AssetPaths.sound("menus/confirmMenu"));
+    cancelMenu = FNFAssets.getSound(AssetPaths.sound("menus/cancelMenu"));
+
+    bg = new FlxSprite();
+    bg.loadGraphic(FNFAssets.getImage(AssetPaths.image("menuBGDesat")));
+    bg.color = 0xFFea71fd;
+    bg.scrollFactor.set();
+    add(bg);
+
+    grpCheckbox = new FlxGroup();
+    add(grpCheckbox);
+
+    grpAlphabet = new FlxGroup();
+    add(grpAlphabet);
+
+    grpAlphabet2 = new FlxGroup();
+    add(grpAlphabet2);
+
+    grpAlphabet3 = new FlxGroup();
+    add(grpAlphabet3);
+
+    var dumb:FlxSprite = new FlxSprite(0, 20);
+    dumb.makeGraphic(FlxG.width, 80, FlxColor.BLACK);
+    dumb.alpha = 0.6;
+    dumb.scrollFactor.set();
+    add(dumb);
+
+    pageText = new Alphabet(0, 35, pages[curPage], true, false, 0.05, 0.8);
+    pageText.screenCenter(FlxAxes.X);
+    pageText.scrollFactor.set();
+    add(pageText);
+
+    var arrowShitCrapBalls:Alphabet = new Alphabet(0, 30, "<              >", true, false, 0.05, 0.8);
+    arrowShitCrapBalls.screenCenter(FlxAxes.X);
+    arrowShitCrapBalls.alpha = 0.4;
+    arrowShitCrapBalls.scrollFactor.set();
+    add(arrowShitCrapBalls);
+
+    descBox = new FlxSprite();
+    descBox.makeGraphic(FlxG.width * 0.85, 50);
+    descBox.y = FlxG.height - (descBox.height + 50);
+    descBox.scrollFactor.set();
+    descBox.alpha = 0.6;
+    add(descBox);
+
+    descText = new FlxText(0, descBox.y + 5, descBox.width, "");
+    descText.setFormat(AssetPaths.font("vcr"), 18, FlxColor.WHITE, FlxTextAlign.CENTER);
+    descText.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
+    descText.scrollFactor.set();
+    descText.screenCenter(FlxAxes.X);
+    add(descText);
+
+    camFollow = new FlxObject(FlxG.width/2, FlxG.height/2, 1, 1);
+    camFollowPos = new FlxObject(FlxG.width/2, FlxG.height/2, 1, 1);
+    add(camFollow);
+    add(camFollowPos);
+
+    FlxG.camera.follow(camFollowPos, null, 1);
+
+    refreshPage();
+}
+
+var holdTimer:Float = 0.0;
+
+function update()
+{
+    camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, Main.deltaTime * 9), FlxMath.lerp(camFollowPos.y, camFollow.y, Main.deltaTime * 9));
+
+    if(UIControls.justPressed("UP"))
+        changeSelection(-1);
+
+    if(UIControls.justPressed("DOWN"))
+        changeSelection(1);
+
+    if(UIControls.justPressed("ACCEPT"))
+        changeValue(0);
+
+    if(!FlxG.keys.pressed.SHIFT)
+    {
+        if(UIControls.pressed("LEFT") || UIControls.pressed("RIGHT"))
+            changeValue(UIControls.pressed("LEFT") ? -1 : 1);
+        else
+            holdTimer = 0;
+    }
+    else
+    {
+        if(UIControls.justPressed("LEFT"))
+            changePage(-1);
+
+        if(UIControls.justPressed("RIGHT"))
+            changePage(1);
+    }
+
+    if(UIControls.justPressed("BACK"))
+    {
+        FlxG.sound.play(cancelMenu);
+        Main.switchState(new MainMenu());
+        Init.saveSettings();
+    }
+}
+
+function refreshPage()
+{
+    curSelected = 0;
+    pageTypes = [];
+
+    if(grpAlphabet.members.length > 0)
+    {
+        while(grpAlphabet.members.length > 0)
+        {
+            var bemb:Alphabet = grpAlphabet.members[0];
+            grpAlphabet.remove(bemb, true);
+            bemb.kill();
+            bemb.destroy();
+        }
+    }
+
+    if(grpAlphabet2.members.length > 0)
+    {
+        while(grpAlphabet2.members.length > 0)
+        {
+            var bemb:Alphabet = grpAlphabet2.members[0];
+            grpAlphabet2.remove(bemb, true);
+            bemb.kill();
+            bemb.destroy();
+        }
+    }
+
+    if(grpAlphabet3.members.length > 0)
+    {
+        while(grpAlphabet3.members.length > 0)
+        {
+            var bemb:Alphabet = grpAlphabet3.members[0];
+            grpAlphabet3.remove(bemb, true);
+            bemb.kill();
+            bemb.destroy();
+        }
+    }
+
+    if(grpCheckbox.members.length > 0)
+    {
+        while(grpCheckbox.members.length > 0)
+        {
+            var bemb:FNFCheckbox = grpCheckbox.members[0];
+            grpCheckbox.remove(bemb, true);
+            bemb.kill();
+            bemb.destroy();
+        }
+    }
+
+    var i:Int = 0;
+    for(option in pageContents.get(pages[curPage]))
+    {
+        optionTypes.push(option.type);
+        
+        switch(Std.string(option.type))
+        {
+            case "Checkbox":
+                var alphabet:Alphabet = new Alphabet(0, 120 + (200 * i), option.name);
+                alphabet.x += 300;
+                grpAlphabet.add(alphabet);
+
+                var checkbox:FNFCheckbox = new FNFCheckbox(0, 0, Init.trueSettings.get(option.name));
+                checkbox.x = ((FlxG.width * 0.9) - checkbox.width);
+                checkbox.sprTracker = alphabet;
+                grpCheckbox.add(checkbox);
+            default:
+                var alphabet:Alphabet = new Alphabet(0, 120 + (200 * i), option.name);
+                alphabet.x += 300;
+                grpAlphabet.add(alphabet);
+
+                // don't ask pls pls pls pls pls pls pls pls pls pls pls pls
+                var checkbox:FNFCheckbox = new FNFCheckbox(0, 0, false);
+                checkbox.visible = false;
+                checkbox.x = ((FlxG.width * 0.85) - checkbox.width);
+                checkbox.sprTracker = alphabet;
+                grpCheckbox.add(checkbox);
+
+                var alphabet:Alphabet = new Alphabet(0, 120 + (200 * i), "<          >");
+                alphabet.ID = i;
+                alphabet.x += ((FlxG.width * 0.915) - alphabet.width);
+                grpAlphabet2.add(alphabet);
+
+                var alphabet:Alphabet = new Alphabet(0, 120 + (200 * i), Init.trueSettings.get(option.name));
+                alphabet.ID = i;
+                alphabet.screenCenter(FlxAxes.X);
+                alphabet.x += (FlxG.width * 0.23);
+                grpAlphabet3.add(alphabet);
+        }
+
+        i += 1;
+    }
+
+    changeSelection(0);
+}
+
+function changeValue(change:Float)
+{
+    holdTimer += Main.deltaTime;
+
+    switch(Std.string(pageContents.get(pages[curPage])[curSelected].type))
+    {
+        case "Checkbox":
+            Init.trueSettings.set(pageContents.get(pages[curPage])[curSelected].name, !Init.trueSettings.get(pageContents.get(pages[curPage])[curSelected].name));
+
+            grpCheckbox.members[curSelected].status = Init.trueSettings.get(pageContents.get(pages[curPage])[curSelected].name);
+            grpCheckbox.members[curSelected].refresh();
+        case "Number":
+            if((UIControls.justPressed("LEFT") || UIControls.justPressed("RIGHT")) || holdTimer > 0.5)
+            {
+                var dumb:Float = Init.trueSettings.get(pageContents.get(pages[curPage])[curSelected].name) + (pageContents.get(pages[curPage])[curSelected].valueMult * change);
+                dumb = FlxMath.roundDecimal(dumb, pageContents.get(pages[curPage])[curSelected].decimals);
+                if(dumb < pageContents.get(pages[curPage])[curSelected].values[0])
+                    dumb = pageContents.get(pages[curPage])[curSelected].values[0];
+
+                if(dumb > pageContents.get(pages[curPage])[curSelected].values[1])
+                    dumb = pageContents.get(pages[curPage])[curSelected].values[1];
+
+                Init.trueSettings.set(pageContents.get(pages[curPage])[curSelected].name, dumb);
+
+                for(yourCock in 0...grpAlphabet3.members.length)
+                {
+                    var item:Alphabet = grpAlphabet3.members[yourCock];
+                    if(curSelected == item.ID)
+                    {
+                        item.changeText(dumb);
+                        item.screenCenter(FlxAxes.X);
+                        item.x += (FlxG.width * 0.23);
+                    }
+                }
+            }
+        case "Selector":
+            if(UIControls.justPressed("LEFT") || UIControls.justPressed("RIGHT"))
+            {
+                var index:Int = pageContents.get(pages[curPage])[curSelected].values.indexOf(Init.trueSettings.get(pageContents.get(pages[curPage])[curSelected].name));
+                index += UIControls.justPressed("LEFT") ? -1 : 1;
+                
+                if(index < 0)
+                    index = pageContents.get(pages[curPage])[curSelected].values.length - 1;
+
+                if(index > pageContents.get(pages[curPage])[curSelected].values.length - 1)
+                    index = 0;
+
+                var dumb:String = pageContents.get(pages[curPage])[curSelected].values[index];
+                Init.trueSettings.set(pageContents.get(pages[curPage])[curSelected].name, dumb);
+
+                for(yourCock in 0...grpAlphabet3.members.length)
+                {
+                    var item:Alphabet = grpAlphabet3.members[yourCock];
+                    if(curSelected == item.ID)
+                    {
+                        item.changeText(dumb);
+                        item.screenCenter(FlxAxes.X);
+                        item.x += (FlxG.width * 0.23);
+                    }
+                }
+            }
+    }
+}
+
+function changePage(change:Int)
+{
+    curPage += change;
+    if(curPage < 0)
+        curPage = pages.length - 1;
+
+    if(curPage > pages.length - 1)
+        curPage = 0;
+
+    pageText.changeText(pages[curPage]);
+    pageText.screenCenter(FlxAxes.X);
+
+    refreshPage();
+}
+
+function changeSelection(change:Int)
+{
+    curSelected += change;
+    if(curSelected < 0)
+        curSelected = grpAlphabet.members.length - 1;
+
+    if(curSelected > grpAlphabet.members.length - 1)
+        curSelected = 0;
+
+    for(i in 0...grpAlphabet.members.length)
+    {
+        var item:Alphabet = grpAlphabet.members[i];
+        item.alpha = curSelected == i ? 1 : 0.6;
+    }
+
+    for(i in 0...grpAlphabet2.members.length)
+    {
+        var item:Alphabet = grpAlphabet2.members[i];
+        item.alpha = curSelected == item.ID ? 1 : 0.6;
+
+        var item:Alphabet = grpAlphabet3.members[i];
+        item.alpha = curSelected == item.ID ? 1 : 0.6;
+    }
+
+    camFollow.y = (grpAlphabet.members[curSelected].y - 120) + FlxG.height/2;
+    FlxG.sound.play(scrollMenu);
+
+    descText.text = pageContents.get(pages[curPage])[curSelected].description;
+    descBox.makeGraphic(FlxG.width * 0.85, descText.height + 10, FlxColor.BLACK);
+    descBox.screenCenter(FlxAxes.X);
+    descBox.y = FlxG.height - (descBox.height + 50);
+    descText.y = descBox.y + 5;
+}

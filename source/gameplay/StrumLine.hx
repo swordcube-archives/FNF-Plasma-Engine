@@ -200,7 +200,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
             {
                 if(note.isSustain)
                 {
-                    note.y += 15;
+                    note.y += 10;
                     
                     if ((PlayState.current.botPlay
                         || !hasInput

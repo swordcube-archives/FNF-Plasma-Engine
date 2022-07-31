@@ -151,11 +151,13 @@ class HScript
 
             setVariable("Highscore", systems.Highscore);
             setVariable("HealthIcon", ui.HealthIcon);
+            setVariable("FNFCheckbox", ui.FNFCheckbox);
 
             // Game states
             setVariable("TitleState", states.TitleState);
             setVariable("MainMenu", states.MainMenu);
             setVariable("FreeplayMenu", states.FreeplayMenu);
+            setVariable("OptionsMenu", states.OptionsMenu);
 
             setVariable("PlayState", PlayState);
 
