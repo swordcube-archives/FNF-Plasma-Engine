@@ -1,0 +1,20 @@
+var stage:Stage;
+function create() {
+    stage = new Stage("stage");
+    add(stage);
+}
+
+function beatHit(curBeat)
+{
+    if (curBeat % 16 == 15 && PlayState.current.dad.curCharacter == "gf" && curBeat > 16 && curBeat < 48)
+    {
+        PlayState.current.bf.playAnim('hey', true);
+        PlayState.current.dad.playAnim('cheer', true);
+    }
+
+    if (curBeat % 16 == 15 && PlayState.current.dad.curCharacter != "gf" && curBeat > 16 && curBeat < 48)
+    {
+        PlayState.current.bf.playAnim('hey', true);
+        PlayState.current.gf.playAnim('cheer', true);
+    }
+}

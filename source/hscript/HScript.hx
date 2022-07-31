@@ -123,6 +123,8 @@ class HScript
 
             setVariable("Conductor", systems.Conductor);
             setVariable("AssetPaths", AssetPaths);
+
+            setVariable("Stage", gameplay.Stage);
             
             // i didn't know you could do this but uh
             // https://github.com/YoshiCrafter29/hscript-improved/blob/master/script/RunScript.hx
@@ -132,6 +134,9 @@ class HScript
                     return FNFAssets.returnAsset(IMAGE, path);
                 },
                 "getSparrow": function(path:String):FlxAtlasFrames {
+                    return FNFAssets.returnAsset(SPARROW, path);
+                },
+                "getCharacterSparrow": function(path:String):FlxAtlasFrames {
                     return FNFAssets.returnAsset(SPARROW, path);
                 },
                 "getSound": function(path:String):Sound {
@@ -249,9 +254,7 @@ class HScript
 		}
 
 		for (otherScript in otherScripts)
-		{
 			otherScript.callFunction(func, args);
-		}
 	}
 
     public function setVariable(variable:String, value:Dynamic)

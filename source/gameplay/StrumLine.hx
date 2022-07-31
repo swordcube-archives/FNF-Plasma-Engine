@@ -105,30 +105,25 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
             {
                 if((Conductor.position - note.strumTime) > Conductor.safeZoneOffset)
                 {
-                    notes.remove(note, true);
-                    note.kill();
-                    note.destroy();
-                }
-
-                if(note.isSustain && (Conductor.position - note.strumTime) >= 0.0)
-                {
-                    members[note.noteData].setColor();
-                    members[note.noteData].colorSwap.enabled.value = [true];
-                    members[note.noteData].playAnim("confirm", true);
+                    PlayState.current.vocals.volume = 0;
+                    notes.forEachAlive(function(deezNote:Note) {
+                        if(deezNote.isSustain && deezNote.sustainParent == note)
+                            deezNote.canBeHit = false;
+                    });
                     notes.remove(note, true);
                     note.kill();
                     note.destroy();
                 }
 
                 // Make the note possible to hit if it's in the safe zone to be hit.
-                // If it's a sustain, it will automatically get hit
-                if(!note.isSustain && ((Conductor.position - note.strumTime) > -Conductor.safeZoneOffset))
+                if(note.canBeHit && ((Conductor.position - note.strumTime) > -Conductor.safeZoneOffset))
                     possibleNotes.push(note);
             }
             else
             {
                 if((Conductor.position - note.strumTime) >= 0.0)
                 {
+                    PlayState.current.vocals.volume = 1;
                     members[note.noteData].alpha = 1;
                     members[note.noteData].setColor();
                     members[note.noteData].colorSwap.enabled.value = [true];
@@ -162,11 +157,23 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                     // Check if we just pressed the keybind the note has and if we're allowed to hit the note
                     // If both are true, then we delete the note.
                     
-                    if(justPressed[note.noteData])
+                    if(justPressed[note.noteData] && !note.isSustain)
                     {
+                        PlayState.current.vocals.volume = 1;
                         justPressed[note.noteData] = false;
                         members[note.noteData].playAnim("confirm", true);
                         goodNoteHit(note);
+                    }
+
+                    if(pressed[note.noteData] && note.isSustain && (Conductor.position - note.strumTime) >= 0.0)
+                    {
+                        PlayState.current.vocals.volume = 1;
+                        members[note.noteData].setColor();
+                        members[note.noteData].colorSwap.enabled.value = [true];
+                        members[note.noteData].playAnim("confirm", true);
+                        notes.remove(note, true);
+                        note.kill();
+                        note.destroy();
                     }
                 }
             }
@@ -182,7 +189,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                     
                     if ((PlayState.current.botPlay
                         || !hasInput
-                        || hasInput && pressed[note.noteData])
+                        || (hasInput && note.canBeHit && pressed[note.noteData]))
                         && note.y - note.offset.y * note.scale.y + note.height >= (this.y + Note.swagWidth / 2))
                     {
                         // Clip to strumline
@@ -204,7 +211,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                     
                     if ((PlayState.current.botPlay
                         || !hasInput
-                        || hasInput && pressed[note.noteData])
+                        || (hasInput && note.canBeHit && pressed[note.noteData]))
                         && note.y + note.offset.y * note.scale.y <= (this.y + Note.swagWidth / 2))
                     {
                         // Clip to strumline

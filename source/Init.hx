@@ -66,7 +66,7 @@ class Init extends MusicBeatState
             name: "Botplay",
             description: "Makes the game play itself for you.",
             type: Checkbox,
-            defaultValue: true
+            defaultValue: false
         },
         {
             page: "Preferences",

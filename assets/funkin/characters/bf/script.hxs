@@ -1,0 +1,34 @@
+function create()
+{
+    character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
+    character.isPlayer = true;
+
+    animation.addByPrefix('idle', 'BF idle dance', 24, false);
+    animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
+    animation.addByPrefix('singLEFT', 'BF NOTE LEFT0', 24, false);
+    animation.addByPrefix('singRIGHT', 'BF NOTE RIGHT0', 24, false);
+    animation.addByPrefix('singDOWN', 'BF NOTE DOWN0', 24, false);
+    animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, false);
+    animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, false);
+    animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, false);
+    animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, false);
+    animation.addByPrefix('hey', 'BF HEY!!', 24, false);
+    animation.addByPrefix('scared', 'BF idle shaking', 24, true);
+
+    character.setOffset('idle', -5);
+    character.setOffset("singUP", -29, 27);
+    character.setOffset("singRIGHT", -38, -7);
+    character.setOffset("singLEFT", 12, -6);
+    character.setOffset("singDOWN", -10, -50);
+    character.setOffset("singUPmiss", -29, 27);
+    character.setOffset("singRIGHTmiss", -30, 21);
+    character.setOffset("singLEFTmiss", 12, 24);
+    character.setOffset("singDOWNmiss", -11, -19);
+    character.setOffset("hey", 7, 4);
+    character.setOffset('scared', -4);
+
+    character.y += 350;
+    character.flipX = true;
+
+    character.dance();
+}

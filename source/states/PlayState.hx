@@ -4,11 +4,14 @@ import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.math.FlxMath;
+import flixel.math.FlxPoint;
 import flixel.system.FlxSound;
+import gameplay.Character;
 import gameplay.GameplayUI;
 import gameplay.Note;
 import gameplay.Section;
 import gameplay.Song;
+import gameplay.Stage;
 import gameplay.StrumLine;
 import hscript.HScript;
 import openfl.media.Sound;
@@ -27,20 +30,23 @@ class PlayState extends MusicBeatState
 	public static var SONG:Song = SongLoader.getJSON("m.i.l.f", "hard");
 	public static var currentDifficulty:String = "hard";
 
+	// Characters
+	public var dad:Character;
+	public var gf:Character;
+	public var bf:Character;
+
 	// Camera
 	public static var camZooming:Bool = true;
 	public static var defaultCamZoom:Float = 1.0;
 
-	// Camera
 	public var camGame:FlxCamera;
 	public var camHUD:FlxCamera;
 	public var camOther:FlxCamera;
 
-	public var curSection:Int = 0;
-	public var camFollow:FlxObject;
+	public var camFollow:FlxPoint;
 	public var camFollowPos:FlxObject;
 
-	public var followLerp:Float = 0.45;
+	public var cameraSpeed:Float = 1;
 
 	// Music & Sounds
 	public var freakyMenu:Sound = FNFAssets.returnAsset(SOUND, AssetPaths.music("freakyMenu"));
@@ -50,8 +56,13 @@ class PlayState extends MusicBeatState
 	public var hasVocals:Bool = true;
 
 	// Misc
+	public var inCutscene:Bool = false;
+	
 	public var botPlay:Bool = Init.trueSettings.get("Botplay");
+
+	public var script:HScript;
 	public var scripts:Array<HScript> = [];
+
 	public var UI:GameplayUI;
 
 	public var startedSong:Bool = false;
@@ -84,6 +95,15 @@ class PlayState extends MusicBeatState
 			vocals.loadEmbedded(loadedSong.get("voices"), false);
 		}
 
+		callOnHScripts("create");
+
+		var path:String = 'songs/${SONG.song.toLowerCase()}/script';
+		script = new HScript(path);
+		script.setVariable("add", this.add);
+		script.setVariable("remove", this.remove);
+		scripts.push(script);
+		script.start();
+
 		Conductor.changeBPM(SONG.bpm);
 		Conductor.mapBPMChanges(SONG);
 
@@ -95,6 +115,22 @@ class PlayState extends MusicBeatState
 		UI = new GameplayUI();
 		UI.cameras = [camHUD];
 		add(UI);
+
+		camFollow = new FlxPoint();
+		camFollowPos = new FlxObject(0, 0, 1, 1);
+		add(camFollowPos);
+		
+		FlxG.camera.follow(camFollowPos, LOCKON, 1);
+
+		if(gf != null)
+		{
+			camFollow.set(gf.getMidpoint().x, gf.getMidpoint().y);
+			camFollowPos.setPosition(camFollow.x, camFollow.y);
+		}
+
+		focusCamera(SONG.notes[0].mustHitSection ? "bf" : "dad");
+
+		callOnHScripts("createPost");
 	}
 
 	function getMenuToSwitchTo()
@@ -108,6 +144,14 @@ class PlayState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+
+		if(!inCutscene)
+		{
+			var lerpVal:Float = FlxMath.bound(Main.deltaTime * 2.4 * cameraSpeed, 0, 1);
+			camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
+		}
+
+		callOnHScripts("update", [elapsed]);
 
 		if(UIControls.justPressed("BACK"))
 		{
@@ -125,7 +169,9 @@ class PlayState extends MusicBeatState
 		spawnNotes();
 
 		FlxG.camera.zoom = FlxMath.lerp(FlxG.camera.zoom, defaultCamZoom, Main.deltaTime * 9);
-		camHUD.zoom = FlxMath.lerp(camHUD.zoom, 1, Main.deltaTime * 9); 
+		camHUD.zoom = FlxMath.lerp(camHUD.zoom, 1, Main.deltaTime * 9);
+
+		callOnHScripts("updatePost", [elapsed]);
 	}
 
 	function spawnNotes()
@@ -145,6 +191,8 @@ class PlayState extends MusicBeatState
 
 						var arrowSkin:String = "arrows";
 
+						var newNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount);
+
 						// sustain
 						var susLength:Float = note[2] / Conductor.stepCrochet;
 
@@ -161,6 +209,7 @@ class PlayState extends MusicBeatState
 								strumLine.notes.add(newSusNote);
 		
 								newSusNote.parent = strumLine;
+								newSusNote.sustainParent = newNote;
 								newSusNote.loadSkin(arrowSkin);
 								susNote++;
 							}
@@ -174,12 +223,12 @@ class PlayState extends MusicBeatState
 							strumLine.notes.add(newSusNote);
 
 							newSusNote.parent = strumLine;
+							newSusNote.sustainParent = newNote;
 							newSusNote.loadSkin(arrowSkin);
 
 							newSusNote.playAnim("tail");
 						}
 
-						var newNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount);
 						newNote.strumTime = strumTime;
 						newNote.mustPress = gottaHitNote;
 						
@@ -205,6 +254,24 @@ class PlayState extends MusicBeatState
 			vocals.play();
 
 		Conductor.position = 0.0;
+		callOnHScripts("startSong");
+	}
+
+	function focusCamera(onWho:String = "dad")
+	{
+		switch(onWho.toLowerCase())
+		{
+			case "dad":
+				if(dad == null) return;
+				camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
+				camFollow.x += dad.cameraPosition.x;
+				camFollow.y += dad.cameraPosition.y;
+			case "bf":
+				if(bf == null) return;
+				camFollow.set(bf.getMidpoint().x - 100, bf.getMidpoint().y - 100);
+				camFollow.x -= bf.cameraPosition.x;
+				camFollow.y += bf.cameraPosition.y;
+		}
 	}
 
 	override function beatHit()
@@ -213,6 +280,26 @@ class PlayState extends MusicBeatState
 
 		// Stop the function from running if the song is ending
 		if(endingSong) return;
+
+		var curSection:Int = Math.round(FlxMath.bound(Conductor.currentStep / 16, 0, SONG.notes.length));
+		focusCamera(SONG.notes[curSection].mustHitSection ? "bf" : "dad");
+
+		callOnHScripts("beatHit", [Conductor.currentBeat]);
+
+		if(Conductor.currentBeat % 4 == 0)
+		{
+			FlxG.camera.zoom = defaultCamZoom + 0.015;
+			camHUD.zoom = 1.05;
+		}
+
+		callOnHScripts("beatHitPost", [Conductor.currentBeat]);
+	}
+
+	override function stepHit()
+	{
+		super.stepHit();
+
+		callOnHScripts("stepHit", [Conductor.currentStep]);
 
 		// Resync song if it gets out of sync with song position
 		if(hasVocals)
@@ -239,11 +326,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if(Conductor.currentBeat % 4 == 0)
-		{
-			FlxG.camera.zoom = defaultCamZoom + 0.015;
-			camHUD.zoom = 1.05;
-		}
+		callOnHScripts("stepHitPost", [Conductor.currentStep]);
 	}
 
 	function setupCameras()
@@ -257,5 +340,11 @@ class PlayState extends MusicBeatState
 
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
+	}
+
+	public function callOnHScripts(func:String, ?args:Null<Array<Dynamic>>)
+	{
+		for(script in scripts)
+			script.callFunction(func, args);
 	}
 }

@@ -16,6 +16,7 @@ class Note extends FNFSprite
     public var strumTime:Float = 0.0;
 
     public var parent:StrumLine;
+    public var sustainParent:Note;
 
     public var keyCount:Int = 4;
     public var noteData:Int = 0;
@@ -24,6 +25,8 @@ class Note extends FNFSprite
 
     public var isSustain:Bool = false;
     public var mustPress:Bool = false;
+
+    public var canBeHit:Bool = true;
 
     public var isDownScroll:Bool = Init.trueSettings.get("Downscroll");
 
@@ -69,6 +72,9 @@ class Note extends FNFSprite
             updateHitbox();
             offsetX();
         }
+
+        if(!canBeHit)
+            alpha = 0.35;
     }
 
     public function loadSkin(skin:String)

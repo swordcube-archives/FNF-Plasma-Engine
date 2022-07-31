@@ -1,0 +1,5 @@
+var stage:Stage;
+function create() {
+    stage = new Stage("philly");
+    add(stage);
+}

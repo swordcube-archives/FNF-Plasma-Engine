@@ -136,6 +136,23 @@ class AssetPaths
     }
 
     /**
+        Turns `path` into `assets/somePack/characters/char/spritesheet.ext` (.ext can be: .png, .jpg, & .bmp)
+        Change `imageExt` to PNG, JPG, or BMP to change file extension.
+
+        @param char                    The character to get the spritesheet path for.
+        @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
+    **/
+    public static function characterSpriteSheet(char:String, imageExt:ImageExt = PNG, packOverride:Null<String> = null):String
+    {
+        var goodPath:String = asset('characters/$char/spritesheet$imageExt', packOverride);
+        if(!FileSystem.exists(goodPath))
+            // Try to get the asset from funkin (default pack) if it doesn't exist in current
+            goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
+            
+        return goodPath;
+    }
+
+    /**
         Turns `path` into `assets/somePack/sound/path.ext` (.ext can be: .ogg, .mp3, & .wav)
         Change `soundExt` to OGG, MP3, or WAV to change file extension.
 
