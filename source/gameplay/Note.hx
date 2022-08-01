@@ -48,12 +48,14 @@ class Note extends FNFSprite
     public function setColor()
     {
         var colorArray:Array<Int> = Init.arrowColors[parent != null ? parent.keyCount-1 : keyCount-1][noteData];
-        colorSwap.setColors(colorArray[0], colorArray[1], colorArray[2]);
+        if(colorSwap != null) // haxeflixel
+            colorSwap.setColors(colorArray[0], colorArray[1], colorArray[2]);
     }
 
     public function resetColor()
     {
-        colorSwap.setColors(255, 255, 255);
+        if(colorSwap != null) // haxeflixel
+            colorSwap.setColors(255, 255, 255);
     }
 
     override function update(elapsed:Float)

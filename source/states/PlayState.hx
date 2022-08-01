@@ -374,10 +374,14 @@ class PlayState extends MusicBeatState
 
 		if(UIControls.justPressed("BACK") || (Conductor.position >= FlxG.sound.music.length))
 		{
+			persistentUpdate = false;
+			persistentDraw = true;
+			
 			endingSong = true;
 
 			FlxG.sound.music.stop();
 			vocals.stop();
+			FlxG.sound.music.time = 0;
 			FlxG.sound.playMusic(freakyMenu);
 			Main.switchState(getMenuToSwitchTo());
 		}

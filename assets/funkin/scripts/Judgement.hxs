@@ -1,15 +1,17 @@
 import flixel.math.FlxPoint;
 
-var ratingPos:FlxPoint;
+var ratingPos:FlxText;
 
 var rating:FlxSprite;
 var grpCombo:FlxGroup;
 
+var started:Bool = false;
+
 function create(judgement, combo)
 {
-    ratingPos = new FlxPoint(FlxG.width*0.55, FlxG.height*0.5);
-    grpCombo = new FlxGroup();
-    add(grpCombo);
+    ratingPos = new FlxText(0, 0, 0, combo, 32);
+    ratingPos.screenCenter();
+    ratingPos.x = FlxG.width * 0.55;
 
     var seperatedScore:Array<Int> = [];
 
@@ -20,18 +22,24 @@ function create(judgement, combo)
     seperatedScore.push(Math.floor(combo / 10) % 10);
     seperatedScore.push(combo % 10);
 
-    rating = new FlxSprite(ratingPos.x - 40, ratingPos.y - 60);
-    var judgementThing:String = PlayState.current.songAccuracy < 1 && judgement == "marvelous" ? "sick" : judgement;
+    rating = new FlxSprite();
+    var judgementThing:String = PlayState.current.songAccuracy >= 1 ? "marvelous" : (PlayState.current.songAccuracy < 1 && judgement == "marvelous" ? "sick" : judgement);
+    rating.screenCenter();
+    rating.x = ratingPos.x - 40;
+    rating.y -= 60;
     rating.loadGraphic(PlayState.current.cachedRatings[judgementThing]);
     //trace("R: load graphic check");
     rating.acceleration.y = 550;
     rating.velocity.y -= FlxG.random.int(140, 175);
     rating.velocity.x -= FlxG.random.int(0, 10);
     //trace("R: velocity check");
-    rating.scale.set(ratingScale);
+    rating.scale.set(ratingScale, ratingScale);
     rating.updateHitbox();
     //trace("R: scale check");
     add(rating);
+
+    grpCombo = new FlxGroup();
+    add(grpCombo);
 
     var daLoop:Int = 0;
     for(i in seperatedScore)
@@ -42,10 +50,10 @@ function create(judgement, combo)
 
         numScore.screenCenter();
         numScore.x = ratingPos.x + (43 * daLoop) - 90;
-        numScore.y += 80;
+        numScore.y += 120;
         //trace("pos check");
 
-        numScore.scale.set(comboScale);
+        numScore.scale.set(comboScale, comboScale);
         numScore.updateHitbox();
         //trace("scale check");
 
@@ -71,11 +79,12 @@ function create(judgement, combo)
         startDelay: Conductor.crochet * 0.001
     });
     //trace("R: tween check");
+    started = true;
 }
 
 function update()
 {
-    if(grpCombo.members.length <= 0)
+    if(grpCombo.members.length <= 0 && started)
     {
         PlayState.current.remove(this, true);
         kill();
