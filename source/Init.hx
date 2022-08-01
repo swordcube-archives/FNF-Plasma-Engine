@@ -128,8 +128,8 @@ class Init extends MusicBeatState
             name: "Arrow Skin",
             description: "Change the skin your arrows use.",
             type: Selector,
-            defaultValue: "Default",
-            values: ["Default", "Quant", "Circles", "Quant Circles"]
+            defaultValue: "Arrows",
+            values: ["Arrows", "Quant", "Circles", "Quant Circles"]
         },
     ];
 

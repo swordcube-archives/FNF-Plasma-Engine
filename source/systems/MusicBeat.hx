@@ -43,10 +43,13 @@ class MusicBeatState extends FlxUIState
 
 		// state refreshing
 		if(FlxG.keys.justPressed.F5)
-			Main.resetState();
+			resetState();
 
 		super.update(elapsed);
 	}
+
+	function resetState()
+		Main.resetState();
 
 	public function updateContents()
 	{
@@ -87,6 +90,7 @@ class MusicBeatState extends FlxUIState
 	public function updateBeat():Void
 	{
 		Conductor.currentBeat = Math.floor(Conductor.currentStep / 4);
+		Conductor.currentBeatFloat = Conductor.currentStepFloat / 4;
 	}
 
 	public function updateCurStep():Void
@@ -182,6 +186,7 @@ class MusicBeatSubState extends FlxUISubState
 	public function updateBeat():Void
 	{
 		Conductor.currentBeat = Math.floor(Conductor.currentStep / 4);
+		Conductor.currentBeatFloat = Conductor.currentStepFloat / 4;
 	}
 
 	public function updateCurStep():Void

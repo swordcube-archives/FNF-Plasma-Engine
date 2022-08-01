@@ -1,9 +1,3 @@
-var stage:Stage;
-function create() {
-    stage = new Stage("limo");
-    add(stage);
-}
-
 function beatHit(curBeat)
 {
     if(curBeat >= 168 && curBeat < 200)

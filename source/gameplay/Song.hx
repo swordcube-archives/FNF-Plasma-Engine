@@ -20,7 +20,7 @@ typedef Song =
     var gfVersion:Null<String>;
     var player3:Null<String>;
     
-    // var stage:Null<String>;
+    var stage:Null<String>;
     // var uiSkin:Null<String>;
 }
 

@@ -125,6 +125,8 @@ class HScript
             setVariable("AssetPaths", AssetPaths);
 
             setVariable("Stage", gameplay.Stage);
+
+            setVariable("Ranking", systems.Ranking);
             
             // i didn't know you could do this but uh
             // https://github.com/YoshiCrafter29/hscript-improved/blob/master/script/RunScript.hx
@@ -137,7 +139,7 @@ class HScript
                     return FNFAssets.returnAsset(SPARROW, path);
                 },
                 "getCharacterSparrow": function(path:String):FlxAtlasFrames {
-                    return FNFAssets.returnAsset(SPARROW, path);
+                    return FNFAssets.returnAsset(CHARACTER_SPARROW, path);
                 },
                 "getSound": function(path:String):Sound {
                     return FNFAssets.returnAsset(SOUND, path);
@@ -206,7 +208,7 @@ class HScript
 		PlayState.logs += text+"\n";
 	}
 
-	public function start()
+	public function start(callCreate:Bool = true)
 	{
 		executedScript = true;
 		try
@@ -220,7 +222,7 @@ class HScript
 			log(e.details(), true);
 		}
 
-		if (executedScript)
+		if (executedScript && callCreate)
 			callFunction("create");
 	}
 

@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.group.FlxGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import hscript.HScript;
 import states.PlayState;
 import systems.Conductor;
 
@@ -23,6 +24,9 @@ class GameplayUI extends FlxGroup
     public var playerStrums:StrumLine;
 
     public var engineVersion:String = 'Genesis Engine v${Main.engineVersion}';
+
+    // Scripts
+    public var healthBarScript:HScript;
 
     public function new()
     {
@@ -53,6 +57,12 @@ class GameplayUI extends FlxGroup
         engineTxt.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
         engineTxt.x = FlxG.width - (engineTxt.width + 5);
         add(engineTxt);
+
+        healthBarScript = new HScript("scripts/HealthBar");
+        healthBarScript.setVariable("add", this.add);
+        healthBarScript.setVariable("remove", this.remove);
+        healthBarScript.start();
+        PlayState.current.scripts.push(healthBarScript);
 
         #if debug
         debugTxt = new FlxText(0, 5, 0, "", 16);

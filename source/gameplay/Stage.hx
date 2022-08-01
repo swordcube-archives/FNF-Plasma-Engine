@@ -36,17 +36,6 @@ class Stage extends FlxGroup
     {
         super();
 
-        PlayState.current.dad = new Character(0, 0, PlayState.SONG.player2);
-        PlayState.current.add(PlayState.current.dad);
-
-        PlayState.current.gf = new Character(0, 0, PlayState.SONG.gf);
-        PlayState.current.add(PlayState.current.gf);
-        PlayState.current.add(inFrontOfGFSprites);
-
-        PlayState.current.gf = new Character(0, 0, PlayState.SONG.player1);
-        PlayState.current.add(PlayState.current.bf);
-        PlayState.current.add(foregroundSprites);
-
         loadStage(stage);
     }
 
@@ -127,28 +116,6 @@ class Stage extends FlxGroup
 				else
 					trace('SCRIPT DOESN\'T EXIST IN STAGE DIRECTORY! (stages/$curStage/script.hxs)');
 		}
-
-        if(!repositionedCharacters)
-        {
-            repositionedCharacters = true;
-            if(PlayState.current.dad != null)
-            {
-                PlayState.current.dad.x += dadPosition.x;
-                PlayState.current.dad.y += dadPosition.y;
-            }
-
-            if(PlayState.current.gf != null)
-            {
-                PlayState.current.gf.x += gfPosition.x;
-                PlayState.current.gf.y += gfPosition.y;
-            }
-
-            if(PlayState.current.bf != null)
-            {
-                PlayState.current.bf.x += gfPosition.x;
-                PlayState.current.bf.y += gfPosition.y;
-            }
-        }
     }
 
 	public function removeDefaultStage()

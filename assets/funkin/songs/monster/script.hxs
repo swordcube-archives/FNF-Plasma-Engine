@@ -1,5 +1,0 @@
-var stage:Stage;
-function create() {
-    stage = new Stage("spooky");
-    add(stage);
-}

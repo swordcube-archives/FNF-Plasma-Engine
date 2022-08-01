@@ -47,7 +47,7 @@ class Note extends FNFSprite
 
     public function setColor()
     {
-        var colorArray = Init.arrowColors[parent != null ? parent.keyCount-1 : keyCount-1][noteData];
+        var colorArray:Array<Int> = Init.arrowColors[parent != null ? parent.keyCount-1 : keyCount-1][noteData];
         colorSwap.setColors(colorArray[0], colorArray[1], colorArray[2]);
     }
 

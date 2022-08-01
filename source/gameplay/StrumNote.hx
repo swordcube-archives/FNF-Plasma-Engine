@@ -13,17 +13,6 @@ typedef ArrowSkin = {
 
     var strum_scale:Float;
     var note_scale:Float;
-
-    var rating_assets_folder:String;
-    var rating_scale:Float;
-
-    var combo_assets_folder:String;
-    var combo_scale:Float;
-
-    var countdown_3_asset:String;
-    var countdown_2_asset:String;
-    var countdown_1_asset:String;
-    var countdown_go_asset:String;
 };
 
 class StrumNote extends FNFSprite

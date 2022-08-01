@@ -148,7 +148,7 @@ class AssetPaths
         if(!FileSystem.exists(goodPath))
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
-            
+
         return goodPath;
     }
 

@@ -96,7 +96,7 @@ class FNFAssets
                 return FlxAtlasFrames.fromSparrow(returnGraphic(AssetPaths.image(path)), returnAsset(TEXT, AssetPaths.xml('images/$path')));
 
             case CHARACTER_SPARROW:
-                return FlxAtlasFrames.fromSparrow(returnGraphic(AssetPaths.characterSpriteSheet(path)), returnAsset(TEXT, AssetPaths.xml('characters/$path/spritesheet.xml')));
+                return FlxAtlasFrames.fromSparrow(returnGraphic(AssetPaths.characterSpriteSheet(path)), returnText(AssetPaths.xml('characters/$path/spritesheet')));
 
             case SOUND:
                 var goodPath:String = path;
@@ -110,16 +110,7 @@ class FNFAssets
                 return cache.get(goodPath+":SOUND");
 
             case TEXT:
-                var goodPath:String = path;
-                if(!FileSystem.exists(goodPath))
-                    // Try to get the asset from funkin (default pack) if it doesn't exist in current
-                    goodPath = path.replace('assets/${AssetPaths.packToUse}', 'assets/funkin');
-
-                var text:String = "";
-                if(FileSystem.exists(goodPath))
-                    text = File.getContent(goodPath);
-
-                return text;
+                return returnText(path);
                 
             default:
                 trace('type: ${type.getName()} doesn\'t do anything or it doesn\'t exist so it\'s gonna return null');
@@ -154,5 +145,24 @@ class FNFAssets
         }
 
         return cache.get(goodPath + ":IMAGE");
+    }
+
+    /**
+        Returns the contents of `path` as a string.
+
+        @param path           The path.
+    **/
+    public static function returnText(path:String):String
+    {
+        var goodPath:String = path;
+        if(!FileSystem.exists(goodPath))
+            // Try to get the asset from funkin (default pack) if it doesn't exist in current
+            goodPath = path.replace('assets/${AssetPaths.packToUse}', 'assets/funkin');
+
+        var text:String = "";
+        if(FileSystem.exists(goodPath))
+            text = File.getContent(goodPath);
+
+        return text;
     }
 }

@@ -1,0 +1,83 @@
+import flixel.math.FlxPoint;
+
+var ratingPos:FlxPoint = new FlxPoint(FlxG.width*0.55, FlxG.height*0.5);
+
+var rating:FlxSprite;
+var grpCombo:FlxGroup;
+
+function create(judgement, combo)
+{
+    grpCombo = new FlxGroup();
+    add(grpCombo);
+
+    var seperatedScore:Array<Int> = [];
+
+    if(combo >= 1000)
+        seperatedScore.push(Math.floor(combo / 1000) % 10);
+
+    seperatedScore.push(Math.floor(combo / 100) % 10);
+    seperatedScore.push(Math.floor(combo / 10) % 10);
+    seperatedScore.push(combo % 10);
+
+    rating = new FlxSprite(ratingPos.x - 40, ratingPos.y - 60);
+    var judgementThing:String = PlayState.current.songAccuracy < 1 && judgement == "marvelous" ? "sick" : judgement;
+    rating.loadGraphic(PlayState.current.cachedRatings[judgementThing]);
+    //trace("R: load graphic check");
+    rating.acceleration.y = 550;
+    rating.velocity.y -= FlxG.random.int(140, 175);
+    rating.velocity.x -= FlxG.random.int(0, 10);
+    //trace("R: velocity check");
+    rating.scale.set(ratingScale);
+    rating.updateHitbox();
+    //trace("R: scale check");
+    add(rating);
+
+    var daLoop:Int = 0;
+    for(i in seperatedScore)
+    {
+        var numScore:FlxSprite = new FlxSprite();
+        numScore.loadGraphic(PlayState.current.cachedCombo[PlayState.current.songAccuracy >= 1 ? "marvelous" : "normal"]["num"+Std.int(i)]);
+        //trace("load graphic check");
+
+        numScore.screenCenter();
+        numScore.x = ratingPos.x + (43 * daLoop) - 90;
+        numScore.y += 80;
+        //trace("pos check");
+
+        numScore.scale.set(comboScale);
+        numScore.updateHitbox();
+        //trace("scale check");
+
+        numScore.acceleration.y = FlxG.random.int(200, 300);
+        numScore.velocity.y -= FlxG.random.int(140, 160);
+        numScore.velocity.x = FlxG.random.float(-5, 5);
+        //trace("velocity check");
+
+        grpCombo.add(numScore);
+
+        FlxTween.tween(numScore, {alpha: 0}, 0.2, {
+            onComplete: function(tween:FlxTween) {
+                numScore.destroy();
+            },
+            startDelay: Conductor.crochet * 0.002
+        });
+        //trace("tween check");
+
+        daLoop += 1;
+    }
+
+    FlxTween.tween(rating, {alpha: 0}, 0.2, {
+        startDelay: Conductor.crochet * 0.001
+    });
+    //trace("R: tween check");
+}
+
+function update()
+{
+    if(grpCombo.members.length <= 0)
+    {
+        PlayState.current.remove(this, true);
+        kill();
+        destroy();
+    }
+}
