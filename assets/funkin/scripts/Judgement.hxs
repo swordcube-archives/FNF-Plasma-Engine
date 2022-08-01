@@ -1,12 +1,13 @@
 import flixel.math.FlxPoint;
 
-var ratingPos:FlxPoint = new FlxPoint(FlxG.width*0.55, FlxG.height*0.5);
+var ratingPos:FlxPoint;
 
 var rating:FlxSprite;
 var grpCombo:FlxGroup;
 
 function create(judgement, combo)
 {
+    ratingPos = new FlxPoint(FlxG.width*0.55, FlxG.height*0.5);
     grpCombo = new FlxGroup();
     add(grpCombo);
 
@@ -36,7 +37,7 @@ function create(judgement, combo)
     for(i in seperatedScore)
     {
         var numScore:FlxSprite = new FlxSprite();
-        numScore.loadGraphic(PlayState.current.cachedCombo[PlayState.current.songAccuracy >= 1 ? "marvelous" : "normal"]["num"+Std.int(i)]);
+        numScore.loadGraphic(PlayState.current.cachedCombo[PlayState.current.songAccuracy >= 1 ? "marvelous" : "default"]["num"+Std.int(i)]);
         //trace("load graphic check");
 
         numScore.screenCenter();
