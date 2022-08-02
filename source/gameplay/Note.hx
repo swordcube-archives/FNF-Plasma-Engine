@@ -30,7 +30,7 @@ class Note extends FNFSprite
 
     public var isDownScroll:Bool = Init.trueSettings.get("Downscroll");
 
-    public var colorSwap:ColorSwap = new ColorSwap(255, 255, 255);
+    public var colorSwap:ColorSwap;
 
     public var noteYOff:Int = 0;
     
@@ -41,6 +41,8 @@ class Note extends FNFSprite
         this.noteData = noteData;
         this.isSustain = isSustain;
 
+        colorSwap = new ColorSwap(255, 255, 255);
+
         shader = colorSwap;
         setColor();
     }
@@ -48,7 +50,7 @@ class Note extends FNFSprite
     public function setColor()
     {
         var colorArray:Array<Int> = Init.arrowColors[parent != null ? parent.keyCount-1 : keyCount-1][noteData];
-        if(colorSwap != null) // haxeflixel
+        if(colorSwap != null && colorArray != null) // haxeflixel
             colorSwap.setColors(colorArray[0], colorArray[1], colorArray[2]);
     }
 

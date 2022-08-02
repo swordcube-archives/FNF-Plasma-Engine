@@ -26,7 +26,7 @@ function create(judgement, combo)
     var judgementThing:String = PlayState.current.songAccuracy >= 1 ? "marvelous" : (PlayState.current.songAccuracy < 1 && judgement == "marvelous" ? "sick" : judgement);
     rating.screenCenter();
     rating.x = ratingPos.x - 40;
-    rating.y -= 60;
+    rating.y -= 80;
     rating.loadGraphic(PlayState.current.cachedRatings[judgementThing]);
     //trace("R: load graphic check");
     rating.acceleration.y = 550;

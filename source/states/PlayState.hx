@@ -400,6 +400,9 @@ class PlayState extends MusicBeatState
 
 	override function resetState()
 	{
+		persistentUpdate = false;
+		persistentDraw = true;
+		
 		SONG = SongLoader.getJSON(SONG.song, currentDifficulty);
 		Main.resetState();
 	}

@@ -13,6 +13,7 @@ import systems.Conductor;
 import systems.ExtraKeys;
 import systems.Ranking;
 import ui.JudgementUI;
+import ui.NoteSplash;
 
 using StringTools;
 
@@ -22,6 +23,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
     
     public var keyCount:Int = 4;
     public var notes:FlxTypedGroup<Note>;
+
+    public var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
 
     function getSingAnimation(noteData:Int):String
     {
@@ -42,6 +45,12 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
         this.keyCount = keyCount;
 
         notes = new FlxTypedGroup<Note>();
+
+		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
+
+		var splash:NoteSplash = new NoteSplash(100, 100, 0);
+        splash.kill();
+		grpNoteSplashes.add(splash);
 
         generateArrows();
     }
@@ -299,10 +308,20 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
         PlayState.current.totalNotes++;
 
         var judgement:String = Ranking.judgeNote(note.strumTime);
-        PlayState.current.songScore += Ranking.judgements[judgement].score;
-        PlayState.current.totalHit += Ranking.judgements[judgement].mod;
-        PlayState.current.health += Ranking.judgements[judgement].health;
+        var judgeData:Judgement = Ranking.judgements[judgement];
+        
+        PlayState.current.songScore += judgeData.score;
+        PlayState.current.totalHit += judgeData.mod;
+        PlayState.current.health += judgeData.health;
         boundHealth();
+
+        if(Init.trueSettings.get("Note Splashes") && judgeData.noteSplash)
+        {
+            var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
+            splash.alpha = 1;
+			splash.setupNoteSplash(members[note.noteData].x, members[note.noteData].y, members[note.noteData].json.splash_assets, note.noteData);
+			grpNoteSplashes.add(splash);
+        }
 
         PlayState.current.calculateAccuracy();
         

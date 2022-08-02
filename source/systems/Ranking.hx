@@ -15,24 +15,24 @@ class Ranking
 {
 	public static final judgements:Map<String, Judgement> = [
 		"marvelous" => {
-			time: 40.75,
+			time: 22.5,
 			score: 300,
 			noteSplash: true,
 			mod: 1
 		},
 		"sick" => {
-			time: 43.5,
+			time: 45,
 			score: 300,
 			noteSplash: true,
 			mod: 1
 		},
 		"good" => {
-            time: 73.5, 
+            time: 75, 
             score: 200, 
             mod: 0.7
         },
 		"bad" => {
-            time: 125, 
+            time: 90, 
             score: 100, 
             mod: 0.4},
 		"shit" => {
@@ -50,7 +50,8 @@ class Ranking
 		60 => "C",
 		50 => "D",
 		40 => "E",
-		30 => "F"
+		30 => "F",
+		0  => "booo"
 	];
 
 	public static function getRank(accuracy:Float)

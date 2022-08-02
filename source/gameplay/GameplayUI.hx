@@ -40,11 +40,13 @@ class GameplayUI extends FlxGroup
         opponentStrums.hasInput = false;
         add(opponentStrums);
         add(opponentStrums.notes);
+        add(opponentStrums.grpNoteSplashes);
 
         playerStrums = new StrumLine((FlxG.width/2)+arrowOffset, strumY, PlayState.SONG.keyCount);
         playerStrums.hasInput = true;
         add(playerStrums);
         add(playerStrums.notes);
+        add(playerStrums.grpNoteSplashes);
 
         // Text
         songTxt = new FlxText(5, FlxG.height - 25, 0, '${PlayState.SONG.song} - ${PlayState.currentDifficulty.toUpperCase()}', 16);

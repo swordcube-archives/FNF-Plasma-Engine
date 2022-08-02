@@ -10,6 +10,7 @@ typedef ArrowSkin = {
     var skin_type:String;
     
     var note_assets:String;
+    var splash_assets:String;
 
     var strum_scale:Float;
     var note_scale:Float;
@@ -24,13 +25,15 @@ class StrumNote extends FNFSprite
     
     public var json:ArrowSkin;
 
-    public var colorSwap:ColorSwap = new ColorSwap(255, 255, 255);
+    public var colorSwap:ColorSwap;
     
     public function new(x:Float, y:Float, noteData:Int = 0)
     {
         super(x, y);
 
         this.noteData = noteData;
+
+        colorSwap = new ColorSwap(255, 255, 255);
 
         shader = colorSwap;
         colorSwap.enabled.value = [false];
@@ -39,7 +42,8 @@ class StrumNote extends FNFSprite
     public function setColor()
     {
         var colorArray = Init.arrowColors[parent != null ? parent.keyCount-1 : keyCount-1][noteData];
-        colorSwap.setColors(colorArray[0], colorArray[1], colorArray[2]);
+        if(colorSwap != null && colorArray != null) // haxeflixel
+            colorSwap.setColors(colorArray[0], colorArray[1], colorArray[2]);
     }
 
     public function resetColor()

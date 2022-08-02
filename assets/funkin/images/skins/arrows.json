@@ -1,6 +1,8 @@
 {
     "skin_type": "default",
     "note_assets": "arrows/NOTE_assets",
+
+    "splash_assets": "splashes/NOTE_splashes",
     
     "strum_scale": 0.7,
     "note_scale": 0.7
