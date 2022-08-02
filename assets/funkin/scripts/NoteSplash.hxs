@@ -19,8 +19,5 @@ function create(skin:String)
 function update(elapsed)
 {
     if(sprite.started && sprite.animation.curAnim != null && sprite.animation.curAnim.finished)
-    {
         kill();
-        destroy();
-    }
 }
