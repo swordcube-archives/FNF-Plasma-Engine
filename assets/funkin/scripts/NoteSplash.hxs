@@ -14,6 +14,7 @@ function create(skin:String)
     sprite.offset.y -= 156 * (sprite.scale.y / 2);
 
     sprite.animation.play("splash"+FlxG.random.int(1, 2));
+    if(sprite.animation.curAnim != null) sprite.animation.curAnim.frameRate *= 1.35;
 }
 
 function update(elapsed)

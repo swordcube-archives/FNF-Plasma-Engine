@@ -73,7 +73,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
             var arrowSkin:String = PlayState.current.currentSkin != "default" ? PlayState.current.currentSkin : Init.trueSettings.get("Arrow Skin").toLowerCase();
             strum.loadSkin(arrowSkin);
             add(strum);
-            FlxTween.tween(strum, { y: strum.y + 10, alpha: 0.75 }, 0.5, { ease: FlxEase.circOut, startDelay: i * 0.3 }).start();
+            FlxTween.tween(strum, { y: strum.y + 10, alpha: Init.trueSettings.get("Opaque Strums") ? 1 : 0.75 }, 0.5, { ease: FlxEase.circOut, startDelay: i * 0.3 }).start();
         }
     }
 
@@ -87,6 +87,14 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
     override function update(elapsed:Float)
     {
         super.update(elapsed);
+
+        grpNoteSplashes.forEachDead(function(cock:NoteSplash) {
+            if(grpNoteSplashes.length > 1)
+            {
+                grpNoteSplashes.remove(cock, true);
+                cock.destroy();
+            }
+        });
 
         if(hasInput)
         {
