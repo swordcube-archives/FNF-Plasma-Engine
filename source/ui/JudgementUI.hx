@@ -28,4 +28,12 @@ class JudgementUI extends FlxGroup
         script.callFunction("createPost", [judgement, combo]);
         // because we call it down here
     }
+
+    override function update(elapsed:Float)
+    {
+        super.update(elapsed);
+        
+        script.update(elapsed);
+        script.callFunction("updatePost", [elapsed]);
+    }
 }
