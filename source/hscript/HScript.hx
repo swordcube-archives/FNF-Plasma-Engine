@@ -106,6 +106,10 @@ class HScript
             setVariable("Math", Math);
             setVariable("Std", Std);
 
+            setVariable("Type", Type);
+
+            setVariable("isDebugBuild", #if debug true #else false #end);
+
             // Game functions
             setVariable("loadScript", function(scriptPath:String)
             {
@@ -169,6 +173,7 @@ class HScript
             setVariable("PlayState", PlayState);
 
             // Game substates
+            setVariable("KeybindMenu", substates.KeybindMenu);
             setVariable("ModSelectionMenu", substates.ModSelectionMenu);
 
             program = parser.parseString(script);

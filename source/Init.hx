@@ -10,6 +10,7 @@ enum SettingType {
     Checkbox;
     Selector;
     Number;
+    KeybindMenu;
 }
 
 typedef OptionData = {
@@ -40,6 +41,7 @@ class Init extends MusicBeatState
         Use Init.trueSettings.get("Option Name") to use your option in other states and hx or hxs files.
     **/
     public static var settings:Array<OptionData> = [
+        // preferences tab
         {
             page: "Preferences",
             name: "Downscroll",
@@ -70,6 +72,13 @@ class Init extends MusicBeatState
         },
         {
             page: "Preferences",
+            name: "Preload Assets",
+            description: "Preloads assets like images, music, and sounds to load into songs faster. (Enabling this option uses more memory)",
+            type: Checkbox,
+            defaultValue: false
+        },
+        {
+            page: "Preferences",
             name: "Note Offset",
             description: "Change how early or late your notes spawn. (Negative = Earlier, Positive = Later)",
             type: Number,
@@ -88,6 +97,8 @@ class Init extends MusicBeatState
             valueMult: 0.1,
             decimals: 1
         },
+
+        // appearance tab
         {
             page: "Appearance",
             name: "Photosensitive Mode",
@@ -131,6 +142,71 @@ class Init extends MusicBeatState
             defaultValue: "Arrows",
             values: ["Arrows", "Quant", "Circles", "Quant Circles"]
         },
+
+        // controls menu
+        {
+            page: "Controls",
+            name: "1k Keybinds",
+            description: "Change your singular keybind for 1k.",
+            type: KeybindMenu,
+            defaultValue: null,
+        },
+        {
+            page: "Controls",
+            name: "2k Keybinds",
+            description: "Change your keybinds for 2k.",
+            type: KeybindMenu,
+            defaultValue: null,
+        },
+        {
+            page: "Controls",
+            name: "3k Keybinds",
+            description: "Change your keybinds for 3k.",
+            type: KeybindMenu,
+            defaultValue: null,
+        },
+        {
+            page: "Controls",
+            name: "4k Keybinds",
+            description: "Change your keybinds for 4k.",
+            type: KeybindMenu,
+            defaultValue: null,
+        },
+        {
+            page: "Controls",
+            name: "5k Keybinds",
+            description: "Change your keybinds for 5k.",
+            type: KeybindMenu,
+            defaultValue: null,
+        },
+        {
+            page: "Controls",
+            name: "6k Keybinds",
+            description: "Change your keybinds for 6k.",
+            type: KeybindMenu,
+            defaultValue: null,
+        },
+        {
+            page: "Controls",
+            name: "7k Keybinds",
+            description: "Change your keybinds for 7k.",
+            type: KeybindMenu,
+            defaultValue: null,
+        },
+        {
+            page: "Controls",
+            name: "8k Keybinds",
+            description: "Change your keybinds for 8k.",
+            type: KeybindMenu,
+            defaultValue: null,
+        },
+        {
+            page: "Controls",
+            name: "9k Keybinds",
+            description: "Change your keybinds for 9k.",
+            type: KeybindMenu,
+            defaultValue: null,
+        },
     ];
 
     public static var trueSettings:Map<String, Dynamic> = [];
@@ -161,7 +237,7 @@ class Init extends MusicBeatState
         super.create();
 
         // Bind save data to something apart from flixel.sol
-        FlxG.save.bind("genesis-engine", "genesis-options");
+        FlxG.save.bind("plasma-engine", "plasma-options");
 
         // Set the volume to the one from save data
         if(FlxG.save.data.volume != null)
@@ -179,7 +255,10 @@ class Init extends MusicBeatState
         FlxG.keys.preventDefaultKeys = [TAB]; // Prevents tab from unfocusing the game.
 
         // Start the game
-        Main.switchState(new states.TitleState());
+        if(trueSettings.get("Preload Assets"))
+            Main.switchState(new states.PreloadState(), false);
+        else
+            Main.switchState(new states.TitleState(), false);
     }
 
     /**

@@ -16,14 +16,11 @@ class GameplayUI extends FlxGroup
 
     public var songTxt:FlxText;
     public var engineTxt:FlxText;
-    #if debug
-    public var debugTxt:FlxText;
-    #end
 
     public var opponentStrums:StrumLine;
     public var playerStrums:StrumLine;
 
-    public var engineVersion:String = 'Genesis Engine v${Main.engineVersion}';
+    public var engineVersion:String = 'Plasma Engine v${Main.engineVersion}';
 
     // Scripts
     public var healthBarScript:HScript;
@@ -65,33 +62,5 @@ class GameplayUI extends FlxGroup
         healthBarScript.setVariable("remove", this.remove);
         healthBarScript.start();
         PlayState.current.scripts.push(healthBarScript);
-
-        #if debug
-        debugTxt = new FlxText(0, 5, 0, "", 16);
-        debugTxt.setFormat(AssetPaths.font("vcr"), 16, FlxColor.WHITE, RIGHT);
-        debugTxt.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
-        add(debugTxt);
-        #end
     }
-
-    override function update(elapsed:Float)
-    {
-        super.update(elapsed);
-
-        #if debug
-        updateDebugTxt();
-        #end
-    }
-
-    #if debug
-    function updateDebugTxt()
-    {
-        debugTxt.text = (
-            "Song Position: " + Conductor.position + "\n" +
-            "Current Beat: " + Conductor.currentBeat + " ("+Conductor.currentBeatFloat+")" + "\n" +
-            "Current Step: " + Conductor.currentStep + " ("+Conductor.currentStepFloat+")"
-        );
-        debugTxt.x = FlxG.width - (debugTxt.width + 5);
-    }
-    #end
 }

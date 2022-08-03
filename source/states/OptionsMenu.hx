@@ -1,6 +1,8 @@
 package states;
 
+import flixel.FlxG;
 import hscript.HScript;
+import substates.KeybindMenu;
 import systems.Conductor;
 import systems.MusicBeat;
 
@@ -28,6 +30,9 @@ class OptionsMenu extends MusicBeatState
     override public function update(elapsed:Float)
     {
         super.update(elapsed);
+
+        if(FlxG.keys.justPressed.D)
+            openSubState(new KeybindMenu(4, true));
 
         script.update(elapsed);
         script.callFunction("updatePost", [elapsed]);

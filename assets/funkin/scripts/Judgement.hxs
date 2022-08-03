@@ -66,6 +66,8 @@ function create(judgement, combo)
 
         FlxTween.tween(numScore, {alpha: 0}, 0.2, {
             onComplete: function(tween:FlxTween) {
+                grpCombo.remove(numScore, true);
+                numScore.kill();
                 numScore.destroy();
             },
             startDelay: Conductor.crochet * 0.002
@@ -86,7 +88,6 @@ function update()
 {
     if(grpCombo.members.length <= 0 && started)
     {
-        PlayState.current.remove(this, true);
         kill();
         destroy();
     }

@@ -217,6 +217,17 @@ function refreshPage()
                 checkbox.x = ((FlxG.width * 0.9) - checkbox.width);
                 checkbox.sprTracker = alphabet;
                 grpCheckbox.add(checkbox);
+            case "KeybindMenu":
+                var alphabet:Alphabet = new Alphabet(0, 120 + (200 * i), option.name);
+                alphabet.screenCenter(FlxAxes.X);
+                grpAlphabet.add(alphabet);
+
+                // don't ask pls pls pls pls pls pls pls pls pls pls pls pls
+                var checkbox:FNFCheckbox = new FNFCheckbox(0, 0, false);
+                checkbox.visible = false;
+                checkbox.x = ((FlxG.width * 0.85) - checkbox.width);
+                checkbox.sprTracker = alphabet;
+                grpCheckbox.add(checkbox);
             default:
                 var alphabet:Alphabet = new Alphabet(0, 120 + (200 * i), option.name);
                 alphabet.x += 300;
@@ -308,6 +319,9 @@ function changeValue(change:Float)
                     }
                 }
             }
+        case "KeybindMenu":
+            var keyCount:Int = Std.int(pageContents.get(pages[curPage])[curSelected].name.split("k Keybinds")[0]);
+            state.openSubState(new KeybindMenu(keyCount, true));
     }
 }
 

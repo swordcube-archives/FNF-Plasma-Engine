@@ -66,7 +66,8 @@ class StrumNote extends FNFSprite
 
             antialiasing = json.skin_type != "pixel" ? Init.trueSettings.get("Antialiasing") : false;
 
-            scale.set(json.strum_scale, json.strum_scale);
+            var funnyScale:Float = json.strum_scale * ExtraKeys.arrowInfo[parent.keyCount-1][2];
+            scale.set(funnyScale, funnyScale);
             updateHitbox();
 
             playAnim("static");

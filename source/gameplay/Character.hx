@@ -27,6 +27,9 @@ class Character extends FNFSprite
     public var debugMode:Bool = false;
 
     public var cameraPosition:FlxPoint = new FlxPoint();
+
+    public var positionOffset:FlxPoint = new FlxPoint();
+
     public var ogPosition:FlxPoint = new FlxPoint();
 
     public function new(x:Float, y:Float, char:String, isPlayer:Bool = false)
@@ -45,9 +48,21 @@ class Character extends FNFSprite
         script = new HScript(path);
         script.setVariable("character", this);
         script.start();
-        script.callFunction("createPost");
+
+        this.x += positionOffset.x;
+        this.y += positionOffset.y;
 
         ogPosition = new FlxPoint(x, y);
+
+        script.callFunction("createPost");
+    }
+
+    public function goToPosition(X:Float, Y:Float)
+    {
+        super.setPosition(X, Y);
+
+        this.x += positionOffset.x;
+        this.y += positionOffset.y;
     }
 
     override function playAnim(anim:String, force:Bool = false, reversed:Bool = false, frame:Int = 0)
@@ -62,26 +77,26 @@ class Character extends FNFSprite
 
         script.update(elapsed);
 
+        if(heyTimer > 0)
+        {
+            heyTimer -= elapsed;
+            if(heyTimer <= 0)
+            {
+                if(specialAnim && animation.curAnim.name == 'hey' || animation.curAnim.name == 'cheer')
+                {
+                    specialAnim = false;
+                    dance();
+                }
+                heyTimer = 0;
+            }
+        } else if(specialAnim && animation.curAnim.finished)
+        {
+            specialAnim = false;
+            dance();
+        }
+
 		if(!isPlayer)
-		{
-			if(heyTimer > 0)
-			{
-				heyTimer -= elapsed;
-				if(heyTimer <= 0)
-				{
-					if(specialAnim && animation.curAnim.name == 'hey' || animation.curAnim.name == 'cheer')
-					{
-						specialAnim = false;
-						dance();
-					}
-					heyTimer = 0;
-				}
-			} else if(specialAnim && animation.curAnim.finished)
-			{
-				specialAnim = false;
-				dance();
-			}
-            
+		{            
 			if (animation.curAnim != null && animation.curAnim.name.startsWith('sing'))
 				holdTimer += elapsed;
 

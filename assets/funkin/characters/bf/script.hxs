@@ -27,7 +27,7 @@ function create()
     character.setOffset("hey", 7, 4);
     character.setOffset('scared', -4);
 
-    character.y += 350;
+    character.positionOffset.y += 350;
     character.flipX = true;
 
     character.dance();

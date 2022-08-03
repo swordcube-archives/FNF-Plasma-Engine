@@ -12,6 +12,7 @@ var menuButtons:FlxGroup;
 var menuOptions:Array<String> = [
     "story-mode",
     "freeplay",
+    "toolbox",
     "options"
 ];
 
@@ -20,7 +21,7 @@ var camFollowPos:FlxObject;
 
 var curSelected:Int = 0;
 
-var engineVersion:String = "Genesis Engine v"+Main.engineVersion;
+var engineVersion:String = "Plasma Engine v"+Main.engineVersion;
 
 function create()
 {
@@ -36,7 +37,7 @@ function create()
     bg.scale.set(1.2, 1.2);
     bg.updateHitbox();
     bg.screenCenter();
-    bg.scrollFactor.set(0.1, 0.1);
+    bg.scrollFactor.set(0.17, 0.17);
     bg.antialiasing = Init.trueSettings.get("Antialiasing");
     add(bg);
 
@@ -45,7 +46,7 @@ function create()
     magenta.scale.set(1.2, 1.2);
     magenta.updateHitbox();
     magenta.screenCenter();
-    magenta.scrollFactor.set(0.1, 0.1);
+    magenta.scrollFactor.set(0.17, 0.17);
     magenta.antialiasing = Init.trueSettings.get("Antialiasing");
     magenta.color = 0xFFfd719b;
     magenta.visible = false;
@@ -56,7 +57,7 @@ function create()
 
     for(i in 0...menuOptions.length)
     {
-        var button:FlxSprite = new FlxSprite(0, 70 + (170 * i));
+        var button:FlxSprite = new FlxSprite(0, 60 + (160 * i));
         button.frames = FNFAssets.getSparrow('mainmenu/'+menuOptions[i]);
         button.animation.addByPrefix("idle", "basic", 24, true);
         button.animation.addByPrefix("selected", "white", 24, true);
@@ -97,6 +98,9 @@ var accepted:Bool = false;
 
 function update()
 {
+    if(isDebugBuild && FlxG.keys.justPressed.D)
+        Main.switchState(new states.CharacterEditor());
+
     if(FlxG.keys.justPressed.TAB)
         state.openSubState(new ModSelectionMenu());
         

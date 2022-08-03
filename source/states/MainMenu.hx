@@ -1,5 +1,6 @@
 package states;
 
+import flixel.FlxG;
 import hscript.HScript;
 import systems.Conductor;
 import systems.MusicBeat;
@@ -28,6 +29,12 @@ class MainMenu extends MusicBeatState
     override public function update(elapsed:Float)
     {
         super.update(elapsed);
+
+        // lazy hardcoded bullshit ik but it's gonna be removed when i add toolbox
+        #if debug
+        if(FlxG.keys.justPressed.D)
+            Main.switchState(new CharacterEditor());
+        #end
 
         script.update(elapsed);
         script.callFunction("updatePost", [elapsed]);

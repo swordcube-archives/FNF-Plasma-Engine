@@ -1,6 +1,6 @@
 package;
 
-import display.GenesisFPS;
+import display.PlasmaFPS;
 import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.addons.transition.FlxTransitionableState;
@@ -21,7 +21,7 @@ class Main extends Sprite
 	public static var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
 	public static var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
 
-	public static var fpsCounter:GenesisFPS;
+	public static var fpsCounter:PlasmaFPS;
 
 	public static var deltaTime:Float = 0.0;
 
@@ -41,7 +41,7 @@ class Main extends Sprite
 		addChild(new FlxGame(gameWidth, gameHeight, currentState, zoom, framerate, framerate, skipSplash, startFullscreen));
 
 		// FPS Counter
-		fpsCounter = new GenesisFPS(10, 3, 0xFFFFFFFF);
+		fpsCounter = new PlasmaFPS(10, 3, 0xFFFFFFFF);
 		addChild(fpsCounter);
 	}
 

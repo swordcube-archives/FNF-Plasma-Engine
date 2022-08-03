@@ -517,13 +517,13 @@ class PlayState extends MusicBeatState
 		var curSection:Int = Std.int(FlxMath.bound(Conductor.currentStep / 16, 0, SONG.notes.length-1));
 		focusCamera(SONG.notes[curSection].mustHitSection ? "bf" : "dad");
 
-		if(!dad.animation.curAnim.name.startsWith("sing"))
+		if(dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith("sing"))
 			dad.dance();
 
-		if(!gf.animation.curAnim.name.startsWith("sing"))
+		if(gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing"))
 			gf.dance();
 
-		if(!bf.animation.curAnim.name.startsWith("sing"))
+		if(bf.animation.curAnim != null && !bf.animation.curAnim.name.startsWith("sing"))
 			bf.dance();
 
 		callOnHScripts("beatHit", [Conductor.currentBeat]);

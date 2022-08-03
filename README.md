@@ -1,4 +1,4 @@
-# 🎮 Genesis Engine
+# 🎮 Plasma Engine
 
 An FNF engine designed to be lightweight and easy to mod.
 

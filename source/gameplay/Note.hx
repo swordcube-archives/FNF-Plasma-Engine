@@ -67,7 +67,7 @@ class Note extends FNFSprite
 		var stepHeight = ((0.45 * Conductor.stepCrochet) * PlayState.current.scrollSpeed);
 
         if(isSustain && animation.curAnim != null && animation.curAnim.name != "tail")
-            scale.y = 0.7 * ((Conductor.stepCrochet / 100 * 1.5) * PlayState.current.scrollSpeed);
+            scale.y = (0.7 / ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][2]) * ((Conductor.stepCrochet / 100 * 1.5) * PlayState.current.scrollSpeed);
 
         if(isSustain)
         {
@@ -96,7 +96,8 @@ class Note extends FNFSprite
 
             antialiasing = json.skin_type != "pixel" ? Init.trueSettings.get("Antialiasing") : false;
 
-            scale.set(json.strum_scale, json.strum_scale);
+            var funnyScale:Float = json.strum_scale * ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][2];
+            scale.set(funnyScale, funnyScale);
             updateHitbox();
 
             playAnim("normal");

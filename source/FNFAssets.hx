@@ -46,6 +46,11 @@ class FNFAssets
     public static var cache:Map<String, Dynamic> = [];
 
     /**
+        The asset cache. except it doesn't clear!!!!1 (used for PreloadState)
+    **/
+    public static var permCache:Map<String, Dynamic> = [];
+
+    /**
         A function to clear the cache of a specific type, or everything in the `cache` map.
 
         @param type           The type of cache to remove (set to `null` (default) to clear all cache)
@@ -104,6 +109,11 @@ class FNFAssets
                     // Try to get the asset from funkin (default pack) if it doesn't exist in current
                     goodPath = path.replace('assets/${AssetPaths.packToUse}', 'assets/funkin');
 
+                // if it exists in perm cache then get that instead
+                if(permCache.exists(goodPath+":SOUND"))
+                    return permCache.get(goodPath+":SOUND");
+
+                // otherwise actually manage the cache and shit
                 if(!cache.exists(goodPath+":SOUND"))
                     cache.set(goodPath+":SOUND", Sound.fromFile(goodPath));
         
@@ -132,6 +142,11 @@ class FNFAssets
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = path.replace('assets/${AssetPaths.packToUse}', 'assets/funkin');
 
+        // if it exists in perm cache then get that instead
+        if(permCache.exists(goodPath+":SOUND"))
+            return permCache.get(goodPath+":SOUND");
+
+        // otherwise actually manage the cache and shit
         if(!cache.exists(goodPath + ":IMAGE"))
         {
             var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(BitmapData.fromFile(goodPath), false, goodPath + ":IMAGE", false);
