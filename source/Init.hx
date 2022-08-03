@@ -307,6 +307,14 @@ class Init extends MusicBeatState
             FlxG.save.data.keyBinds = keyBinds;
             FlxG.save.flush();
         }
+
+        if(FlxG.save.data.currentPack != null)
+            AssetPaths.currentPack = FlxG.save.data.currentPack;
+        else
+        {
+            FlxG.save.data.currentPack = AssetPaths.currentPack;
+            FlxG.save.flush();
+        }
     }
 
     /**
@@ -329,6 +337,10 @@ class Init extends MusicBeatState
             FlxG.save.flush();
         }
         trace('SAVED ARROW COLORS!');
+
+        FlxG.save.data.currentPack = AssetPaths.currentPack;
+        FlxG.save.flush();
+        trace('SAVED CURRENTLY SELECTED PACK');
 
         trace('ALL SETTINGS SAVED!');
     }

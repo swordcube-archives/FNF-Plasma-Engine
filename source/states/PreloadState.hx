@@ -36,207 +36,38 @@ class PreloadState extends MusicBeatState
         loadingText.screenCenter(X);
         add(loadingText);
 
-        // Preload All Characters
-        var initialFolder:String = 'characters';
-        for(piss in FileSystem.readDirectory('${AssetPaths.cwd}assets/'))
-        {
-            if(!piss.contains(".") && FileSystem.exists('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-            {
-                for(folder in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-                {
-                    if(!folder.contains("."))
-                    {
-                        for(item in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder'))
-                        {
-                            if(item.endsWith(".png") || item.endsWith(".jpg") || item.endsWith(".bmp"))
-                                images.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                            else if(item.endsWith(".mp3") || item.endsWith(".ogg") || item.endsWith(".wav"))
-                                sounds.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                        }
-                    }
-                }
-            }
-        }
-
-        // Preload Some Images
-        var initialFolder:String = 'images';
-        for(piss in FileSystem.readDirectory('${AssetPaths.cwd}assets/'))
-        {
-            if(!piss.contains(".") && FileSystem.exists('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-            {
-                for(folder in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-                {
-                    if(!folder.contains("."))
-                    {
-                        for(item in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder'))
-                        {
-                            if(item.endsWith(".png") || item.endsWith(".jpg") || item.endsWith(".bmp"))
-                                images.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                            else if(item.endsWith(".mp3") || item.endsWith(".ogg") || item.endsWith(".wav"))
-                                sounds.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                        }
-                    }
-                }
-            }
-        }
-
-        // Preload Some Main Menu Images
-        var initialFolder:String = 'mainmenu';
-        for(piss in FileSystem.readDirectory('${AssetPaths.cwd}assets/'))
-        {
-            if(!piss.contains(".") && FileSystem.exists('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-            {
-                for(folder in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-                {
-                    if(!folder.contains("."))
-                    {
-                        for(item in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder'))
-                        {
-                            if(item.endsWith(".png") || item.endsWith(".jpg") || item.endsWith(".bmp"))
-                                images.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                            else if(item.endsWith(".mp3") || item.endsWith(".ogg") || item.endsWith(".wav"))
-                                sounds.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                        }
-                    }
-                }
-            }
-        }
-
-        // Preload Some Notes
-        var initialFolder:String = 'arrows';
-        for(piss in FileSystem.readDirectory('${AssetPaths.cwd}assets/'))
-        {
-            if(!piss.contains(".") && FileSystem.exists('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-            {
-                for(folder in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-                {
-                    if(!folder.contains("."))
-                    {
-                        for(item in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder'))
-                        {
-                            if(item.endsWith(".png") || item.endsWith(".jpg") || item.endsWith(".bmp"))
-                                images.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                            else if(item.endsWith(".mp3") || item.endsWith(".ogg") || item.endsWith(".wav"))
-                                sounds.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                        }
-                    }
-                }
-            }
-        }
-
-        // Preload Some Splashes
-        var initialFolder:String = 'splashes';
-        for(piss in FileSystem.readDirectory('${AssetPaths.cwd}assets/'))
-        {
-            if(!piss.contains(".") && FileSystem.exists('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-            {
-                for(folder in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-                {
-                    if(!folder.contains("."))
-                    {
-                        for(item in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder'))
-                        {
-                            if(item.endsWith(".png") || item.endsWith(".jpg") || item.endsWith(".bmp"))
-                                images.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                            else if(item.endsWith(".mp3") || item.endsWith(".ogg") || item.endsWith(".wav"))
-                                sounds.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                        }
-                    }
-                }
-            }
-        }
-
-        // Preload Some Stage Images
-        var initialFolder:String = 'stages/stage';
-        for(piss in FileSystem.readDirectory('${AssetPaths.cwd}assets/'))
-        {
-            if(!piss.contains(".") && FileSystem.exists('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-            {
-                for(folder in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-                {
-                    if(!folder.contains("."))
-                    {
-                        for(item in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder'))
-                        {
-                            if(item.endsWith(".png") || item.endsWith(".jpg") || item.endsWith(".bmp"))
-                                images.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                            else if(item.endsWith(".mp3") || item.endsWith(".ogg") || item.endsWith(".wav"))
-                                sounds.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                        }
-                    }
-                }
-            }
-        }
-
-        // Preload All Icons
-        var initialFolder:String = 'images/icons';
-        for(piss in FileSystem.readDirectory('${AssetPaths.cwd}assets/'))
-        {
-            if(!piss.contains(".") && FileSystem.exists('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-            {
-                for(folder in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-                {
-                    if(!folder.contains("."))
-                    {
-                        for(item in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder'))
-                        {
-                            if(item.endsWith(".png") || item.endsWith(".jpg") || item.endsWith(".bmp"))
-                                images.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                            else if(item.endsWith(".mp3") || item.endsWith(".ogg") || item.endsWith(".wav"))
-                                sounds.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                        }
-                    }
-                }
-            }
-        }
-
-        // Preload Almost All Sounds
-        var initialFolder:String = 'sounds';
-        for(piss in FileSystem.readDirectory('${AssetPaths.cwd}assets/'))
-        {
-            if(!piss.contains(".") && FileSystem.exists('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-            {
-                for(folder in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-                {
-                    if(!folder.contains("."))
-                    {
-                        for(item in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder'))
-                        {
-                            if(item.endsWith(".png") || item.endsWith(".jpg") || item.endsWith(".bmp"))
-                                images.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                            else if(item.endsWith(".mp3") || item.endsWith(".ogg") || item.endsWith(".wav"))
-                                sounds.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                        }
-                    }
-                }
-            }
-        }
-
-        // Preload All Menu Sounds
-        var initialFolder:String = 'sounds/menus';
-        for(piss in FileSystem.readDirectory('${AssetPaths.cwd}assets/'))
-        {
-            if(!piss.contains(".") && FileSystem.exists('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-            {
-                for(folder in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder'))
-                {
-                    if(!folder.contains("."))
-                    {
-                        for(item in FileSystem.readDirectory('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder'))
-                        {
-                            if(item.endsWith(".png") || item.endsWith(".jpg") || item.endsWith(".bmp"))
-                                images.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                            else if(item.endsWith(".mp3") || item.endsWith(".ogg") || item.endsWith(".wav"))
-                                sounds.push('${AssetPaths.cwd}assets/$piss/$initialFolder/$folder/$item');
-                        }
-                    }
-                }
-            }
-        }
+        addToCacheList(""); // preload any images that may happen to be in root assets folderr
+        addToCacheList("images");
+        addToCacheList("images/icons");
+        addToCacheList("images/mainmenu");
+        addToCacheList("images/arrows");
+        addToCacheList("images/splashes");
+        addToCacheList("images/stages");
+        addToCacheList("images/title");
 
 		sys.thread.Thread.create(() -> {
 			cache();
 		});
+    }
+
+    /**
+        Adds the contents of `folder` to the cache list so the contents can be cached.
+        
+        @param folder       The folder to preload assets from.
+    **/
+    function addToCacheList(folder:String)
+    {
+        var dumbassPath:String = '${AssetPaths.cwd}assets/${AssetPaths.currentPack}/$folder';
+        // Don't load contents from this place if it isn't a folder or if it doesn't exist!!!
+        if(dumbassPath.contains(".") || !FileSystem.exists(dumbassPath)) return;
+
+        for(item in FileSystem.readDirectory(dumbassPath))
+        {
+            if(item.endsWith(".png") || item.endsWith(".jpg") || item.endsWith(".bmp"))
+                images.push(dumbassPath+"/"+item);
+            else if(item.endsWith(".mp3") || item.endsWith(".ogg") || item.endsWith(".wav"))
+                sounds.push(dumbassPath+"/"+item);
+        }
     }
 
     var loadedSoFar:Int = 0;

@@ -96,6 +96,9 @@ class ModSelectionMenu extends MusicBeatSubState
         {
             AssetPaths.currentPack = grpIcons.members[curSelected].mod;
 
+            FlxG.save.data.currentPack = AssetPaths.currentPack;
+            FlxG.save.flush();
+
             Main.resetState();
             close();
         }
