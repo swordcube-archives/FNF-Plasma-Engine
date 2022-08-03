@@ -143,8 +143,8 @@ class FNFAssets
             goodPath = path.replace('assets/${AssetPaths.packToUse}', 'assets/funkin');
 
         // if it exists in perm cache then get that instead
-        if(permCache.exists(goodPath+":SOUND"))
-            return permCache.get(goodPath+":SOUND");
+        if(permCache.exists(goodPath+":IMAGE"))
+            return permCache.get(goodPath+":IMAGE");
 
         // otherwise actually manage the cache and shit
         if(!cache.exists(goodPath + ":IMAGE"))

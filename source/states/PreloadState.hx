@@ -13,6 +13,8 @@ using StringTools;
 
 class PreloadState extends MusicBeatState
 {
+    var assetCount:Int = 0;
+    
 	var images = [];
 	var sounds = [];
 
@@ -36,14 +38,63 @@ class PreloadState extends MusicBeatState
         loadingText.screenCenter(X);
         add(loadingText);
 
-        addToCacheList(""); // preload any images that may happen to be in root assets folderr
+        // Preload Characters
+        var charFolder = '${AssetPaths.cwd}assets/${AssetPaths.currentPack}/characters';
+        if(FileSystem.exists(charFolder))
+        {
+            for(fucker in FileSystem.readDirectory(charFolder))
+            {
+                if(!fucker.contains(".")) // basically a check to see if the folder is a folder
+                {
+                    var dumbassPath:String = charFolder+"/"+fucker;
+                    for(item in FileSystem.readDirectory(dumbassPath))
+                    {
+                        if(item.endsWith(".png") || item.endsWith(".jpg") || item.endsWith(".bmp"))
+                        {
+                            assetCount++;
+                            images.push(dumbassPath+"/"+item);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Preload Songs
+        var songsFolder = '${AssetPaths.cwd}assets/${AssetPaths.currentPack}/songs';
+        if(FileSystem.exists(songsFolder))
+        {
+            for(fucker in FileSystem.readDirectory(songsFolder))
+            {
+                if(!fucker.contains(".")) // basically a check to see if the folder is a folder
+                {
+                    var dumbassPath:String = songsFolder+"/"+fucker;
+                    for(item in FileSystem.readDirectory(dumbassPath))
+                    {
+                        // This is the songs folder so why try to load any images lmao
+                        if(item.endsWith(".mp3") || item.endsWith(".ogg") || item.endsWith(".wav"))
+                        {
+                            assetCount++;
+                            sounds.push(dumbassPath+"/"+item);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Images
         addToCacheList("images");
         addToCacheList("images/icons");
+        addToCacheList("images/countdown");
         addToCacheList("images/mainmenu");
         addToCacheList("images/arrows");
         addToCacheList("images/splashes");
-        addToCacheList("images/stages");
         addToCacheList("images/title");
+        addToCacheList("images/stages/stage");
+
+        // Music & Sounds
+        addToCacheList("music");
+        addToCacheList("sounds");
+        addToCacheList("sounds/menus");
 
 		sys.thread.Thread.create(() -> {
 			cache();
@@ -58,15 +109,22 @@ class PreloadState extends MusicBeatState
     function addToCacheList(folder:String)
     {
         var dumbassPath:String = '${AssetPaths.cwd}assets/${AssetPaths.currentPack}/$folder';
-        // Don't load contents from this place if it isn't a folder or if it doesn't exist!!!
-        if(dumbassPath.contains(".") || !FileSystem.exists(dumbassPath)) return;
-
-        for(item in FileSystem.readDirectory(dumbassPath))
+        
+        if(!dumbassPath.contains(".") && FileSystem.exists(dumbassPath))
         {
-            if(item.endsWith(".png") || item.endsWith(".jpg") || item.endsWith(".bmp"))
-                images.push(dumbassPath+"/"+item);
-            else if(item.endsWith(".mp3") || item.endsWith(".ogg") || item.endsWith(".wav"))
-                sounds.push(dumbassPath+"/"+item);
+            for(item in FileSystem.readDirectory(dumbassPath))
+            {
+                if(item.endsWith(".png") || item.endsWith(".jpg") || item.endsWith(".bmp"))
+                {
+                    assetCount++;
+                    images.push(dumbassPath+"/"+item);
+                }
+                else if(item.endsWith(".mp3") || item.endsWith(".ogg") || item.endsWith(".wav"))
+                {
+                    assetCount++;
+                    sounds.push(dumbassPath+"/"+item);
+                }
+            }
         }
     }
 
@@ -82,8 +140,6 @@ class PreloadState extends MusicBeatState
 			graph.persist = true;
 			graph.destroyOnNoUse = false;
 			FNFAssets.permCache.set(i+":IMAGE", graph);
-            loadingText.text = "Loaded "+loadedSoFar+"/"+images.length+sounds.length+" assets";
-            loadingText.screenCenter(X);
             trace("LOADED IMAGE "+i);
         }
 
@@ -91,12 +147,20 @@ class PreloadState extends MusicBeatState
 		{
             loadedSoFar++;
             FNFAssets.permCache.set(i+":SOUND", Sound.fromFile(i));
-            loadingText.text = "Loaded "+loadedSoFar+"/"+images.length+sounds.length+" assets";
-            loadingText.screenCenter(X);
 			trace("LOADED SOUND "+i);
 		}
 
         Main.fpsCounter.visible = true;
         Main.switchState(new states.TitleState(), false);
+    }
+
+    var textUpdateTimer:Float = 0.0;
+
+    override function update(elapsed:Float)
+    {
+        super.update(elapsed);
+
+        loadingText.text = "Loaded "+loadedSoFar+"/"+assetCount+" assets";
+        loadingText.screenCenter(X);
     }
 }

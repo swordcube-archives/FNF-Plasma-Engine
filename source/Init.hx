@@ -73,7 +73,7 @@ class Init extends MusicBeatState
         {
             page: "Preferences",
             name: "Preload Assets",
-            description: "Preloads assets like images, music, and sounds to load into songs faster. (Enabling this option uses more memory)",
+            description: "Preloads assets like images, music, and sounds when the game starts to load into songs faster. (Enabling this option uses more memory, A restart is needed for this to take effect)",
             type: Checkbox,
             defaultValue: false
         },
