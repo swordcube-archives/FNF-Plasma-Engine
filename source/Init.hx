@@ -143,6 +143,15 @@ class Init extends MusicBeatState
             values: ["Arrows", "Quant", "Circles", "Quant Circles"]
         },
 
+        // developers tab
+        {
+            page: "Developers",
+            name: "Developer Mode",
+            description: "Allows you to access the toolbox for making mods. (Also enables pressing F5 to reload state)",
+            type: Checkbox,
+            defaultValue: false
+        },
+
         // controls menu
         {
             page: "Controls",

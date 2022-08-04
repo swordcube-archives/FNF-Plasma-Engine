@@ -33,6 +33,7 @@ function create(judgement, combo)
     rating.velocity.y -= FlxG.random.int(140, 175);
     rating.velocity.x -= FlxG.random.int(0, 10);
     //trace("R: velocity check");
+    rating.antialiasing = PlayState.current.ratingAntialiasing;
     rating.scale.set(ratingScale, ratingScale);
     rating.updateHitbox();
     //trace("R: scale check");
@@ -53,6 +54,7 @@ function create(judgement, combo)
         numScore.y += 120;
         //trace("pos check");
 
+        numScore.antialiasing = PlayState.current.comboAntialiasing;
         numScore.scale.set(comboScale, comboScale);
         numScore.updateHitbox();
         //trace("scale check");

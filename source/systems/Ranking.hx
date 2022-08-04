@@ -4,6 +4,7 @@ import states.PlayState;
 
 typedef Judgement =
 {
+	var name:String;
 	var time:Float;
 	var score:Int;
 	var ?noteSplash:Bool;
@@ -13,36 +14,49 @@ typedef Judgement =
 
 class Ranking
 {
-	public static final judgements:Map<String, Judgement> = [
-		"marvelous" => {
+	// This is an array because from what i've heard maps have undefined orders in haxe
+	// fun!
+	public static var judgements:Array<Judgement> = [
+		// marvelous
+		{
+			name: "marvelous",
 			time: 22.5,
 			score: 300,
 			noteSplash: true,
 			mod: 1
 		},
-		"sick" => {
+		// sick
+		{
+			name: "sick",
 			time: 45,
 			score: 300,
 			noteSplash: true,
-			mod: 1
+			mod: 0.95
 		},
-		"good" => {
-            time: 75, 
-            score: 200, 
-            mod: 0.7
-        },
-		"bad" => {
-            time: 90, 
-            score: 100, 
-            mod: 0.4},
-		"shit" => {
-            time: 150, 
-            score: 50, 
-            health: -0.15
-        }
+		// good
+		{
+			name: "good",
+			time: 73.5, 
+			score: 200, 
+			mod: 0.7
+		},
+		// bad
+		{
+			name: "bad",
+			time: 125, 
+			score: 100, 
+			mod: 0.4
+		},
+		// shit
+		{
+			name: "shit",
+			time: 150, 
+			score: 50, 
+			health: -0.15
+		}
 	];
 
-	static final ranks:Map<Int, String> = [
+	static var ranks:Map<Int, String> = [
 		100 => "S+",
 		90 => "S",
 		80 => "A",
@@ -50,8 +64,8 @@ class Ranking
 		60 => "C",
 		50 => "D",
 		40 => "E",
-		30 => "F",
-		0  => "booo"
+		10 => "F",
+		0 => "booooo",
 	];
 
 	public static function getRank(accuracy:Float)
@@ -77,19 +91,35 @@ class Ranking
 		return "N/A";
 	}
 
+	public static function getInfo(rating:String):Judgement
+	{
+		var judgement:Judgement = null;
+		for(judge in judgements)
+		{
+			if(judge.name == rating)
+			{
+				judgement = judge;
+				break;
+			}
+		}
+
+		return judgement;
+	}
+
 	public static function judgeNote(strumTime:Float)
 	{
 		var noteDiff:Float = Math.abs(Conductor.position - strumTime);
-		var lastJudge:String = "";
-
-		for (name => judge in judgements)
+		var lastJudge:String = "no";
+		
+		for(judge in judgements)
 		{
-			if (noteDiff >= judge.time)
-				return name;
-			else
-				lastJudge = name;
+			if(noteDiff <= judge.time && lastJudge == "no")
+				lastJudge = judge.name;
 		}
-
+		
+		if(lastJudge == "no")
+			lastJudge = judgements[judgements.length - 1].name;
+		
 		return lastJudge;
 	}
 }

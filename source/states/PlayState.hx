@@ -118,8 +118,13 @@ class PlayState extends MusicBeatState
 	public var countdownGraphics:Map<String, FlxGraphic> = [];
 	public var countdownSounds:Map<String, Sound> = [];
 
-	public var cachedRatings:Map<String, FlxGraphic> = [];
+	public var ratingScale:Float = 0.7;
+	public var comboScale:Float = 0.5;
 
+	public var ratingAntialiasing:Bool = true;
+	public var comboAntialiasing:Bool = true;
+
+	public var cachedRatings:Map<String, FlxGraphic> = [];
 	public var cachedCombo:Map<String, Map<String, FlxGraphic>> = [];
 	
 	override function create()
@@ -175,6 +180,16 @@ class PlayState extends MusicBeatState
 
 		dad = new Character(stage.dadPosition.x, stage.dadPosition.y, SONG.player2);
 		add(dad);
+
+		// what if i told you the dad was the impostor!?!!?!
+		if(dad.curCharacter == gf.curCharacter)
+		{
+			dad.goToPosition(stage.gfPosition.x, stage.gfPosition.y);
+			remove(gf, true);
+			gf.kill();
+			gf.destroy();
+			gf = null;
+		}
 
 		bf = new Boyfriend(stage.bfPosition.x, stage.bfPosition.y, SONG.player1);
 		bf.flipX = !bf.flipX;

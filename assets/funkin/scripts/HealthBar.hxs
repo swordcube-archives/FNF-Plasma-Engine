@@ -22,13 +22,13 @@ function create()
     bar.createFilledBar(0xFFff0000, 0xFF00ff00);
     add(bar);
 
-    iconP2 = new HealthIcon(PlayState.current.dad != null ? PlayState.current.dad.curCharacter : "face", false);
-    iconP2.y = bar.y - (iconP2.height / 2);
-    add(iconP2);
-
     iconP1 = new HealthIcon(PlayState.current.bf != null ? PlayState.current.bf.curCharacter : "face", true);
     iconP1.y = bar.y - (iconP1.height / 2);
     add(iconP1);
+
+    iconP2 = new HealthIcon(PlayState.current.dad != null ? PlayState.current.dad.curCharacter : "face", false);
+    iconP2.y = bar.y - (iconP2.height / 2);
+    add(iconP2);
 
     scoreTxt = new FlxText(0, image.y + 35, 0, "test");
     scoreTxt.setFormat(AssetPaths.font("vcr"), 16, FlxColor.WHITE, FlxTextAlign.CENTER);

@@ -15,6 +15,7 @@ var grpAlphabet3:FlxGroup;
 var pages:Array<String> = [
     "Preferences",
     "Appearance",
+    "Developers",
     "Controls"
 ];
 

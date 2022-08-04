@@ -319,7 +319,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
         PlayState.current.totalNotes++;
 
         var judgement:String = Ranking.judgeNote(note.strumTime);
-        var judgeData:Judgement = Ranking.judgements[judgement];
+        var judgeData:Judgement = Ranking.getInfo(judgement);
         
         PlayState.current.songScore += judgeData.score;
         PlayState.current.totalHit += judgeData.mod;
@@ -338,7 +338,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
         
         PlayState.current.combo++;
 
-        var judgeUI:JudgementUI = new JudgementUI(judgement, PlayState.current.combo, 0.7, 0.5);
+        var judgeUI:JudgementUI = new JudgementUI(judgement, PlayState.current.combo, PlayState.current.ratingScale, PlayState.current.comboScale);
         PlayState.current.add(judgeUI);
 
         PlayState.current.UI.healthBarScript.callFunction("updateScoreText");

@@ -28,6 +28,9 @@ function create()
     state.persistentUpdate = true;
     state.persistentDraw = true;
 
+    if(!Init.trueSettings.get("Developer Mode"))
+        menuOptions.remove("toolbox");
+
     scrollMenu = FNFAssets.getSound(AssetPaths.sound('menus/scrollMenu'));
     cancelMenu = FNFAssets.getSound(AssetPaths.sound('menus/cancelMenu'));
     confirmMenu = FNFAssets.getSound(AssetPaths.sound('menus/confirmMenu'));
@@ -167,11 +170,11 @@ function switchToOtherStateShit()
     {
         case 'story-mode':
             trace("story mode = unimplemented");
-            //Main.switchState(new StoryMenuMenu());
+            //Main.switchState(new states.StoryMenuMenu());
         case 'freeplay':
-            Main.switchState(new FreeplayMenu());
+            Main.switchState(new states.FreeplayMenu());
         case 'options':
-            Main.switchState(new OptionsMenu());
+            Main.switchState(new states.OptionsMenu());
     }
 }
 
