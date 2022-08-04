@@ -20,6 +20,7 @@ class Note extends FNFSprite
 
     public var keyCount:Int = 4;
     public var noteData:Int = 0;
+    public var rawNoteData:Int = 0;
     
     public var json:ArrowSkin;
 
