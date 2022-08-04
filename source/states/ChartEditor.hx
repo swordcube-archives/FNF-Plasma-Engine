@@ -14,6 +14,7 @@ import gameplay.Note;
 import gameplay.Song;
 import openfl.media.Sound;
 import sys.FileSystem;
+import systems.Conductor;
 import systems.MusicBeat;
 import systems.UIControls;
 
@@ -41,6 +42,25 @@ class ChartEditor extends MusicBeatState
         Main.switchState(Type.createInstance(stateClass, []));
     }
 
+    function sectionStartTime(?curSection:Int):Float
+    {
+        if(curSection == null)
+            curSection = this.curSection;
+
+        var daBPM:Float = SONG.bpm;
+        var daPos:Float = 0;
+
+        for (i in 0...curSection)
+        {
+            if (SONG.notes[i].changeBPM && SONG.notes[i].bpm != daBPM)
+                daBPM = SONG.notes[i].bpm;
+
+            daPos += (16 / Conductor.timeScale[1]) * (1000 * (60 / daBPM));
+        }
+
+        return daPos;
+    }
+
     override function create()
     {
         current = this;
@@ -50,6 +70,9 @@ class ChartEditor extends MusicBeatState
             SONG = PlayState.SONG;
         else
             SONG = SongLoader.getJSON("tutorial", "hard");
+
+		Conductor.changeBPM(SONG.bpm);
+		Conductor.mapBPMChanges(SONG);
 
         grids = [
             new CharterGrid(-1),

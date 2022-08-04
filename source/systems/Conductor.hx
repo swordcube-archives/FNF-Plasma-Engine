@@ -62,6 +62,8 @@ class Conductor
     **/
 	public static var safeZoneOffset:Float = (safeFrames / 60) * 1000;
 
+    public static var timeScale:Array<Int> = [4, 4];
+
 	public static var bpmChangeMap:Array<BPMChangeEvent> = [];
 
 	public static function mapBPMChanges(song:Song)
