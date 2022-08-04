@@ -38,7 +38,7 @@ class PlayState extends MusicBeatState
 	public static var SONG:Song = SongLoader.getJSON("m.i.l.f", "hard");
 	public static var currentDifficulty:String = "hard";
 
-	public var notes:Array<Section> = SONG.notes.copy();
+	public var unspawnNotes:Array<Note> = [];
 
 	// Characters
 	public var dad:Character;
@@ -132,6 +132,8 @@ class PlayState extends MusicBeatState
 		current = this;
 		super.create();
 
+		ChartEditor.stateClass = PlayState;
+
 		persistentUpdate = true;
 		persistentDraw = true;
 
@@ -158,6 +160,66 @@ class PlayState extends MusicBeatState
 		setupCameras();
 
 		callOnHScripts("create");
+
+		for(section in SONG.notes)
+		{
+			for(note in section.sectionNotes)
+			{
+				var strumTime:Float = note[0] + Init.trueSettings.get("Note Offset");
+				var gottaHitNote:Bool = section.mustHitSection;
+				if (note[1] > (SONG.keyCount - 1))
+					gottaHitNote = !section.mustHitSection;
+
+				var arrowSkin:String = currentSkin != "default" ? currentSkin : Init.trueSettings.get("Arrow Skin").toLowerCase();
+
+				var newNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount);
+
+				// sustain
+				var susLength:Float = note[2] / Conductor.stepCrochet;
+
+				if(susLength > 0)
+				{
+					var susNote:Int = 0;
+					for(i in 0...Math.floor(susLength))
+					{
+						var newSusNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount, true);
+						newSusNote.strumTime = strumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
+						newSusNote.mustPress = gottaHitNote;
+
+						var strumLine:StrumLine = gottaHitNote ? UI.playerStrums : UI.opponentStrums;
+						unspawnNotes.push(newSusNote);
+
+						newSusNote.parent = strumLine;
+						newSusNote.sustainParent = newNote;
+						newSusNote.loadSkin(arrowSkin);
+						susNote++;
+					}
+
+					// end piece
+					var newSusNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount, true);
+					newSusNote.strumTime = strumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
+					newSusNote.mustPress = gottaHitNote;
+
+					var strumLine:StrumLine = gottaHitNote ? UI.playerStrums : UI.opponentStrums;
+					unspawnNotes.push(newSusNote);
+
+					newSusNote.parent = strumLine;
+					newSusNote.sustainParent = newNote;
+					newSusNote.loadSkin(arrowSkin);
+
+					newSusNote.playAnim("tail");
+				}
+
+				newNote.strumTime = strumTime;
+				newNote.mustPress = gottaHitNote;
+				
+				var strumLine:StrumLine = gottaHitNote ? UI.playerStrums : UI.opponentStrums;
+				unspawnNotes.push(newNote);
+
+				newNote.parent = strumLine;
+				newNote.loadSkin(arrowSkin);
+			}
+		}
 
 		stage = new Stage(SONG.stage != null ? SONG.stage : "stage");
 		add(stage);
@@ -387,6 +449,12 @@ class PlayState extends MusicBeatState
 
 		callOnHScripts("update", [elapsed]);
 
+		if(FlxG.keys.justPressed.SEVEN)
+		{
+			ChartEditor.stateClass = PlayState;
+			Main.switchState(new ChartEditor());
+		}
+
 		if(UIControls.justPressed("BACK") || (Conductor.position >= FlxG.sound.music.length))
 		{
 			persistentUpdate = false;
@@ -418,77 +486,20 @@ class PlayState extends MusicBeatState
 		persistentUpdate = false;
 		persistentDraw = true;
 		
-		SONG = SongLoader.getJSON(SONG.song, currentDifficulty);
 		Main.resetState();
 	}
 
 	function spawnNotes()
 	{
-		for(section in notes)
+		if(unspawnNotes[0] != null)
 		{
-			if(section.sectionNotes.length > 0)
+			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.position < 2500)
 			{
-				for(note in section.sectionNotes)
-				{
-					var strumTime:Float = note[0] + Init.trueSettings.get("Note Offset");
-					if((strumTime - Conductor.position) < 2500)
-					{
-						var gottaHitNote:Bool = section.mustHitSection;
-						if (note[1] > (SONG.keyCount - 1))
-							gottaHitNote = !section.mustHitSection;
+				var dunceNote:Note = unspawnNotes[0];
+				dunceNote.parent.notes.add(dunceNote);
 
-						var arrowSkin:String = currentSkin != "default" ? currentSkin : Init.trueSettings.get("Arrow Skin").toLowerCase();
-
-						var newNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount);
-
-						// sustain
-						var susLength:Float = note[2] / Conductor.stepCrochet;
-
-						if(susLength > 0)
-						{
-							var susNote:Int = 0;
-							for(i in 0...Math.floor(susLength))
-							{
-								var newSusNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount, true);
-								newSusNote.strumTime = strumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
-								newSusNote.mustPress = gottaHitNote;
-
-								var strumLine:StrumLine = gottaHitNote ? UI.playerStrums : UI.opponentStrums;
-								strumLine.notes.add(newSusNote);
-		
-								newSusNote.parent = strumLine;
-								newSusNote.sustainParent = newNote;
-								newSusNote.loadSkin(arrowSkin);
-								susNote++;
-							}
-
-							// end piece
-							var newSusNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount, true);
-							newSusNote.strumTime = strumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
-							newSusNote.mustPress = gottaHitNote;
-
-							var strumLine:StrumLine = gottaHitNote ? UI.playerStrums : UI.opponentStrums;
-							strumLine.notes.add(newSusNote);
-
-							newSusNote.parent = strumLine;
-							newSusNote.sustainParent = newNote;
-							newSusNote.loadSkin(arrowSkin);
-
-							newSusNote.playAnim("tail");
-						}
-
-						newNote.strumTime = strumTime;
-						newNote.mustPress = gottaHitNote;
-						
-						var strumLine:StrumLine = gottaHitNote ? UI.playerStrums : UI.opponentStrums;
-						strumLine.notes.add(newNote);
-
-						newNote.parent = strumLine;
-						newNote.loadSkin(arrowSkin);
-
-						section.sectionNotes.remove(note);
-					}
-				}
+				var index:Int = unspawnNotes.indexOf(dunceNote);
+				unspawnNotes.splice(index, 1);
 			}
 		}
 	}
