@@ -1,6 +1,7 @@
 package states;
 
 import cpp.Int16;
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.addons.display.FlxGridOverlay;
@@ -21,11 +22,7 @@ class ChartEditor extends MusicBeatState
     public static var current:ChartEditor;
     public static var stateClass:Class<FlxState> = states.PlayState;
 
-    public var grids:Array<CharterGrid> = [
-        new CharterGrid(-1),
-        new CharterGrid(0),
-        new CharterGrid(1),
-    ];
+    public var grids:Array<CharterGrid> = [];
 
     public var SONG:Song;
 
@@ -37,7 +34,12 @@ class ChartEditor extends MusicBeatState
     public var loadedSong:Map<String, Sound> = [];
 
     function leaveMenu()
+    {
+        FlxG.sound.music.stop();
+        vocals.stop();
+        
         Main.switchState(Type.createInstance(stateClass, []));
+    }
 
     override function create()
     {
@@ -49,6 +51,12 @@ class ChartEditor extends MusicBeatState
         else
             SONG = SongLoader.getJSON("tutorial", "hard");
 
+        grids = [
+            new CharterGrid(-1),
+            new CharterGrid(0),
+            new CharterGrid(1),
+        ];
+
         loadedSong.set("inst", FNFAssets.returnAsset(SOUND, AssetPaths.songInst(SONG.song)));
 		hasVocals = FileSystem.exists(AssetPaths.songVoices(SONG.song));
 		if(hasVocals)
@@ -59,16 +67,18 @@ class ChartEditor extends MusicBeatState
 
         var bg:FlxSprite = new FlxSprite().loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image("menuBGDesat")));
         bg.scrollFactor.set();
-        bg.alpha = 0.4;
+        bg.alpha = 0.2;
         add(bg);
 
-        grids[0].setPosition(grids[1].grid.x, grids[1].grid.y - grids[1].grid.height);
-        add(grids[0]);
-        
-        grids[1].screenCenter(Y);
+        grids[1].screenCenter();
         add(grids[1]);
 
+        grids[0].setPosition(grids[1].grid.x, grids[1].grid.y - grids[1].grid.height);
+        grids[0].grid.alpha = 0.6;
+        add(grids[0]);
+
         grids[2].setPosition(grids[1].grid.x, grids[1].grid.y + grids[1].grid.height);
+        grids[2].grid.alpha = 0.6;
         add(grids[2]);
     }
 
