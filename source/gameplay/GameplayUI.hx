@@ -24,6 +24,9 @@ class GameplayUI extends FlxGroup
 
     // Scripts
     public var healthBarScript:HScript;
+    public var timeBarScript:HScript;
+
+    public var healthColors:Array<FlxColor> = [];
 
     public function new()
     {
@@ -60,7 +63,15 @@ class GameplayUI extends FlxGroup
         healthBarScript = new HScript("scripts/HealthBar");
         healthBarScript.setVariable("add", this.add);
         healthBarScript.setVariable("remove", this.remove);
+        healthBarScript.setVariable("ui", this);
         healthBarScript.start();
         PlayState.current.scripts.push(healthBarScript);
+
+        timeBarScript = new HScript("scripts/TimeBar");
+        timeBarScript.setVariable("add", this.add);
+        timeBarScript.setVariable("remove", this.remove);
+        timeBarScript.setVariable("ui", this);
+        timeBarScript.start();
+        PlayState.current.scripts.push(timeBarScript);
     }
 }

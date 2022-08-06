@@ -273,7 +273,7 @@ class Init extends MusicBeatState
     /**
         Initialize all settings.
     **/
-    function initializeSettings()
+    public static function initializeSettings()
     {
         for(setting in settings)
         {

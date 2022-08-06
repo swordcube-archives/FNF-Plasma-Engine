@@ -10,6 +10,7 @@ import flixel.math.FlxPoint;
 import flixel.system.FlxSound;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
 import gameplay.Boyfriend;
 import gameplay.Character;
@@ -321,6 +322,8 @@ class PlayState extends MusicBeatState
 			}
 		}
 
+		unspawnNotes.sort(sortByShit);
+
 		UI.cameras = [camHUD];
 		add(UI);
 
@@ -536,11 +539,14 @@ class PlayState extends MusicBeatState
 		Main.resetState();
 	}
 
+	function sortByShit(Obj1:Note, Obj2:Note):Int
+		return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime);
+
 	function spawnNotes()
 	{
 		if(unspawnNotes[0] != null)
 		{
-			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.position < 2500)
+			while (unspawnNotes.length > 0 && (unspawnNotes[0].strumTime - Conductor.position) < 2500)
 			{
 				var dunceNote:Note = unspawnNotes[0];
 				dunceNote.parent.notes.add(dunceNote);
@@ -560,7 +566,7 @@ class PlayState extends MusicBeatState
 			vocals.play();
 
 		Conductor.position = 0.0;
-		callOnHScripts("startSong");
+		callOnHScripts("startSong", [SONG.song]);
 	}
 
 	function focusCamera(onWho:String = "dad")

@@ -1,0 +1,68 @@
+import flixel.util.FlxStringUtil;
+import flixel.ui.FlxBarFillDirection;
+import flixel.ui.FlxBar;
+
+var image:FlxSprite;
+var bar:FlxBar;
+var text:FlxText;
+
+function create()
+{
+    image = new FlxSprite(0, Init.trueSettings.get("Downscroll") ? FlxG.height - 40 : 20);
+    image.loadGraphic(FNFAssets.getImage(AssetPaths.image("timeBar")));
+    image.screenCenter(FlxAxes.X);
+    image.alpha = 0;
+    add(image);
+}
+
+function countdownTick(counter)
+{
+    if(counter == 4)
+    {
+        bar = new FlxBar(image.x + 4, image.y + 4, FlxBarFillDirection.RIGHT_TO_LEFT, Std.int(image.width - 8), Std.int(image.height - 8), FlxG.sound.music,
+        'time', 0, FlxG.sound.music.length);
+        bar.createFilledBar(PlayState_.SONG.notes[0].mustHitSection ? ui.healthColors[1] : ui.healthColors[0], 0xFF000000);
+        bar.alpha = 0;
+        add(bar);
+
+        updateBar();
+
+        text = new FlxText(0, image.y, 0, "0:00 / 0:00");
+        text.setFormat(AssetPaths.font("vcr"), 18, FlxColor.WHITE, FlxTextAlign.CENTER);
+        text.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
+        text.screenCenter(FlxAxes.X);
+        text.alpha = 0;
+        add(text);
+
+        FlxTween.tween(image, { alpha: 1 }, 0.5, { ease: FlxEase.cubeInOut });
+        FlxTween.tween(bar, { alpha: 1 }, 0.5, { ease: FlxEase.cubeInOut });
+        FlxTween.tween(text, { alpha: 1 }, 0.5, { ease: FlxEase.cubeInOut });
+    }
+}
+
+var oldMustHit:Bool = false;
+
+function beatHit(curBeat)
+{
+    updateBar();
+}
+
+function updateBar()
+{
+    var SONG = PlayState_.SONG;
+    var currentStep = Std.int(FlxMath.bound(Conductor.currentStep / 16, 0, SONG.notes.length - 1));
+
+    if(bar != null && oldMustHit != SONG.notes[currentStep].mustHitSection)
+        bar.color = SONG.notes[currentStep].mustHitSection ? ui.healthColors[1] : ui.healthColors[0];
+
+    oldMustHit = SONG.notes[currentStep].mustHitSection;
+}
+
+function update(elapsed)
+{
+    if(text != null)
+    {
+        text.text = FlxStringUtil.formatTime(FlxG.sound.music.time/1000.0) + " / " + FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0);
+        text.screenCenter(FlxAxes.X);
+    }
+}

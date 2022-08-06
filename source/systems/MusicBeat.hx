@@ -16,6 +16,8 @@ class MusicBeatState extends FlxUIState
 
 	override function create()
 	{
+		Init.initializeSettings();
+		
 		if (!FlxTransitionableState.skipNextTransOut)
 			openSubState(new Transition(0.65, true));
 

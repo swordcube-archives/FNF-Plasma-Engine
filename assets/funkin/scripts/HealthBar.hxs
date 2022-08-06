@@ -12,14 +12,16 @@ var scoreDivider:String = " • ";
 
 function create()
 {
-    image = new FlxSprite(0, Init.trueSettings.get("Downscroll") ? 60 : FlxG.height - 160);
+    ui.healthColors = [0xFFff0000, 0xFF00ff00];
+
+    image = new FlxSprite(0, Init.trueSettings.get("Downscroll") ? 60 : FlxG.height - 80);
     image.loadGraphic(FNFAssets.getImage(AssetPaths.image("healthBar")));
     image.screenCenter(FlxAxes.X);
     add(image);
 
     bar = new FlxBar(image.x + 4, image.y + 4, FlxBarFillDirection.RIGHT_TO_LEFT, Std.int(image.width - 8), Std.int(image.height - 8), PlayState,
     'health', PlayState.minHealth, PlayState.maxHealth);
-    bar.createFilledBar(0xFFff0000, 0xFF00ff00);
+    bar.createFilledBar(ui.healthColors[0], ui.healthColors[1]);
     add(bar);
 
     iconP1 = new HealthIcon(PlayState.bf != null ? PlayState.bf.curCharacter : "face", true);
