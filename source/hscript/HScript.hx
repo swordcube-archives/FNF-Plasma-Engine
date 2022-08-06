@@ -96,6 +96,7 @@ class HScript
                 "stringify": haxe.Json.stringify
             });
             
+            setVariable("FNFSprite", systems.FNFSprite);
             setVariable("FlxSprite", flixel.FlxSprite);
             setVariable("FlxTimer", flixel.util.FlxTimer);
             setVariable("FlxSound", flixel.system.FlxSound);
@@ -163,6 +164,14 @@ class HScript
             setVariable("Highscore", systems.Highscore);
             setVariable("HealthIcon", ui.HealthIcon);
             setVariable("FNFCheckbox", ui.FNFCheckbox);
+
+            // Gameplay Characters
+            if(PlayState.current != null)
+            {
+                setVariable("dad", PlayState.current.dad);
+                setVariable("gf", PlayState.current.gf);
+                setVariable("bf", PlayState.current.bf);
+            }
 
             // Game states
             setVariable("TitleState", states.TitleState);

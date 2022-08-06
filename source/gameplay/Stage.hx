@@ -101,10 +101,10 @@ class Stage extends FlxGroup
 
 				// Run hscript and allow users to do Stage.removeDefaultStage();
 				// To make their own custom stage
-				if(FileSystem.exists(AssetPaths.hxs('stages/$curStage/script')))
+				if(FileSystem.exists(AssetPaths.hxs('stages/$curStage')))
 				{
-					trace("TRYING TO RUN SCRIPT! " + 'stages/$curStage/script.hxs');
-					script = new HScript(AssetPaths.hxs('stages/$curStage/script'));
+					trace("TRYING TO RUN SCRIPT! " + 'stages/$curStage.hxs');
+					script = new HScript('stages/$curStage');
 					script.setVariable("add", this.addSprite);
                     script.setVariable("remove", this.removeSprite);
                     script.setVariable("removeStage", this.removeDefaultStage);
@@ -114,7 +114,7 @@ class Stage extends FlxGroup
 					PlayState.current.scripts.push(script);
 				}
 				else
-					trace('SCRIPT DOESN\'T EXIST IN STAGE DIRECTORY! (stages/$curStage/script.hxs)');
+					trace('SCRIPT DOESN\'T EXIST IN STAGE DIRECTORY! (stages/$curStage.hxs)');
 		}
     }
 
@@ -132,12 +132,12 @@ class Stage extends FlxGroup
     {
         switch(layer.toLowerCase())
         {
-            case "back":
-                add(object);
             case "middle" | "gf":
                 inFrontOfGFSprites.add(object);
             case "front":
                 foregroundSprites.add(object);
+            default:
+                add(object);
         }
     }
 

@@ -164,6 +164,8 @@ class PlayState extends MusicBeatState
 		stage = new Stage(SONG.stage != null ? SONG.stage : "stage");
 		add(stage);
 
+		callOnHScripts("createAfterStage");
+
 		var gfVersion:String = "gf";
 
 		if(SONG.player3 != null)
@@ -197,6 +199,15 @@ class PlayState extends MusicBeatState
 		bf.flipX = !bf.flipX;
 		add(bf);
 		add(stage.foregroundSprites);
+
+		if(stage.script != null)
+		{
+			stage.script.setVariable("dad", dad);
+			stage.script.setVariable("gf", gf);
+			stage.script.setVariable("bf", bf);
+		}
+
+		callOnHScripts("createAfterChars");
 
 		var path:String = 'songs/${SONG.song.toLowerCase()}/script';
 		script = new HScript(path);
@@ -438,6 +449,24 @@ class PlayState extends MusicBeatState
 		}, 5);
 	}
 
+	function kindaEndSong()
+	{
+		FlxG.sound.music.stop();
+		vocals.stop();
+		FlxG.sound.music.time = 0;
+		FlxG.sound.playMusic(freakyMenu);
+		Main.switchState(getMenuToSwitchTo());
+	}
+
+	function endSong()
+	{
+		FlxG.sound.music.stop();
+		vocals.stop();
+		FlxG.sound.music.time = 0;
+		FlxG.sound.playMusic(freakyMenu);
+		Main.switchState(getMenuToSwitchTo());
+	}
+
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
@@ -463,11 +492,8 @@ class PlayState extends MusicBeatState
 			
 			endingSong = true;
 
-			FlxG.sound.music.stop();
-			vocals.stop();
-			FlxG.sound.music.time = 0;
-			FlxG.sound.playMusic(freakyMenu);
-			Main.switchState(getMenuToSwitchTo());
+			var func = UIControls.justPressed("BACK") ? kindaEndSong : endSong;
+			func();
 		}
 
 		Conductor.position += elapsed * 1000.0;
