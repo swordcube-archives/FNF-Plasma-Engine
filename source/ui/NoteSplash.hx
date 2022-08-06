@@ -3,7 +3,7 @@ package ui;
 import flixel.group.FlxGroup;
 import gameplay.StrumLine;
 import hscript.HScript;
-import shaders.ColorSwap;
+import shaders.ColorShader;
 import systems.FNFSprite;
 
 class NoteSplash extends FNFSprite
@@ -14,7 +14,7 @@ class NoteSplash extends FNFSprite
     public var keyCount:Int = 4;
     
     public var parent:StrumLine;
-    public var colorSwap:ColorSwap;
+    public var colorSwap:ColorShader;
 
     var script:HScript;
 
@@ -40,7 +40,7 @@ class NoteSplash extends FNFSprite
         this.noteData = noteData;
         setPosition(x, y);
 
-        colorSwap = new ColorSwap(255, 255, 255);
+        colorSwap = new ColorShader(255, 255, 255);
         shader = colorSwap;
         setColor();
 

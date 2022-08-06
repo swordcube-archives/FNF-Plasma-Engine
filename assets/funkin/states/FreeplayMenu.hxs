@@ -93,7 +93,7 @@ function create()
 
 function updateScore()
 {
-    intendedScore = Highscore.getScore(songs[curSelected].name, StringTools.trim(songs[curSelected].difficulties[curDifficulty]));
+    intendedScore = Highscore.getScore(songs[curSelected].name+"-"+StringTools.trim(songs[curSelected].difficulties[curDifficulty]));
 
     lerpScore = FlxMath.lerp(lerpScore, intendedScore, Main.deltaTime * 7);
 
@@ -167,10 +167,11 @@ function update()
     }
     else if(UIControls.justPressed("ACCEPT"))
     {
-        PlayState.SONG = SongLoader.getJSON(songs[curSelected].name, songs[curSelected].difficulties[curDifficulty]);
-        PlayState.currentDifficulty = songs[curSelected].difficulties[curDifficulty];
+        PlayState_.SONG = SongLoader.getJSON(songs[curSelected].name, StringTools.trim(songs[curSelected].difficulties[curDifficulty]));
+        PlayState_.currentDifficulty = StringTools.trim(songs[curSelected].difficulties[curDifficulty]);
+        PlayState_.availableDifficulties = songs[curSelected].difficulties;
         
-        Main.switchState(new PlayState());
+        Main.switchState(new PlayState_());
     }
 }
 

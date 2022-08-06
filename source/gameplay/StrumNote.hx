@@ -1,7 +1,7 @@
 package gameplay;
 
 import haxe.Json;
-import shaders.ColorSwap;
+import shaders.ColorShader;
 import sys.FileSystem;
 import systems.ExtraKeys;
 import systems.FNFSprite;
@@ -25,7 +25,7 @@ class StrumNote extends FNFSprite
     
     public var json:ArrowSkin;
 
-    public var colorSwap:ColorSwap;
+    public var colorSwap:ColorShader;
     
     public function new(x:Float, y:Float, noteData:Int = 0)
     {
@@ -33,7 +33,7 @@ class StrumNote extends FNFSprite
 
         this.noteData = noteData;
 
-        colorSwap = new ColorSwap(255, 255, 255);
+        colorSwap = new ColorShader(255, 255, 255);
 
         shader = colorSwap;
         colorSwap.enabled.value = [false];

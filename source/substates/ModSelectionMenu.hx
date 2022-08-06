@@ -6,7 +6,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxColor;
 import haxe.Json;
 import openfl.media.Sound;
-import shaders.ColorSwap;
+import shaders.ColorShader;
 import sys.FileSystem;
 import systems.MusicBeat;
 import systems.UIControls;

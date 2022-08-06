@@ -8,6 +8,7 @@ import flixel.util.FlxColor;
 import hscript.Interp;
 import hscript.Parser;
 import lime.app.Application;
+import openfl.display.BlendMode;
 import openfl.media.Sound;
 import states.PlayState;
 
@@ -101,13 +102,38 @@ class HScript
             setVariable("FlxTimer", flixel.util.FlxTimer);
             setVariable("FlxSound", flixel.system.FlxSound);
             setVariable("FlxMath", flixel.math.FlxMath);
+            setVariable("FlxTypeText", flixel.addons.text.FlxTypeText);
             setVariable("FlxText", flixel.text.FlxText);
             setVariable("FlxAxes", flixel.util.FlxAxes);
+            setVariable("Window", Application.current.window);
+            setVariable("Application", Application.current);
+            setVariable("Application_", Application);
+
+            setVariable("BitmapData", openfl.display.BitmapData);
+            setVariable("FlxGraphic", flixel.graphics.FlxGraphic);
             
             setVariable("Math", Math);
             setVariable("Std", Std);
 
             setVariable("Type", Type);
+
+            setVariable("BlendMode", {
+                "ADD": BlendMode.ADD,
+                "ALPHA": BlendMode.ALPHA,
+                "DARKEN": BlendMode.DARKEN,
+                "DIFFERENCE": BlendMode.DIFFERENCE,
+                "ERASE": BlendMode.ERASE,
+                "HARDLIGHT": BlendMode.HARDLIGHT,
+                "INVERT": BlendMode.INVERT,
+                "LAYER": BlendMode.LAYER,
+                "LIGHTEN": BlendMode.LIGHTEN,
+                "MULTIPLY": BlendMode.MULTIPLY,
+                "NORMAL": BlendMode.NORMAL,
+                "OVERLAY": BlendMode.OVERLAY,
+                "SCREEN": BlendMode.SCREEN,
+                "SHADER": BlendMode.SHADER,
+                "SUBTRACT": BlendMode.SUBTRACT
+            });
 
             setVariable("isDebugBuild", #if debug true #else false #end);
 
@@ -124,16 +150,34 @@ class HScript
             // Game classes
             setVariable("UIControls", systems.UIControls);
             
-            setVariable("ColorSwap", shaders.ColorSwap);
+            setVariable("ColorShader", shaders.ColorShader);
 
             setVariable("Conductor", systems.Conductor);
             setVariable("AssetPaths", AssetPaths);
 
             setVariable("Stage", gameplay.Stage);
-
             setVariable("Ranking", systems.Ranking);
+
+            setVariable("StrumLine", gameplay.StrumLine);
+            setVariable("StrumNote", gameplay.StrumNote);
+            setVariable("Note", gameplay.Note);
+
+            setVariable("Character", gameplay.Character);
+            setVariable("Boyfriend", gameplay.Boyfriend);
+
+            setVariable("JudgementUI", ui.JudgementUI);
+            setVariable("NoteSplash", ui.NoteSplash);
             
-            // i didn't know you could do this but uh
+            // i didn't know you could do this whole
+            /**
+                setVariable("Something" {
+                    "someVariableOrFunctionInThisBracketShit": function(balls:String) {
+                        return someActualFunctionThatHScriptHatesButCanBeDoneHere(balls);
+                    },
+                    "beans": FlxColor.BROWN
+                });
+            **/
+            // thing, but uh
             // https://github.com/YoshiCrafter29/hscript-improved/blob/master/script/RunScript.hx
             // line 74 is where i found this information
             setVariable("FNFAssets", {
@@ -179,7 +223,11 @@ class HScript
             setVariable("FreeplayMenu", states.FreeplayMenu);
             setVariable("OptionsMenu", states.OptionsMenu);
 
-            setVariable("PlayState", PlayState);
+            setVariable("PlayState", PlayState.current);
+            setVariable("PlayState_", PlayState);
+
+            setVariable("ModState", states.ModState);
+            setVariable("ModSubState", substates.ModSubState);
 
             // Game substates
             setVariable("KeybindMenu", substates.KeybindMenu);

@@ -75,7 +75,7 @@ class Stage extends FlxGroup
 		switch(curStage)
 		{
 			default:
-				PlayState.defaultCamZoom = 0.9;
+				PlayState.current.defaultCamZoom = 0.9;
 
 				bg = new FlxSprite(-600, -200);
 				bg.loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image('stages/stage/stageback')));

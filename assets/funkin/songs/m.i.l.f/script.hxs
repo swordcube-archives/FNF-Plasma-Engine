@@ -3,6 +3,6 @@ function beatHit(curBeat)
     if(curBeat >= 168 && curBeat < 200)
     {
         FlxG.camera.zoom = PlayState.defaultCamZoom + 0.015;
-        PlayState.current.camHUD.zoom = 1.05;
+        PlayState.camHUD.zoom = 1.05;
     }
 }

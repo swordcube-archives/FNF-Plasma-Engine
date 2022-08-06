@@ -23,6 +23,7 @@ import hscript.HScript;
 import openfl.media.Sound;
 import sys.FileSystem;
 import systems.Conductor;
+import systems.Highscore;
 import systems.MusicBeat;
 import systems.UIControls;
 
@@ -37,6 +38,7 @@ class PlayState extends MusicBeatState
 	public static var isStoryMode:Bool = false;
 	public static var SONG:Song = SongLoader.getJSON("m.i.l.f", "hard");
 	public static var currentDifficulty:String = "hard";
+	public static var availableDifficulties:Array<String> = ["easy", "normal", "hard"];
 
 	public var unspawnNotes:Array<Note> = [];
 
@@ -46,8 +48,8 @@ class PlayState extends MusicBeatState
 	public var bf:Boyfriend;
 
 	// Camera
-	public static var camZooming:Bool = true;
-	public static var defaultCamZoom:Float = 1.0;
+	public var camZooming:Bool = true;
+	public var defaultCamZoom:Float = 1.0;
 
 	public var camGame:FlxCamera;
 	public var camHUD:FlxCamera;
@@ -455,6 +457,8 @@ class PlayState extends MusicBeatState
 		vocals.stop();
 		FlxG.sound.music.time = 0;
 		FlxG.sound.playMusic(freakyMenu);
+		callOnHScripts("endSong", [SONG.song]);
+		
 		Main.switchState(getMenuToSwitchTo());
 	}
 
@@ -462,9 +466,22 @@ class PlayState extends MusicBeatState
 	{
 		FlxG.sound.music.stop();
 		vocals.stop();
+
 		FlxG.sound.music.time = 0;
 		FlxG.sound.playMusic(freakyMenu);
-		Main.switchState(getMenuToSwitchTo());
+		
+		Highscore.setScore(SONG.song+"-"+currentDifficulty, songScore);
+		callOnHScripts("endSong", [SONG.song]);
+		
+		if(isStoryMode)
+		{
+			if(!inCutscene)
+			{
+				trace("die, now.");
+			}
+		}
+		else
+			Main.switchState(getMenuToSwitchTo());
 	}
 
 	override function update(elapsed:Float)

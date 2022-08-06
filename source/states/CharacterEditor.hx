@@ -10,7 +10,7 @@ import gameplay.Boyfriend;
 import gameplay.Character;
 import gameplay.Stage;
 import haxe.macro.ComplexTypeTools;
-import shaders.ColorSwap;
+import shaders.ColorShader;
 import systems.MusicBeat;
 
 enum CharacterSpot {
@@ -30,7 +30,7 @@ class CharacterEditor extends MusicBeatState
 
     var coolCharacter:Character;
 
-    var dumbassesColorSwap:ColorSwap = new ColorSwap(255, 255, 255);
+    var dumbassesColorShader:ColorShader = new ColorShader(255, 255, 255);
     var dumbassGroup:FlxTypedSpriteGroup<Character>;
 
     var uiGroup:FlxGroup;
@@ -44,10 +44,10 @@ class CharacterEditor extends MusicBeatState
         stage = new Stage();
         add(stage);
 
-        dumbassesColorSwap.setColors(0, 0, 0);
+        dumbassesColorShader.setColors(0, 0, 0);
 
         dumbassGroup = new FlxTypedSpriteGroup<Character>();
-        dumbassGroup.shader = dumbassesColorSwap;
+        dumbassGroup.shader = dumbassesColorShader;
         dumbassGroup.alpha = 0.45;
         add(dumbassGroup);
 

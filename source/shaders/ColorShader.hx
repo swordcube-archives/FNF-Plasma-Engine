@@ -1,6 +1,6 @@
 package shaders;
 
-class ColorSwap extends FlxFixedShader {
+class ColorShader extends FlxFixedShader {
     @:glFragmentSource('#pragma header
 
         uniform float r;

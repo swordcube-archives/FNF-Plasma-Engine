@@ -2,7 +2,7 @@ package gameplay;
 
 import gameplay.StrumNote;
 import haxe.Json;
-import shaders.ColorSwap;
+import shaders.ColorShader;
 import states.PlayState;
 import sys.FileSystem;
 import systems.Conductor;
@@ -31,7 +31,7 @@ class Note extends FNFSprite
 
     public var isDownScroll:Bool = Init.trueSettings.get("Downscroll");
 
-    public var colorSwap:ColorSwap;
+    public var colorSwap:ColorShader;
 
     public var noteYOff:Int = 0;
     
@@ -42,7 +42,7 @@ class Note extends FNFSprite
         this.noteData = noteData;
         this.isSustain = isSustain;
 
-        colorSwap = new ColorSwap(255, 255, 255);
+        colorSwap = new ColorShader(255, 255, 255);
 
         shader = colorSwap;
         setColor();

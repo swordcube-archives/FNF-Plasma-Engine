@@ -2,11 +2,11 @@ function beatHit(curBeat)
 {
     if (curBeat % 8 == 7)
     {
-        if(PlayState.current.bf != null)
+        if(PlayState.bf != null)
         {
-            PlayState.current.bf.heyTimer = 0.6;
-            PlayState.current.bf.playAnim('hey', true);
-            PlayState.current.bf.specialAnim = true;
+            PlayState.bf.heyTimer = 0.6;
+            PlayState.bf.playAnim('hey', true);
+            PlayState.bf.specialAnim = true;
         }
     }
 }

@@ -17,16 +17,16 @@ function create()
     image.screenCenter(FlxAxes.X);
     add(image);
 
-    bar = new FlxBar(image.x + 4, image.y + 4, FlxBarFillDirection.RIGHT_TO_LEFT, Std.int(image.width - 8), Std.int(image.height - 8), PlayState.current,
-    'health', PlayState.current.minHealth, PlayState.current.maxHealth);
+    bar = new FlxBar(image.x + 4, image.y + 4, FlxBarFillDirection.RIGHT_TO_LEFT, Std.int(image.width - 8), Std.int(image.height - 8), PlayState,
+    'health', PlayState.minHealth, PlayState.maxHealth);
     bar.createFilledBar(0xFFff0000, 0xFF00ff00);
     add(bar);
 
-    iconP1 = new HealthIcon(PlayState.current.bf != null ? PlayState.current.bf.curCharacter : "face", true);
+    iconP1 = new HealthIcon(PlayState.bf != null ? PlayState.bf.curCharacter : "face", true);
     iconP1.y = bar.y - (iconP1.height / 2);
     add(iconP1);
 
-    iconP2 = new HealthIcon(PlayState.current.dad != null ? PlayState.current.dad.curCharacter : "face", false);
+    iconP2 = new HealthIcon(PlayState.dad != null ? PlayState.dad.curCharacter : "face", false);
     iconP2.y = bar.y - (iconP2.height / 2);
     add(iconP2);
 
@@ -54,10 +54,10 @@ function beatHit(curBeat)
 function updateScoreText()
 {
     scoreTxt.text = (
-        "Score: " + PlayState.current.songScore + scoreDivider +
-        "Accuracy: " + FlxMath.roundDecimal(PlayState.current.songAccuracy*100.0, 2) + "%" + scoreDivider +
-        "Misses: " + PlayState.current.songMisses + scoreDivider +
-        "Rank: " + Ranking.getRank(PlayState.current.songAccuracy*100.0)
+        "Score: " + PlayState.songScore + scoreDivider +
+        "Accuracy: " + FlxMath.roundDecimal(PlayState.songAccuracy*100.0, 2) + "%" + scoreDivider +
+        "Misses: " + PlayState.songMisses + scoreDivider +
+        "Rank: " + Ranking.getRank(PlayState.songAccuracy*100.0)
     );
     scoreTxt.screenCenter(FlxAxes.X);
 }
