@@ -101,8 +101,10 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
             var i:Int = 0;
             for(strum in members)
             {
+                var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
+
                 var key:FlxKey = Init.keyBinds[keyCount-1][i];
-                if(FlxG.keys.checkStatus(key, JUST_PRESSED))
+                if(FlxG.keys.checkStatus(key, JUST_PRESSED) && !botPlay)
                 {
                     strum.setColor();
                     strum.colorSwap.enabled.value = [true];
@@ -110,7 +112,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                     strum.alpha = 1;
                 }
 
-                if(FlxG.keys.checkStatus(key, JUST_RELEASED))
+                if((FlxG.keys.checkStatus(key, JUST_RELEASED) && !botPlay) || (botPlay && strum.animation.curAnim != null && strum.animation.curAnim.name == "confirm" && strum.animation.curAnim.finished))
                 {
                     strum.colorSwap.enabled.value = [false];
                     strum.resetColor();
@@ -148,7 +150,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                 
                 if(hasInput)
                 {
-                    if((Conductor.position - note.strumTime) > Conductor.safeZoneOffset)
+                    var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
+                    if(!botPlay && (Conductor.position - note.strumTime) > Conductor.safeZoneOffset)
                     {
                         PlayState.current.vocals.volume = 0;
                         PlayState.current.health -= PlayState.current.healthLoss;
@@ -176,7 +179,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                     }
 
                     // Make the note possible to hit if it's in the safe zone to be hit.
-                    if(note.canBeHit && ((Conductor.position - note.strumTime) > -Conductor.safeZoneOffset))
+                    var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
+                    if(note.canBeHit && ((Conductor.position - note.strumTime) >= (botPlay ? 0.0 : -Conductor.safeZoneOffset)))
                         possibleNotes.push(note);
                 }
                 else
@@ -209,10 +213,11 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                 justPressed = [];
                 pressed = [];
 
+                var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
                 for(i in 0...keyCount)
                 {
-                    justPressed.push(FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], JUST_PRESSED));
-                    pressed.push(FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], PRESSED));
+                    justPressed.push(botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], JUST_PRESSED));
+                    pressed.push(botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], PRESSED));
                 }
 
                 if(possibleNotes.length > 0)
@@ -223,19 +228,23 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                         // Check if we just pressed the keybind the note has and if we're allowed to hit the note
                         // If both are true, then we delete the note.
                         
-                        if(justPressed[note.noteData] && !note.isSustain)
+                        if((justPressed[note.noteData] || botPlay) && !note.isSustain)
                         {
                             PlayState.current.vocals.volume = 1;
                             justPressed[note.noteData] = false;
+                            members[note.noteData].alpha = 1;
+                            members[note.noteData].setColor();
+                            members[note.noteData].colorSwap.enabled.value = [true];
                             members[note.noteData].playAnim("confirm", true);
                             goodNoteHit(note);
                         }
 
-                        if(pressed[note.noteData] && note.isSustain && (Conductor.position - note.strumTime) >= 0.0)
+                        if((pressed[note.noteData] || botPlay) && note.isSustain && (Conductor.position - note.strumTime) >= 0.0)
                         {
                             PlayState.current.vocals.volume = 1;
                             PlayState.current.health += PlayState.current.healthGain;
                             boundHealth();
+                            members[note.noteData].alpha = 1;
                             members[note.noteData].setColor();
                             members[note.noteData].colorSwap.enabled.value = [true];
                             members[note.noteData].playAnim("confirm", true);
@@ -258,6 +267,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                 }
             }
 
+            var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
             notes.forEachAlive(function(note:Note) {
                 if(note.isDownScroll)
                 {
@@ -266,7 +276,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                         note.y -= note.height - stepHeight;
                         note.y += 10;
                         
-                        if ((PlayState.current.botPlay
+                        if ((botPlay
                             || !hasInput
                             || (hasInput && note.canBeHit && pressed[note.noteData]))
                             && note.y - note.offset.y * note.scale.y + note.height >= (this.y + Note.swagWidth / 2))
@@ -288,7 +298,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                     {
                         note.y += 10;
                         
-                        if ((PlayState.current.botPlay
+                        if ((botPlay
                             || !hasInput
                             || (hasInput && note.canBeHit && pressed[note.noteData]))
                             && note.y + note.offset.y * note.scale.y <= (this.y + Note.swagWidth / 2))
@@ -310,6 +320,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
     function goodNoteHit(note:Note)
     {
+        var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
+
         notes.remove(note, true);
         note.kill();
         note.destroy();
@@ -319,9 +331,11 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
         PlayState.current.totalNotes++;
 
         var judgement:String = Ranking.judgeNote(note.strumTime);
-        var judgeData:Judgement = Ranking.getInfo(judgement);
+        var judgeData:Judgement = Ranking.getInfo(botPlay ? "marvelous" : judgement);
         
-        PlayState.current.songScore += judgeData.score;
+        if(!botPlay)
+            PlayState.current.songScore += judgeData.score;
+        
         PlayState.current.totalHit += judgeData.mod;
         PlayState.current.health += judgeData.health;
         boundHealth();

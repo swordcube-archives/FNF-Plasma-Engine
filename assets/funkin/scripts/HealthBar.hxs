@@ -59,6 +59,9 @@ function updateScoreText()
         "Misses: " + PlayState.songMisses + scoreDivider +
         "Rank: " + Ranking.getRank(PlayState.songAccuracy*100.0)
     );
+    if(PlayState.botPlay)
+        scoreTxt.text += scoreDivider + "[BOTPLAY]";
+
     scoreTxt.screenCenter(FlxAxes.X);
 }
 

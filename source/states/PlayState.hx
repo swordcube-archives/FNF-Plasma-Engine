@@ -519,8 +519,11 @@ class PlayState extends MusicBeatState
 
 		spawnNotes();
 
-		FlxG.camera.zoom = FlxMath.lerp(FlxG.camera.zoom, defaultCamZoom, Main.deltaTime * 9);
-		camHUD.zoom = FlxMath.lerp(camHUD.zoom, 1, Main.deltaTime * 9);
+		if(camZooming)
+		{
+			FlxG.camera.zoom = FlxMath.lerp(FlxG.camera.zoom, defaultCamZoom, Main.deltaTime * 9);
+			camHUD.zoom = FlxMath.lerp(camHUD.zoom, 1, Main.deltaTime * 9);
+		}
 
 		callOnHScripts("updatePost", [elapsed]);
 	}
@@ -598,10 +601,10 @@ class PlayState extends MusicBeatState
 
 		callOnHScripts("beatHit", [Conductor.currentBeat]);
 
-		if(Conductor.currentBeat % 4 == 0)
+		if(camZooming && Conductor.currentBeat % 4 == 0)
 		{
-			FlxG.camera.zoom = defaultCamZoom + 0.015;
-			camHUD.zoom = 1.05;
+			FlxG.camera.zoom += 0.015;
+			camHUD.zoom += 0.04;
 		}
 
 		callOnHScripts("beatHitPost", [Conductor.currentBeat]);
