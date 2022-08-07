@@ -1,0 +1,6 @@
+function create() {
+    DialogueBox.dialogue = DialogueManager.loadFromJSON('dialogue');
+    
+    var dialogue:DialogueBox = new DialogueBox();
+    PlayState.add(dialogue);
+}

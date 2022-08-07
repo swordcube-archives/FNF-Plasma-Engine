@@ -1,0 +1,28 @@
+{
+    "dialogue": [
+        {
+            "char": "dad",
+            "emotion": "neutral",
+            "text": "rahehehehehe",
+            "speed": 0.05
+        },
+        {
+            "char": "bf",
+            "emotion": "neutral",
+            "text": "testing!!!!",
+            "speed": 0.05
+        },
+        {
+            "char": "gf",
+            "emotion": "excited",
+            "text": "sex!!!!",
+            "speed": 0.05
+        },
+        {
+            "char": "bf",
+            "emotion": "excited",
+            "text": "YEAH!!!!",
+            "speed": 0.05
+        }
+    ]
+}

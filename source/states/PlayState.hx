@@ -467,24 +467,24 @@ class PlayState extends MusicBeatState
 
 	function endSong()
 	{
-		FlxG.sound.music.stop();
-		vocals.stop();
-
-		FlxG.sound.music.time = 0;
-		FlxG.sound.playMusic(freakyMenu);
-		
-		Highscore.setScore(SONG.song+"-"+currentDifficulty, songScore);
-		callOnHScripts("endSong", [SONG.song]);
-		
-		if(isStoryMode)
+		if(!inCutscene)
 		{
-			if(!inCutscene)
+			FlxG.sound.music.stop();
+			vocals.stop();
+
+			FlxG.sound.music.time = 0;
+			FlxG.sound.playMusic(freakyMenu);
+			
+			Highscore.setScore(SONG.song+"-"+currentDifficulty, songScore);
+			callOnHScripts("endSong", [SONG.song]);
+			
+			if(isStoryMode)
 			{
 				trace("die, now.");
 			}
+			else
+				Main.switchState(getMenuToSwitchTo());
 		}
-		else
-			Main.switchState(getMenuToSwitchTo());
 	}
 
 	override function update(elapsed:Float)
@@ -516,9 +516,12 @@ class PlayState extends MusicBeatState
 			func();
 		}
 
-		Conductor.position += elapsed * 1000.0;
-		if(Conductor.position >= 0.0 && !startedSong)
-			startSong();
+		if(!inCutscene)
+		{
+			Conductor.position += elapsed * 1000.0;
+			if(Conductor.position >= 0.0 && !startedSong)
+				startSong();
+		}
 
 		spawnNotes();
 

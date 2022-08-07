@@ -209,6 +209,9 @@ class HScript
             setVariable("HealthIcon", ui.HealthIcon);
             setVariable("FNFCheckbox", ui.FNFCheckbox);
 
+            setVariable("DialogueBox", ui.DialogueBox);
+            setVariable("DialogueManager", ui.DialogueBox.DialogueManager);
+
             // Gameplay Characters
             if(PlayState.current != null)
             {
