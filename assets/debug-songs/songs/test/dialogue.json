@@ -1,28 +1,32 @@
 {
     "dialogue": [
         {
-            "char": "dad",
+            "char": "gf",
             "emotion": "neutral",
             "text": "rahehehehehe",
-            "speed": 0.05
+            "speed": 0.05,
+            "loudBox": false
         },
         {
             "char": "bf",
             "emotion": "neutral",
             "text": "testing!!!!",
-            "speed": 0.05
+            "speed": 0.05,
+            "loudBox": false
         },
         {
             "char": "gf",
             "emotion": "excited",
             "text": "sex!!!!",
-            "speed": 0.05
+            "speed": 0.05,
+            "loudBox": true
         },
         {
             "char": "bf",
             "emotion": "excited",
             "text": "YEAH!!!!",
-            "speed": 0.05
+            "speed": 0.05,
+            "loudBox": true
         }
     ]
 }

@@ -404,7 +404,7 @@ class PlayState extends MusicBeatState
 	public var countdownGo:FlxSprite = new FlxSprite();
 
 	var countdownTimer:Int = 0;
-	function startCountdown()
+	public function startCountdown()
 	{		
 		new FlxTimer().start(Conductor.crochet / 1000.0, function(tmr:FlxTimer) {
 			if(dad != null)

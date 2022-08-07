@@ -8,6 +8,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import haxe.Json;
 import hscript.HScript;
+import openfl.media.Sound;
 import states.PlayState;
 import systems.FNFSprite;
 
@@ -20,6 +21,7 @@ typedef DialoguePage = {
     var emotion:String;
     var text:String;
     var speed:Float;
+    var loudBox:Bool;
 };
 
 // To use dialogue make a script.hxs in your song's folder
@@ -40,10 +42,14 @@ class DialogueBox extends FlxGroup
     public var tempDialogue:Array<DialoguePage> = [];
 
     public var bg:FlxSprite;
-
     public var box:DialogueBoxSprite;
 
     public var skipped:Bool = false;
+
+    public var soundEffects:Map<String, Sound> = [
+        "next"   => FNFAssets.returnAsset(SOUND, AssetPaths.sound("clickText")),
+        "talk"   => FNFAssets.returnAsset(SOUND, AssetPaths.sound("pixelText")),
+    ];
 
     public function new(?skin:String = "default")
     {
@@ -64,7 +70,7 @@ class DialogueBox extends FlxGroup
         add(box);
 
         FlxTween.tween(bg, { alpha: 0.3 }, 0.5, { ease: FlxEase.cubeInOut, onComplete: function(twn:FlxTween) {
-            box.playAnim("normalOpen");
+            box.playBoxAnim("open", tempDialogue[0].loudBox, false);
             box.visible = true;
         }});
     }
@@ -73,20 +79,40 @@ class DialogueBox extends FlxGroup
     {
         super.update(elapsed);
 
+        if(!skipped && box != null && box.animation.curAnim.finished)
+            box.playBoxAnim("idle", tempDialogue[0].loudBox, false);
+
         if(FlxG.keys.justPressed.SHIFT && !skipped)
             skipDialogue();
         else if(FlxG.keys.justPressed.ANY && !skipped)
             nextPage();
+
+        if(skipped && box != null && box.animation.curAnim.curFrame <= 0) {
+            box.kill();
+            remove(box);
+            box.destroy();
+            box = null;
+        }
+
+        if(box == null && bg.alpha == 0 && skipped)
+        {
+            PlayState.current.inCutscene = false;
+            PlayState.current.startCountdown();
+            kill();
+            destroy();
+        }
     }
 
     function nextPage()
     {
         if(tempDialogue.length > 0)
         {
+            FlxG.sound.play(soundEffects["next"]);
             tempDialogue.shift();
         }
         else
         {
+            FlxG.sound.play(soundEffects["next"]);
             skipDialogue();
         }
     }
@@ -94,13 +120,13 @@ class DialogueBox extends FlxGroup
     function skipDialogue()
     {
         skipped = true;
+
+        box.playAnim("normalOpen");
+        box.animation.curAnim.curFrame = box.animation.curAnim.frames.length-1;
+        box.animation.curAnim.reverse();
+        box.visible = true;
             
-        FlxTween.tween(bg, { alpha: 0 }, 0.5, { ease: FlxEase.cubeInOut, onComplete: function(twn:FlxTween) {
-            box.playAnim("normalOpen");
-            box.animation.curAnim.curFrame = box.animation.curAnim.frames.length-1;
-            box.animation.curAnim.reverse();
-            box.visible = true;
-        }});
+        FlxTween.tween(bg, { alpha: 0 }, 0.5, { ease: FlxEase.cubeInOut });
     }
 }
 
