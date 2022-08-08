@@ -39,6 +39,7 @@ class Init extends MusicBeatState
         Add custom settings here!
 
         Use Init.trueSettings.get("Option Name") to use your option in other states and hx or hxs files.
+        You can use Settings['Option Name'] in hscript instead.
     **/
     public static var settings:Array<OptionData> = [
         // preferences tab

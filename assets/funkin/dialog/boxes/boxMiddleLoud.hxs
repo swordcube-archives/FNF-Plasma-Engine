@@ -1,0 +1,11 @@
+function create() {
+    box.frames = FNFAssets.getSparrow("boxes/default");
+    box.animation.addByPrefix('open', 'loud middle open', 24, false);
+    box.animation.addByPrefix('idle', 'loud middle idle', 24, true);
+    box.animation.play('open');
+    box.x = 50;
+    box.y = 375;
+    portrait.x += 400;
+    box.antialiasing = Settings("Antialiasing");
+    box.cameras = [PlayState.camHUD];
+}

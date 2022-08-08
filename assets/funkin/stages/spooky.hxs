@@ -17,7 +17,7 @@ function create()
     halloweenBG.frames = FNFAssets.getSparrow('stages/spooky/halloween_bg');
     halloweenBG.animation.addByPrefix('static', 'halloweem bg0', 24, true);
     halloweenBG.animation.addByPrefix('lightning', 'halloweem bg lightning strike', 24, false);
-    halloweenBG.antialiasing = Init.trueSettings.get("Antialiasing");
+    halloweenBG.antialiasing = Settings["Antialiasing"];
     halloweenBG.animation.play('static');
     add(halloweenBG);
 }

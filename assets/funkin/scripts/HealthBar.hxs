@@ -14,7 +14,7 @@ function create()
 {
     ui.healthColors = [0xFFff0000, 0xFF00ff00];
 
-    image = new FlxSprite(0, Init.trueSettings.get("Downscroll") ? 60 : FlxG.height - 80);
+    image = new FlxSprite(0, Settings["Downscroll"] ? 60 : FlxG.height - 80);
     image.loadGraphic(FNFAssets.getImage(AssetPaths.image("healthBar")));
     image.screenCenter(FlxAxes.X);
     add(image);

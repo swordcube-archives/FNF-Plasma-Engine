@@ -50,7 +50,7 @@ function create()
 
     logo = new FlxSprite(-150, -100);
     logo.frames = FNFAssets.getSparrow("title/fnfLogo");
-    logo.antialiasing = Init.trueSettings.get("Antialiasing");
+    logo.antialiasing = Settings["Antialiasing"];
     logo.animation.addByPrefix("bump", "bump", 24, false);
     logo.animation.play("bump", true);
     logo.alpha = 0.0000001;
@@ -58,7 +58,7 @@ function create()
 
     gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
     gfDance.frames = FNFAssets.getSparrow("title/gfTitle");
-    gfDance.antialiasing = Init.trueSettings.get("Antialiasing");
+    gfDance.antialiasing = Settings["Antialiasing"];
     gfDance.animation.addByPrefix("danceLeft", "danceLeft0", 24, false);
     gfDance.animation.addByPrefix("danceRight", "danceRight0", 24, false);
     gfDance.animation.play("danceRight", true);
@@ -67,7 +67,7 @@ function create()
 
     titleText = new FlxSprite(100, FlxG.height * 0.8);
     titleText.frames = FNFAssets.getSparrow("title/titleEnter");
-    titleText.antialiasing = Init.trueSettings.get("Antialiasing");
+    titleText.antialiasing = Settings["Antialiasing"];
     titleText.animation.addByPrefix("idle", "Press Enter to Begin", 24, true);
     titleText.animation.addByPrefix("confirm", "ENTER PRESSED", 24, true);
     titleText.animation.play("idle", true);
@@ -76,7 +76,7 @@ function create()
 
     ngSpr = new FlxSprite(0, FlxG.height * 0.52);
     ngSpr.loadGraphic(FNFAssets.getImage(AssetPaths.image("title/newgrounds")));
-    ngSpr.antialiasing = Init.trueSettings.get("Antialiasing");
+    ngSpr.antialiasing = Settings["Antialiasing"];
     ngSpr.alpha = 0.0000001;
     ngSpr.scale.set(0.8, 0.8);
     ngSpr.updateHitbox();
@@ -169,7 +169,7 @@ function beatHit(currentBeat:Int)
     switch(currentBeat)
     {
         case 1:
-            createCoolText(["swordcube", "Leather128", "Stilic"]);
+            createCoolText(["swordcube", "Leather128", "Stilic", "Raf"]);
         case 3:
             addMoreText('present');
         case 4:

@@ -27,7 +27,7 @@ function create()
 
     bg = new FlxSprite();
     bg.loadGraphic(FNFAssets.getImage(AssetPaths.image('menuBGDesat')));
-    bg.antialiasing = Init.trueSettings.get("Antialiasing");
+    bg.antialiasing = Settings["Antialiasing"];
     add(bg);
 
     songs = Json.parse(FNFAssets.getText(AssetPaths.json("freeplaySongs"))).songs;
