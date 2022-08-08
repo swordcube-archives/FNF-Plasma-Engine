@@ -199,6 +199,7 @@ class HScript
             });
             setVariable("Main", Main);
             setVariable("Init", Init);
+            setVariable("Settings", Init.trueSettings);
             setVariable("Transition", Transition);
 
             setVariable("Alphabet", ui.Alphabet);
@@ -209,8 +210,7 @@ class HScript
             setVariable("HealthIcon", ui.HealthIcon);
             setVariable("FNFCheckbox", ui.FNFCheckbox);
 
-            setVariable("DialogueBox", ui.DialogueBox);
-            setVariable("DialogueManager", ui.DialogueBox.DialogueManager);
+            setVariable("Dialogue", ui.Dialogue);
 
             // Gameplay Characters
             if(PlayState.current != null)

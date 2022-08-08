@@ -1,0 +1,12 @@
+function create() {
+    box.frames = FNFAssets.getSparrow("boxes/default");
+    box.animation.addByPrefix('open', 'normal open', 24, false);
+    box.animation.addByPrefix('idle', 'normal idle', 24, true);
+    box.animation.play('open');
+    box.x = 50;
+    box.y = 375;
+    //portrait.x += 800;
+    box.screenCenter();
+    box.antialiasing = Settings("Antialiasing");
+    box.cameras = [PlayState.camOther];
+}

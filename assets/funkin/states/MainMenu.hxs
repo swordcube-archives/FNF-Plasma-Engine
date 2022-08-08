@@ -28,7 +28,7 @@ function create()
     state.persistentUpdate = true;
     state.persistentDraw = true;
 
-    if(!Init.trueSettings.get("Developer Mode"))
+    if(!Settings["Developer Mode"])
         menuOptions.remove("toolbox");
 
     scrollMenu = FNFAssets.getSound(AssetPaths.sound('menus/scrollMenu'));
@@ -41,7 +41,7 @@ function create()
     bg.updateHitbox();
     bg.screenCenter();
     bg.scrollFactor.set(0.17, 0.17);
-    bg.antialiasing = Init.trueSettings.get("Antialiasing");
+    bg.antialiasing = Settings["Antialiasing"];
     add(bg);
 
     magenta = new FlxSprite();
@@ -50,7 +50,7 @@ function create()
     magenta.updateHitbox();
     magenta.screenCenter();
     magenta.scrollFactor.set(0.17, 0.17);
-    magenta.antialiasing = Init.trueSettings.get("Antialiasing");
+    magenta.antialiasing = Settings["Antialiasing"];
     magenta.color = 0xFFfd719b;
     magenta.visible = false;
     add(magenta);
@@ -65,7 +65,7 @@ function create()
         button.animation.addByPrefix("idle", "basic", 24, true);
         button.animation.addByPrefix("selected", "white", 24, true);
         button.animation.play("idle");
-        button.antialiasing = Init.trueSettings.get("Antialiasing");
+        button.antialiasing = Settings["Antialiasing"];
         button.screenCenter(FlxAxes.X);
         button.scrollFactor.set();
         button.ID = i;
@@ -129,7 +129,7 @@ function update()
             FlxG.sound.play(confirmMenu);
 
             // Toggle flashing for magenta bg sprite
-            if(!Init.trueSettings.get("Photosensitive Mode")) FlxFlicker.flicker(magenta, 1.1, 0.15, false);
+            if(!Settings["Photosensitive Mode"]) FlxFlicker.flicker(magenta, 1.1, 0.15, false);
 
             for(spr in menuButtons)
             {
@@ -145,7 +145,7 @@ function update()
                 else
                 {
                     // Toggle flashing for the currently selected button
-                    if(!Init.trueSettings.get("Photosensitive Mode"))
+                    if(!Settings["Photosensitive Mode"])
                     {
                         FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
                         {

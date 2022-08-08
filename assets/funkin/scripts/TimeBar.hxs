@@ -8,7 +8,7 @@ var text:FlxText;
 
 function create()
 {
-    image = new FlxSprite(0, Init.trueSettings.get("Downscroll") ? FlxG.height - 40 : 20);
+    image = new FlxSprite(0, Settings["Downscroll"] ? FlxG.height - 40 : 20);
     image.loadGraphic(FNFAssets.getImage(AssetPaths.image("timeBar")));
     image.screenCenter(FlxAxes.X);
     image.alpha = 0;

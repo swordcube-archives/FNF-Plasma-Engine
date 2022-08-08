@@ -27,6 +27,7 @@ import systems.Conductor;
 import systems.Highscore;
 import systems.MusicBeat;
 import systems.UIControls;
+import ui.Dialogue;
 
 using StringTools;
 
