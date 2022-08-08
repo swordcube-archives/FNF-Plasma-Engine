@@ -223,6 +223,8 @@ class HScript
             // Game states
             setVariable("TitleState", states.TitleState);
             setVariable("MainMenu", states.MainMenu);
+
+            setVariable("StoryMenu", states.StoryMenu);
             setVariable("FreeplayMenu", states.FreeplayMenu);
             setVariable("OptionsMenu", states.OptionsMenu);
 

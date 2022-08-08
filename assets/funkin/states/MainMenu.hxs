@@ -169,8 +169,7 @@ function switchToOtherStateShit()
     switch(menuOptions[curSelected])
     {
         case 'story-mode':
-            trace("story mode = unimplemented");
-            //Main.switchState(new states.StoryMenuMenu());
+            Main.switchState(new states.StoryMenu());
         case 'freeplay':
             Main.switchState(new states.FreeplayMenu());
         case 'options':

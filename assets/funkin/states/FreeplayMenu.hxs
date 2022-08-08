@@ -1,5 +1,6 @@
 import sys.FileSystem;
 
+var scrollMenu:Sound;
 var cancelMenu:Sound;
 
 var bg:FlxSprite;
