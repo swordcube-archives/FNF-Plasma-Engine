@@ -88,6 +88,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
     {
         super.update(elapsed);
 
+        var inCutscene:Bool = PlayState.current != null ? PlayState.current.inCutscene : false;
+
         grpNoteSplashes.forEachDead(function(cock:NoteSplash) {
             if(grpNoteSplashes.length > 1)
             {
@@ -104,7 +106,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                 var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
 
                 var key:FlxKey = Init.keyBinds[keyCount-1][i];
-                if(FlxG.keys.checkStatus(key, JUST_PRESSED) && !botPlay)
+                if(FlxG.keys.checkStatus(key, JUST_PRESSED) && !inCutscene && !botPlay)
                 {
                     strum.setColor();
                     strum.colorSwap.enabled.value = [true];
@@ -112,7 +114,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                     strum.alpha = 1;
                 }
 
-                if((FlxG.keys.checkStatus(key, JUST_RELEASED) && !botPlay) || (botPlay && strum.animation.curAnim != null && strum.animation.curAnim.name == "confirm" && strum.animation.curAnim.finished))
+                if((FlxG.keys.checkStatus(key, JUST_RELEASED) && !inCutscene && !botPlay) || (botPlay && strum.animation.curAnim != null && strum.animation.curAnim.name == "confirm" && strum.animation.curAnim.finished))
                 {
                     strum.colorSwap.enabled.value = [false];
                     strum.resetColor();
@@ -216,8 +218,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                 var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
                 for(i in 0...keyCount)
                 {
-                    justPressed.push(botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], JUST_PRESSED));
-                    pressed.push(botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], PRESSED));
+                    justPressed.push(inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], JUST_PRESSED)) : false);
+                    pressed.push(inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], PRESSED)) : false);
                 }
 
                 if(possibleNotes.length > 0)
