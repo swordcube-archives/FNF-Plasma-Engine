@@ -48,6 +48,7 @@ function create()
     pageContents = [
         "Preferences"     => getOptionsFromPage("Preferences"),
         "Appearance"      => getOptionsFromPage("Appearance"),
+        "Developers"      => getOptionsFromPage("Developers"),
         "Controls"        => getOptionsFromPage("Controls"),
     ];
 
