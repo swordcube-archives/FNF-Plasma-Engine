@@ -218,8 +218,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                 var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
                 for(i in 0...keyCount)
                 {
-                    justPressed.push(inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], JUST_PRESSED)) : false);
-                    pressed.push(inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], PRESSED)) : false);
+                    justPressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], JUST_PRESSED)) : false);
+                    pressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], PRESSED)) : false);
                 }
 
                 if(possibleNotes.length > 0)
