@@ -5,8 +5,8 @@ function create() {
     box.animation.play('open');
     box.x = 50;
     box.y = 375;
-    //portrait.x += 800;
-    box.screenCenter();
+    portrait.offset.set(-800, 0);
     box.antialiasing = Settings("Antialiasing");
     box.cameras = [PlayState.camOther];
+    add(box);
 }

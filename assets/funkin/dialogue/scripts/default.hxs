@@ -1,0 +1,107 @@
+var json = {};
+
+var curLine = {};
+var curLineIndex:Int = 0;
+
+var bg:FlxSprite;
+var box:FlxSprite;
+var portrait:FlxSprite;
+var text:FlxTypeText;
+    
+var bgScript:HScript;
+var boxScript:HScript;
+var portraitScript:HScript;
+var textScript:HScript;
+
+var dialogue:FlxGroup;
+
+function create() {
+    PlayState.inCutscene = true;
+    dialogue = new FlxGroup();
+    PlayState.add(dialogue);
+    json = Json.parse(FNFAssets.getText(AssetPaths.json('songs/'+PlayState_.SONG.song+'/dialogue')));
+    runDialogue(0);
+    FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music(json.info.music)), json.info.musicVolume);
+}
+function update(elapsed) {
+    if (FlxG.keys.justPressed.ENTER) {
+        if (curLineIndex < json.lines.length-1) {
+            curLineIndex ++;
+            clearDialogue();
+            runDialogue(curLineIndex);
+        } else {
+            clearDialogue();
+            PlayState.inCutscene = false;
+            PlayState.startCountdown();
+        }
+    }
+}
+
+function runDialogue(idx) {
+    bg = new FlxSprite().makeGraphic(1,1,0);
+    portrait = new FlxSprite();
+    box = new FlxSprite();
+    text = new FlxTypeText(0,0,0,'');
+    if (json.lines[idx].bg != null) {
+        loadBG(json.lines[idx].bg);
+    } else {
+        dialogue.add(bg);
+    }
+    loadPortrait(json.lines[idx].char, json.lines[idx].emotion);
+    loadBox(json.lines[idx].box);
+    loadText(json.lines[idx].font);
+    type(json.lines[idx].text, json.lines[idx].speed);
+    var textTime = new FlxTimer().start(json.lines[idx].speed, function(){callTheTalk();}, json.lines[idx].text.length);
+}
+function clearDialogue() {
+    dialogue.remove(bg);
+    dialogue.remove(box);
+    dialogue.remove(portrait);
+    dialogue.remove(text);
+}
+
+function loadBG(script) {
+    bgScript = new HScript('dialogue/bgs/'+script);
+    bgScript.setVariable("bg", bg);
+    bgScript.setVariable("add", dialogue.add);
+    bgScript.setVariable("insert", dialogue.insert);
+    bgScript.start();
+}
+function loadPortrait(script, emotion) {
+    portraitScript = new HScript('dialogue/portraits/'+script);
+    portraitScript.setVariable("bg", bg);
+    portraitScript.setVariable("box", box);
+    portraitScript.setVariable("portrait", portrait);
+    portraitScript.setVariable("add", dialogue.add);
+    portraitScript.setVariable("insert", dialogue.insert);
+    portraitScript.setVariable("emotion", emotion);
+    portraitScript.start();
+}
+function loadBox(script) {
+    boxScript = new HScript('dialogue/boxes/'+script);
+    boxScript.setVariable("bg", bg);
+    boxScript.setVariable("box", box);
+    boxScript.setVariable("portrait", portrait);
+    boxScript.setVariable("add", dialogue.add);
+    boxScript.setVariable("insert", dialogue.insert);
+    boxScript.start();
+}
+function loadText(script) {
+    textScript = new HScript('dialogue/textStyles/'+script);
+    textScript.setVariable("bg", bg);
+    textScript.setVariable("box", box);
+    textScript.setVariable("portrait", portrait);
+    textScript.setVariable("text", text);
+    textScript.setVariable("add", dialogue.add);
+    textScript.setVariable("insert", dialogue.insert);
+    textScript.start();
+}
+
+function type(text, speed) {
+    textScript.callFunction('type', [text, speed]);
+}
+function callTheTalk() {
+    boxScript.callFunction('talk');
+    portraitScript.callFunction('talk');
+    textScript.callFunction('talk');
+}

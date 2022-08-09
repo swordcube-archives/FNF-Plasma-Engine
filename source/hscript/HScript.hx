@@ -16,6 +16,7 @@ using StringTools;
 
 class HScript
 {
+	public var _path:String;
 	public var script:String;
 
 	public var parser:Parser = new Parser();
@@ -30,6 +31,7 @@ class HScript
     {
         try
         {
+            _path = path;
             script = FNFAssets.returnAsset(TEXT, AssetPaths.hxs(path));
 
             parser = new Parser();
@@ -138,13 +140,14 @@ class HScript
             setVariable("isDebugBuild", #if debug true #else false #end);
 
             // Game functions
-            setVariable("loadScript", function(scriptPath:String)
+            setVariable("loadScript", function(scriptPath:String, ?args:Array<Any>)
             {
-                var new_script = new HScript(FNFAssets.returnAsset(TEXT, AssetPaths.hxs(scriptPath)));
-                new_script.start();
-                new_script.callFunction("createPost");
+                var new_script = new HScript(scriptPath);
+                new_script.callFunction("create", args);
+                new_script.callFunction("createPost", args);
 
                 otherScripts.push(new_script);
+                return new_script;
             });
 
             // Game classes
@@ -157,6 +160,8 @@ class HScript
 
             setVariable("Stage", gameplay.Stage);
             setVariable("Ranking", systems.Ranking);
+            
+            setVariable("HScript", HScript);
 
             setVariable("StrumLine", gameplay.StrumLine);
             setVariable("StrumNote", gameplay.StrumNote);
@@ -209,8 +214,6 @@ class HScript
             setVariable("Highscore", systems.Highscore);
             setVariable("HealthIcon", ui.HealthIcon);
             setVariable("FNFCheckbox", ui.FNFCheckbox);
-
-            setVariable("Dialogue", ui.Dialogue);
 
             // Gameplay Characters
             if(PlayState.current != null)
@@ -318,7 +321,7 @@ class HScript
 			catch (e)
 			{
 				log(e.details(), true);
-				log("ERROR Caused in " + func + " with " + Std.string(args) + " args", true);
+				log(_path + ".hxs: ERROR Caused in " + func + " with " + Std.string(args) + " args", true);
 			}
 		}
 

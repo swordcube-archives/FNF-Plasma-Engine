@@ -1,5 +1,8 @@
+var dialogue;
 function create() {
-    PlayState.inCutscene = true;
-    var dialogue:Dialogue = new Dialogue('dialogue');
-    PlayState.add(dialogue);
+    dialogue = new HScript('dialogue/scripts/default');
+    dialogue.start();
+}
+function update(elapsed) {
+    dialogue.update(elapsed);
 }

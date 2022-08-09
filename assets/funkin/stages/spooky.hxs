@@ -1,6 +1,6 @@
 var halloweenBG:FNFSprite;
-var thunder1:FNFSprite;
-var thunder2:FNFSprite;
+var thunder1:Sound;
+var thunder2:Sound;
 
 var lightningStrikeBeat:Int = 0;
 var lightningOffset:Int = 8;

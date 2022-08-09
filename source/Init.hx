@@ -281,7 +281,6 @@ class Init extends MusicBeatState
             if(Reflect.getProperty(FlxG.save.data, setting.name) != null)
             {
                 trueSettings.set(setting.name, Reflect.getProperty(FlxG.save.data, setting.name));
-                trace('INITIALIZED ${setting.name}!');
             }
             else
             {
@@ -289,7 +288,6 @@ class Init extends MusicBeatState
                 FlxG.save.flush();
 
                 trueSettings.set(setting.name, setting.defaultValue);
-                trace('${setting.name} has been added to save data!');
             }
         }
         
@@ -298,7 +296,6 @@ class Init extends MusicBeatState
             if(Reflect.getProperty(FlxG.save.data, "arrowColors"+(i+1)+"k") != null)
             {
                 arrowColors.set(i, Reflect.getProperty(FlxG.save.data, "arrowColors"+(i+1)+"k"));
-                trace('INITIALIZED ARROW COLORS FOR ${i+1}k!');
             }
             else
             {

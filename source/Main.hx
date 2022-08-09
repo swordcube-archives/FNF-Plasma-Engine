@@ -124,13 +124,13 @@ class Main extends Sprite
 		switch(type.toLowerCase())
 		{
 			case "error":
-				trace('[   ERROR   ] [ ${FlxStringUtil.formatTime(getTime())} ] '+text);
+				trace('[   ERROR   ] '+text);
 
 			case "warn" | "warning":
-				trace('[  WARNING  ] [ ${FlxStringUtil.formatTime(getTime())} ] '+text);
+				trace('[  WARNING  ] '+text);
 				
 			case "hxs" | "hscript":
-				trace('[  HSCRIPT  ] [ ${FlxStringUtil.formatTime(getTime())} ] '+text);
+				trace('[  HSCRIPT  ] '+text);
 		}
 	}
 

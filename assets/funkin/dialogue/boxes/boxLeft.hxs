@@ -7,5 +7,6 @@ function create() {
     box.y = 375;
     box.flipX = true;
     box.antialiasing = Settings("Antialiasing");
-    box.cameras = [PlayState.camHUD];
+    box.cameras = [PlayState.camOther];
+    add(box);
 }
