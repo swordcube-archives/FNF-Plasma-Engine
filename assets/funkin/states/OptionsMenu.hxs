@@ -215,7 +215,7 @@ function refreshPage()
                 alphabet.x += 300;
                 grpAlphabet.add(alphabet);
 
-                var checkbox:FNFCheckbox = new FNFCheckbox(0, 0, Init.trueSettings.get(option.name));
+                var checkbox:FNFCheckbox = new FNFCheckbox(0, 0, Settings[option.name]);
                 checkbox.x = ((FlxG.width * 0.9) - checkbox.width);
                 checkbox.sprTracker = alphabet;
                 grpCheckbox.add(checkbox);
@@ -247,7 +247,7 @@ function refreshPage()
                 alphabet.x += ((FlxG.width * 0.915) - alphabet.width);
                 grpAlphabet2.add(alphabet);
 
-                var alphabet:Alphabet = new Alphabet(0, 120 + (200 * i), Init.trueSettings.get(option.name));
+                var alphabet:Alphabet = new Alphabet(0, 120 + (200 * i), Settings[option.name]);
                 alphabet.ID = i;
                 alphabet.screenCenter(FlxAxes.X);
                 alphabet.x += (FlxG.width * 0.23);
@@ -267,14 +267,14 @@ function changeValue(change:Float)
     switch(Std.string(pageContents.get(pages[curPage])[curSelected].type))
     {
         case "Checkbox":
-            Init.trueSettings.set(pageContents.get(pages[curPage])[curSelected].name, !Init.trueSettings.get(pageContents.get(pages[curPage])[curSelected].name));
+            Settings[pageContents.get(pages[curPage])[curSelected].name] = !Settings[pageContents.get(pages[curPage])[curSelected].name];
 
-            grpCheckbox.members[curSelected].status = Init.trueSettings.get(pageContents.get(pages[curPage])[curSelected].name);
+            grpCheckbox.members[curSelected].status = Settings[pageContents.get(pages[curPage])[curSelected].name];
             grpCheckbox.members[curSelected].refresh();
         case "Number":
             if((UIControls.justPressed("LEFT") || UIControls.justPressed("RIGHT")) || holdTimer > 0.5)
             {
-                var dumb:Float = Init.trueSettings.get(pageContents.get(pages[curPage])[curSelected].name) + (pageContents.get(pages[curPage])[curSelected].valueMult * change);
+                var dumb:Float = Settings[pageContents.get(pages[curPage])[curSelected].name] + (pageContents.get(pages[curPage])[curSelected].valueMult * change);
                 dumb = FlxMath.roundDecimal(dumb, pageContents.get(pages[curPage])[curSelected].decimals);
                 if(dumb < pageContents.get(pages[curPage])[curSelected].values[0])
                     dumb = pageContents.get(pages[curPage])[curSelected].values[0];
@@ -282,7 +282,7 @@ function changeValue(change:Float)
                 if(dumb > pageContents.get(pages[curPage])[curSelected].values[1])
                     dumb = pageContents.get(pages[curPage])[curSelected].values[1];
 
-                Init.trueSettings.set(pageContents.get(pages[curPage])[curSelected].name, dumb);
+                Settings[pageContents.get(pages[curPage])[curSelected].name] = dumb;
 
                 for(yourCock in 0...grpAlphabet3.members.length)
                 {
@@ -298,7 +298,7 @@ function changeValue(change:Float)
         case "Selector":
             if(UIControls.justPressed("LEFT") || UIControls.justPressed("RIGHT"))
             {
-                var index:Int = pageContents.get(pages[curPage])[curSelected].values.indexOf(Init.trueSettings.get(pageContents.get(pages[curPage])[curSelected].name));
+                var index:Int = pageContents.get(pages[curPage])[curSelected].values.indexOf(Settings[pageContents.get(pages[curPage])[curSelected].name]);
                 index += UIControls.justPressed("LEFT") ? -1 : 1;
                 
                 if(index < 0)
@@ -308,7 +308,7 @@ function changeValue(change:Float)
                     index = 0;
 
                 var dumb:String = pageContents.get(pages[curPage])[curSelected].values[index];
-                Init.trueSettings.set(pageContents.get(pages[curPage])[curSelected].name, dumb);
+                Settings[pageContents.get(pages[curPage])[curSelected].name] = dumb;
 
                 for(yourCock in 0...grpAlphabet3.members.length)
                 {
