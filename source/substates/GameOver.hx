@@ -1,38 +1,47 @@
-package states;
+package substates;
 
-import flixel.FlxG;
 import hscript.HScript;
-import substates.KeybindMenu;
 import systems.Conductor;
 import systems.MusicBeat;
 
-// Go to "assets/funkin/states/OptionsMenu.hxs" to edit the options menu.
+// Go to "assets/funkin/substates/GameOver.hxs" to edit the game over.
 // Can be overridden by currently loaded pack btw.
 
-class OptionsMenu extends MusicBeatState
+class GameOver extends MusicBeatSubState
 {
     var script:HScript;
+    var character:String = "bf-dead";
+
+    var x:Float = 0;
+    var y:Float = 0;
+
+    public function new(x:Float, y:Float, character:String)
+    {
+        super();
+
+        this.x = x;
+        this.y = y;
+        this.character = character;
+
+        script = new HScript("substates/GameOver");
+
+        script.setVariable("add", this.add);
+        script.setVariable("remove", this.remove);
+        script.setVariable("substate", this);
+    }
 
     override public function create()
     {
         super.create();
 
-        script = new HScript("states/OptionsMenu");
-
-        script.setVariable("add", this.add);
-        script.setVariable("remove", this.remove);
-        script.setVariable("state", this);
-        
-        script.start();
-        script.callFunction("createPost");
+        script.start(false);
+        script.callFunction("create", [x, y, character]);
+        script.callFunction("createPost", [x, y, character]);
     }
 
     override public function update(elapsed:Float)
     {
         super.update(elapsed);
-
-        if(FlxG.keys.justPressed.D)
-            openSubState(new KeybindMenu(4, true));
 
         script.update(elapsed);
         script.callFunction("updatePost", [elapsed]);

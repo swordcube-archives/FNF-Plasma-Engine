@@ -15,7 +15,11 @@ var textScript:HScript;
 
 var dialogue:FlxGroup;
 
+var proceedSound:Sound;
+
 function create() {
+    proceedSound = FNFAssets.getSound(AssetPaths.sound("dialogue/pixelProceed"));
+
     PlayState.inCutscene = true;
     dialogue = new FlxGroup();
     PlayState.add(dialogue);
@@ -24,16 +28,43 @@ function create() {
     FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music(json.info.music)), json.info.musicVolume);
 }
 function update(elapsed) {
-    if (FlxG.keys.justPressed.ENTER) {
+    if(FlxG.keys.justPressed.ENTER) {
         if (curLineIndex < json.lines.length-1) {
             curLineIndex ++;
             clearDialogue();
             runDialogue(curLineIndex);
+            FlxG.sound.play(proceedSound);
         } else {
-            clearDialogue();
-            PlayState.inCutscene = false;
-            PlayState.startCountdown();
+            endDialogue();
         }
+    } else if(FlxG.keys.justPressed.SHIFT)
+        endDialogue();
+
+    if(PlayState.inCutscene && ended && box != null && box.animation.curAnim != null && box.animation.curAnim.curFrame == 0)
+    {
+        dialogue.remove(box);
+        PlayState.startCountdown();
+        PlayState.inCutscene = false;
+    }
+}
+
+var ended:Bool = false;
+
+function endDialogue() {
+    if(!ended)
+    {
+        FlxG.sound.music.fadeOut(0.5, 0);
+        ended = true;
+
+        box.animation.play("open");
+        box.animation.curAnim.curFrame = box.animation.curAnim.frames.length - 1;
+        box.animation.curAnim.reverse();
+
+        dialogue.remove(portrait);
+        dialogue.remove(text);
+        FlxTween.tween(bg, { alpha: 0 }, 0.5, { ease: FlxEase.cubeInOut, onComplete: function(twn:FlxTween) {
+            dialogue.remove(bg);
+        }});
     }
 }
 
@@ -42,17 +73,18 @@ function runDialogue(idx) {
     portrait = new FlxSprite();
     box = new FlxSprite();
     text = new FlxTypeText(0,0,0,'');
-    if (json.lines[idx].bg != null) {
+    if (json.lines[idx].bg != null)
         loadBG(json.lines[idx].bg);
-    } else {
+    else
         dialogue.add(bg);
-    }
+    
     loadPortrait(json.lines[idx].char, json.lines[idx].emotion);
     loadBox(json.lines[idx].box);
     loadText(json.lines[idx].font);
     type(json.lines[idx].text, json.lines[idx].speed);
     var textTime = new FlxTimer().start(json.lines[idx].speed, function(){callTheTalk();}, json.lines[idx].text.length);
 }
+
 function clearDialogue() {
     dialogue.remove(bg);
     dialogue.remove(box);

@@ -4,7 +4,7 @@ import hscript.HScript;
 import systems.Conductor;
 import systems.MusicBeat;
 
-// Go to "assets/funkin/states/FreeplayMenu.hxs" to edit the title screen.
+// Go to "assets/funkin/states/FreeplayMenu.hxs" to edit the freeplay menu.
 // Can be overridden by currently loaded pack btw.
 
 class FreeplayMenu extends MusicBeatState

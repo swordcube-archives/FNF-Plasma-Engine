@@ -22,6 +22,7 @@ import gameplay.Stage;
 import gameplay.StrumLine;
 import hscript.HScript;
 import openfl.media.Sound;
+import substates.GameOver;
 import sys.FileSystem;
 import systems.Conductor;
 import systems.Highscore;
@@ -127,6 +128,8 @@ class PlayState extends MusicBeatState
 	public var ratingAntialiasing:Bool = true;
 	public var comboAntialiasing:Bool = true;
 
+	public var practiceMode:Bool = false;
+
 	public var cachedRatings:Map<String, FlxGraphic> = [];
 	public var cachedCombo:Map<String, Map<String, FlxGraphic>> = [];
 	
@@ -148,6 +151,11 @@ class PlayState extends MusicBeatState
 
 		if(SONG.keyCount == null)
 			SONG.keyCount = 4;
+
+		Conductor.changeBPM(SONG.bpm);
+		Conductor.mapBPMChanges(SONG);
+
+		Conductor.position = Conductor.crochet * -5.0;
 
 		scrollSpeed = (Init.trueSettings.get("Scroll Speed") > 0) ? Init.trueSettings.get("Scroll Speed") : SONG.speed;
 
@@ -218,11 +226,6 @@ class PlayState extends MusicBeatState
 		script.setVariable("remove", this.remove);
 		scripts.push(script);
 		script.start();
-
-		Conductor.changeBPM(SONG.bpm);
-		Conductor.mapBPMChanges(SONG);
-
-		Conductor.position = Conductor.crochet * -5.0;
 
 		// precache the countdown bullshit
 		countdownGraphics = [
@@ -390,12 +393,14 @@ class PlayState extends MusicBeatState
 		];
 	}
 
-	function getMenuToSwitchTo()
+	public function getMenuToSwitchTo():Dynamic
 	{
 		if(isStoryMode)
-			return new FreeplayMenu(); // will be changed soon
+			return new states.StoryMenu(); // i changed it!!!
 		else
-			return new FreeplayMenu();
+			return new states.FreeplayMenu();
+
+		return null;
 	}
 
 	public var countdownPreReady:FlxSprite = new FlxSprite();
@@ -521,6 +526,19 @@ class PlayState extends MusicBeatState
 			Conductor.position += elapsed * 1000.0;
 			if(Conductor.position >= 0.0 && !startedSong)
 				startSong();
+		}
+
+		if(health <= minHealth)
+		{
+			health = minHealth;
+
+			if(!practiceMode)
+			{
+				persistentUpdate = false;
+				persistentDraw = false;
+
+				openSubState(new GameOver(bf.getScreenPosition().x, bf.getScreenPosition().y, bf.deathCharacter));
+			}
 		}
 
 		spawnNotes();

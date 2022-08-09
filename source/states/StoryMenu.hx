@@ -4,7 +4,7 @@ import hscript.HScript;
 import systems.Conductor;
 import systems.MusicBeat;
 
-// Go to "assets/funkin/states/StoryMenu.hxs" to edit the title screen.
+// Go to "assets/funkin/states/StoryMenu.hxs" to edit the story menu.
 // Can be overridden by currently loaded pack btw.
 
 class StoryMenu extends MusicBeatState

@@ -12,6 +12,7 @@ class Character extends FNFSprite
 {
     public var script:HScript;
     public var curCharacter:String = "bf";
+    public var deathCharacter:String = "bf-dead";
 
     public var isLikeGF:Bool = false;
     public var canDance:Bool = true;
@@ -43,7 +44,10 @@ class Character extends FNFSprite
 
         var path:String = 'characters/$char/script';
         if(!FileSystem.exists(AssetPaths.hxs(path)))
+        {
+            curCharacter = "bf";
             path = 'characters/bf/script';
+        }
 
         script = new HScript(path);
         script.setVariable("character", this);

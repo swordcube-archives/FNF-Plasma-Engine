@@ -8,6 +8,7 @@ import flixel.math.FlxMath;
 import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import openfl.media.Sound;
 import states.PlayState;
 import systems.Conductor;
 import systems.ExtraKeys;
@@ -25,6 +26,12 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
     public var notes:FlxTypedGroup<Note>;
 
     public var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
+
+    public var missSounds:Map<String, Sound> = [
+        "miss1" => FNFAssets.returnAsset(SOUND, AssetPaths.sound("missnote1")),
+        "miss2" => FNFAssets.returnAsset(SOUND, AssetPaths.sound("missnote2")),
+        "miss3" => FNFAssets.returnAsset(SOUND, AssetPaths.sound("missnote3")),
+    ];
 
     function getSingAnimation(noteData:Int):String
     {
@@ -98,34 +105,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
             }
         });
 
-        if(hasInput)
-        {
-            var i:Int = 0;
-            for(strum in members)
-            {
-                var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
-
-                var key:FlxKey = Init.keyBinds[keyCount-1][i];
-                if(FlxG.keys.checkStatus(key, JUST_PRESSED) && !inCutscene && !botPlay)
-                {
-                    strum.setColor();
-                    strum.colorSwap.enabled.value = [true];
-                    strum.playAnim("press", true);
-                    strum.alpha = 1;
-                }
-
-                if((FlxG.keys.checkStatus(key, JUST_RELEASED) && !inCutscene && !botPlay) || (botPlay && strum.animation.curAnim != null && strum.animation.curAnim.name == "confirm" && strum.animation.curAnim.finished))
-                {
-                    strum.colorSwap.enabled.value = [false];
-                    strum.resetColor();
-                    strum.playAnim("static", true);
-                    strum.alpha = Init.trueSettings.get("Opaque Strums") ? 1 : 0.75;
-                }
-
-                i++;
-            }
-        }
-        else
+        if(!hasInput)
         {
             for(strum in members)
             {
@@ -164,8 +144,12 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                             PlayState.current.combo = 0;
                             PlayState.current.songMisses++;
 
+                            FlxG.sound.play(missSounds["miss"+FlxG.random.int(1, 3)], FlxG.random.float(0.1, 0.2));
+
                             PlayState.current.totalNotes++;
                             PlayState.current.calculateAccuracy();
+
+                            PlayState.current.UI.healthBarScript.callFunction("updateScoreText");
                         }
                         
                         if(note.canBeHit && PlayState.current.bf != null)
@@ -220,6 +204,46 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                 {
                     justPressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], JUST_PRESSED)) : false);
                     pressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], PRESSED)) : false);
+                }
+
+                var i:Int = 0;
+                for(strum in members)
+                {
+                    var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
+    
+                    var key:FlxKey = Init.keyBinds[keyCount-1][i];
+                    if(FlxG.keys.checkStatus(key, JUST_PRESSED) && !inCutscene && !botPlay)
+                    {
+                        if(!Init.trueSettings.get("Ghost Tapping") && possibleNotes.length <= 0)
+                        {
+                            PlayState.current.health -= PlayState.current.healthLoss;
+                            
+                            PlayState.current.combo = 0;
+                            PlayState.current.songMisses++;
+
+                            FlxG.sound.play(missSounds["miss"+FlxG.random.int(1, 3)], FlxG.random.float(0.1, 0.2));
+
+                            PlayState.current.totalNotes++;
+                            PlayState.current.calculateAccuracy();
+
+                            PlayState.current.UI.healthBarScript.callFunction("updateScoreText");
+                        }
+
+                        strum.setColor();
+                        strum.colorSwap.enabled.value = [true];
+                        strum.playAnim("press", true);
+                        strum.alpha = 1;
+                    }
+    
+                    if((FlxG.keys.checkStatus(key, JUST_RELEASED) && !inCutscene && !botPlay) || (botPlay && strum.animation.curAnim != null && strum.animation.curAnim.name == "confirm" && strum.animation.curAnim.finished))
+                    {
+                        strum.colorSwap.enabled.value = [false];
+                        strum.resetColor();
+                        strum.playAnim("static", true);
+                        strum.alpha = Init.trueSettings.get("Opaque Strums") ? 1 : 0.75;
+                    }
+    
+                    i++;
                 }
 
                 if(possibleNotes.length > 0)
