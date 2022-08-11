@@ -65,7 +65,7 @@ class Ranking
 		50 => "D",
 		40 => "E",
 		10 => "F",
-		0 => "booooo",
+		0 => "u bad lmao",
 	];
 
 	public static function getRank(accuracy:Float)
@@ -73,14 +73,14 @@ class Ranking
 		if (PlayState.current.totalNotes > 0)
 		{
 			// biggest Haccuracy
-			var bigHacc:Int = 0;
+			var lastAccuracy:Int = 0;
 			var leRank:String = "";
 
 			for (minAccuracy => rank in ranks)
 			{
-				if (minAccuracy <= accuracy && minAccuracy >= bigHacc)
+				if (minAccuracy <= accuracy && minAccuracy >= lastAccuracy)
 				{
-					bigHacc = minAccuracy;
+					lastAccuracy = minAccuracy;
 					leRank = rank;
 				}
 			}
