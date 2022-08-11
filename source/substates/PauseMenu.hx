@@ -1,22 +1,29 @@
-package states;
+package substates;
 
 import hscript.HScript;
+import states.PlayState;
 import systems.Conductor;
 import systems.MusicBeat;
 
-class ModState extends MusicBeatState
+// Go to "assets/funkin/substates/PauseMenu.hxs" to edit the pause menu.
+// Can be overridden by currently loaded pack btw.
+
+class PauseMenu extends MusicBeatSubState
 {
     var script:HScript;
 
-    public function new(stateName:String)
+    public function new()
     {
         super();
 
-        script = new HScript('states/${stateName}');
+        script = new HScript("substates/PauseMenu");
 
         script.setVariable("add", this.add);
         script.setVariable("remove", this.remove);
-        script.setVariable("state", this);
+        script.setVariable("substate", this);
+
+        if(PlayState.current.countdownTimer != null)
+            PlayState.current.countdownTimer.active = false;
     }
 
     override public function create()
@@ -24,7 +31,7 @@ class ModState extends MusicBeatState
         super.create();
 
         script.start();
-        script.callFunction("createPost");
+        script.callFunction("createPost", []);
     }
 
     override public function update(elapsed:Float)
@@ -47,5 +54,14 @@ class ModState extends MusicBeatState
         super.stepHit();
 
         script.callFunction("stepHit", [Conductor.currentStep]);
+    }
+
+    override function destroy()
+    {
+        if(PlayState.current.countdownTimer != null)
+            PlayState.current.countdownTimer.active = true;
+
+        script.callFunction("destroy");
+        super.destroy();
     }
 }

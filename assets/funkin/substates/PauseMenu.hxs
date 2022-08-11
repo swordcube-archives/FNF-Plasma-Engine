@@ -1,0 +1,117 @@
+var freakyMenu:Sound;
+
+var grpMenuShit:FlxGroup;
+
+var menuItems:Array<String> = ['Resume', 'Restart Song', 'Exit To Menu'];
+var curSelected:Int = 0;
+
+var pauseMusic:FlxSound;
+
+function create()
+{
+    pauseMusic = new FlxSound();
+    pauseMusic.loadEmbedded(FNFAssets.getSound(AssetPaths.music('breakfast')), true, true);
+    pauseMusic.volume = 0;
+    pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
+
+    FlxG.sound.list.add(pauseMusic);
+
+    freakyMenu = FNFAssets.getSound(AssetPaths.music("freakyMenu"));
+
+    var bg:FlxSprite = new FlxSprite();
+    bg.makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+    bg.alpha = 0;
+    add(bg);
+
+    var levelInfo:FlxText = new FlxText(20, 15, 0, PlayState_.SONG.song, 32);
+    levelInfo.scrollFactor.set();
+    levelInfo.setFormat(AssetPaths.font("vcr"), 32);
+    levelInfo.updateHitbox();
+    add(levelInfo);
+
+    var levelDifficulty:FlxText = new FlxText(20, 15 + 32, 0, PlayState_.currentDifficulty.toUpperCase(), 32);
+    levelDifficulty.scrollFactor.set();
+    levelDifficulty.setFormat(AssetPaths.font('vcr'), 32);
+    levelDifficulty.updateHitbox();
+    add(levelDifficulty);
+
+    levelDifficulty.alpha = 0;
+    levelInfo.alpha = 0;
+
+    levelInfo.x = FlxG.width - (levelInfo.width + 20);
+    levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
+
+    grpMenuShit = new FlxGroup();
+    add(grpMenuShit);
+
+    FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
+    FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
+    FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
+
+
+    for (i in 0...menuItems.length)
+    {
+        var songText:Alphabet = new Alphabet(0, (70 * i) + 30, menuItems[i], true, false);
+        songText.isMenuItem = true;
+        songText.targetY = i;
+        grpMenuShit.add(songText);
+    }
+
+    changeSelection(0);
+
+    substate.cameras = [PlayState.camOther];
+}
+
+function update(elapsed)
+{
+    FlxG.sound.music.pause();
+    PlayState.vocals.pause();
+
+    if(pauseMusic.volume < 0.5)
+        pauseMusic.volume += 0.01 * elapsed;
+
+    if(UIControls.justPressed("UP"))
+        changeSelection(-1);
+
+    if(UIControls.justPressed("DOWN"))
+        changeSelection(1);
+
+    if(UIControls.justPressed("ACCEPT"))
+    {
+        switch(menuItems[curSelected])
+        {
+            case "Resume":
+                PlayState.resyncSong();
+                substate.close();
+            case "Restart Song":
+                Main.resetState();
+            case "Exit To Menu":
+                FlxG.sound.playMusic(freakyMenu);
+                Main.switchState(PlayState.getMenuToSwitchTo());
+        }
+    }
+}
+
+function changeSelection(change:Int)
+{
+    curSelected += change;
+
+    if(curSelected < 0)
+        curSelected = menuItems.length - 1;
+
+    if(curSelected > menuItems.length - 1)
+        curSelected = 0;
+
+    for(i in 0...grpMenuShit.length)
+    {
+        grpMenuShit.members[i].targetY = i - curSelected;
+        grpMenuShit.members[i].alpha = curSelected == i ? 1 : 0.6;
+    }
+
+    FlxG.sound.play(FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu")));
+}
+
+function destroy()
+{
+    pauseMusic.destroy();
+}

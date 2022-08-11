@@ -408,10 +408,12 @@ class PlayState extends MusicBeatState
 	public var countdownSet:FlxSprite = new FlxSprite();
 	public var countdownGo:FlxSprite = new FlxSprite();
 
-	var countdownTimer:Int = 0;
+	public var countdownTimer:FlxTimer;
+
+	public var countdownTick:Int = 0;
 	public function startCountdown()
 	{		
-		new FlxTimer().start(Conductor.crochet / 1000.0, function(tmr:FlxTimer) {
+		countdownTimer = new FlxTimer().start(Conductor.crochet / 1000.0, function(tmr:FlxTimer) {
 			if(dad != null)
 				dad.dance();
 
@@ -421,41 +423,41 @@ class PlayState extends MusicBeatState
 			if(bf != null)
 				bf.dance();
 
-			switch(countdownTimer)
+			switch(countdownTick)
 			{
 				case 0:
-					callOnHScripts("countdownTick", [countdownTimer]);
+					callOnHScripts("countdownTick", [countdownTick]);
 					FlxG.sound.play(countdownSounds["preready"]);
 					countdownPreReady.loadGraphic(countdownGraphics["preready"]);
 					countdownPreReady.screenCenter();
 					countdownPreReady.alpha = 1;
 					FlxTween.tween(countdownPreReady, { alpha: 0 }, Conductor.crochet / 1000.0, { ease: FlxEase.cubeInOut });
 				case 1:
-					callOnHScripts("countdownTick", [countdownTimer]);
+					callOnHScripts("countdownTick", [countdownTick]);
 					FlxG.sound.play(countdownSounds["ready"]);
 					countdownReady.loadGraphic(countdownGraphics["ready"]);
 					countdownReady.screenCenter();
 					countdownReady.alpha = 1;
 					FlxTween.tween(countdownReady, { alpha: 0 }, Conductor.crochet / 1000.0, { ease: FlxEase.cubeInOut });
 				case 2:
-					callOnHScripts("countdownTick", [countdownTimer]);
+					callOnHScripts("countdownTick", [countdownTick]);
 					FlxG.sound.play(countdownSounds["set"]);
 					countdownSet.loadGraphic(countdownGraphics["set"]);
 					countdownSet.screenCenter();
 					countdownSet.alpha = 1;
 					FlxTween.tween(countdownSet, { alpha: 0 }, Conductor.crochet / 1000.0, { ease: FlxEase.cubeInOut });
 				case 3:
-					callOnHScripts("countdownTick", [countdownTimer]);
+					callOnHScripts("countdownTick", [countdownTick]);
 					FlxG.sound.play(countdownSounds["go"]);
 					countdownGo.loadGraphic(countdownGraphics["go"]);
 					countdownGo.screenCenter();
 					countdownGo.alpha = 1;
 					FlxTween.tween(countdownGo, { alpha: 0 }, Conductor.crochet / 1000.0, { ease: FlxEase.cubeInOut });
 				case 4:
-					callOnHScripts("countdownTick", [countdownTimer]);
+					callOnHScripts("countdownTick", [countdownTick]);
 			}
 
-			countdownTimer++;
+			countdownTick++;
 		}, 5);
 	}
 
@@ -519,6 +521,14 @@ class PlayState extends MusicBeatState
 
 			var func = UIControls.justPressed("BACK") ? kindaEndSong : endSong;
 			func();
+		}
+
+		if(!inCutscene && !UIControls.justPressed("BACK") && UIControls.justPressed("PAUSE"))
+		{
+			persistentUpdate = false;
+			persistentDraw = true;
+
+			openSubState(new substates.PauseMenu());
 		}
 
 		if(!inCutscene)
@@ -644,6 +654,13 @@ class PlayState extends MusicBeatState
 		callOnHScripts("stepHit", [Conductor.currentStep]);
 
 		// Resync song if it gets out of sync with song position
+		resyncSong();
+
+		callOnHScripts("stepHitPost", [Conductor.currentStep]);
+	}
+
+	public function resyncSong()
+	{
 		if(hasVocals)
 		{
 			if(!(Conductor.isAudioSynced(FlxG.sound.music) && Conductor.isAudioSynced(vocals)))
@@ -670,8 +687,6 @@ class PlayState extends MusicBeatState
 				FlxG.sound.music.play();
 			}
 		}
-
-		callOnHScripts("stepHitPost", [Conductor.currentStep]);
 	}
 
 	function setupCameras()

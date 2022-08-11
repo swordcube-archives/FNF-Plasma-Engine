@@ -65,6 +65,6 @@ class GameOver extends MusicBeatSubState
     {
         super.stepHit();
 
-        script.callFunction("stepHit", [Conductor.currentBeat]);
+        script.callFunction("stepHit", [Conductor.currentStep]);
     }
 }
