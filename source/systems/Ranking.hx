@@ -72,7 +72,6 @@ class Ranking
 	{
 		if (PlayState.current.totalNotes > 0)
 		{
-			// biggest Haccuracy
 			var lastAccuracy:Int = 0;
 			var leRank:String = "";
 
