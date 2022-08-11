@@ -19,9 +19,9 @@ function countdownTick(counter)
 {
     if(counter == 4)
     {
-        bar = new FlxBar(image.x + 4, image.y + 4, FlxBarFillDirection.RIGHT_TO_LEFT, Std.int(image.width - 8), Std.int(image.height - 8), FlxG.sound.music,
+        bar = new FlxBar(image.x + 4, image.y + 4, FlxBarFillDirection.LEFT_TO_RIGHT, Std.int(image.width - 8), Std.int(image.height - 8), FlxG.sound.music,
         'time', 0, FlxG.sound.music.length);
-        bar.createFilledBar(0xFFFFFFFF, 0xFF000000);
+        bar.createFilledBar(0xFF000000, 0xFFFFFFFF);
         bar.color = PlayState_.SONG.notes[0].mustHitSection ? ui.healthColors[1] : ui.healthColors[0];
         bar.alpha = 0;
         add(bar);

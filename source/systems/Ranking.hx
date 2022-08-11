@@ -65,7 +65,7 @@ class Ranking
 		50 => "D",
 		40 => "E",
 		10 => "F",
-		0 => "u bad lmao",
+		0 => "skill issue",
 	];
 
 	public static function getRank(accuracy:Float)

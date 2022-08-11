@@ -28,17 +28,20 @@ function create() {
     FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music(json.info.music)), json.info.musicVolume);
 }
 function update(elapsed) {
-    if(FlxG.keys.justPressed.ENTER) {
-        if (curLineIndex < json.lines.length-1) {
-            curLineIndex ++;
-            clearDialogue();
-            runDialogue(curLineIndex);
-            FlxG.sound.play(proceedSound);
-        } else {
+    if(PlayState.inCutscene && !ended)
+    {
+        if(FlxG.keys.justPressed.ENTER) {
+            if (curLineIndex < json.lines.length-1) {
+                curLineIndex ++;
+                clearDialogue();
+                runDialogue(curLineIndex);
+                FlxG.sound.play(proceedSound);
+            } else {
+                endDialogue();
+            }
+        } else if(FlxG.keys.justPressed.SHIFT)
             endDialogue();
-        }
-    } else if(FlxG.keys.justPressed.SHIFT)
-        endDialogue();
+    }
 
     if(PlayState.inCutscene && ended && box != null && box.animation.curAnim != null && box.animation.curAnim.curFrame == 0)
     {

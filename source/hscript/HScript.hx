@@ -1,5 +1,6 @@
 package hscript;
 
+import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.text.FlxText.FlxTextAlign;
@@ -119,6 +120,15 @@ class HScript
 
             setVariable("Type", Type);
 
+            setVariable("FlxCameraFollowStyle", {
+                "LOCKON": FlxCameraFollowStyle.LOCKON,
+                "PLATFORMER": FlxCameraFollowStyle.PLATFORMER,
+                "TOPDOWN": FlxCameraFollowStyle.TOPDOWN,
+                "TOPDOWN_TIGHT": FlxCameraFollowStyle.TOPDOWN_TIGHT,
+                "SCREEN_BY_SCREEN": FlxCameraFollowStyle.SCREEN_BY_SCREEN,
+                "NO_DEAD_ZONE": FlxCameraFollowStyle.NO_DEAD_ZONE
+            });
+
             setVariable("BlendMode", {
                 "ADD": BlendMode.ADD,
                 "ALPHA": BlendMode.ALPHA,
@@ -173,35 +183,7 @@ class HScript
             setVariable("JudgementUI", ui.JudgementUI);
             setVariable("NoteSplash", ui.NoteSplash);
             
-            // i didn't know you could do this whole
-            /**
-                setVariable("Something" {
-                    "someVariableOrFunctionInThisBracketShit": function(balls:String) {
-                        return someActualFunctionThatHScriptHatesButCanBeDoneHere(balls);
-                    },
-                    "beans": FlxColor.BROWN
-                });
-            **/
-            // thing, but uh
-            // https://github.com/YoshiCrafter29/hscript-improved/blob/master/script/RunScript.hx
-            // line 74 is where i found this information
-            setVariable("FNFAssets", {
-                "getImage": function(path:String):FlxGraphic {
-                    return FNFAssets.returnAsset(IMAGE, path);
-                },
-                "getSparrow": function(path:String):FlxAtlasFrames {
-                    return FNFAssets.returnAsset(SPARROW, path);
-                },
-                "getCharacterSparrow": function(path:String):FlxAtlasFrames {
-                    return FNFAssets.returnAsset(CHARACTER_SPARROW, path);
-                },
-                "getSound": function(path:String):Sound {
-                    return FNFAssets.returnAsset(SOUND, path);
-                },
-                "getText": function(path:String):String {
-                    return FNFAssets.returnAsset(TEXT, path);
-                }
-            });
+            setVariable("FNFAssets", HScriptHelpers.getFNFAssetsClass());
             setVariable("Main", Main);
             setVariable("Init", Init);
             setVariable("Settings", Init.trueSettings);

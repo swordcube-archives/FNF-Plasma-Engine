@@ -537,7 +537,7 @@ class PlayState extends MusicBeatState
 				persistentUpdate = false;
 				persistentDraw = false;
 
-				openSubState(new GameOver(bf.getScreenPosition().x, bf.getScreenPosition().y, bf.deathCharacter));
+				openSubState(new GameOver(bf.x, bf.y, camFollowPos.x, camFollowPos.y, bf.deathCharacter));
 			}
 		}
 

@@ -15,12 +15,19 @@ class GameOver extends MusicBeatSubState
     var x:Float = 0;
     var y:Float = 0;
 
-    public function new(x:Float, y:Float, character:String)
+    var camX:Float = 0;
+    var camY:Float = 0;
+
+    public function new(x:Float, y:Float, camX:Float, camY:Float, character:String)
     {
         super();
 
         this.x = x;
         this.y = y;
+
+        this.camX = camX;
+        this.camY = camY;
+
         this.character = character;
 
         script = new HScript("substates/GameOver");
@@ -35,8 +42,8 @@ class GameOver extends MusicBeatSubState
         super.create();
 
         script.start(false);
-        script.callFunction("create", [x, y, character]);
-        script.callFunction("createPost", [x, y, character]);
+        script.callFunction("create", [x, y, camX, camY, character]);
+        script.callFunction("createPost", [x, y, camX, camY, character]);
     }
 
     override public function update(elapsed:Float)
