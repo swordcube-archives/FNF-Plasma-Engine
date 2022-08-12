@@ -128,6 +128,7 @@ class PlayState extends MusicBeatState
 	public var ratingAntialiasing:Bool = true;
 	public var comboAntialiasing:Bool = true;
 
+	public var usedPractice:Bool = false;
 	public var practiceMode:Bool = false;
 
 	public var cachedRatings:Map<String, FlxGraphic> = [];
@@ -194,6 +195,7 @@ class PlayState extends MusicBeatState
 		add(stage.inFrontOfGFSprites);
 
 		dad = new Character(stage.dadPosition.x, stage.dadPosition.y, SONG.player2);
+		dad.isPlayer = false;
 		add(dad);
 
 		// what if i told you the dad was the impostor!?!!?!
@@ -482,7 +484,9 @@ class PlayState extends MusicBeatState
 			FlxG.sound.music.time = 0;
 			FlxG.sound.playMusic(freakyMenu);
 			
-			Highscore.setScore(SONG.song+"-"+currentDifficulty, songScore);
+			if(!usedPractice && songScore > Highscore.getScore(SONG.song+"-"+currentDifficulty))
+				Highscore.setScore(SONG.song+"-"+currentDifficulty, songScore);
+			
 			callOnHScripts("endSong", [SONG.song]);
 			
 			if(isStoryMode)

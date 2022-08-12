@@ -2,8 +2,21 @@ var freakyMenu:Sound;
 
 var grpMenuShit:FlxGroup;
 
-var menuItems:Array<String> = ['Resume', 'Restart Song', 'Exit To Menu'];
+var defaultMenuItems:Array<String> = [
+    'Resume', 
+    'Restart Song', 
+    'Change Difficulty', 
+    'Toggle Practice Mode', 
+    'Exit To Menu'
+];
+
+var menuItems:Array<String> = defaultMenuItems;
+
+var changingDifficulty:Bool = false;
+
 var curSelected:Int = 0;
+
+var practiceMode:FlxText;
 
 var pauseMusic:FlxSound;
 
@@ -35,21 +48,50 @@ function create()
     levelDifficulty.updateHitbox();
     add(levelDifficulty);
 
+    practiceMode = new FlxText(20, 0, 0, "PRACTICE MODE", 32);
+    practiceMode.scrollFactor.set();
+    practiceMode.setFormat(AssetPaths.font('vcr'), 32);
+    practiceMode.updateHitbox();
+    practiceMode.y = FlxG.height - (practiceMode.height + 20);
+    add(practiceMode);
+
     levelDifficulty.alpha = 0;
     levelInfo.alpha = 0;
 
     levelInfo.x = FlxG.width - (levelInfo.width + 20);
     levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
+    practiceMode.x = FlxG.width - (practiceMode.width + 20);
 
     grpMenuShit = new FlxGroup();
     add(grpMenuShit);
 
     FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
+
     FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
+
     FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 
+    spawnOptions();
 
-    for (i in 0...menuItems.length)
+    changeSelection(0);
+
+    substate.cameras = [PlayState.camOther];
+}
+
+function spawnOptions()
+{
+    while(grpMenuShit.length > 0)
+    {
+        var bemb = grpMenuShit.members[0];
+        bemb.kill();
+        bemb.destroy();
+        grpMenuShit.remove(bemb, true);
+    }
+
+    if(PlayState.availableDifficulties.length <= 1)
+        menuItems.remove("Change Difficulty");
+
+    for(i in 0...menuItems.length)
     {
         var songText:Alphabet = new Alphabet(0, (70 * i) + 30, menuItems[i], true, false);
         songText.isMenuItem = true;
@@ -57,15 +99,16 @@ function create()
         grpMenuShit.add(songText);
     }
 
+    curSelected = 0;
     changeSelection(0);
-
-    substate.cameras = [PlayState.camOther];
 }
 
 function update(elapsed)
 {
     FlxG.sound.music.pause();
     PlayState.vocals.pause();
+
+    practiceMode.visible = PlayState.practiceMode;
 
     if(pauseMusic.volume < 0.5)
         pauseMusic.volume += 0.01 * elapsed;
@@ -78,16 +121,48 @@ function update(elapsed)
 
     if(UIControls.justPressed("ACCEPT"))
     {
-        switch(menuItems[curSelected])
+        if(changingDifficulty)
         {
-            case "Resume":
-                PlayState.resyncSong();
-                substate.close();
-            case "Restart Song":
-                Main.resetState();
-            case "Exit To Menu":
-                FlxG.sound.playMusic(freakyMenu);
-                Main.switchState(PlayState.getMenuToSwitchTo());
+            switch(menuItems[curSelected])
+            {
+                case "Back":
+                    changingDifficulty = false;
+                    menuItems = defaultMenuItems;
+                    spawnOptions();
+
+                default:
+                    changingDifficulty = false;
+                    PlayState_.SONG = SongLoader.getJSON(PlayState_.SONG.song, menuItems[curSelected]);
+                    Main.resetState();
+            }
+        }
+        else
+        {
+            switch(menuItems[curSelected])
+            {
+                case "Resume":
+                    PlayState.resyncSong();
+                    substate.close();
+
+                case "Restart Song":
+                    Main.resetState();
+                    
+                case "Change Difficulty":
+                    changingDifficulty = true;
+                    menuItems = PlayState.availableDifficulties.copy();
+                    menuItems.push("Back");
+                    spawnOptions();
+
+                case "Toggle Practice Mode":
+                    PlayState.practiceMode = !PlayState.practiceMode;
+
+                    if(PlayState.practiceMode)
+                        PlayState.usedPractice = true;
+
+                case "Exit To Menu":
+                    FlxG.sound.playMusic(freakyMenu);
+                    Main.switchState(PlayState.getMenuToSwitchTo());
+            }
         }
     }
 }

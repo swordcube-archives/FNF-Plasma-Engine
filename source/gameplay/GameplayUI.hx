@@ -1,12 +1,14 @@
 package gameplay;
 
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import hscript.HScript;
 import states.PlayState;
 import systems.Conductor;
+import ui.HealthIcon;
 
 using StringTools;
 
@@ -21,6 +23,15 @@ class GameplayUI extends FlxGroup
     public var playerStrums:StrumLine;
 
     public var engineVersion:String = 'Plasma Engine v${Main.engineVersion}';
+
+    public var healthBarBG:FlxSprite;
+    public var healthBar:FlxSprite;
+    public var iconP2:HealthIcon;
+    public var iconP1:HealthIcon;
+
+    public var timeBarBG:FlxSprite;
+    public var timeBar:FlxSprite;
+    public var timeTxt:FlxText;
 
     // Scripts
     public var healthBarScript:HScript;
@@ -47,6 +58,12 @@ class GameplayUI extends FlxGroup
         add(playerStrums);
         add(playerStrums.notes);
         add(playerStrums.grpNoteSplashes);
+
+        if(Init.trueSettings.get("Centered Notes"))
+        {
+            opponentStrums.x = -9999;
+            playerStrums.screenCenter(X);
+        }
 
         // Text
         songTxt = new FlxText(5, FlxG.height - 25, 0, '${PlayState.SONG.song} - ${PlayState.currentDifficulty.toUpperCase()}', 16);

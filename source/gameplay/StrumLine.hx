@@ -8,6 +8,7 @@ import flixel.math.FlxMath;
 import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import flixel.util.FlxSort;
 import openfl.media.Sound;
 import states.PlayState;
 import systems.Conductor;
@@ -91,6 +92,11 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
             bemb.loadSkin(arrowSkin);
     }
 
+	function sortNotes(Sort:Int = FlxSort.ASCENDING, Obj1:Note, Obj2:Note):Int
+		return Obj1.strumTime < Obj2.strumTime ? Sort : Obj1.strumTime > Obj2.strumTime ? -Sort : 0;
+
+    var noteSortTimer:Float = 0.0;
+
     override function update(elapsed:Float)
     {
         super.update(elapsed);
@@ -122,6 +128,16 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
         if(PlayState.current != null)
         {
             var stepHeight = (0.45 * Conductor.stepCrochet * PlayState.current.scrollSpeed);
+
+            noteSortTimer += elapsed;
+
+            if(noteSortTimer >= 1.0)
+            {
+                noteSortTimer = 0;
+                notes.members.sort(function(Obj1:Note, Obj2:Note) {
+                    return sortNotes(FlxSort.DESCENDING, Obj1, Obj2);
+                });
+            }
 
             var possibleNotes:Array<Note> = [];
             notes.forEachAlive(function(note:Note) {

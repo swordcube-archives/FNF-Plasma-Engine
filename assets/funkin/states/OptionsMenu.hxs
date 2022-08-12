@@ -133,7 +133,10 @@ function update()
     if(!FlxG.keys.pressed.SHIFT)
     {
         if(UIControls.pressed("LEFT") || UIControls.pressed("RIGHT"))
-            changeValue(UIControls.pressed("LEFT") ? -1 : 1);
+        {
+            if(Std.string(pageContents.get(pages[curPage])[curSelected].type) != "Checkbox")
+                changeValue(UIControls.pressed("LEFT") ? -1 : 1);
+        }
         else
             holdTimer = 0;
     }
@@ -369,7 +372,7 @@ function changeSelection(change:Int)
     camFollow.y = (grpAlphabet.members[curSelected].y - 120) + FlxG.height/2;
     FlxG.sound.play(scrollMenu);
 
-    descText.text = pageContents.get(pages[curPage])[curSelected].description;
+    descText.text = pageContents.get(pages[curPage])[curSelected].description + "\n\nPress SHIFT + arrow keys to switch pages.";
     descBox.makeGraphic(FlxG.width * 0.85, descText.height + 10, FlxColor.BLACK);
     descBox.screenCenter(FlxAxes.X);
     descBox.y = FlxG.height - (descBox.height + 50);

@@ -1,8 +1,112 @@
+// Dialogue Code
 var dialogue;
 function create() {
-    dialogue = new HScript('dialogue/scripts/default');
-    dialogue.start();
+    if(PlayState_.isStoryMode) {
+        dialogue = new HScript('dialogue/scripts/default');
+        dialogue.start();
+    }
 }
 function update(elapsed) {
-    dialogue.update(elapsed);
+    if(dialogue != null)
+        dialogue.update(elapsed);
+
+    modchartUpdate(elapsed);
+}
+
+// Actual Modchart
+var noteSineShit:Float = 0;
+var noteSineShit2:Float = 0;
+
+var ogStrumX = [];
+var ogStrumY = [];
+function createPost()
+{
+    // Fuck you you're forced to use middlescroll
+    PlayState.UI.opponentStrums.x = -9999;
+    PlayState.UI.playerStrums.screenCenter(FlxAxes.X);
+
+    for(strum in PlayState.UI.playerStrums)
+    {
+        ogStrumX.push(strum.x);
+        ogStrumY.push(strum.y+10);
+    }
+}
+
+function beatHit(curBeat)
+{
+    switch(curBeat)
+    {
+        case 28:
+            var obj = PlayState.UI.healthBarBG;
+            if(obj != null)
+                FlxTween.tween(obj, { y: obj.y - 500 }, 1.5, { ease: FlxEase.cubeInOut });
+
+            var obj = PlayState.UI.healthBar;
+            if(obj != null)
+                FlxTween.tween(obj, { y: obj.y - 500 }, 1.5, { ease: FlxEase.cubeInOut });
+
+            var obj = PlayState.UI.iconP2;
+            if(obj != null)
+                FlxTween.tween(obj, { y: obj.y - 500 }, 1.5, { ease: FlxEase.cubeInOut });
+
+            var obj = PlayState.UI.iconP1;
+            if(obj != null)
+                FlxTween.tween(obj, { y: obj.y - 500 }, 1.5, { ease: FlxEase.cubeInOut });
+
+            var obj = PlayState.UI.scoreTxt;
+            if(obj != null)
+                FlxTween.tween(obj, { y: obj.y - 500 }, 1.5, { ease: FlxEase.cubeInOut });
+
+            var obj = PlayState.UI.timeBarBG;
+            if(obj != null)
+                FlxTween.tween(obj, { y: obj.y + 500 }, 1.5, { ease: FlxEase.cubeInOut });
+
+            var obj = PlayState.UI.timeBar;
+            if(obj != null)
+                FlxTween.tween(obj, { y: obj.y + 500 }, 1.5, { ease: FlxEase.cubeInOut });
+
+            var obj = PlayState.UI.timeTxt;
+            if(obj != null)
+                FlxTween.tween(obj, { y: obj.y + 500 }, 1.5, { ease: FlxEase.cubeInOut });
+    }
+}
+
+function stepHit(curStep)
+{
+    switch(curStep)
+    {
+        case 512:
+            var obj = dad;
+            if(obj != null)
+                FlxTween.tween(obj, { y: obj.y - 1000 }, 5, { ease: FlxEase.cubeInOut });
+
+            var obj = bf;
+            if(obj != null)
+                FlxTween.tween(obj, { y: obj.y - 1000 }, 5, { ease: FlxEase.cubeInOut });
+    }
+}
+
+var cum:Float = 1;
+
+function modchartUpdate(elapsed)
+{
+    noteSineShit += elapsed * 5;
+
+    if(Conductor.currentStep >= 384)
+        noteSineShit2 += elapsed * 5;
+
+    if(Conductor.currentStep >= 512)
+    {
+        cum += elapsed;
+        if(cum > 3.5)
+            cum = 3.5;
+    }
+
+    for(strum in PlayState.UI.playerStrums)
+    {
+        if(Conductor.currentStep >= 384)
+            strum.x = ogStrumX[strum.noteData] + (Math.sin(noteSineShit2 * 0.2) * (320 * cum));
+
+        strum.y = ogStrumY[strum.noteData] + (Math.sin(noteSineShit + strum.noteData) * (20 * cum));
+    }
 }
