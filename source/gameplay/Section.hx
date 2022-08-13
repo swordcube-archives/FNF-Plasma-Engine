@@ -3,8 +3,7 @@ package gameplay;
 /**
     Typedef for Section Data.
 **/
-typedef Section =
-{
+typedef Section = {
     // The notes for this section.
     var sectionNotes:Array<Dynamic>;
     // Stuff for charting.

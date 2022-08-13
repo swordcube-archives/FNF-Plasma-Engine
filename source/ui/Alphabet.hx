@@ -13,8 +13,7 @@ using StringTools;
 /**
  * Loosley based on FlxTypeText lolol
  */
-class Alphabet extends FlxSpriteGroup
-{
+class Alphabet extends FlxSpriteGroup {
 	public var delay:Float = 0.05;
 	public var paused:Bool = false;
 
@@ -370,8 +369,7 @@ class Alphabet extends FlxSpriteGroup
 	}
 }
 
-class AlphaCharacter extends FlxSprite
-{
+class AlphaCharacter extends FlxSprite {
 	public static var alphabet:String = "abcdefghijklmnopqrstuvwxyz";
 
 	public static var numbers:String = "1234567890";

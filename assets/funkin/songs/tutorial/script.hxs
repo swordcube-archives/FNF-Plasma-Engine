@@ -1,5 +1,4 @@
-function beatHit(curBeat)
-{
+function beatHit(curBeat) {
     if (curBeat % 16 == 15 && PlayState.dad.curCharacter == "gf" && curBeat > 16 && curBeat < 48)
     {
         PlayState.bf.playAnim('hey', true);

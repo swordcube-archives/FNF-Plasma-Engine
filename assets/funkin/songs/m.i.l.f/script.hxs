@@ -1,5 +1,4 @@
-function beatHit(curBeat)
-{
+function beatHit(curBeat) {
     if(curBeat >= 168 && curBeat < 200)
     {
         FlxG.camera.zoom = PlayState.defaultCamZoom + 0.015;

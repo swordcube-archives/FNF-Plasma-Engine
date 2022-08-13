@@ -7,8 +7,7 @@ import systems.MusicBeat;
 // Go to "assets/funkin/states/StoryMenu.hxs" to edit the story menu.
 // Can be overridden by currently loaded pack btw.
 
-class StoryMenu extends MusicBeatState
-{
+class StoryMenu extends MusicBeatState {
     var script:HScript;
 
     override public function create()

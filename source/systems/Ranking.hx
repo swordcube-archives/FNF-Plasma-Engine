@@ -2,8 +2,7 @@ package systems;
 
 import states.PlayState;
 
-typedef Judgement =
-{
+typedef Judgement = {
 	var name:String;
 	var time:Float;
 	var score:Int;
@@ -12,8 +11,7 @@ typedef Judgement =
 	var ?health:Float;
 }
 
-class Ranking
-{
+class Ranking {
 	// This is an array because from what i've heard maps have undefined orders in haxe
 	// fun!
 	public static var judgements:Array<Judgement> = [

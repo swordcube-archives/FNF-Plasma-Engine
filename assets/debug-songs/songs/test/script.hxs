@@ -19,8 +19,7 @@ var noteSineShit2:Float = 0;
 
 var ogStrumX = [];
 var ogStrumY = [];
-function createPost()
-{
+function createPost() {
     // Fuck you you're forced to use middlescroll
     PlayState.UI.opponentStrums.x = -9999;
     PlayState.UI.playerStrums.screenCenter(FlxAxes.X);
@@ -32,8 +31,7 @@ function createPost()
     }
 }
 
-function beatHit(curBeat)
-{
+function beatHit(curBeat) {
     switch(curBeat)
     {
         case 28:
@@ -71,11 +69,12 @@ function beatHit(curBeat)
     }
 }
 
-function stepHit(curStep)
-{
+function stepHit(curStep) {
     switch(curStep)
     {
         case 512:
+            FlxTween.tween(PlayState, { scrollSpeed: 1 }, 5, { ease: FlxEase.cubeInOut });
+
             var obj = dad;
             if(obj != null)
                 FlxTween.tween(obj, { y: obj.y - 1000 }, 5, { ease: FlxEase.cubeInOut });
@@ -88,18 +87,23 @@ function stepHit(curStep)
 
 var cum:Float = 1;
 
-function modchartUpdate(elapsed)
-{
+function modchartUpdate(elapsed) {
     noteSineShit += elapsed * 5;
 
     if(Conductor.currentStep >= 384)
         noteSineShit2 += elapsed * 5;
 
-    if(Conductor.currentStep >= 512)
+    if(Conductor.currentStep >= 512 && Conductor.currentStep < 612)
     {
         cum += elapsed;
         if(cum > 3.5)
             cum = 3.5;
+    }
+    else
+    {
+        cum -= elapsed;
+        if(cum < 1)
+            cum = 1;
     }
 
     for(strum in PlayState.UI.playerStrums)

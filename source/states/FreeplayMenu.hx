@@ -7,8 +7,7 @@ import systems.MusicBeat;
 // Go to "assets/funkin/states/FreeplayMenu.hxs" to edit the freeplay menu.
 // Can be overridden by currently loaded pack btw.
 
-class FreeplayMenu extends MusicBeatState
-{
+class FreeplayMenu extends MusicBeatState {
     var script:HScript;
 
     override public function create()

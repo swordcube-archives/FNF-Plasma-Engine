@@ -19,8 +19,7 @@ import ui.NoteSplash;
 
 using StringTools;
 
-class StrumLine extends FlxTypedSpriteGroup<StrumNote>
-{
+class StrumLine extends FlxTypedSpriteGroup<StrumNote> {
     public var hasInput:Bool = true;
     
     public var keyCount:Int = 4;
@@ -302,7 +301,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                     }
                 }
 
-                if (PlayState.current.bf != null && PlayState.current.bf.animation.curAnim != null && PlayState.current.bf.holdTimer > Conductor.stepCrochet * PlayState.current.bf.singDuration * 0.001 && !pressed.contains(true))
+                if (PlayState.current != null && PlayState.current.bf != null && PlayState.current.bf.animation.curAnim != null && PlayState.current.bf.holdTimer > Conductor.stepCrochet * PlayState.current.bf.singDuration * 0.001 && !pressed.contains(true))
                 {
                     if (PlayState.current.bf.animation.curAnim.name.startsWith('sing') && !PlayState.current.bf.animation.curAnim.name.endsWith('miss'))
                         PlayState.current.bf.dance();

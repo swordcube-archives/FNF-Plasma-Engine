@@ -15,8 +15,7 @@ import flixel.util.FlxGradient;
  * @author Shadow_Mario_
  *
 **/
-class Transition extends FlxSubState
-{
+class Transition extends FlxSubState {
 	public static var finishCallback:Void->Void;
 
 	private var leTween:FlxTween = null;

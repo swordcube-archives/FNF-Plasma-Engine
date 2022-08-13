@@ -3,8 +3,7 @@ package ui;
 import flixel.group.FlxGroup;
 import hscript.HScript;
 
-class JudgementUI extends FlxGroup
-{
+class JudgementUI extends FlxGroup {
     var script:HScript;
 
     public function new(judgement:String, combo:Int, ratingScale:Float, comboScale:Float)

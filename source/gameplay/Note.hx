@@ -9,8 +9,7 @@ import systems.Conductor;
 import systems.ExtraKeys;
 import systems.FNFSprite;
 
-class Note extends FNFSprite
-{
+class Note extends FNFSprite {
     public static var swagWidth:Float = 160*0.7;
 
     public var strumTime:Float = 0.0;

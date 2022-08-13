@@ -1,5 +1,4 @@
-function create()
-{
+function create() {
     removeStage();
     PlayState.defaultCamZoom = 1.05;
 }

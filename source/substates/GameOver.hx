@@ -7,8 +7,7 @@ import systems.MusicBeat;
 // Go to "assets/funkin/substates/GameOver.hxs" to edit the game over.
 // Can be overridden by currently loaded pack btw.
 
-class GameOver extends MusicBeatSubState
-{
+class GameOver extends MusicBeatSubState {
     var script:HScript;
     var character:String = "bf-dead";
 

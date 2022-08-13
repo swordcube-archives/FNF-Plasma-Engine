@@ -20,8 +20,7 @@ var curDifficulty:Int = 1;
 
 var curPlaying:String = "";
 
-function create()
-{
+function create() {
     scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
     cancelMenu = FNFAssets.getSound(AssetPaths.sound("menus/cancelMenu"));
 
@@ -92,8 +91,7 @@ function create()
     changeDifficulty(0);
 }
 
-function updateScore()
-{
+function updateScore() {
     intendedScore = Highscore.getScore(songs[curSelected].name+"-"+StringTools.trim(songs[curSelected].difficulties[curDifficulty]));
 
     lerpScore = FlxMath.lerp(lerpScore, intendedScore, Main.deltaTime * 7);
@@ -102,8 +100,7 @@ function updateScore()
     positionHighscore();
 }
 
-function positionHighscore()
-{
+function positionHighscore() {
     scoreText.x = FlxG.width - scoreText.width - 6;
     scoreBG.scale.x = FlxG.width - scoreText.x + 6;
     scoreBG.x = FlxG.width - scoreBG.scale.x / 2;
@@ -117,8 +114,7 @@ var bgColor:Array<Float> = [
     255
 ];
 
-function update()
-{
+function update() {
     if(FlxG.keys.justPressed.TAB)
         state.openSubState(new ModSelectionMenu());
     
@@ -176,8 +172,7 @@ function update()
     }
 }
 
-function changeDifficulty(change:Int)
-{
+function changeDifficulty(change:Int) {
     curDifficulty += change;
 
     if(curDifficulty < 0)
@@ -191,8 +186,7 @@ function changeDifficulty(change:Int)
     updateScore();
 }
 
-function changeSelection(change:Int)
-{
+function changeSelection(change:Int) {
     curSelected += change;
 
     if(curSelected < 0)

@@ -5,8 +5,7 @@ var thunder2:Sound;
 var lightningStrikeBeat:Int = 0;
 var lightningOffset:Int = 8;
 
-function create()
-{
+function create() {
     removeStage();
     PlayState.defaultCamZoom = 1.05;
 
@@ -22,14 +21,12 @@ function create()
     add(halloweenBG);
 }
 
-function beatHit(curBeat:Int)
-{
+function beatHit(curBeat:Int) {
     if(FlxG.random.bool(10) && curBeat > lightningStrikeBeat + lightningOffset)
         lightningStrikeShit(curBeat);
 }
 
-function lightningStrikeShit(curBeat:Int)
-{
+function lightningStrikeShit(curBeat:Int) {
     if(FlxG.random.int(1, 2) == 2)
         FlxG.sound.play(thunder2);
     else

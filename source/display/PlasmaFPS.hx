@@ -13,8 +13,7 @@ import openfl.text.TextFormat;
  * FPS class extension to display memory usage.
  * @author Kirill Poletaev
  */
-class PlasmaFPS extends TextField
-{
+class PlasmaFPS extends TextField {
 	//                                      fps    mem    version
 	public var infoDisplayed:Array<Bool> = [true, true, false];
 

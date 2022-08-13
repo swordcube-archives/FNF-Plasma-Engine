@@ -2,8 +2,7 @@ package systems;
 
 import flixel.FlxG;
 
-class Highscore
-{
+class Highscore {
     public static var scores:Map<String, Int> = [];
 
     public static function init()

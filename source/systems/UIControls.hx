@@ -4,8 +4,7 @@ import flixel.FlxG;
 import flixel.input.FlxInput.FlxInputState;
 import flixel.input.keyboard.FlxKey;
 
-class UIControls
-{
+class UIControls {
     public static var controls:Map<String, Array<FlxKey>> = [
         "LEFT"        => [A, LEFT],
         "DOWN"        => [S, DOWN],

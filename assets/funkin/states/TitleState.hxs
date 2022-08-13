@@ -11,8 +11,7 @@ var credGroup:FlxGroup;
 
 var curWacky:Array<String> = ["???", "???"];
 
-function getIntroTextShit()
-{
+function getIntroTextShit() {
     var fullText:String = FNFAssets.getText(AssetPaths.txt('introText'));
 
     var firstArray:Array<String> = fullText.split('\n');
@@ -26,8 +25,7 @@ function getIntroTextShit()
     return swagGoodArray;
 }
 
-function startIntro()
-{
+function startIntro() {
     trace("PLAYING MUSIC OR SOMETHING!");
 
     if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
@@ -37,8 +35,7 @@ function startIntro()
     }
 }
 
-function create()
-{
+function create() {
     freakyMenu = FNFAssets.getSound(AssetPaths.music('freakyMenu'));
     confirmMenu = FNFAssets.getSound(AssetPaths.sound('menus/confirmMenu'));
 
@@ -97,8 +94,7 @@ function create()
 var lean:Bool = false;
 var danceLeft:Bool = false;
 
-function createCoolText(textArray:Array<String>)
-{
+function createCoolText(textArray:Array<String>) {
     for (i in 0...textArray.length)
     {
         var money:Alphabet = new Alphabet(0, 0, textArray[i], true, false);
@@ -108,24 +104,21 @@ function createCoolText(textArray:Array<String>)
     }
 }
 
-function addMoreText(text:String)
-{
+function addMoreText(text:String) {
     var coolText:Alphabet = new Alphabet(0, 0, text, true, false);
     coolText.screenCenter(FlxAxes.X);
     coolText.y += (credGroup.length * 60) + 200;
     credGroup.add(coolText);
 }
 
-function deleteCoolText()
-{
+function deleteCoolText() {
     while (credGroup.members.length > 0)
     {
         credGroup.remove(credGroup.members[0], true);
     }
 }
 
-function update(elapsed:Float)
-{
+function update(elapsed:Float) {
     if(FlxG.keys.justPressed.TAB)
         state.openSubState(new ModSelectionMenu());
         
@@ -155,8 +148,7 @@ function update(elapsed:Float)
     }
 }
 
-function beatHit(currentBeat:Int)
-{
+function beatHit(currentBeat:Int) {
     logo.animation.play("bump", true);
 
     danceLeft = !danceLeft;
@@ -201,8 +193,7 @@ function beatHit(currentBeat:Int)
 
 var skippedIntro:Bool = false;
 
-function skipIntro()
-{
+function skipIntro() {
     if (!skippedIntro)
     {
         remove(ngSpr);

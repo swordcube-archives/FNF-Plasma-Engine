@@ -11,8 +11,7 @@ import openfl.display.Sprite;
 
 using StringTools;
 
-class Main extends Sprite
-{
+class Main extends Sprite {
 	public static var engineVersion:String = "0.1.0"; // The version of the engine
 
 	public static var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
@@ -86,7 +85,7 @@ class Main extends Sprite
 		FlxTransitionableState.skipNextTransOut = !transition;
 		if (transition)
 		{
-			FlxG.state.openSubState(new Transition(0.65, false));
+			FlxG.state.openSubState(new Transition(0.45, false));
 			Transition.finishCallback = function() {
 				FlxG.switchState(newState);
 			};
@@ -106,7 +105,7 @@ class Main extends Sprite
 		FlxTransitionableState.skipNextTransOut = !transition;
 		if (transition)
 		{
-			FlxG.state.openSubState(new Transition(0.65, false));
+			FlxG.state.openSubState(new Transition(0.45, false));
 			Transition.finishCallback = function() {
 				FlxG.resetState();
 			};

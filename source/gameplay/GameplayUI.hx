@@ -12,8 +12,7 @@ import ui.HealthIcon;
 
 using StringTools;
 
-class GameplayUI extends FlxGroup
-{
+class GameplayUI extends FlxGroup {
     public var scoreTxt:FlxText;
 
     public var songTxt:FlxText;

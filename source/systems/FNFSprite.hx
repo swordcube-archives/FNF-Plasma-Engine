@@ -2,8 +2,7 @@ package systems;
 
 import flixel.FlxSprite;
 
-class FNFSprite extends FlxSprite
-{
+class FNFSprite extends FlxSprite {
     public var animOffsets:Map<String, Array<Int>> = [];
 
     public function playAnim(anim:String, force:Bool = false, reversed:Bool = false, frame:Int = 0)

@@ -10,8 +10,7 @@ var iconP1:HealthIcon;
 var scoreTxt:FlxText;
 var scoreDivider:String = " • ";
 
-function create()
-{
+function create() {
     ui.healthColors = [0xFFff0000, 0xFF00ff00];
 
     ui.healthBarBG = new FlxSprite(0, Settings["Downscroll"] ? 60 : FlxG.height - 80);
@@ -42,8 +41,7 @@ function create()
     positionIcons();
 }
 
-function beatHit(curBeat)
-{
+function beatHit(curBeat) {
     ui.iconP2.scale.set(1.2, 1.2);
     ui.iconP2.updateHitbox();
 
@@ -53,8 +51,7 @@ function beatHit(curBeat)
     positionIcons();
 }
 
-function updateScoreText()
-{
+function updateScoreText() {
     ui.scoreTxt.text = (
         "Score: " + PlayState.songScore + scoreDivider +
         "Accuracy: " + FlxMath.roundDecimal(PlayState.songAccuracy*100.0, 2) + "%" + scoreDivider +
@@ -67,8 +64,7 @@ function updateScoreText()
     ui.scoreTxt.screenCenter(FlxAxes.X);
 }
 
-function update()
-{
+function update() {
     var iconLerp:Float = Main.deltaTime * 25;
 
     ui.iconP2.scale.set(FlxMath.lerp(ui.iconP2.scale.x, 1, iconLerp), FlxMath.lerp(ui.iconP2.scale.y, 1, iconLerp));
@@ -96,8 +92,7 @@ function update()
     positionIcons();
 }
 
-function positionIcons()
-{
+function positionIcons() {
     var iconOffset:Int = 26;
 
     ui.iconP1.x = ui.healthBar.x + (ui.healthBar.width * (FlxMath.remapToRange(ui.healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);

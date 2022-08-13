@@ -5,8 +5,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.util.FlxColor;
 import openfl.media.Sound;
 
-class HScriptHelpers
-{
+class HScriptHelpers {
     // i didn't know you could do this whole
     //
     // setVariable("Something" {

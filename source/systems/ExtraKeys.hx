@@ -1,7 +1,6 @@
 package systems;
 
-class ExtraKeys
-{
+class ExtraKeys {
     // the shit works like this:
     // the name of the thing in the xml
     // and the default colors (in rgb format)

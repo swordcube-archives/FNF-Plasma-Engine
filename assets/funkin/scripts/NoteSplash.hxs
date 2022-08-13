@@ -1,5 +1,4 @@
-function create(skin:String)
-{
+function create(skin:String) {
     sprite.frames = FNFAssets.getSparrow(skin);
     sprite.animation.addByPrefix("splash1", "splash 1", 24, false);
     sprite.animation.addByPrefix("splash2", "splash 2", 24, false);
@@ -17,8 +16,7 @@ function create(skin:String)
     if(sprite.animation.curAnim != null) sprite.animation.curAnim.frameRate *= 1.35;
 }
 
-function update(elapsed)
-{
+function update(elapsed) {
     if(sprite.started && sprite.animation.curAnim != null && sprite.animation.curAnim.finished)
         kill();
 }

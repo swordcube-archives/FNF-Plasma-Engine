@@ -9,8 +9,7 @@ import systems.MusicBeat;
 // Go to "assets/funkin/states/OptionsMenu.hxs" to edit the options menu.
 // Can be overridden by currently loaded pack btw.
 
-class OptionsMenu extends MusicBeatState
-{
+class OptionsMenu extends MusicBeatState {
     var script:HScript;
 
     override public function create()

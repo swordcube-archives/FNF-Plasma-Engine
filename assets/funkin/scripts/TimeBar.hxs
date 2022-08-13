@@ -2,8 +2,7 @@ import flixel.util.FlxStringUtil;
 import flixel.ui.FlxBarFillDirection;
 import flixel.ui.FlxBar;
 
-function create()
-{
+function create() {
     ui.timeBarBG = new FlxSprite(0, Settings["Downscroll"] ? FlxG.height - 40 : 20);
     ui.timeBarBG.loadGraphic(FNFAssets.getImage(AssetPaths.image("timeBar")));
     ui.timeBarBG.screenCenter(FlxAxes.X);
@@ -11,8 +10,7 @@ function create()
     add(ui.timeBarBG);
 }
 
-function countdownTick(counter)
-{
+function countdownTick(counter) {
     if(counter == 4)
     {
         ui.timeBar = new FlxBar(ui.timeBarBG.x + 4, ui.timeBarBG.y + 4, FlxBarFillDirection.LEFT_TO_RIGHT, Std.int(ui.timeBarBG.width - 8), Std.int(ui.timeBarBG.height - 8), FlxG.sound.music,
@@ -39,13 +37,11 @@ function countdownTick(counter)
 
 var oldMustHit:Bool = false;
 
-function beatHit(curBeat)
-{
+function beatHit(curBeat) {
     updateBar();
 }
 
-function updateBar()
-{
+function updateBar() {
     var SONG = PlayState_.SONG;
     var currentStep = Std.int(FlxMath.bound(Conductor.currentStep / 16, 0, SONG.notes.length - 1));
 
@@ -55,8 +51,7 @@ function updateBar()
     oldMustHit = SONG.notes[currentStep].mustHitSection;
 }
 
-function update(elapsed)
-{
+function update(elapsed) {
     if(ui.timeTxt != null)
     {
         ui.timeTxt.text = FlxStringUtil.formatTime(FlxG.sound.music.time/1000.0) + " / " + FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0);

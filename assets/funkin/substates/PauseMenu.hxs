@@ -20,8 +20,7 @@ var practiceMode:FlxText;
 
 var pauseMusic:FlxSound;
 
-function create()
-{
+function create() {
     pauseMusic = new FlxSound();
     pauseMusic.loadEmbedded(FNFAssets.getSound(AssetPaths.music('breakfast')), true, true);
     pauseMusic.volume = 0;
@@ -78,8 +77,7 @@ function create()
     substate.cameras = [PlayState.camOther];
 }
 
-function spawnOptions()
-{
+function spawnOptions() {
     while(grpMenuShit.length > 0)
     {
         var bemb = grpMenuShit.members[0];
@@ -103,8 +101,7 @@ function spawnOptions()
     changeSelection(0);
 }
 
-function update(elapsed)
-{
+function update(elapsed) {
     FlxG.sound.music.pause();
     PlayState.vocals.pause();
 
@@ -167,8 +164,7 @@ function update(elapsed)
     }
 }
 
-function changeSelection(change:Int)
-{
+function changeSelection(change:Int) {
     curSelected += change;
 
     if(curSelected < 0)
@@ -186,7 +182,6 @@ function changeSelection(change:Int)
     FlxG.sound.play(FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu")));
 }
 
-function destroy()
-{
+function destroy() {
     pauseMusic.destroy();
 }

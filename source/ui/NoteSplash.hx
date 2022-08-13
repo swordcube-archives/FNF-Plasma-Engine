@@ -6,8 +6,7 @@ import hscript.HScript;
 import shaders.ColorShader;
 import systems.FNFSprite;
 
-class NoteSplash extends FNFSprite
-{
+class NoteSplash extends FNFSprite {
     public var started:Bool = false;
     
     public var noteData:Int = 0;

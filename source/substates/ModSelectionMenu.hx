@@ -20,8 +20,7 @@ typedef PackJSON = {
     var locked:Bool;
 };
 
-class ModSelectionMenu extends MusicBeatSubState
-{
+class ModSelectionMenu extends MusicBeatSubState {
     var scrollMenu:Sound = FNFAssets.returnAsset(SOUND, AssetPaths.sound("menus/scrollMenu"));
     var cancelMenu:Sound = FNFAssets.returnAsset(SOUND, AssetPaths.sound("menus/cancelMenu"));
     
@@ -128,8 +127,7 @@ class ModSelectionMenu extends MusicBeatSubState
     }
 }
 
-class ModSelectionIcon extends FlxSprite
-{
+class ModSelectionIcon extends FlxSprite {
     public var mod:String = "";
     public var sprTracker:FlxSprite;
 

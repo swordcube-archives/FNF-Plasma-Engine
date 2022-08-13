@@ -4,8 +4,7 @@ import sys.FileSystem;
 
 using StringTools;
 
-class AssetPaths
-{
+class AssetPaths {
     /**
         The current working directory of the game.
     **/

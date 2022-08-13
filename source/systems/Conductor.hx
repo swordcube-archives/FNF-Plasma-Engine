@@ -3,15 +3,13 @@ package systems;
 import flixel.system.FlxSound;
 import gameplay.Song;
 
-typedef BPMChangeEvent =
-{
+typedef BPMChangeEvent = {
 	var stepTime:Int;
 	var songTime:Float;
 	var bpm:Float;
 }
 
-class Conductor
-{
+class Conductor {
     /**
         The beats per minute of the song.
     **/

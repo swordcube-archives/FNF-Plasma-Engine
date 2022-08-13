@@ -8,8 +8,7 @@ import systems.FNFSprite;
 
 using StringTools;
 
-class Character extends FNFSprite
-{
+class Character extends FNFSprite {
     public var script:HScript;
     public var curCharacter:String = "bf";
     public var deathCharacter:String = "bf-dead";

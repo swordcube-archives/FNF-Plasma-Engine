@@ -1,5 +1,4 @@
-function beatHit(curBeat)
-{
+function beatHit(curBeat) {
     if (curBeat % 8 == 7)
     {
         if(PlayState.bf != null)

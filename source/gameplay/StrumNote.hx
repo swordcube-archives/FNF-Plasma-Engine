@@ -16,8 +16,7 @@ typedef ArrowSkin = {
     var note_scale:Float;
 };
 
-class StrumNote extends FNFSprite
-{
+class StrumNote extends FNFSprite {
     public var parent:StrumLine;
 
     public var keyCount:Int = 4;

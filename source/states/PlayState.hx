@@ -31,8 +31,7 @@ import systems.UIControls;
 
 using StringTools;
 
-class PlayState extends MusicBeatState
-{
+class PlayState extends MusicBeatState {
 	public static var logs:String = "";
 	public static var current:PlayState;
 
@@ -140,6 +139,9 @@ class PlayState extends MusicBeatState
 		super.create();
 
 		ChartEditor.stateClass = PlayState;
+
+		// cache "breakfast" from music folder because pause menu!
+		FNFAssets.returnAsset(SOUND, AssetPaths.music("breakfast"));
 
 		persistentUpdate = true;
 		persistentDraw = true;

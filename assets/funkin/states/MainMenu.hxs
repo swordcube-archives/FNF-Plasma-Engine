@@ -1,5 +1,7 @@
 import flixel.FlxObject;
 
+// everythign else
+
 var scrollMenu:Sound;
 var cancelMenu:Sound;
 var confirmMenu:Sound;
@@ -23,8 +25,7 @@ var curSelected:Int = 0;
 
 var engineVersion:String = "Plasma Engine v"+Main.engineVersion;
 
-function create()
-{
+function create() {
     state.persistentUpdate = true;
     state.persistentDraw = true;
 
@@ -99,8 +100,7 @@ function create()
 
 var accepted:Bool = false;
 
-function update()
-{
+function update() {
     if(isDebugBuild && FlxG.keys.justPressed.D)
         Main.switchState(new states.CharacterEditor());
 
@@ -164,21 +164,21 @@ function update()
     }
 }
 
-function switchToOtherStateShit()
-{
+function switchToOtherStateShit() {
     switch(menuOptions[curSelected])
     {
         case 'story-mode':
-            Main.switchState(new states.StoryMenu());
+            Main.switchState(new StoryMenu());
         case 'freeplay':
-            Main.switchState(new states.FreeplayMenu());
+            Main.switchState(new FreeplayMenu());
+        case 'toolbox':
+            Main.switchState(new ToolboxMain());
         case 'options':
-            Main.switchState(new states.OptionsMenu());
+            Main.switchState(new OptionsMenu());
     }
 }
 
-function changeSelection(change:Int)
-{
+function changeSelection(change:Int) {
     curSelected += change;
     if(curSelected < 0)
         curSelected = menuOptions.length-1;

@@ -18,28 +18,24 @@ enum FNFAssetType {
     TEXT;
 }
 
-@:enum abstract ImageExt(String) to String
-{
+@:enum abstract ImageExt(String) to String {
 	var PNG = '.png';
 	var JPG = '.jpg';
     var BMP = '.bmp';
 }
 
-@:enum abstract SoundExt(String) to String
-{
+@:enum abstract SoundExt(String) to String {
 	var OGG = '.ogg';
 	var MP3 = '.mp3';
 	var WAV = '.wav';
 }
 
-@:enum abstract FontExt(String) to String
-{
+@:enum abstract FontExt(String) to String {
 	var TTF = '.ttf';
 	var OTF = '.otf';
 }
 
-class FNFAssets
-{
+class FNFAssets {
     /**
         The asset cache.
     **/

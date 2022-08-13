@@ -7,8 +7,7 @@ var grpCombo:FlxGroup;
 
 var started:Bool = false;
 
-function create(judgement, combo)
-{
+function create(judgement, combo) {
     ratingPos = new FlxText(0, 0, 0, combo, 32);
     ratingPos.screenCenter();
     ratingPos.x = FlxG.width * 0.55;
@@ -86,8 +85,7 @@ function create(judgement, combo)
     started = true;
 }
 
-function update()
-{
+function update() {
     if(grpCombo.members.length <= 0 && started)
     {
         kill();

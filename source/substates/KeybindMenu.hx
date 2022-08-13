@@ -13,8 +13,7 @@ import openfl.media.Sound;
 import systems.MusicBeat;
 import systems.UIControls;
 
-class KeybindMenu extends MusicBeatSubState
-{
+class KeybindMenu extends MusicBeatSubState {
     var scrollMenu:Sound;
     var confirmMenu:Sound;
 

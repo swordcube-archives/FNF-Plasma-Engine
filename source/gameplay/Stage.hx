@@ -10,8 +10,7 @@ import sys.FileSystem;
 
 using StringTools;
 
-class Stage extends FlxGroup
-{
+class Stage extends FlxGroup {
 	// Default Stage
 	public var bg:FlxSprite;
 	public var stageFront:FlxSprite;

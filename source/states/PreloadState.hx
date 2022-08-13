@@ -11,8 +11,7 @@ import systems.MusicBeat;
 
 using StringTools;
 
-class PreloadState extends MusicBeatState
-{
+class PreloadState extends MusicBeatState {
     var assetCount:Int = 0;
     
 	var images = [];

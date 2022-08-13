@@ -11,8 +11,7 @@ import flixel.input.keyboard.FlxKey;
  * or `FlxAndroidKeys` with `FlxG.android`.
  * Example: `FlxG.keys.justPressed.A`
  */
-class FlxKeyManager<Key:Int, KeyList:FlxBaseKeyList> implements IFlxInputManager
-{
+class FlxKeyManager<Key:Int, KeyList:FlxBaseKeyList> implements IFlxInputManager {
 	/**
 	 * Whether or not keyboard input is currently enabled.
 	 */

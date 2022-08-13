@@ -8,8 +8,7 @@ import systems.MusicBeat;
 // Go to "assets/funkin/substates/PauseMenu.hxs" to edit the pause menu.
 // Can be overridden by currently loaded pack btw.
 
-class PauseMenu extends MusicBeatSubState
-{
+class PauseMenu extends MusicBeatSubState {
     var script:HScript;
 
     public function new()

@@ -18,8 +18,7 @@ import systems.Conductor;
 import systems.MusicBeat;
 import systems.UIControls;
 
-class ChartEditor extends MusicBeatState
-{
+class ChartEditor extends MusicBeatState {
     public static var current:ChartEditor;
     public static var stateClass:Class<FlxState> = states.PlayState;
 
@@ -118,8 +117,7 @@ class ChartEditor extends MusicBeatState
     }
 }
 
-class CharterGrid extends FlxGroup
-{
+class CharterGrid extends FlxGroup {
     public function getYfromStrum(strumTime:Float, ?baseGrid:FlxSprite):Float
     {
         if(baseGrid == null)

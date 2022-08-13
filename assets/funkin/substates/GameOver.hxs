@@ -15,8 +15,7 @@ var boyfriend:Boyfriend;
 
 var updateCamera:Bool = false;
 
-function create(x, y, camX, camY, character)
-{
+function create(x, y, camX, camY, character) {
     FlxG.sound.music.stop();
     PlayState.vocals.stop();
     
@@ -39,8 +38,7 @@ function create(x, y, camX, camY, character)
 
 var isEnding:Bool = false;
 
-function update()
-{
+function update() {
     if(updateCamera)
     {
         var lerpVal:Float = FlxMath.bound(Main.deltaTime * 0.6, 0, 1);

@@ -4,8 +4,7 @@ import flixel.FlxSprite;
 
 using StringTools;
 
-class HealthIcon extends FlxSprite
-{
+class HealthIcon extends FlxSprite {
 	public var sprTracker:FlxSprite;
 	public var char:String = 'face';
 

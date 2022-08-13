@@ -7,8 +7,7 @@ import ui.FNFCheckbox;
 /**
     A state that is for debugging.
 **/
-class CheckboxTest extends MusicBeatState
-{
+class CheckboxTest extends MusicBeatState {
     var test:Bool = false;
 
     var checkbox:FNFCheckbox;

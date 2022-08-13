@@ -1,5 +1,4 @@
-function create()
-{
+function create() {
     character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
     character.isLikeGF = true;
     character.singDuration = 4;

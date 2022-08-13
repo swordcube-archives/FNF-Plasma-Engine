@@ -7,8 +7,7 @@ import systems.MusicBeat;
 // Go to "assets/funkin/states/TitleState.hxs" to edit the title screen.
 // Can be overridden by currently loaded pack btw.
 
-class TitleState extends MusicBeatState
-{
+class TitleState extends MusicBeatState {
     var script:HScript;
 
     override public function create()

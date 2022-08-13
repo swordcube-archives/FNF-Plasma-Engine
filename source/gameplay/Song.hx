@@ -2,8 +2,7 @@ package gameplay;
 
 import haxe.Json;
 
-typedef Song =
-{
+typedef Song = {
     // Base Song Info
     var song:String;
     var notes:Array<Section>;
@@ -29,8 +28,7 @@ typedef Song =
     // var uiSkin:Null<String>;
 }
 
-class SongLoader
-{
+class SongLoader {
     public static function getJSON(song:String, diff:String = "normal"):Song
     {
         var rawText:String = FNFAssets.returnAsset(TEXT, AssetPaths.json('songs/${song.toLowerCase()}/$diff'));

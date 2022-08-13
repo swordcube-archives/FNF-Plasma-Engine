@@ -32,8 +32,7 @@ var camFollowPos:FlxObject;
 var descBox:FlxSprite;
 var descText:FlxSprite;
 
-function getOptionsFromPage(page:String)
-{
+function getOptionsFromPage(page:String) {
     var options:Array<Dynamic> = [];
     for(option in Init.settings)
     {
@@ -43,8 +42,7 @@ function getOptionsFromPage(page:String)
     return options;
 }
 
-function create()
-{
+function create() {
     pageContents = [
         "Preferences"     => getOptionsFromPage("Preferences"),
         "Appearance"      => getOptionsFromPage("Appearance"),
@@ -117,8 +115,7 @@ function create()
 
 var holdTimer:Float = 0.0;
 
-function update()
-{
+function update() {
     camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, Main.deltaTime * 9), FlxMath.lerp(camFollowPos.y, camFollow.y, Main.deltaTime * 9));
 
     if(UIControls.justPressed("UP"))
@@ -157,8 +154,7 @@ function update()
     }
 }
 
-function refreshPage()
-{
+function refreshPage() {
     curSelected = 0;
     pageTypes = [];
 
@@ -263,8 +259,7 @@ function refreshPage()
     changeSelection(0);
 }
 
-function changeValue(change:Float)
-{
+function changeValue(change:Float) {
     holdTimer += Main.deltaTime;
 
     switch(Std.string(pageContents.get(pages[curPage])[curSelected].type))
@@ -330,8 +325,7 @@ function changeValue(change:Float)
     }
 }
 
-function changePage(change:Int)
-{
+function changePage(change:Int) {
     curPage += change;
     if(curPage < 0)
         curPage = pages.length - 1;
@@ -345,8 +339,7 @@ function changePage(change:Int)
     refreshPage();
 }
 
-function changeSelection(change:Int)
-{
+function changeSelection(change:Int) {
     curSelected += change;
     if(curSelected < 0)
         curSelected = grpAlphabet.members.length - 1;

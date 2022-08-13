@@ -19,8 +19,7 @@ enum CharacterSpot {
     BF;
 }
 
-class CharacterEditor extends MusicBeatState
-{
+class CharacterEditor extends MusicBeatState {
     var camHUD:FlxCamera;
     var stage:Stage;
 

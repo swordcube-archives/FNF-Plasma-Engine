@@ -2,15 +2,13 @@ var scrollMenu:Sound;
 var confirmMenu:Sound;
 var cancelMenu:Sound;
 
-function create()
-{
+function create() {
     scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
     confirmMenu = FNFAssets.getSound(AssetPaths.sound("menus/confirmMenu"));
     cancelMenu = FNFAssets.getSound(AssetPaths.sound("menus/cancelMenu"));
 }
 
-function update()
-{
+function update() {
     if(UIControls.justPressed("BACK"))
     {
         FlxG.sound.play(cancelMenu);

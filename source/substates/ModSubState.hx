@@ -4,8 +4,7 @@ import hscript.HScript;
 import systems.Conductor;
 import systems.MusicBeat;
 
-class ModSubState extends MusicBeatState
-{
+class ModSubState extends MusicBeatState {
     var script:HScript;
 
     public function new(stateName:String)

@@ -29,8 +29,7 @@ typedef OptionData = {
 
     If you need to do something before the game reaches TitleState, do it here.
 **/
-class Init extends MusicBeatState
-{
+class Init extends MusicBeatState {
     // I kinda wanna add softcoded options at some point.
     // That would be like
     // Cool
@@ -294,16 +293,13 @@ class Init extends MusicBeatState
         for(i in 0...ExtraKeys.arrowInfo.length)
         {
             if(Reflect.getProperty(FlxG.save.data, "arrowColors"+(i+1)+"k") != null)
-            {
                 arrowColors.set(i, Reflect.getProperty(FlxG.save.data, "arrowColors"+(i+1)+"k"));
-            }
             else
             {
                 Reflect.setProperty(FlxG.save.data, "arrowColors"+(i+1)+"k", ExtraKeys.arrowInfo[i][1]);
                 FlxG.save.flush();
 
                 arrowColors.set(i, ExtraKeys.arrowInfo[i][1]);
-                trace('${i}k arrow colors have been added to save data!');
             }
         }
 
@@ -333,21 +329,21 @@ class Init extends MusicBeatState
         {
             Reflect.setProperty(FlxG.save.data, setting, trueSettings.get(setting));
             FlxG.save.flush();
-            trace('$setting SAVED!');
+            //trace('$setting SAVED!');
         }
         FlxG.save.data.keyBinds = keyBinds;
-        trace('SAVED KEYBINDS!');
+        //trace('SAVED KEYBINDS!');
 
         for(i in 0...ExtraKeys.arrowInfo.length)
         {
             Reflect.setProperty(FlxG.save.data, "arrowColors"+(i+1)+"k", arrowColors.get(i));
             FlxG.save.flush();
         }
-        trace('SAVED ARROW COLORS!');
+        //trace('SAVED ARROW COLORS!');
 
         FlxG.save.data.currentPack = AssetPaths.currentPack;
         FlxG.save.flush();
-        trace('SAVED CURRENTLY SELECTED PACK');
+        //trace('SAVED CURRENTLY SELECTED PACK');
 
         trace('ALL SETTINGS SAVED!');
     }

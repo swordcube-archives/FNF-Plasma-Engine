@@ -8,8 +8,7 @@ import systems.MusicBeat;
 // Go to "assets/funkin/states/MainMenu.hxs" to edit the main menu.
 // Can be overridden by currently loaded pack btw.
 
-class MainMenu extends MusicBeatState
-{
+class MainMenu extends MusicBeatState {
     var script:HScript;
     
     override public function create()

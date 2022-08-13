@@ -8,8 +8,7 @@ import flixel.system.FlxSound;
 import openfl.system.System;
 import systems.Conductor;
 
-class MusicBeatState extends FlxUIState
-{
+class MusicBeatState extends FlxUIState {
 	// original variables extended from original game source
 	private var lastBeat:Float = 0;
 	private var lastStep:Float = 0;
@@ -19,7 +18,7 @@ class MusicBeatState extends FlxUIState
 		Init.initializeSettings();
 		
 		if (!FlxTransitionableState.skipNextTransOut)
-			openSubState(new Transition(0.65, true));
+			openSubState(new Transition(0.45, true));
 
         FNFAssets.clearCache();
 
@@ -132,8 +131,7 @@ class MusicBeatState extends FlxUIState
 	}
 }
 
-class MusicBeatSubState extends FlxUISubState
-{
+class MusicBeatSubState extends FlxUISubState {
 	public function new()
 	{
 		super();

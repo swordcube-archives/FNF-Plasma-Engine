@@ -15,8 +15,7 @@ import states.PlayState;
 
 using StringTools;
 
-class HScript
-{
+class HScript {
 	public var _path:String;
 	public var script:String;
 
@@ -212,6 +211,8 @@ class HScript
             setVariable("StoryMenu", states.StoryMenu);
             setVariable("FreeplayMenu", states.FreeplayMenu);
             setVariable("OptionsMenu", states.OptionsMenu);
+
+            setVariable("ToolboxMain", toolbox.ToolboxMain);
 
             setVariable("PlayState", PlayState.current);
             setVariable("PlayState_", PlayState);

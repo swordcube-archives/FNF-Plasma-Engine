@@ -3,8 +3,7 @@ package ui;
 import flixel.FlxSprite;
 import systems.FNFSprite;
 
-class FNFCheckbox extends FNFSprite
-{
+class FNFCheckbox extends FNFSprite {
     public var sprTracker:FlxSprite;
     public var status:Bool = false;
 
