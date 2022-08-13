@@ -64,7 +64,11 @@ class FNFAssets
                 for(fucker in cache.keys())
                 {
                     if(fucker.endsWith(":IMAGE"))
+                    {
+                        cast(cache[fucker], FlxGraphic).dump();
+                        cast(cache[fucker], FlxGraphic).destroy();
                         cache.remove(fucker);
+                    }
                 }
 
             // Clears all sounds from cache

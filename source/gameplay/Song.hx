@@ -8,7 +8,10 @@ typedef Song =
     var song:String;
     var notes:Array<Section>;
     var bpm:Float;
-    //var needsVoices:Bool; // I think this is kinda useless now isn't it
+
+    @:deprecated
+    var needsVoices:Bool;
+    
     var speed:Float;
     var keyCount:Null<Int>;
 
@@ -18,8 +21,10 @@ typedef Song =
 
     var gf:Null<String>;
     var gfVersion:Null<String>;
+
+    @:deprecated
     var player3:Null<String>;
-    
+
     var stage:Null<String>;
     // var uiSkin:Null<String>;
 }

@@ -69,6 +69,36 @@
                 "normal",
                 "hard"
             ]
+        },
+        {
+            "name": "Pico",
+            "icon": "pico",
+            "color": [148, 22, 83],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "Philly Nice",
+            "icon": "pico",
+            "color": [148, 22, 83],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "Blammed",
+            "icon": "pico",
+            "color": [148, 22, 83],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
         }
     ]
 }

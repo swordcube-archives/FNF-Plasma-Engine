@@ -22,6 +22,7 @@ class Note extends FNFSprite
     public var noteData:Int = 0;
     public var rawNoteData:Int = 0;
     
+    public var skin:String = "";
     public var json:ArrowSkin;
 
     public var isSustain:Bool = false;
@@ -84,6 +85,7 @@ class Note extends FNFSprite
 
     public function loadSkin(skin:String)
     {
+        this.skin = skin;
         var path:String = AssetPaths.json('images/skins/$skin');
         if(FileSystem.exists(path))
         {
