@@ -1,6 +1,8 @@
 function create() {
     character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
     character.singDuration = 4;
+
+    character.healthIcon = "pico";
     
     character.animation.addByPrefix('idle', "Pico Idle Dance", 24, false);
     character.animation.addByPrefix('singUP', 'pico Up note0', 24, false);

@@ -13,6 +13,8 @@ class Character extends FNFSprite {
     public var curCharacter:String = "bf";
     public var deathCharacter:String = "bf-dead";
 
+    public var healthIcon:String = "face";
+
     public var isLikeGF:Bool = false;
     public var canDance:Bool = true;
 

@@ -23,11 +23,11 @@ function create() {
     ui.healthBar.createFilledBar(ui.healthColors[0], ui.healthColors[1]);
     add(ui.healthBar);
 
-    ui.iconP1 = new HealthIcon(PlayState.bf != null ? PlayState.bf.curCharacter : "face", true);
+    ui.iconP1 = new HealthIcon(PlayState.bf != null ? PlayState.bf.healthIcon : "face", true);
     ui.iconP1.y = ui.healthBar.y - (ui.iconP1.height / 2);
     add(ui.iconP1);
 
-    ui.iconP2 = new HealthIcon(PlayState.dad != null ? PlayState.dad.curCharacter : "face", false);
+    ui.iconP2 = new HealthIcon(PlayState.dad != null ? PlayState.dad.healthIcon : "face", false);
     ui.iconP2.y = ui.healthBar.y - (ui.iconP2.height / 2);
     add(ui.iconP2);
 

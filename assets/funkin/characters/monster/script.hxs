@@ -1,6 +1,8 @@
 function create() {
     character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
     character.singDuration = 4;
+
+    character.healthIcon = "monster";
     
     character.animation.addByPrefix('idle', 'monster idle', 24, false);
     character.animation.addByPrefix('singUP', 'monster up note', 24, false);
