@@ -104,6 +104,7 @@ class HScript {
                 "stringify": haxe.Json.stringify
             });
             
+            setVariable("BackgroundDancer", gameplay.BackgroundDancer);
             setVariable("FNFSprite", systems.FNFSprite);
             setVariable("FlxSprite", flixel.FlxSprite);
             setVariable("FlxTimer", flixel.util.FlxTimer);

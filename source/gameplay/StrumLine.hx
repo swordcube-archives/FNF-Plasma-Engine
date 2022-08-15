@@ -191,7 +191,10 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote> {
                         if(PlayState.current.dad != null)
                         {
                             PlayState.current.dad.holdTimer = 0.0;
-                            PlayState.current.dad.playAnim(getSingAnimation(note.noteData), true);
+                            if(note.altAnim && PlayState.current.dad.animation.exists(getSingAnimation(note.noteData)+"-alt"))
+                                PlayState.current.dad.playAnim(getSingAnimation(note.noteData)+"-alt", true);
+                            else
+                                PlayState.current.dad.playAnim(getSingAnimation(note.noteData), true);
                         }
                         
                         PlayState.current.vocals.volume = 1;
@@ -295,7 +298,10 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote> {
                             if(PlayState.current.bf != null && !PlayState.current.bf.specialAnim)
                             {
                                 PlayState.current.bf.holdTimer = 0.0;
-                                PlayState.current.bf.playAnim(getSingAnimation(note.noteData), true);
+                                if(note.altAnim && PlayState.current.bf.animation.exists(getSingAnimation(note.noteData)+"-alt"))
+                                    PlayState.current.bf.playAnim(getSingAnimation(note.noteData)+"-alt", true);
+                                else
+                                    PlayState.current.bf.playAnim(getSingAnimation(note.noteData), true);
                             }
                         }
                     }
@@ -401,7 +407,10 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote> {
         if(PlayState.current.bf != null && !PlayState.current.bf.specialAnim)
         {
             PlayState.current.bf.holdTimer = 0.0;
-            PlayState.current.bf.playAnim(getSingAnimation(note.noteData), true);
+            if(note.altAnim && PlayState.current.bf.animation.exists(getSingAnimation(note.noteData)+"-alt"))
+                PlayState.current.bf.playAnim(getSingAnimation(note.noteData)+"-alt", true);
+            else
+                PlayState.current.bf.playAnim(getSingAnimation(note.noteData), true);
         }
     }
 

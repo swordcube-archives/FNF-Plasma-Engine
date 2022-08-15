@@ -99,6 +99,66 @@
                 "normal",
                 "hard"
             ]
+        },
+        {
+            "name": "Satin Panties",
+            "icon": "mom",
+            "color": [252, 150, 215],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "High",
+            "icon": "mom",
+            "color": [252, 150, 215],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "M.I.L.F",
+            "icon": "mom",
+            "color": [252, 150, 215],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "Cocoa",
+            "icon": "parents-christmas",
+            "color": [160, 209, 255],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "Eggnog",
+            "icon": "parents-christmas",
+            "color": [160, 209, 255],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "Winter Horrorland",
+            "icon": "monster",
+            "color": [160, 209, 255],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
         }
     ]
 }

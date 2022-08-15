@@ -6,6 +6,7 @@
         "player1": "bf-christmas",
         "player2": "monster-christmas",
         "gf": "gf-christmas",
+        "stage": "mallEvil",
         "speed": 1.1,
         "notes": [
             {

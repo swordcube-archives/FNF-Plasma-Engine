@@ -34,6 +34,8 @@ class Note extends FNFSprite {
     public var colorSwap:ColorShader;
 
     public var noteYOff:Int = 0;
+
+    public var altAnim:Bool = false;
     
     public function new(x:Float, y:Float, noteData:Int = 0, isSustain:Bool = false)
     {
@@ -84,10 +86,10 @@ class Note extends FNFSprite {
 
     public function loadSkin(skin:String)
     {
-        this.skin = skin;
         var path:String = AssetPaths.json('images/skins/$skin');
         if(FileSystem.exists(path))
         {
+            this.skin = skin;
             json = Json.parse(FNFAssets.returnAsset(TEXT, AssetPaths.json('images/skins/$skin')));
 
             frames = FNFAssets.returnAsset(SPARROW, json.note_assets);

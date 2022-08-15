@@ -99,12 +99,13 @@ class Stage extends FlxGroup {
                 stageCurtains.antialiasing = Init.trueSettings.get("Antialiasing");
 				add(stageCurtains);
 
-				// Run hscript and allow users to do Stage.removeDefaultStage();
+				// Run hscript and allow users to do removeDefaultStage();
 				// To make their own custom stage
 				if(FileSystem.exists(AssetPaths.hxs('stages/$curStage')))
 				{
 					trace("TRYING TO RUN SCRIPT! " + 'stages/$curStage.hxs');
 					script = new HScript('stages/$curStage');
+                    script.setVariable("stage", this);
 					script.setVariable("add", this.addSprite);
                     script.setVariable("remove", this.removeSprite);
                     script.setVariable("removeStage", this.removeDefaultStage);

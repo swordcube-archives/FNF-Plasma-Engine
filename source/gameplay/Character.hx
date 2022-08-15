@@ -112,6 +112,9 @@ class Character extends FNFSprite {
 			}
 		}
 
+        if(animation.curAnim.finished && animation.exists(animation.curAnim.name + '-loop'))
+            playAnim(animation.curAnim.name + '-loop');
+
         if (isLikeGF && canDance && animation.curAnim != null && animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
             playAnim('danceRight');
         

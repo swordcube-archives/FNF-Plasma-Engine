@@ -8,7 +8,7 @@ typedef Song = {
     var notes:Array<Section>;
     var bpm:Float;
 
-    @:deprecated
+    @:deprecated("`needsVoices` is unused. Please check if the vocals file exists instead.")
     var needsVoices:Bool;
     
     var speed:Float;
@@ -21,7 +21,7 @@ typedef Song = {
     var gf:Null<String>;
     var gfVersion:Null<String>;
 
-    @:deprecated
+    @:deprecated("`player3` is deprecated. Use `gf` or `gfVersion` instead.")
     var player3:Null<String>;
 
     var stage:Null<String>;

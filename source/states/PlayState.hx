@@ -281,6 +281,7 @@ class PlayState extends MusicBeatState {
 				var arrowSkin:String = currentSkin != "default" ? currentSkin : Init.trueSettings.get("Arrow Skin").toLowerCase();
 
 				var newNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount);
+				newNote.altAnim = section.altAnim;
 
 				// sustain
 				var susLength:Float = note[2] / Conductor.stepCrochet;
@@ -291,6 +292,7 @@ class PlayState extends MusicBeatState {
 					for(i in 0...Math.floor(susLength))
 					{
 						var newSusNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount, true);
+						newSusNote.altAnim = section.altAnim;
 						newSusNote.strumTime = strumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
 						newSusNote.mustPress = gottaHitNote;
 
@@ -305,6 +307,7 @@ class PlayState extends MusicBeatState {
 
 					// end piece
 					var newSusNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount, true);
+					newSusNote.altAnim = section.altAnim;
 					newSusNote.strumTime = strumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
 					newSusNote.mustPress = gottaHitNote;
 
@@ -633,13 +636,13 @@ class PlayState extends MusicBeatState {
 		var curSection:Int = Std.int(FlxMath.bound(Conductor.currentStep / 16, 0, SONG.notes.length-1));
 		focusCamera(SONG.notes[curSection].mustHitSection ? "bf" : "dad");
 
-		if(dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith("sing"))
+		if(dad != null && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith("sing"))
 			dad.dance();
 
-		if(gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing"))
+		if(gf != null && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing"))
 			gf.dance();
 
-		if(bf.animation.curAnim != null && !bf.animation.curAnim.name.startsWith("sing"))
+		if(bf != null && bf.animation.curAnim != null && !bf.animation.curAnim.name.startsWith("sing"))
 			bf.dance();
 
 		callOnHScripts("beatHit", [Conductor.currentBeat]);

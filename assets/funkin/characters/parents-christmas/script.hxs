@@ -1,0 +1,32 @@
+function create() {
+    character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
+    character.singDuration = 4;
+
+    character.healthIcon = "parents-christmas";
+    
+    character.animation.addByPrefix('idle', 'Parent Christmas Idle', 24, false);
+    character.animation.addByPrefix('singUP', 'Parent Up Note Dad', 24, false);
+    character.animation.addByPrefix('singDOWN', 'Parent Down Note Dad', 24, false);
+    character.animation.addByPrefix('singLEFT', 'Parent Left Note Dad', 24, false);
+    character.animation.addByPrefix('singRIGHT', 'Parent Right Note Dad', 24, false);
+
+    character.animation.addByPrefix('singUP-alt', 'Parent Up Note Mom', 24, false);
+
+    character.animation.addByPrefix('singDOWN-alt', 'Parent Down Note Mom', 24, false);
+    character.animation.addByPrefix('singLEFT-alt', 'Parent Left Note Mom', 24, false);
+    character.animation.addByPrefix('singRIGHT-alt', 'Parent Right Note Mom', 24, false);
+
+    character.setOffset('idle');
+    character.setOffset("singUP", -47, 24);
+    character.setOffset("singRIGHT", -1, -23);
+    character.setOffset("singLEFT", -30, 16);
+    character.setOffset("singDOWN", -31, -29);
+    character.setOffset("singUP-alt", -47, 24);
+    character.setOffset("singRIGHT-alt", -1, -24);
+    character.setOffset("singLEFT-alt", -30, 15);
+    character.setOffset("singDOWN-alt", -30, -27);
+
+    character.positionOffset.x -= 500;
+
+    character.dance();
+}

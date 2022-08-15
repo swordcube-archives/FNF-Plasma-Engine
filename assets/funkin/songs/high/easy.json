@@ -6,6 +6,7 @@
         "player1": "bf-car",
         "player2": "mom-car",
         "gf": "gf-car",
+        "stage": "limo",
         "speed": 1.3,
         "notes": [
             {
