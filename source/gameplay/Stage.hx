@@ -7,6 +7,7 @@ import flixel.math.FlxPoint;
 import hscript.HScript;
 import states.PlayState;
 import sys.FileSystem;
+import systems.Conductor;
 
 using StringTools;
 

@@ -1,17 +1,22 @@
 package hscript;
 
 import flixel.FlxCamera.FlxCameraFollowStyle;
+import flixel.FlxG;
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.text.FlxText.FlxTextAlign;
 import flixel.text.FlxText.FlxTextBorderStyle;
 import flixel.util.FlxColor;
+import haxe.Exception;
+import hscript.Expr.Error;
 import hscript.Interp;
 import hscript.Parser;
 import lime.app.Application;
 import openfl.display.BlendMode;
 import openfl.media.Sound;
 import states.PlayState;
+import systems.MusicBeat.MusicBeatState;
+import ui.Notification;
 
 using StringTools;
 
@@ -196,6 +201,24 @@ class HScript {
             setVariable("HealthIcon", ui.HealthIcon);
             setVariable("FNFCheckbox", ui.FNFCheckbox);
 
+            setVariable("Notification", {
+                "showError": function(title:String, description:String) {
+                    var notif:Notification = new Notification(title, description, Error);
+                    cast(FlxG.state, MusicBeatState).notificationGroup.add(notif);
+                    return notif;
+                },
+                "showWarning": function(title:String, description:String) {
+                    var notif:Notification = new Notification(title, description, Warn);
+                    cast(FlxG.state, MusicBeatState).notificationGroup.add(notif);
+                    return notif;
+                },
+                "showInfo": function(title:String, description:String) {
+                    var notif:Notification = new Notification(title, description, Info);
+                    cast(FlxG.state, MusicBeatState).notificationGroup.add(notif);
+                    return notif;
+                }
+            });
+
             // Gameplay Characters
             if(PlayState.current != null)
             {
@@ -226,7 +249,7 @@ class HScript {
 
             program = parser.parseString(script);
 
-            interp.errorHandler = function(e) {
+            interp.errorHandler = function(e:hscript.Error) {
                 trace('$e');
                 if(!flixel.FlxG.keys.pressed.SHIFT) {
                     var posInfo = interp.posInfos();
@@ -240,6 +263,12 @@ class HScript {
                     #else
                     Main.print("error", 'Exception occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'}\n\n${e}\n\nHX File: $path.hxs');
                     #end
+
+                    cast(FlxG.state, MusicBeatState).notificationGroup.add(new Notification(
+                        '${e}',
+                        'Occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'} in $path.hxs',
+                        Error
+                    ));
                 }
             };
 

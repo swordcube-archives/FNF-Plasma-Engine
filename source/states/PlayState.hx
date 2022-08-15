@@ -697,7 +697,8 @@ class PlayState extends MusicBeatState {
 
 	function setupCameras()
 	{
-		FlxG.cameras.reset();
+		FlxG.cameras.remove(camNotif, false);
+
 		camGame = FlxG.camera;
 		camHUD = new FlxCamera();
 		camOther = new FlxCamera();
@@ -706,6 +707,7 @@ class PlayState extends MusicBeatState {
 
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
+		FlxG.cameras.add(camNotif, false);
 	}
 
 	public function callOnHScripts(func:String, ?args:Null<Array<Dynamic>>)

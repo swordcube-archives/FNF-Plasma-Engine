@@ -220,6 +220,8 @@ class Init extends MusicBeatState {
 
     public static var trueSettings:Map<String, Dynamic> = [];
 
+    public static var startedGame:Bool = false;
+
     /**
         Put keybinds for extra keys here!
         Go to systems/ExtraKeys.hx to make info for your extra keys.
@@ -268,6 +270,8 @@ class Init extends MusicBeatState {
             Main.switchState(new states.PreloadState(), false);
         else
             Main.switchState(new states.TitleState(), false);
+
+        startedGame = true;
     }
 
     /**

@@ -1,17 +1,24 @@
 package systems;
 
+import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.ui.FlxUIState;
 import flixel.addons.ui.FlxUISubState;
+import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.system.FlxSound;
 import openfl.system.System;
 import systems.Conductor;
+import ui.Notification;
 
 class MusicBeatState extends FlxUIState {
 	// original variables extended from original game source
 	private var lastBeat:Float = 0;
 	private var lastStep:Float = 0;
+
+	public var camNotif:FlxCamera;
+
+	public var notificationGroup:FlxTypedGroup<Notification>;
 
 	override function create()
 	{
@@ -36,10 +43,36 @@ class MusicBeatState extends FlxUIState {
 
         // run the garbage collector
         System.gc();
+
+		super.create();
+
+		FlxG.cameras.reset();
+		camNotif = new FlxCamera();
+		camNotif.bgColor = 0x0;
+
+		FlxG.cameras.add(camNotif, false);
+
+		notificationGroup = new FlxTypedGroup<Notification>();
+		notificationGroup.cameras = [camNotif];
+		add(notificationGroup);
     }
 
 	override function update(elapsed:Float)
 	{
+		var dumb:Int = 0;
+		notificationGroup.forEachAlive(function(notif:Notification) {
+			notif.scrollFactor.set();
+			notif.y = 20 + ((notif.box.height + 20) * dumb);
+			if(notif.shouldDie)
+			{
+				notificationGroup.remove(notif, true);
+				notif.kill();
+				notif.destroy();
+			}
+
+			dumb++;
+		});
+
 		updateContents();
 
 		// state refreshing
