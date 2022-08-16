@@ -46,6 +46,8 @@ class PlayState extends MusicBeatState {
 	// Song
 	public static var isStoryMode:Bool = false;
 	public static var SONG:Song = SongLoader.getJSON("m.i.l.f", "hard");
+	public static var actualSongName:String = "";
+
 	public static var currentDifficulty:String = "hard";
 	public static var availableDifficulties:Array<String> = ["easy", "normal", "hard"];
 
@@ -233,7 +235,7 @@ class PlayState extends MusicBeatState {
 
 		callOnHScripts("createAfterChars");
 
-		var path:String = 'songs/${SONG.song.toLowerCase()}/script';
+		var path:String = 'songs/${actualSongName.toLowerCase()}/script';
 		script = new HScript(path);
 		script.set("add", this.add);
 		script.set("remove", this.remove);
@@ -456,7 +458,7 @@ class PlayState extends MusicBeatState {
 		vocals.stop();
 		FlxG.sound.music.time = 0;
 		FlxG.sound.playMusic(freakyMenu);
-		callOnHScripts("endSong", [SONG.song]);
+		callOnHScripts("endSong", [actualSongName]);
 		
 		Main.switchState(getMenuToSwitchTo());
 	}
@@ -471,10 +473,10 @@ class PlayState extends MusicBeatState {
 			FlxG.sound.music.time = 0;
 			FlxG.sound.playMusic(freakyMenu);
 			
-			if(!usedPractice && songScore > Highscore.getScore(SONG.song+"-"+currentDifficulty))
-				Highscore.setScore(SONG.song+"-"+currentDifficulty, songScore);
+			if(!usedPractice && songScore > Highscore.getScore(actualSongName+"-"+currentDifficulty))
+				Highscore.setScore(actualSongName+"-"+currentDifficulty, songScore);
 			
-			callOnHScripts("endSong", [SONG.song]);
+			callOnHScripts("endSong", [actualSongName]);
 			
 			if(isStoryMode)
 			{

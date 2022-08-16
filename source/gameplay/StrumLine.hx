@@ -172,8 +172,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 							FlxG.sound.play(missSounds["miss" + FlxG.random.int(1, 3)], FlxG.random.float(0.1, 0.2));
 
-							PlayState.current.totalNotes++;
-							PlayState.current.calculateAccuracy();
+                            PlayState.current.totalNotes++;
+                            PlayState.current.calculateAccuracy();
 
 							PlayState.current.UI.healthBarScript.callFunction("updateScoreText");
 						}
@@ -191,65 +191,71 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 						notes.remove(note, true);
 					}
 
-					// Make the note possible to hit if it's in the safe zone to be hit.
-					var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
-					if (note.canBeHit && ((Conductor.position - note.strumTime) >= (botPlay ? 0.0 : -Conductor.safeZoneOffset)))
-						possibleNotes.push(note);
-				}
-				else
-				{
-					if ((Conductor.position - note.strumTime) >= 0.0)
-					{
-						if (PlayState.current.dad != null)
-						{
-							PlayState.current.dad.holdTimer = 0.0;
-							if (note.altAnim && PlayState.current.dad.animation.exists(getSingAnimation(note.noteData) + "-alt"))
-								PlayState.current.dad.playAnim(getSingAnimation(note.noteData) + "-alt", true);
-							else
-								PlayState.current.dad.playAnim(getSingAnimation(note.noteData), true);
-						}
+                    // Make the note possible to hit if it's in the safe zone to be hit.
+                    var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
+                    if(note.canBeHit && ((Conductor.position - note.strumTime) >= (botPlay ? 0.0 : -Conductor.safeZoneOffset)))
+                        possibleNotes.push(note);
+                }
+                else
+                {
+                    if((Conductor.position - note.strumTime) >= 0.0)
+                    {
+                        if(PlayState.current.dad != null)
+                        {
+                            PlayState.current.dad.holdTimer = 0.0;
+                            if(note.altAnim && PlayState.current.dad.animation.exists(getSingAnimation(note.noteData)+"-alt"))
+                                PlayState.current.dad.playAnim(getSingAnimation(note.noteData)+"-alt", true);
+                            else
+                                PlayState.current.dad.playAnim(getSingAnimation(note.noteData), true);
+                        }
+                        
+                        PlayState.current.vocals.volume = 1;
+                        members[note.noteData].alpha = 1;
+                        members[note.noteData].setColor();
+                        members[note.noteData].colorSwap.enabled.value = [true];
+                        members[note.noteData].playAnim("confirm", true);
 
-						PlayState.current.vocals.volume = 1;
-						members[note.noteData].alpha = 1;
-						members[note.noteData].setColor();
-						members[note.noteData].colorSwap.enabled.value = [true];
-						members[note.noteData].playAnim("confirm", true);
-						note.kill();
-						note.destroy();
-						notes.remove(note, true);
-					}
-				}
-			});
+                        PlayState.current.callOnHScripts("opponentNoteHit", [note]);
 
-			var justPressed:Array<Bool> = [];
-			var pressed:Array<Bool> = [];
+                        note.kill();
+                        note.destroy();
+                        notes.remove(note, true);
+                    }
+                }
+            });
 
-			if (hasInput)
-			{
-				justPressed = [];
-				pressed = [];
+            var justPressed:Array<Bool> = [];
+            var pressed:Array<Bool> = [];
+            var noteDataTimes:Array<Float> = [];
 
-				var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
-				for (i in 0...keyCount)
-				{
-					justPressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount - 1][i], JUST_PRESSED)) : false);
-					pressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount - 1][i], PRESSED)) : false);
-				}
+            if(hasInput)
+            {
+                justPressed = [];
+                pressed = [];
+                noteDataTimes = [];
 
-				var i:Int = 0;
-				for (strum in members)
-				{
-					var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
+                var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
+                for(i in 0...keyCount)
+                {
+                    justPressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], JUST_PRESSED)) : false);
+                    pressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], PRESSED)) : false);
+                    noteDataTimes.push(-1);
+                }
 
-					var key:FlxKey = Init.keyBinds[keyCount - 1][i];
-					if (FlxG.keys.checkStatus(key, JUST_PRESSED) && !inCutscene && !botPlay)
-					{
-						if (!Init.trueSettings.get("Ghost Tapping") && possibleNotes.length <= 0)
-						{
-							PlayState.current.health -= PlayState.current.healthLoss;
-
-							PlayState.current.combo = 0;
-							PlayState.current.songMisses++;
+                var i:Int = 0;
+                for(strum in members)
+                {
+                    var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
+    
+                    var key:FlxKey = Init.keyBinds[keyCount-1][i];
+                    if(FlxG.keys.checkStatus(key, JUST_PRESSED) && !inCutscene && !botPlay)
+                    {
+                        if(!Init.trueSettings.get("Ghost Tapping") && possibleNotes.length <= 0)
+                        {
+                            PlayState.current.health -= PlayState.current.healthLoss;
+                            
+                            PlayState.current.combo = 0;
+                            PlayState.current.songMisses++;
 
 							FlxG.sound.play(missSounds["miss" + FlxG.random.int(1, 3)], FlxG.random.float(0.1, 0.2));
 
@@ -259,26 +265,22 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 							PlayState.current.UI.healthBarScript.callFunction("updateScoreText");
 						}
 
-						strum.setColor();
-						strum.colorSwap.enabled.value = [true];
-						strum.playAnim("press", true);
-						strum.alpha = 1;
-					}
-
-					if ((FlxG.keys.checkStatus(key, JUST_RELEASED) && !inCutscene && !botPlay)
-						|| (botPlay
-							&& strum.animation.curAnim != null
-							&& strum.animation.curAnim.name == "confirm"
-							&& strum.animation.curAnim.finished))
-					{
-						strum.colorSwap.enabled.value = [false];
-						strum.resetColor();
-						strum.playAnim("static", true);
-						strum.alpha = Init.trueSettings.get("Opaque Strums") ? 1 : 0.75;
-					}
-
-					i++;
-				}
+                        strum.setColor();
+                        strum.colorSwap.enabled.value = [true];
+                        strum.playAnim("press", true);
+                        strum.alpha = 1;
+                    }
+    
+                    if((FlxG.keys.checkStatus(key, JUST_RELEASED) && !inCutscene && !botPlay) || (botPlay && strum.animation.curAnim != null && strum.animation.curAnim.name == "confirm" && strum.animation.curAnim.finished))
+                    {
+                        strum.colorSwap.enabled.value = [false];
+                        strum.resetColor();
+                        strum.playAnim("static", true);
+                        strum.alpha = Init.trueSettings.get("Opaque Strums") ? 1 : 0.75;
+                    }
+    
+                    i++;
+                }
 
 				if (possibleNotes.length > 0)
 				{
@@ -293,6 +295,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 						{
 							PlayState.current.vocals.volume = 1;
 							justPressed[note.noteData] = false;
+                            noteDataTimes[note.noteData] = note.strumTime;
+
 							members[note.noteData].alpha = 1;
 							members[note.noteData].setColor();
 							members[note.noteData].colorSwap.enabled.value = [true];
@@ -322,6 +326,17 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 							}
 						}
 					}
+
+                    // we hate stacked notes!
+                    for(note in possibleNotes) {
+                        if(!note.isSustain && note.strumTime == noteDataTimes[note.noteData])
+                        {
+                            possibleNotes.remove(note);
+                            notes.remove(note, true);
+                            note.kill();
+                            note.destroy();
+                        }
+                    }
 				}
 
 				if (PlayState.current != null
@@ -384,11 +399,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 	{
 		var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
 
-		note.kill();
-		note.destroy();
-		notes.remove(note, true);
-
-		PlayState.current.health += PlayState.current.healthGain;
+        PlayState.current.health += PlayState.current.healthGain;
 
 		PlayState.current.totalNotes++;
 
@@ -417,17 +428,24 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		var judgeUI:JudgementUI = new JudgementUI(judgement, PlayState.current.combo, PlayState.current.ratingScale, PlayState.current.comboScale);
 		PlayState.current.add(judgeUI);
 
-		PlayState.current.UI.healthBarScript.callFunction("updateScoreText");
+        PlayState.current.UI.healthBarScript.callFunction("updateScoreText");
 
-		if (PlayState.current.bf != null && !PlayState.current.bf.specialAnim)
-		{
-			PlayState.current.bf.holdTimer = 0.0;
-			if (note.altAnim && PlayState.current.bf.animation.exists(getSingAnimation(note.noteData) + "-alt"))
-				PlayState.current.bf.playAnim(getSingAnimation(note.noteData) + "-alt", true);
-			else
-				PlayState.current.bf.playAnim(getSingAnimation(note.noteData), true);
-		}
-	}
+        if(PlayState.current.bf != null && !PlayState.current.bf.specialAnim)
+        {
+            PlayState.current.bf.holdTimer = 0.0;
+            if(note.altAnim && PlayState.current.bf.animation.exists(getSingAnimation(note.noteData)+"-alt"))
+                PlayState.current.bf.playAnim(getSingAnimation(note.noteData)+"-alt", true);
+            else
+                PlayState.current.bf.playAnim(getSingAnimation(note.noteData), true);
+        }
+
+        PlayState.current.callOnHScripts("goodNoteHit", [note]);
+        PlayState.current.callOnHScripts("playerNoteHit", [note]);
+
+        note.kill();
+        note.destroy();
+        notes.remove(note, true);
+    }
 
 	function boundHealth()
 		PlayState.current.health = FlxMath.bound(PlayState.current.health, PlayState.current.minHealth, PlayState.current.maxHealth);

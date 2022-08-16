@@ -1,5 +1,6 @@
 package gameplay;
 
+import haxe.Json;
 import flixel.util.FlxColor;
 import flixel.math.FlxPoint;
 import hscript.HScript;
@@ -8,6 +9,28 @@ import systems.Conductor;
 import systems.FNFSprite;
 
 using StringTools;
+
+typedef PsychCharacter = {
+    var animations:Array<PsychCharacterAnimation>;
+    var no_antialiasing:Bool;
+    var image:String;
+    var position:Array<Float>;
+    var healthicon:String;
+    var flip_x:Bool;
+    var healthbar_colors:Array<Int>; // psych colors work with rgb
+    var camera_position:Array<Float>;
+    var sing_duration:Float;
+    var scale:Float;
+};
+
+typedef PsychCharacterAnimation = {
+    var offsets:Array<Float>;
+    var loop:Bool;
+    var anim:String;
+    var fps:Int;
+    var name:String;
+    var indices:Array<Int>;
+};
 
 class Character extends FNFSprite {
     public var script:HScript;
@@ -63,6 +86,40 @@ class Character extends FNFSprite {
         ogPosition = new FlxPoint(x, y);
 
         script.callFunction("createPost");
+    }
+
+    public function loadPsychJSON()
+    {
+        var path:String = 'characters/$curCharacter/config';
+        if(FileSystem.exists(AssetPaths.json(path)))
+        {
+            var json:PsychCharacter = Json.parse(FNFAssets.returnAsset(TEXT, AssetPaths.json(path)));
+            for(anim in json.animations)
+            {
+                if(anim.indices != null && anim.indices.length > 0)
+                    animation.addByIndices(anim.anim, anim.name, anim.indices, "", anim.fps, anim.loop);
+                else
+                    animation.addByPrefix(anim.anim, anim.name, anim.fps, anim.loop);
+
+                setOffset(anim.anim, anim.offsets[0], anim.offsets[1]);
+            }
+
+            healthIcon = json.healthicon;
+            healthBarColor = FlxColor.fromRGB(json.healthbar_colors[0], json.healthbar_colors[1], json.healthbar_colors[2]);
+            antialiasing = json.no_antialiasing ? false : Init.trueSettings.get("Antialiasing");
+            flipX = json.flip_x;
+
+            singDuration = json.sing_duration;
+            scale.set(json.scale, json.scale);
+            updateHitbox();
+
+            positionOffset.set(json.position[0], json.position[1]);
+            cameraPosition.set(json.camera_position[0], json.camera_position[1]);
+
+            isLikeGF = animation.exists("danceLeft") && animation.exists("danceRight");
+
+            dance();
+        }
     }
 
     public function goToPosition(X:Float, Y:Float)

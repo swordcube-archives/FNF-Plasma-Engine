@@ -72,6 +72,13 @@ class Init extends MusicBeatState {
         },
         {
             page: "Preferences",
+            name: "Auto Pause",
+            description: "Choose whether or not the game pauses while not focused on the window.",
+            type: Checkbox,
+            defaultValue: true
+        },
+        {
+            page: "Preferences",
             name: "Preload Assets",
             description: "Preloads assets like images, music, and sounds when the game starts to load into songs faster. (Enabling this option uses more memory, A restart is needed for this to take effect)",
             type: Checkbox,
