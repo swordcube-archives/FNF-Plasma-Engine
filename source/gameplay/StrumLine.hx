@@ -174,9 +174,9 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote> {
                             if(deezNote.isSustain && deezNote.sustainParent == note)
                                 deezNote.canBeHit = false;
                         });
-                        notes.remove(note, true);
                         note.kill();
                         note.destroy();
+                        notes.remove(note, true);
                     }
 
                     // Make the note possible to hit if it's in the safe zone to be hit.
@@ -202,9 +202,9 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote> {
                         members[note.noteData].setColor();
                         members[note.noteData].colorSwap.enabled.value = [true];
                         members[note.noteData].playAnim("confirm", true);
-                        notes.remove(note, true);
                         note.kill();
                         note.destroy();
+                        notes.remove(note, true);
                     }
                 }
             });
@@ -292,9 +292,9 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote> {
                             members[note.noteData].setColor();
                             members[note.noteData].colorSwap.enabled.value = [true];
                             members[note.noteData].playAnim("confirm", true);
-                            notes.remove(note, true);
                             note.kill();
                             note.destroy();
+                            notes.remove(note, true); 
                             if(PlayState.current.bf != null && !PlayState.current.bf.specialAnim)
                             {
                                 PlayState.current.bf.holdTimer = 0.0;
@@ -369,9 +369,9 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote> {
     {
         var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
 
-        notes.remove(note, true);
         note.kill();
         note.destroy();
+        notes.remove(note, true);
 
         PlayState.current.health += PlayState.current.healthGain;
 

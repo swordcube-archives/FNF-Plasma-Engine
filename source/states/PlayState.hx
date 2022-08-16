@@ -641,6 +641,9 @@ class PlayState extends MusicBeatState {
 		var curSection:Int = Std.int(FlxMath.bound(Conductor.currentStep / 16, 0, SONG.notes.length-1));
 		focusCamera(SONG.notes[curSection].mustHitSection ? "bf" : "dad");
 
+		if (SONG.notes[curSection].changeBPM)
+			Conductor.changeBPM(SONG.notes[curSection].bpm);
+
 		if(dad != null && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith("sing"))
 			dad.dance();
 
