@@ -25,5 +25,7 @@ function create() {
     character.positionOffset.x -= 150;
     character.positionOffset.x += 100;
 
+    character.trail = new FlxTrail(character, null, 4, 24, 0.3, 0.069);
+
     character.dance();
 }

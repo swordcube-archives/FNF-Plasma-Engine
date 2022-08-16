@@ -204,17 +204,29 @@ class PlayState extends MusicBeatState {
 
 		gf = new Character(stage.gfPosition.x, stage.gfPosition.y, gfVersion);
 		gf.scrollFactor.set(0.95, 0.95);
+
+		if (gf.trail != null)
+			add(gf.trail);
+
 		add(gf);
 		add(stage.inFrontOfGFSprites);
 
 		dad = new Character(stage.dadPosition.x, stage.dadPosition.y, SONG.player2);
 		dad.isPlayer = false;
+
+		if (dad.trail != null)
+			add(dad.trail);
+
 		add(dad);
 
 		// what if i told you the dad was the impostor!?!!?!
 		if(dad.curCharacter == gf.curCharacter)
 		{
 			dad.goToPosition(stage.gfPosition.x, stage.gfPosition.y);
+
+			if (gf.trail != null)
+				remove(gf.trail, true);
+
 			remove(gf, true);
 			gf.kill();
 			gf.destroy();
@@ -223,6 +235,10 @@ class PlayState extends MusicBeatState {
 
 		bf = new Boyfriend(stage.bfPosition.x, stage.bfPosition.y, SONG.player1);
 		bf.flipX = !bf.flipX;
+
+		if (bf.trail != null)
+			add(bf.trail);
+
 		add(bf);
 		add(stage.foregroundSprites);
 

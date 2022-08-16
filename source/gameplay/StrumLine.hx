@@ -426,7 +426,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		PlayState.current.combo++;
 
 		var judgeUI:JudgementUI = new JudgementUI(judgement, PlayState.current.combo, PlayState.current.ratingScale, PlayState.current.comboScale);
-		PlayState.current.add(judgeUI);
+		PlayState.current.insert(PlayState.current.members.length + 1, judgeUI);
 
         PlayState.current.UI.healthBarScript.callFunction("updateScoreText");
 

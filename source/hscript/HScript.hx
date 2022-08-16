@@ -117,6 +117,7 @@ class HScript {
             set("FlxTypeText", flixel.addons.text.FlxTypeText);
             set("FlxText", flixel.text.FlxText);
             set("FlxAxes", flixel.util.FlxAxes);
+            set("FlxTrail", flixel.addons.effects.FlxTrail);
             set("Window", Application.current.window);
             set("Application", Application.current);
             set("Application_", Application);
