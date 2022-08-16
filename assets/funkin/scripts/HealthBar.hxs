@@ -11,7 +11,10 @@ var scoreTxt:FlxText;
 var scoreDivider:String = " • ";
 
 function create() {
-    ui.healthColors = [0xFFff0000, 0xFF00ff00];
+    ui.healthColors = [
+        PlayState.dad != null ? PlayState.dad.healthBarColor : 0xFFff0000, // opponent
+        PlayState.bf != null ? PlayState.bf.healthBarColor : 0xFF00ff00, // player
+    ];
 
     ui.healthBarBG = new FlxSprite(0, Settings["Downscroll"] ? 60 : FlxG.height - 80);
     ui.healthBarBG.loadGraphic(FNFAssets.getImage(AssetPaths.image("healthBar")));

@@ -3,6 +3,7 @@ function create() {
     character.singDuration = 4;
 
     character.healthIcon = "tankman";
+    character.healthBarColor = FlxColor.BLACK;
     
     character.animation.addByPrefix('idle', 'Tankman Idle Dance', 24, false);
     character.animation.addByPrefix('singLEFT', 'Tankman Right Note ', 24, false);

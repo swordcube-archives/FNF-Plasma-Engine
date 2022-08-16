@@ -3,6 +3,7 @@ function create() {
     character.singDuration = 4;
 
     character.healthIcon = "pico";
+    character.healthBarColor = FlxColor.fromString("#B7D855");
     
     character.animation.addByPrefix('idle', "Pico Idle Dance", 24, false);
     character.animation.addByPrefix('singUP', 'pico Up note0', 24, false);

@@ -1,5 +1,6 @@
 package gameplay;
 
+import flixel.util.FlxColor;
 import flixel.math.FlxPoint;
 import hscript.HScript;
 import sys.FileSystem;
@@ -33,6 +34,8 @@ class Character extends FNFSprite {
     public var positionOffset:FlxPoint = new FlxPoint();
 
     public var ogPosition:FlxPoint = new FlxPoint();
+
+    public var healthBarColor:FlxColor = FlxColor.BLACK;
 
     public function new(x:Float, y:Float, char:String, isPlayer:Bool = false)
     {
