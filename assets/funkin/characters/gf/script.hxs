@@ -3,6 +3,7 @@ function create() {
     character.isLikeGF = true;
 
     character.healthIcon = "gf";
+    character.healthBarColor = FlxColor.fromString("#A5004D");
     
     character.animation.addByPrefix('cheer', 'GF Cheer', 24, false);
     character.animation.addByPrefix('singLEFT', 'GF left note', 24, false);

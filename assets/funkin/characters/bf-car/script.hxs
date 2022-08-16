@@ -3,6 +3,7 @@ function create() {
     character.isPlayer = true;
 
     character.healthIcon = "bf";
+    character.healthBarColor = FlxColor.fromString("#31B0D1");
 
     character.animation.addByPrefix('idle', 'BF idle dance', 24, false);
     character.animation.addByIndices('idle-loop', 'BF idle dance', [10,11,12,13], "", 24, true);

@@ -5,6 +5,7 @@ function create() {
     character.canDance = false;
 
     character.healthIcon = "pico";
+    character.healthBarColor = FlxColor.fromString("#B7D855");
     
     character.animation.addByPrefix('shoot1', 'Pico shoot 1', 24, false);
     character.animation.addByPrefix('shoot2', 'Pico shoot 2', 24, false);
