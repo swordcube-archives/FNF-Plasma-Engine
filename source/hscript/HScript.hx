@@ -2,18 +2,14 @@ package hscript;
 
 import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
-import flixel.graphics.FlxGraphic;
-import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.text.FlxText.FlxTextAlign;
 import flixel.text.FlxText.FlxTextBorderStyle;
-import flixel.util.FlxColor;
 import haxe.Exception;
 import hscript.Expr.Error;
 import hscript.Interp;
 import hscript.Parser;
 import lime.app.Application;
 import openfl.display.BlendMode;
-import openfl.media.Sound;
 import states.PlayState;
 import sys.thread.Thread;
 import systems.MusicBeat.MusicBeatState;

@@ -79,6 +79,12 @@ function create(judgement, combo) {
     }
 
     FlxTween.tween(rating, {alpha: 0}, 0.2, {
+        onComplete: function(tween:FlxTween) {
+            remove(rating, true);
+            rating.kill();
+            rating.destroy();
+            rating = null;
+        },
         startDelay: Conductor.crochet * 0.001
     });
     //trace("R: tween check");
@@ -86,9 +92,9 @@ function create(judgement, combo) {
 }
 
 function update() {
-    if(grpCombo.members.length <= 0 && started)
+    if(grpCombo.members.length <= 0 && rating == null && started)
     {
-        kill();
+        PlayState.remove(this);
         destroy();
     }
 }

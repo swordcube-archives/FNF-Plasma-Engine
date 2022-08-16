@@ -13,7 +13,8 @@ import ui.Notification;
 
 using StringTools;
 
-class Main extends Sprite {
+class Main extends Sprite
+{
 	public static var engineVersion:String = "0.1.0"; // The version of the engine
 
 	public static var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
@@ -27,15 +28,16 @@ class Main extends Sprite {
 	public static var deltaTime:Float = 0.0;
 
 	static var startTime:Float = 0.0;
+
 	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
 
 	public static var currentState:Class<flixel.FlxState> = Init; // The FlxState the game starts with.
-	
+
 	public function new()
 	{
 		super();
 		startTime = getTime(true);
-		
+
 		setupZoom(); // Setup the "zoom" variable
 
 		// Start the game
@@ -48,17 +50,20 @@ class Main extends Sprite {
 
 	public static function getSizeLabel(num:Int):String
 	{
-        var size:Float = num;
-        var data = 0;
-        var dataTexts = ["b", "kb", "mb", "gb", "tb", "pb"];
-        while(size > 1024 && data < dataTexts.length - 1) {
-          data++;
-          size = size / 1024;
-        }
-        
-        size = Math.round(size * 100) / 100;
-        return size+dataTexts[data]; // smth like 100mb
-    }
+		// 2147483648 is 2048 mb btw lmao
+		var size:Float = Math.abs(num) != num ? Math.abs(num) + 2147483648 : num;
+		var data = 0;
+		var dataTexts = ["b", "kb", "mb", "gb", "tb", "pb"];
+
+		while (size > 1024 && data < dataTexts.length - 1)
+		{
+			data++;
+			size = size / 1024;
+		}
+
+		size = Math.round(size * 100) / 100;
+		return size + dataTexts[data]; // smth like 100mb
+	}
 
 	function setupZoom()
 	{
@@ -88,7 +93,8 @@ class Main extends Sprite {
 		if (transition)
 		{
 			FlxG.state.openSubState(new Transition(0.45, false));
-			Transition.finishCallback = function() {
+			Transition.finishCallback = function()
+			{
 				FlxG.switchState(newState);
 			};
 			return trace('changed state to ${Type.getClassName(currentState)} (with transition)');
@@ -108,7 +114,8 @@ class Main extends Sprite {
 		if (transition)
 		{
 			FlxG.state.openSubState(new Transition(0.45, false));
-			Transition.finishCallback = function() {
+			Transition.finishCallback = function()
+			{
 				FlxG.resetState();
 			};
 			return trace('reloaded current state ${Type.getClassName(currentState)} (with transition)');
@@ -122,16 +129,16 @@ class Main extends Sprite {
 	**/
 	public static function print(type:String, text:String)
 	{
-		switch(type.toLowerCase())
+		switch (type.toLowerCase())
 		{
 			case "error":
-				trace('[   ERROR   ] '+text);
+				trace('[   ERROR   ] ' + text);
 
 			case "warn" | "warning":
-				trace('[  WARNING  ] '+text);
-				
+				trace('[  WARNING  ] ' + text);
+
 			case "hxs" | "hscript":
-				trace('[  HSCRIPT  ] '+text);
+				trace('[  HSCRIPT  ] ' + text);
 		}
 	}
 

@@ -6,67 +6,70 @@ import hscript.HScript;
 import shaders.ColorShader;
 import systems.FNFSprite;
 
-class NoteSplash extends FNFSprite {
-    public var started:Bool = false;
-    
-    public var noteData:Int = 0;
-    public var keyCount:Int = 4;
-    
-    public var parent:StrumLine;
-    public var colorSwap:ColorShader;
+class NoteSplash extends FNFSprite
+{
+	public var started:Bool = false;
 
-    var script:HScript;
+	public var noteData:Int = 0;
+	public var keyCount:Int = 4;
 
-    public function new(x:Float, y:Float, noteData:Int = 0)
-    {
-        super(x, y);
-        script = new HScript("scripts/NoteSplash");
+	public var parent:StrumLine;
+	public var colorSwap:ColorShader;
 
-        // Set some variables
-        script.set("noteData", noteData);
+	var script:HScript;
 
-        script.set("sprite", this);
-        script.set("kill", this.kill);
-        script.set("destroy", this.destroy);
+	public function new(x:Float, y:Float, noteData:Int = 0)
+	{
+		super(x, y);
+		
+		script = new HScript("scripts/NoteSplash");
 
-        // Start the script
-        script.start(false);
-    }
+		// Set some variables
+		script.set("noteData", noteData);
 
-    public function setupNoteSplash(x:Float, y:Float, skin:String = "splashes/NOTE_splashes", noteData:Int)
-    {
-        started = true;
-        this.noteData = noteData;
-        setPosition(x, y);
+		script.set("sprite", this);
+		script.set("kill", this.kill);
+		script.set("destroy", this.destroy);
 
-        colorSwap = new ColorShader(255, 255, 255);
-        shader = colorSwap;
-        setColor();
+		// Start the script
+		script.start(false);
+	}
 
-        script.callFunction("create", [skin]);
-    }
+	public function setupNoteSplash(x:Float, y:Float, skin:String = "splashes/NOTE_splashes", noteData:Int)
+	{
+		started = true;
+		this.noteData = noteData;
+		setPosition(x, y);
 
-    override function update(elapsed:Float)
-    {
-        super.update(elapsed);
+		colorSwap = new ColorShader(255, 255, 255);
+		shader = colorSwap;
+		setColor();
 
-        // I love when my brain goes "why no update work?" then i realize i'm not even calling
-        // the function that makes the script update
-        // I am the dumbass ever.
-        script.update(elapsed);
-        script.callFunction("updatePost", [elapsed]);
-    }
+		script.callFunction("create", [skin]);
+	}
 
-    public function setColor()
-    {
-        var colorArray:Array<Int> = Init.arrowColors[parent != null ? parent.keyCount-1 : keyCount-1][noteData];
-        if(colorSwap != null && colorArray != null) // haxeflixel
-            colorSwap.setColors(colorArray[0], colorArray[1], colorArray[2]);
-    }
+	override function update(elapsed:Float)
+	{
+		super.update(elapsed);
 
-    public function resetColor()
-    {
-        if(colorSwap != null) // haxeflixel
-            colorSwap.setColors(255, 255, 255);
-    }
+		// I love when my brain goes "why no update work?" then i realize i'm not even calling
+		// the function that makes the script update
+		// I am the dumbass ever.
+		script.update(elapsed);
+		script.callFunction("updatePost", [elapsed]);
+	}
+
+	public function setColor()
+	{
+		var colorArray:Array<Int> = Init.arrowColors[parent != null ? parent.keyCount - 1 : keyCount - 1][noteData];
+		
+		if (colorSwap != null && colorArray != null) // haxeflixel
+			colorSwap.setColors(colorArray[0], colorArray[1], colorArray[2]);
+	}
+
+	public function resetColor()
+	{
+		if (colorSwap != null) // haxeflixel
+			colorSwap.setColors(255, 255, 255);
+	}
 }
