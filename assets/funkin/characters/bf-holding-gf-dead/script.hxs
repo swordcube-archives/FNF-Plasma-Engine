@@ -1,0 +1,16 @@
+function create() {
+    character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
+    character.isPlayer = true;
+
+    character.healthIcon = "bf";
+
+    character.animation.addByPrefix('firstDeath', 'BF Dies with GF', 24, false);
+    character animation.addByPrefix('deathLoop', 'BF Dead with GF Loop', 24, true);
+    character.animation.addByPrefix('deathConfirm', 'RETRY confirm holding gf', 24, false);
+
+    character.setOffset('firstDeath', 37, 14);
+    character.setOffset('deathLoop', 37, -3);
+    character.setOffset('deathConfirm', 37, 28);
+
+    character.playAnim('firstDeath');
+}

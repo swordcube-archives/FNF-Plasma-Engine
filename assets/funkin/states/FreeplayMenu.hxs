@@ -173,7 +173,7 @@ function update() {
     if(UIControls.justPressed("RIGHT"))
         changeDifficulty(1);
 
-    if(FlxG.keys.justPressed.SPACE && curPlaying != songs[curSelected].name)
+    if(FlxG.keys.justPressed.SPACE && !loadingBox.visible && curPlaying != songs[curSelected].name)
     {
         playTheFuckingSong();
     }

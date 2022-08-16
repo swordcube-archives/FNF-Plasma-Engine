@@ -5,6 +5,8 @@
         "needsVoices": true,
         "player1": "bf-holding-gf",
         "player2": "tankman",
+        "gf": "picospeaker",
+        "stage": "tank",
         "speed": 2.2,
         "notes": [
             {

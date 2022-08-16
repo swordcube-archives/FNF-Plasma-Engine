@@ -1,0 +1,31 @@
+function create() {
+    character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
+    character.singDuration = 4;
+
+    character.healthIcon = "senpai";
+    
+    character.animation.addByPrefix('idle', 'Senpai Idle', 24, false);
+    character.animation.addByPrefix('singUP', 'SENPAI UP NOTE', 24, false);
+    character.animation.addByPrefix('singLEFT', 'SENPAI LEFT NOTE', 24, false);
+    character.animation.addByPrefix('singRIGHT', 'SENPAI RIGHT NOTE', 24, false);
+    character.animation.addByPrefix('singDOWN', 'SENPAI DOWN NOTE', 24, false);
+
+    character.setOffset('idle');
+    character.setOffset("singUP", 5, 37);
+    character.setOffset("singRIGHT");
+    character.setOffset("singLEFT", 40);
+    character.setOffset("singDOWN", 14);
+
+    character.setGraphicSize(Std.int(character.width * 6));
+    character.updateHitbox();
+
+    character.positionOffset.x += 150;
+    character.positionOffset.y += 360;
+
+    character.cameraPosition.x -= 240;
+    character.cameraPosition.y -= 330;
+
+    character.antialiasing = false;
+
+    character.dance();
+}

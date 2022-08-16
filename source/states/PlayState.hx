@@ -283,6 +283,8 @@ class PlayState extends MusicBeatState {
 
 				var newNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount);
 				newNote.altAnim = section.altAnim;
+				if(note[3]) // week 7 moment!
+					newNote.altAnim = note[3];
 
 				// sustain
 				var susLength:Float = note[2] / Conductor.stepCrochet;
@@ -293,7 +295,7 @@ class PlayState extends MusicBeatState {
 					for(i in 0...Math.floor(susLength)-1)
 					{
 						var newSusNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount, true);
-						newSusNote.altAnim = section.altAnim;
+						newSusNote.altAnim = newNote.altAnim;
 						newSusNote.strumTime = strumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
 						newSusNote.mustPress = gottaHitNote;
 
@@ -308,7 +310,7 @@ class PlayState extends MusicBeatState {
 
 					// end piece
 					var newSusNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount, true);
-					newSusNote.altAnim = section.altAnim;
+					newSusNote.altAnim = newNote.altAnim;
 					newSusNote.strumTime = strumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
 					newSusNote.mustPress = gottaHitNote;
 					newSusNote.isEndPiece = true;

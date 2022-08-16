@@ -1,0 +1,29 @@
+function create() {
+    character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
+    character.singDuration = 4;
+
+    character.healthIcon = "tankman";
+    
+    character.animation.addByPrefix('idle', 'Tankman Idle Dance', 24, false);
+    character.animation.addByPrefix('singLEFT', 'Tankman Right Note ', 24, false);
+    character.animation.addByPrefix('singRIGHT', 'Tankman Note Left ', 24, false);
+    character.animation.addByPrefix('singUP', 'Tankman UP note ', 24, false);
+    character.animation.addByPrefix('singDOWN', 'Tankman DOWN note ', 24, false);
+
+    character.animation.addByPrefix('singDOWN-alt', 'PRETTY GOOD', 24, false);
+    character.animation.addByPrefix('singUP-alt', 'TANKMAN UGH', 24, false);
+
+    character.setOffset('singUP', 48, 54);
+    character.setOffset('singRIGHT', -21, -31);
+    character.setOffset('singLEFT', 84, -14);
+    character.setOffset('singDOWN', 76, -101);
+
+    character.setOffset('singUP-alt', -15, -8);
+    character.setOffset('singDOWN-alt', 1, 16);
+
+    character.positionOffset.y += 240;
+
+    character.flipX = true;
+
+    character.dance();
+}

@@ -5,6 +5,8 @@
         "needsVoices": true,
         "player1": "bf",
         "player2": "tankman",
+        "gf": "gf-tankmen",
+        "stage": "tank",
         "speed": 1.8,
         "notes": [
             {

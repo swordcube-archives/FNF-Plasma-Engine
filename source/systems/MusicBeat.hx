@@ -7,6 +7,7 @@ import flixel.addons.ui.FlxUIState;
 import flixel.addons.ui.FlxUISubState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.system.FlxSound;
+import hscript.Global;
 import openfl.system.System;
 import systems.Conductor;
 import ui.Notification;
@@ -22,14 +23,13 @@ class MusicBeatState extends FlxUIState {
 
 	override function create()
 	{
+		Global.reset();
 		Init.initializeSettings();
 		
 		if (!FlxTransitionableState.skipNextTransOut)
 			openSubState(new Transition(0.45, true));
 
-        FNFAssets.clearCache();
-
-		FlxG.sound.list.forEachDead(function(sound:FlxSound)
+		FlxG.sound.list.forEachAlive(function(sound:FlxSound)
 		{ // clears sounds from memory
 			FlxG.sound.list.remove(sound, true);
 			sound.stop();
@@ -40,6 +40,9 @@ class MusicBeatState extends FlxUIState {
         // clears all bitmaps from memory
 		FlxG.bitmap.dumpCache();
 		FlxG.bitmap.clearCache();
+
+		// clear all cache
+		FNFAssets.clearCache();
 
         // run the garbage collector
         System.gc();

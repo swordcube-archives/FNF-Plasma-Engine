@@ -111,6 +111,7 @@ class HScript {
                 "stringify": haxe.Json.stringify
             });
             
+            set("BGSprite", gameplay.BGSprite);
             set("BackgroundDancer", gameplay.BackgroundDancer);
             set("FNFSprite", systems.FNFSprite);
             set("FlxSprite", flixel.FlxSprite);
@@ -173,6 +174,7 @@ class HScript {
             });
 
             // Game classes
+            set("Global", Global);
             set("CoolUtil", CoolUtil);
             set("UIControls", systems.UIControls);
             

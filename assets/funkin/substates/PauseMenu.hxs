@@ -138,7 +138,12 @@ function update(elapsed) {
             switch(menuItems[curSelected])
             {
                 case "Resume":
-                    PlayState.resyncSong();
+                    if(Conductor.position >= 0)
+                    {
+                        FlxG.sound.music.play();
+                        PlayState.vocals.play();
+                        PlayState.resyncSong();
+                    }
                     substate.close();
 
                 case "Restart Song":

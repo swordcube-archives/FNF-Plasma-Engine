@@ -1,0 +1,52 @@
+var animationNotes:Array<Dynamic> = [];
+
+function create() {
+    character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
+    character.canDance = false;
+
+    character.healthIcon = "pico";
+    
+    character.animation.addByPrefix('shoot1', 'Pico shoot 1', 24, false);
+    character.animation.addByPrefix('shoot2', 'Pico shoot 2', 24, false);
+    character.animation.addByPrefix('shoot3', 'Pico shoot 3', 24, false);
+    character.animation.addByPrefix('shoot4', 'Pico shoot 4', 24, false);
+    
+    character.setOffset('shoot1');
+    character.setOffset('shoot2', -1, -128);
+    character.setOffset('shoot3', 412, -64);
+    character.setOffset('shoot4', 439, -19);
+
+    character.playAnim('shoot1');
+
+    character.positionOffset.x += 120;
+    character.positionOffset.y -= 125;
+
+    // load notes used for shooting
+    var sections:Array<Section> = SongLoader.getJSON('stress', 'picospeaker').notes;
+    for (section in sections)
+    {
+        for (note in section.sectionNotes)
+            animationNotes.push(note);
+    }
+    animationNotes.sort(sortAnims);
+    Global.set("animationNotes", animationNotes);
+}
+
+function sortAnims(x, y)
+    return x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0;
+
+function update() {
+    if (animationNotes.length > 0 && Conductor.position > animationNotes[0][0]) {
+        var shotDirection:Int = 1;
+        if (animationNotes[0][1] >= 2)
+            shotDirection = 3;
+        
+        shotDirection += FlxG.random.int(0, 1);
+        
+        character.playAnim('shoot' + shotDirection, true);
+        animationNotes.shift();
+    }
+
+    if (character.animation.curAnim != null && character.animation.curAnim.finished)
+        character.playAnim(character.animation.curAnim.name, false, false, character.animation.curAnim.frames.length - 3);
+}

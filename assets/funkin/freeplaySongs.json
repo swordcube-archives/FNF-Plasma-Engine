@@ -189,6 +189,36 @@
                 "normal",
                 "hard"
             ]
+        },
+        {
+            "name": "Ugh",
+            "icon": "tankman",
+            "color": [246, 182, 4],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "Guns",
+            "icon": "tankman",
+            "color": [246, 182, 4],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "Stress",
+            "icon": "tankman",
+            "color": [246, 182, 4],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
         }
     ]
 }
