@@ -97,38 +97,38 @@ function clearDialogue() {
 
 function loadBG(script) {
     bgScript = new HScript('dialogue/bgs/'+script);
-    bgScript.setVariable("bg", bg);
-    bgScript.setVariable("add", dialogue.add);
-    bgScript.setVariable("insert", dialogue.insert);
+    bgScript.set("bg", bg);
+    bgScript.set("add", dialogue.add);
+    bgScript.set("insert", dialogue.insert);
     bgScript.start();
 }
 function loadPortrait(script, emotion) {
     portraitScript = new HScript('dialogue/portraits/'+script);
-    portraitScript.setVariable("bg", bg);
-    portraitScript.setVariable("box", box);
-    portraitScript.setVariable("portrait", portrait);
-    portraitScript.setVariable("add", dialogue.add);
-    portraitScript.setVariable("insert", dialogue.insert);
-    portraitScript.setVariable("emotion", emotion);
+    portraitScript.set("bg", bg);
+    portraitScript.set("box", box);
+    portraitScript.set("portrait", portrait);
+    portraitScript.set("add", dialogue.add);
+    portraitScript.set("insert", dialogue.insert);
+    portraitScript.set("emotion", emotion);
     portraitScript.start();
 }
 function loadBox(script) {
     boxScript = new HScript('dialogue/boxes/'+script);
-    boxScript.setVariable("bg", bg);
-    boxScript.setVariable("box", box);
-    boxScript.setVariable("portrait", portrait);
-    boxScript.setVariable("add", dialogue.add);
-    boxScript.setVariable("insert", dialogue.insert);
+    boxScript.set("bg", bg);
+    boxScript.set("box", box);
+    boxScript.set("portrait", portrait);
+    boxScript.set("add", dialogue.add);
+    boxScript.set("insert", dialogue.insert);
     boxScript.start();
 }
 function loadText(script) {
     textScript = new HScript('dialogue/textStyles/'+script);
-    textScript.setVariable("bg", bg);
-    textScript.setVariable("box", box);
-    textScript.setVariable("portrait", portrait);
-    textScript.setVariable("text", text);
-    textScript.setVariable("add", dialogue.add);
-    textScript.setVariable("insert", dialogue.insert);
+    textScript.set("bg", bg);
+    textScript.set("box", box);
+    textScript.set("portrait", portrait);
+    textScript.set("text", text);
+    textScript.set("add", dialogue.add);
+    textScript.set("insert", dialogue.insert);
     textScript.start();
 }
 

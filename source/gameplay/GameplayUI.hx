@@ -77,16 +77,16 @@ class GameplayUI extends FlxGroup {
         add(engineTxt);
 
         healthBarScript = new HScript("scripts/HealthBar");
-        healthBarScript.setVariable("add", this.add);
-        healthBarScript.setVariable("remove", this.remove);
-        healthBarScript.setVariable("ui", this);
+        healthBarScript.set("add", this.add);
+        healthBarScript.set("remove", this.remove);
+        healthBarScript.set("ui", this);
         healthBarScript.start();
         PlayState.current.scripts.push(healthBarScript);
 
         timeBarScript = new HScript("scripts/TimeBar");
-        timeBarScript.setVariable("add", this.add);
-        timeBarScript.setVariable("remove", this.remove);
-        timeBarScript.setVariable("ui", this);
+        timeBarScript.set("add", this.add);
+        timeBarScript.set("remove", this.remove);
+        timeBarScript.set("ui", this);
         timeBarScript.start();
         PlayState.current.scripts.push(timeBarScript);
     }

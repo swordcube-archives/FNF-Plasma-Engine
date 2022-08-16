@@ -123,6 +123,7 @@ class PlayState extends MusicBeatState {
 
 	public var ratingScale:Float = 0.7;
 	public var comboScale:Float = 0.5;
+	public var countdownScale:Float = 1.0;
 
 	public var ratingAntialiasing:Bool = true;
 	public var comboAntialiasing:Bool = true;
@@ -217,17 +218,17 @@ class PlayState extends MusicBeatState {
 
 		if(stage.script != null)
 		{
-			stage.script.setVariable("dad", dad);
-			stage.script.setVariable("gf", gf);
-			stage.script.setVariable("bf", bf);
+			stage.script.set("dad", dad);
+			stage.script.set("gf", gf);
+			stage.script.set("bf", bf);
 		}
 
 		callOnHScripts("createAfterChars");
 
 		var path:String = 'songs/${SONG.song.toLowerCase()}/script';
 		script = new HScript(path);
-		script.setVariable("add", this.add);
-		script.setVariable("remove", this.remove);
+		script.set("add", this.add);
+		script.set("remove", this.remove);
 		scripts.push(script);
 		script.start();
 
@@ -289,7 +290,7 @@ class PlayState extends MusicBeatState {
 				if(susLength > 0)
 				{
 					var susNote:Int = 0;
-					for(i in 0...Math.floor(susLength))
+					for(i in 0...Math.floor(susLength)-1)
 					{
 						var newSusNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount, true);
 						newSusNote.altAnim = section.altAnim;
@@ -310,6 +311,7 @@ class PlayState extends MusicBeatState {
 					newSusNote.altAnim = section.altAnim;
 					newSusNote.strumTime = strumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
 					newSusNote.mustPress = gottaHitNote;
+					newSusNote.isEndPiece = true;
 
 					var strumLine:StrumLine = gottaHitNote ? UI.playerStrums : UI.opponentStrums;
 					unspawnNotes.push(newSusNote);
@@ -436,6 +438,8 @@ class PlayState extends MusicBeatState {
 					callOnHScripts("countdownTick", [countdownTick]);
 					FlxG.sound.play(countdownSounds["preready"]);
 					countdownPreReady.loadGraphic(countdownGraphics["preready"]);
+					countdownPreReady.scale.set(countdownScale, countdownScale);
+					countdownPreReady.updateHitbox();
 					countdownPreReady.screenCenter();
 					countdownPreReady.alpha = 1;
 					FlxTween.tween(countdownPreReady, { alpha: 0 }, Conductor.crochet / 1000.0, { ease: FlxEase.cubeInOut });
@@ -443,6 +447,8 @@ class PlayState extends MusicBeatState {
 					callOnHScripts("countdownTick", [countdownTick]);
 					FlxG.sound.play(countdownSounds["ready"]);
 					countdownReady.loadGraphic(countdownGraphics["ready"]);
+					countdownReady.scale.set(countdownScale, countdownScale);
+					countdownReady.updateHitbox();
 					countdownReady.screenCenter();
 					countdownReady.alpha = 1;
 					FlxTween.tween(countdownReady, { alpha: 0 }, Conductor.crochet / 1000.0, { ease: FlxEase.cubeInOut });
@@ -450,6 +456,8 @@ class PlayState extends MusicBeatState {
 					callOnHScripts("countdownTick", [countdownTick]);
 					FlxG.sound.play(countdownSounds["set"]);
 					countdownSet.loadGraphic(countdownGraphics["set"]);
+					countdownSet.scale.set(countdownScale, countdownScale);
+					countdownSet.updateHitbox();
 					countdownSet.screenCenter();
 					countdownSet.alpha = 1;
 					FlxTween.tween(countdownSet, { alpha: 0 }, Conductor.crochet / 1000.0, { ease: FlxEase.cubeInOut });
@@ -457,6 +465,8 @@ class PlayState extends MusicBeatState {
 					callOnHScripts("countdownTick", [countdownTick]);
 					FlxG.sound.play(countdownSounds["go"]);
 					countdownGo.loadGraphic(countdownGraphics["go"]);
+					countdownGo.scale.set(countdownScale, countdownScale);
+					countdownGo.updateHitbox();
 					countdownGo.screenCenter();
 					countdownGo.alpha = 1;
 					FlxTween.tween(countdownGo, { alpha: 0 }, Conductor.crochet / 1000.0, { ease: FlxEase.cubeInOut });

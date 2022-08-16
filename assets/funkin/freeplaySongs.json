@@ -159,6 +159,36 @@
                 "normal",
                 "hard"
             ]
+        },
+        {
+            "name": "Senpai",
+            "icon": "senpai",
+            "color": [255, 120, 191],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "Roses",
+            "icon": "senpai-angry",
+            "color": [255, 120, 191],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "Thorns",
+            "icon": "spirit",
+            "color": [255, 120, 191],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
         }
     ]
 }

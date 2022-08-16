@@ -18,9 +18,9 @@ class OptionsMenu extends MusicBeatState {
 
         script = new HScript("states/OptionsMenu");
 
-        script.setVariable("add", this.add);
-        script.setVariable("remove", this.remove);
-        script.setVariable("state", this);
+        script.set("add", this.add);
+        script.set("remove", this.remove);
+        script.set("state", this);
         
         script.start();
         script.callFunction("createPost");

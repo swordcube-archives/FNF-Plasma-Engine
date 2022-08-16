@@ -12,14 +12,14 @@ class JudgementUI extends FlxGroup {
         script = new HScript("scripts/Judgement");
 
         // Set some variables
-        script.setVariable("ratingScale", ratingScale);
-        script.setVariable("comboScale", comboScale);
+        script.set("ratingScale", ratingScale);
+        script.set("comboScale", comboScale);
 
-        script.setVariable("this", this);
-        script.setVariable("add", this.add);
-        script.setVariable("remove", this.remove);
-        script.setVariable("kill", this.kill);
-        script.setVariable("destroy", this.destroy);
+        script.set("this", this);
+        script.set("add", this.add);
+        script.set("remove", this.remove);
+        script.set("kill", this.kill);
+        script.set("destroy", this.destroy);
 
         // Start the script
         script.start(false); // Make the script function but don't automatically call the create function

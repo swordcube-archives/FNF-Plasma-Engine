@@ -3,7 +3,11 @@
     "note_assets": "arrows/NOTE_assets",
 
     "splash_assets": "splashes/NOTE_splashes",
+
+    "framerate": 24,
     
     "strum_scale": 0.7,
-    "note_scale": 0.7
+    "note_scale": 0.7,
+
+    "sustain_scale": 0.7
 }

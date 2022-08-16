@@ -15,6 +15,7 @@ import lime.app.Application;
 import openfl.display.BlendMode;
 import openfl.media.Sound;
 import states.PlayState;
+import sys.thread.Thread;
 import systems.MusicBeat.MusicBeatState;
 import ui.Notification;
 
@@ -51,43 +52,49 @@ class HScript {
             // Set all of the classes/variables/functions
             //
 
-            // HaxeFlixel classes
-            setVariable("trace", function(text:String) {
+            // Haxe/HaxeFlixel classes
+            set("trace", function(text:String) {
                 log(text);
             });
-            setVariable("traceError", function(text:String) {
+            set("traceError", function(text:String) {
                 Main.print("error", text);
             });
-            setVariable("traceWarning", function(text:String) {
+            set("traceWarning", function(text:String) {
                 Main.print("warn", text);
             });
-            setVariable("traceWarn", function(text:String) {
+            set("traceWarn", function(text:String) {
                 Main.print("warn", text);
+            });
+
+            set("Thread", {
+                "readMessage": Thread.readMessage,
+                "create": Thread.create,
+                "createWithEventLoop": Thread.createWithEventLoop
             });
             
-            setVariable("StringTools", StringTools);
-            setVariable("FlxG", flixel.FlxG);
-            setVariable("OpenFLAssets", openfl.utils.Assets);
-            setVariable("LimeAssets", lime.utils.Assets);
+            set("StringTools", StringTools);
+            set("FlxG", flixel.FlxG);
+            set("OpenFLAssets", openfl.utils.Assets);
+            set("LimeAssets", lime.utils.Assets);
 
-            setVariable("FlxFlicker", flixel.effects.FlxFlicker);
+            set("FlxFlicker", flixel.effects.FlxFlicker);
 
-            setVariable("FlxTween", flixel.tweens.FlxTween);
-            setVariable("FlxEase", flixel.tweens.FlxEase);
+            set("FlxTween", flixel.tweens.FlxTween);
+            set("FlxEase", flixel.tweens.FlxEase);
 
-            setVariable("FlxGroup", flixel.group.FlxGroup);
-            setVariable("FlxTypedGroup", flixel.group.FlxGroup.FlxTypedGroup);
-            setVariable("FlxSpriteGroup", flixel.group.FlxSpriteGroup);
-            setVariable("FlxTypedSpriteGroup", flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup);
+            set("FlxGroup", flixel.group.FlxGroup);
+            set("FlxTypedGroup", flixel.group.FlxGroup.FlxTypedGroup);
+            set("FlxSpriteGroup", flixel.group.FlxSpriteGroup);
+            set("FlxTypedSpriteGroup", flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup);
 
-            setVariable("FlxTextBorderStyle", {
+            set("FlxTextBorderStyle", {
                 "NONE": FlxTextBorderStyle.NONE,
                 "SHADOW": FlxTextBorderStyle.SHADOW,
                 "OUTLINE": FlxTextBorderStyle.OUTLINE,
                 "OUTLINE_FAST": FlxTextBorderStyle.OUTLINE_FAST
             });
 
-            setVariable("FlxTextAlign", {
+            set("FlxTextAlign", {
                 "LEFT": "left",
                 "CENTER": "center",
                 "RIGHT": "right",
@@ -97,35 +104,35 @@ class HScript {
             });
 
             // flxcolor is a stupid abstract class so i am doing this
-            setVariable("FlxColor", HScriptHelpers.getFlxColorClass());
+            set("FlxColor", HScriptHelpers.getFlxColorClass());
 
-            setVariable("Json", {
+            set("Json", {
                 "parse": haxe.Json.parse,
                 "stringify": haxe.Json.stringify
             });
             
-            setVariable("BackgroundDancer", gameplay.BackgroundDancer);
-            setVariable("FNFSprite", systems.FNFSprite);
-            setVariable("FlxSprite", flixel.FlxSprite);
-            setVariable("FlxTimer", flixel.util.FlxTimer);
-            setVariable("FlxSound", flixel.system.FlxSound);
-            setVariable("FlxMath", flixel.math.FlxMath);
-            setVariable("FlxTypeText", flixel.addons.text.FlxTypeText);
-            setVariable("FlxText", flixel.text.FlxText);
-            setVariable("FlxAxes", flixel.util.FlxAxes);
-            setVariable("Window", Application.current.window);
-            setVariable("Application", Application.current);
-            setVariable("Application_", Application);
+            set("BackgroundDancer", gameplay.BackgroundDancer);
+            set("FNFSprite", systems.FNFSprite);
+            set("FlxSprite", flixel.FlxSprite);
+            set("FlxTimer", flixel.util.FlxTimer);
+            set("FlxSound", flixel.system.FlxSound);
+            set("FlxMath", flixel.math.FlxMath);
+            set("FlxTypeText", flixel.addons.text.FlxTypeText);
+            set("FlxText", flixel.text.FlxText);
+            set("FlxAxes", flixel.util.FlxAxes);
+            set("Window", Application.current.window);
+            set("Application", Application.current);
+            set("Application_", Application);
 
-            setVariable("BitmapData", openfl.display.BitmapData);
-            setVariable("FlxGraphic", flixel.graphics.FlxGraphic);
+            set("BitmapData", openfl.display.BitmapData);
+            set("FlxGraphic", flixel.graphics.FlxGraphic);
             
-            setVariable("Math", Math);
-            setVariable("Std", Std);
+            set("Math", Math);
+            set("Std", Std);
 
-            setVariable("Type", Type);
+            set("Type", Type);
 
-            setVariable("FlxCameraFollowStyle", {
+            set("FlxCameraFollowStyle", {
                 "LOCKON": FlxCameraFollowStyle.LOCKON,
                 "PLATFORMER": FlxCameraFollowStyle.PLATFORMER,
                 "TOPDOWN": FlxCameraFollowStyle.TOPDOWN,
@@ -134,7 +141,7 @@ class HScript {
                 "NO_DEAD_ZONE": FlxCameraFollowStyle.NO_DEAD_ZONE
             });
 
-            setVariable("BlendMode", {
+            set("BlendMode", {
                 "ADD": BlendMode.ADD,
                 "ALPHA": BlendMode.ALPHA,
                 "DARKEN": BlendMode.DARKEN,
@@ -152,10 +159,10 @@ class HScript {
                 "SUBTRACT": BlendMode.SUBTRACT
             });
 
-            setVariable("isDebugBuild", #if debug true #else false #end);
+            set("isDebugBuild", #if debug true #else false #end);
 
             // Game functions
-            setVariable("loadScript", function(scriptPath:String, ?args:Array<Any>)
+            set("loadScript", function(scriptPath:String, ?args:Array<Any>)
             {
                 var new_script = new HScript(scriptPath);
                 new_script.callFunction("create", args);
@@ -166,43 +173,44 @@ class HScript {
             });
 
             // Game classes
-            setVariable("UIControls", systems.UIControls);
+            set("CoolUtil", CoolUtil);
+            set("UIControls", systems.UIControls);
             
-            setVariable("ColorShader", shaders.ColorShader);
+            set("ColorShader", shaders.ColorShader);
 
-            setVariable("Conductor", systems.Conductor);
-            setVariable("AssetPaths", AssetPaths);
+            set("Conductor", systems.Conductor);
+            set("AssetPaths", AssetPaths);
 
-            setVariable("Stage", gameplay.Stage);
-            setVariable("Ranking", systems.Ranking);
+            set("Stage", gameplay.Stage);
+            set("Ranking", systems.Ranking);
             
-            setVariable("HScript", HScript);
+            set("HScript", HScript);
 
-            setVariable("StrumLine", gameplay.StrumLine);
-            setVariable("StrumNote", gameplay.StrumNote);
-            setVariable("Note", gameplay.Note);
+            set("StrumLine", gameplay.StrumLine);
+            set("StrumNote", gameplay.StrumNote);
+            set("Note", gameplay.Note);
 
-            setVariable("Character", gameplay.Character);
-            setVariable("Boyfriend", gameplay.Boyfriend);
+            set("Character", gameplay.Character);
+            set("Boyfriend", gameplay.Boyfriend);
 
-            setVariable("JudgementUI", ui.JudgementUI);
-            setVariable("NoteSplash", ui.NoteSplash);
+            set("JudgementUI", ui.JudgementUI);
+            set("NoteSplash", ui.NoteSplash);
             
-            setVariable("FNFAssets", HScriptHelpers.getFNFAssetsClass());
-            setVariable("Main", Main);
-            setVariable("Init", Init);
-            setVariable("Settings", Init.trueSettings);
-            setVariable("Transition", Transition);
+            set("FNFAssets", HScriptHelpers.getFNFAssetsClass());
+            set("Main", Main);
+            set("Init", Init);
+            set("Settings", Init.trueSettings);
+            set("Transition", Transition);
 
-            setVariable("Alphabet", ui.Alphabet);
+            set("Alphabet", ui.Alphabet);
 
-            setVariable("SongLoader", gameplay.Song.SongLoader);
+            set("SongLoader", gameplay.Song.SongLoader);
 
-            setVariable("Highscore", systems.Highscore);
-            setVariable("HealthIcon", ui.HealthIcon);
-            setVariable("FNFCheckbox", ui.FNFCheckbox);
+            set("Highscore", systems.Highscore);
+            set("HealthIcon", ui.HealthIcon);
+            set("FNFCheckbox", ui.FNFCheckbox);
 
-            setVariable("Notification", {
+            set("Notification", {
                 "showError": function(title:String, description:String) {
                     var notif:Notification = new Notification(title, description, Error);
                     cast(FlxG.state, MusicBeatState).notificationGroup.add(notif);
@@ -223,30 +231,30 @@ class HScript {
             // Gameplay Characters
             if(PlayState.current != null)
             {
-                setVariable("dad", PlayState.current.dad);
-                setVariable("gf", PlayState.current.gf);
-                setVariable("bf", PlayState.current.bf);
+                set("dad", PlayState.current.dad);
+                set("gf", PlayState.current.gf);
+                set("bf", PlayState.current.bf);
             }
 
             // Game states
-            setVariable("TitleState", states.TitleState);
-            setVariable("MainMenu", states.MainMenu);
+            set("TitleState", states.TitleState);
+            set("MainMenu", states.MainMenu);
 
-            setVariable("StoryMenu", states.StoryMenu);
-            setVariable("FreeplayMenu", states.FreeplayMenu);
-            setVariable("OptionsMenu", states.OptionsMenu);
+            set("StoryMenu", states.StoryMenu);
+            set("FreeplayMenu", states.FreeplayMenu);
+            set("OptionsMenu", states.OptionsMenu);
 
-            setVariable("ToolboxMain", toolbox.ToolboxMain);
+            set("ToolboxMain", toolbox.ToolboxMain);
 
-            setVariable("PlayState", PlayState.current);
-            setVariable("PlayState_", PlayState);
+            set("PlayState", PlayState.current);
+            set("PlayState_", PlayState);
 
-            setVariable("ModState", states.ModState);
-            setVariable("ModSubState", substates.ModSubState);
+            set("ModState", states.ModState);
+            set("ModSubState", substates.ModSubState);
 
             // Game substates
-            setVariable("KeybindMenu", substates.KeybindMenu);
-            setVariable("ModSelectionMenu", substates.ModSelectionMenu);
+            set("KeybindMenu", substates.KeybindMenu);
+            set("ModSelectionMenu", substates.ModSelectionMenu);
 
             program = parser.parseString(script);
 
@@ -342,6 +350,6 @@ class HScript {
 			otherScript.callFunction(func, args);
 	}
 
-    public function setVariable(variable:String, value:Dynamic)
+    public function set(variable:String, value:Dynamic)
         interp.variables.set(variable, value);
 }

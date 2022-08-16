@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="NOTE_splashes.png">
+	<!-- Created with Adobe Animate version 22.0.3.179 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="splash 10000" x="10" y="10" width="411" height="411"/>
+	<SubTexture name="splash 10001" x="10" y="10" width="411" height="411"/>
+	<SubTexture name="splash 10002" x="10" y="431" width="411" height="411"/>
+	<SubTexture name="splash 10003" x="10" y="431" width="411" height="411"/>
+	<SubTexture name="splash 10004" x="10" y="852" width="411" height="411"/>
+	<SubTexture name="splash 10005" x="10" y="852" width="411" height="411"/>
+	<SubTexture name="splash 10006" x="10" y="1273" width="411" height="411"/>
+	<SubTexture name="splash 10007" x="10" y="1273" width="411" height="411"/>
+	<SubTexture name="splash 20000" x="431" y="10" width="411" height="411"/>
+	<SubTexture name="splash 20001" x="431" y="10" width="411" height="411"/>
+	<SubTexture name="splash 20002" x="431" y="431" width="411" height="411"/>
+	<SubTexture name="splash 20003" x="431" y="431" width="411" height="411"/>
+	<SubTexture name="splash 20004" x="431" y="852" width="411" height="411"/>
+	<SubTexture name="splash 20005" x="431" y="852" width="411" height="411"/>
+	<SubTexture name="splash 20006" x="431" y="1273" width="411" height="411"/>
+	<SubTexture name="splash 20007" x="431" y="1273" width="411" height="411"/>
+</TextureAtlas>

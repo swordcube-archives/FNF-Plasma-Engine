@@ -13,7 +13,9 @@ using StringTools;
 enum FNFAssetType {
     IMAGE;
     SPARROW;
+    PACKER;
     CHARACTER_SPARROW;
+    CHARACTER_PACKER;
     SOUND;
     TEXT;
 }
@@ -100,8 +102,14 @@ class FNFAssets {
             case SPARROW:
                 return FlxAtlasFrames.fromSparrow(returnGraphic(AssetPaths.image(path)), returnAsset(TEXT, AssetPaths.xml('images/$path')));
 
+            case PACKER:
+                return FlxAtlasFrames.fromSpriteSheetPacker(returnGraphic(AssetPaths.image(path)), returnAsset(TEXT, AssetPaths.txt('images/$path')));
+
             case CHARACTER_SPARROW:
                 return FlxAtlasFrames.fromSparrow(returnGraphic(AssetPaths.characterSpriteSheet(path)), returnText(AssetPaths.xml('characters/$path/spritesheet')));
+
+            case CHARACTER_PACKER:
+                return FlxAtlasFrames.fromSpriteSheetPacker(returnGraphic(AssetPaths.characterSpriteSheet(path)), returnText(AssetPaths.txt('characters/$path/spritesheet')));
 
             case SOUND:
                 var goodPath:String = path;

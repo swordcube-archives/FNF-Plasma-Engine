@@ -25,6 +25,8 @@ class Note extends FNFSprite {
     public var json:ArrowSkin;
 
     public var isSustain:Bool = false;
+    public var isEndPiece:Bool = false;
+    
     public var mustPress:Bool = false;
 
     public var canBeHit:Bool = true;
@@ -70,7 +72,7 @@ class Note extends FNFSprite {
 		var stepHeight = ((0.45 * Conductor.stepCrochet) * PlayState.current.scrollSpeed);
 
         if(isSustain && animation.curAnim != null && animation.curAnim.name != "tail")
-            scale.y = (0.7 / ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][2]) * ((Conductor.stepCrochet / 100 * 1.5) * PlayState.current.scrollSpeed);
+            scale.y = (json.sustain_scale / ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][2]) * ((Conductor.stepCrochet / 100 * 1.5) * PlayState.current.scrollSpeed);
 
         if(isSustain)
         {
@@ -84,23 +86,41 @@ class Note extends FNFSprite {
             alpha = 0.35;
     }
 
-    public function loadSkin(skin:String)
+    public function loadSkin(skinToLoad:String)
     {
+        var skin:String = skinToLoad;
+        
         var path:String = AssetPaths.json('images/skins/$skin');
+        if(!FileSystem.exists(path))
+        {
+            skin = "arrows";
+            path = AssetPaths.json('images/skins/$skin');
+        }
+        
         if(FileSystem.exists(path))
         {
             this.skin = skin;
             json = Json.parse(FNFAssets.returnAsset(TEXT, AssetPaths.json('images/skins/$skin')));
 
-            frames = FNFAssets.returnAsset(SPARROW, json.note_assets);
             var noteThing:String = ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][0][noteData];
-            animation.addByPrefix("normal", noteThing+"0", 24, true);
-            animation.addByPrefix("hold", noteThing+" hold0", 24, true);
-            animation.addByPrefix("tail", noteThing+" tail0", 24, true);
+            if(json.skin_type == "pixel")
+            {
+                loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image(json.note_assets)), true, 17, 17);
+                animation.add("normal", [noteData+4], 24, true);
+                animation.add("hold", [noteData+20], 24, true);
+                animation.add("tail", [noteData+24], 24, true);
+            }
+            else
+            {
+                frames = FNFAssets.returnAsset(SPARROW, json.note_assets);
+                animation.addByPrefix("normal", noteThing+"0", 24, true);
+                animation.addByPrefix("hold", noteThing+" hold0", 24, true);
+                animation.addByPrefix("tail", noteThing+" tail0", 24, true);
+            }
 
             antialiasing = json.skin_type != "pixel" ? Init.trueSettings.get("Antialiasing") : false;
 
-            var funnyScale:Float = json.strum_scale * ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][2];
+            var funnyScale:Float = json.note_scale * ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][2];
             scale.set(funnyScale, funnyScale);
             updateHitbox();
 
@@ -108,7 +128,7 @@ class Note extends FNFSprite {
             if(isSustain)
             {
                 alpha = Init.trueSettings.get("Opaque Sustains") ? 1 : 0.6;
-                playAnim("hold");
+                playAnim(isEndPiece ? "tail" : "hold");
             }
         }
         else

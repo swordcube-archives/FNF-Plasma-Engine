@@ -6,6 +6,7 @@
         "player1": "bf-pixel",
         "player2": "spirit",
         "gf": "gf-pixel",
+        "stage": "schoolEvil",
         "speed": 1.1,
         "notes": [
             {

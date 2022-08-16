@@ -1,0 +1,24 @@
+// my code is ass so createPost is for the notes and create is for everything else
+function create() {
+    PlayState.countdownImageLocation = "countdown/pixel";
+    PlayState.countdownSoundLocation = "countdown/pixel";
+    PlayState.countdownScale = 6;
+
+    PlayState.ratingAssetPath = "ratings/pixel";
+    PlayState.comboAssetPath = "combo/pixel";
+
+    PlayState.ratingScale = 5.1;
+    PlayState.comboScale = 6;
+
+    PlayState.ratingAntialiasing = false;
+    PlayState.comboAntialiasing = false;
+}
+
+function createPost() {
+    PlayState.currentSkin = "arrows-pixel";
+    PlayState.UI.opponentStrums.reloadSkin();
+    PlayState.UI.playerStrums.reloadSkin();
+
+    for(note in PlayState.unspawnNotes)
+        note.loadSkin("arrows-pixel");
+}

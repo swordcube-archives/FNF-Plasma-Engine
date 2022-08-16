@@ -51,7 +51,7 @@ class Character extends FNFSprite {
         }
 
         script = new HScript(path);
-        script.setVariable("character", this);
+        script.set("character", this);
         script.start();
 
         this.x += positionOffset.x;
@@ -112,7 +112,7 @@ class Character extends FNFSprite {
 			}
 		}
 
-        if(animation.curAnim.finished && animation.exists(animation.curAnim.name + '-loop'))
+        if(animation.curAnim != null && animation.curAnim.finished && animation.exists(animation.curAnim.name + '-loop'))
             playAnim(animation.curAnim.name + '-loop');
 
         if (isLikeGF && canDance && animation.curAnim != null && animation.curAnim.name == 'hairFall' && animation.curAnim.finished)

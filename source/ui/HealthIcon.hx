@@ -42,6 +42,8 @@ class HealthIcon extends FlxSprite {
 
 			icons = 0;
 
+			var pixelIcons:Array<String> = CoolUtil.listFromText(FNFAssets.returnAsset(TEXT, AssetPaths.txt("pixelIcons")));
+
 			// check if the icon exists, otherwise use default face
 			var image = FNFAssets.returnAsset(IMAGE, AssetPaths.image('icons/face'));
 
@@ -82,7 +84,7 @@ class HealthIcon extends FlxSprite {
 
 			animation.play("normal");
 
-			if (char.endsWith('-pixel'))
+			if(pixelIcons.contains(char))
 				antialiasing = false;
 			else
 				antialiasing = Init.trueSettings.get('Antialiasing');

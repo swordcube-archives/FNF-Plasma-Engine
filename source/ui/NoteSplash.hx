@@ -23,11 +23,11 @@ class NoteSplash extends FNFSprite {
         script = new HScript("scripts/NoteSplash");
 
         // Set some variables
-        script.setVariable("noteData", noteData);
+        script.set("noteData", noteData);
 
-        script.setVariable("sprite", this);
-        script.setVariable("kill", this.kill);
-        script.setVariable("destroy", this.destroy);
+        script.set("sprite", this);
+        script.set("kill", this.kill);
+        script.set("destroy", this.destroy);
 
         // Start the script
         script.start(false);

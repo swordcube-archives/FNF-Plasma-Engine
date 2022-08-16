@@ -105,11 +105,11 @@ class Stage extends FlxGroup {
 				{
 					trace("TRYING TO RUN SCRIPT! " + 'stages/$curStage.hxs');
 					script = new HScript('stages/$curStage');
-                    script.setVariable("stage", this);
-					script.setVariable("add", this.addSprite);
-                    script.setVariable("remove", this.removeSprite);
-                    script.setVariable("removeStage", this.removeDefaultStage);
-                    script.setVariable("removeDefaultStage", this.removeDefaultStage);
+                    script.set("stage", this);
+					script.set("add", this.addSprite);
+                    script.set("remove", this.removeSprite);
+                    script.set("removeStage", this.removeDefaultStage);
+                    script.set("removeDefaultStage", this.removeDefaultStage);
 					script.start();
 
 					PlayState.current.scripts.push(script);

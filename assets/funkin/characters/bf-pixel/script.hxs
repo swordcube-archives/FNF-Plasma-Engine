@@ -1,0 +1,39 @@
+function create() {
+    character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
+    character.isPlayer = true;
+
+    character.healthIcon = "bf-pixel";
+
+    character.animation.addByPrefix('idle', 'BF IDLE', 24, false);
+    character.animation.addByPrefix('singUP', 'BF UP NOTE', 24, false);
+    character.animation.addByPrefix('singLEFT', 'BF LEFT NOTE', 24, false);
+    character.animation.addByPrefix('singRIGHT', 'BF RIGHT NOTE', 24, false);
+    character.animation.addByPrefix('singDOWN', 'BF DOWN NOTE', 24, false);
+    character.animation.addByPrefix('singUPmiss', 'BF UP MISS', 24, false);
+    character.animation.addByPrefix('singLEFTmiss', 'BF LEFT MISS', 24, false);
+    character.animation.addByPrefix('singRIGHTmiss', 'BF RIGHT MISS', 24, false);
+    character.animation.addByPrefix('singDOWNmiss', 'BF DOWN MISS', 24, false);
+
+    character.setOffset('idle');
+    character.setOffset("singUP");
+    character.setOffset("singRIGHT");
+    character.setOffset("singLEFT");
+    character.setOffset("singDOWN");
+    character.setOffset("singUPmiss");
+    character.setOffset("singRIGHTmiss");
+    character.setOffset("singLEFTmiss");
+    character.setOffset("singDOWNmiss");
+
+    character.cameraPosition.x += 150;
+    character.cameraPosition.y -= 160;
+
+    character.positionOffset.y += 350;
+    character.flipX = true;
+
+    character.setGraphicSize(Std.int(character.width * 6));
+    character.updateHitbox();
+
+    character.antialiasing = false;
+
+    character.dance();
+}

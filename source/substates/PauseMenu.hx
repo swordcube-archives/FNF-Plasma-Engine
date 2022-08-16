@@ -17,9 +17,9 @@ class PauseMenu extends MusicBeatSubState {
 
         script = new HScript("substates/PauseMenu");
 
-        script.setVariable("add", this.add);
-        script.setVariable("remove", this.remove);
-        script.setVariable("substate", this);
+        script.set("add", this.add);
+        script.set("remove", this.remove);
+        script.set("substate", this);
 
         if(PlayState.current.countdownTimer != null)
             PlayState.current.countdownTimer.active = false;

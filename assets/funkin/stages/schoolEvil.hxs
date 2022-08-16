@@ -1,0 +1,16 @@
+function create() {
+    removeStage();
+    PlayState.defaultCamZoom = 1.05;
+
+    stage.dadPosition.set(100, 100);
+    stage.gfPosition.set(580, 430);
+    stage.bfPosition.set(970, 320);
+
+    var bg:FlxSprite = new FlxSprite(400, 200);
+    bg.frames = FNFAssets.getSparrow('stages/school/animatedEvilSchool');
+    bg.animation.addByPrefix('idle', 'background 2', 24);
+    bg.animation.play('idle');
+    bg.scrollFactor.set(0.8, 0.9);
+    bg.scale.set(6, 6);
+    add(bg);
+}

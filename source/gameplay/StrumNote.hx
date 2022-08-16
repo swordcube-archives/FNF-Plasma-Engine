@@ -12,8 +12,12 @@ typedef ArrowSkin = {
     var note_assets:String;
     var splash_assets:String;
 
+    var framerate:Int;
+
     var strum_scale:Float;
     var note_scale:Float;
+
+    var sustain_scale:Float;
 };
 
 class StrumNote extends FNFSprite {
@@ -50,18 +54,36 @@ class StrumNote extends FNFSprite {
         colorSwap.setColors(255, 255, 255);
     }
 
-    public function loadSkin(skin:String)
+    public function loadSkin(skinToLoad:String)
     {
+        var skin:String = skinToLoad;
+        
         var path:String = AssetPaths.json('images/skins/$skin');
+        if(!FileSystem.exists(path))
+        {
+            skin = "arrows";
+            path = AssetPaths.json('images/skins/$skin');
+        }
+
         if(FileSystem.exists(path))
         {
             json = Json.parse(FNFAssets.returnAsset(TEXT, AssetPaths.json('images/skins/$skin')));
 
-            frames = FNFAssets.returnAsset(SPARROW, json.note_assets);
             var noteThing:String = ExtraKeys.arrowInfo[parent.keyCount-1][0][noteData];
-            animation.addByPrefix("static", noteThing+" static0", 24, true);
-            animation.addByPrefix("press", noteThing+" press0", 24, false);
-            animation.addByPrefix("confirm", noteThing+" confirm0", 24, false);
+            if(json.skin_type == "pixel")
+            {
+                loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image(json.note_assets)), true, 17, 17);
+                animation.add("static", [noteData], json.framerate, true);
+                animation.add("press", [noteData+4, noteData+8], json.framerate, false);
+                animation.add("confirm", [noteData+12, noteData+16], json.framerate, false);
+            }
+            else
+            {
+                frames = FNFAssets.returnAsset(SPARROW, json.note_assets);
+                animation.addByPrefix("static", noteThing+" static0", json.framerate, true);
+                animation.addByPrefix("press", noteThing+" press0", json.framerate, false);
+                animation.addByPrefix("confirm", noteThing+" confirm0", json.framerate, false);
+            }
 
             antialiasing = json.skin_type != "pixel" ? Init.trueSettings.get("Antialiasing") : false;
 

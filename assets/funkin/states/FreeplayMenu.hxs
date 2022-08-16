@@ -20,6 +20,10 @@ var curDifficulty:Int = 1;
 
 var curPlaying:String = "";
 
+var loadingBox:FlxSprite = new FlxSprite().makeGraphic(400, 50, FlxColor.BLACK);
+var loadingIco:FlxSprite = new FlxSprite().loadGraphic(FNFAssets.getImage(AssetPaths.image("icons/bf")), 150, 150);
+var loadingTxt:FlxText = new FlxText(0, 0, 0, "Loading audio...");
+
 function create() {
     scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
     cancelMenu = FNFAssets.getSound(AssetPaths.sound("menus/cancelMenu"));
@@ -84,6 +88,27 @@ function create() {
     var dumbText = new FlxText(5, dumbStripThing.y + 5, 0, "Current Mod: "+modPackJSON.name+" - Press TAB to switch", 16);
     dumbText.setFormat(AssetPaths.font("vcr"), 16, FlxColor.WHITE, FlxTextAlign.LEFT);
     add(dumbText);
+
+    loadingBox.alpha = 0.6;
+    loadingBox.setPosition(FlxG.width - loadingBox.width, FlxG.height - (loadingBox.height + 40));
+    add(loadingBox);
+
+    loadingIco.animation.add("cum", [0]);
+    loadingIco.animation.play("cum");
+    loadingIco.setGraphicSize(loadingBox.height + 15, loadingBox.height + 15);
+    loadingIco.updateHitbox();
+    loadingIco.setPosition(loadingBox.x + 10, loadingBox.y - 5);
+    loadingIco.antialiasing = Init.trueSettings.get("Antialiasing");
+    add(loadingIco);
+
+    loadingTxt.setFormat(AssetPaths.font("vcr"), 24);
+    loadingTxt.x = loadingIco.x + (loadingIco.width + 10);
+    loadingTxt.y = (loadingBox.y + (loadingBox.height / 2)) - loadingTxt.height / 1.7;
+    add(loadingTxt);
+
+    loadingBox.visible = false;
+    loadingIco.visible = false;
+    loadingTxt.visible = false;
 
     positionHighscore();
 
@@ -150,17 +175,7 @@ function update() {
 
     if(FlxG.keys.justPressed.SPACE && curPlaying != songs[curSelected].name)
     {
-        FlxG.sound.music.stop();
-
-        curPlaying = songs[curSelected].name;
-
-        FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.songInst(songs[curSelected].name)), 0, true);
-
-        FlxG.sound.music.pause();
-        FlxG.sound.music.time = 0;
-        FlxG.sound.music.play();
-
-        FlxG.sound.music.fadeIn(1, 0, 1);
+        playTheFuckingSong();
     }
     else if(UIControls.justPressed("ACCEPT"))
     {
@@ -171,6 +186,30 @@ function update() {
         Main.switchState(new PlayState_());
     }
 }
+
+function playTheFuckingSong() {
+    loadingBox.visible = true;
+    loadingIco.visible = true;
+    loadingTxt.visible = true;
+
+    Thread.create(function() {
+        FNFAssets.getSound(AssetPaths.songInst(songs[curSelected].name));
+        FlxG.sound.music.stop();
+        FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.songInst(songs[curSelected].name)), 0, true);
+
+        FlxG.sound.music.pause();
+        FlxG.sound.music.time = 0;
+        FlxG.sound.music.play();
+
+        FlxG.sound.music.fadeIn(1, 0, 1);
+
+        loadingBox.visible = false;
+        loadingIco.visible = false;
+        loadingTxt.visible = false;
+
+        curPlaying = songs[curSelected].name;
+    });
+} 
 
 function changeDifficulty(change:Int) {
     curDifficulty += change;
