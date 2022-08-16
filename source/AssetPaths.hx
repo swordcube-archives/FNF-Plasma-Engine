@@ -205,7 +205,7 @@ class AssetPaths {
     **/
     public static function songInst(song:String, soundExt:SoundExt = OGG, packOverride:Null<String> = null):String
     {
-        var goodPath:String = asset('songs/$song/Inst$soundExt', packOverride);
+        var goodPath:String = asset('songs/${song.toLowerCase()}/Inst$soundExt', packOverride);
         if(!FileSystem.exists(goodPath))
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
@@ -222,7 +222,7 @@ class AssetPaths {
     **/
     public static function songVoices(song:String, soundExt:SoundExt = OGG, packOverride:Null<String> = null):String
     {
-        var goodPath:String = asset('songs/$song/Voices$soundExt', packOverride);
+        var goodPath:String = asset('songs/${song.toLowerCase()}/Voices$soundExt', packOverride);
         if(!FileSystem.exists(goodPath))
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
