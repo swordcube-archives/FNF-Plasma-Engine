@@ -682,20 +682,26 @@ class PlayState extends MusicBeatState {
 		{
 			if(!(Conductor.isAudioSynced(FlxG.sound.music) && Conductor.isAudioSynced(vocals)))
 			{
-				vocals.pause();
+				FlxG.sound.music.pause();
+				if(vocals.time < vocals.length)
+					vocals.pause();
+
+				FlxG.sound.music.time = Conductor.position;
+				if(vocals.time < vocals.length)
+					vocals.time = Conductor.position;
 
 				FlxG.sound.music.play();
-				Conductor.position = FlxG.sound.music.time;
-				if (Conductor.position <= vocals.length)
-					vocals.time = Conductor.position;
-				
-				vocals.play();
+				if(vocals.time < vocals.length)
+					vocals.play();
 			}
 		}
 		else
 		{
-			if(!Conductor.isAudioSynced(FlxG.sound.music)) {
-				Conductor.position = FlxG.sound.music.time;
+			if(!Conductor.isAudioSynced(FlxG.sound.music))
+			{
+				FlxG.sound.music.pause();
+				FlxG.sound.music.time = Conductor.position;
+				FlxG.sound.music.play();
 			}
 		}
 	}
