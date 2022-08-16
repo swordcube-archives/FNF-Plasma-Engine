@@ -202,6 +202,9 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote> {
                         members[note.noteData].setColor();
                         members[note.noteData].colorSwap.enabled.value = [true];
                         members[note.noteData].playAnim("confirm", true);
+
+                        PlayState.current.callOnHScripts("opponentNoteHit", [note]);
+
                         note.kill();
                         note.destroy();
                         notes.remove(note, true);
@@ -211,17 +214,20 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote> {
 
             var justPressed:Array<Bool> = [];
             var pressed:Array<Bool> = [];
+            var noteDataTimes:Array<Float> = [];
 
             if(hasInput)
             {
                 justPressed = [];
                 pressed = [];
+                noteDataTimes = [];
 
                 var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
                 for(i in 0...keyCount)
                 {
                     justPressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], JUST_PRESSED)) : false);
                     pressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], PRESSED)) : false);
+                    noteDataTimes.push(-1);
                 }
 
                 var i:Int = 0;
@@ -276,6 +282,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote> {
                         {
                             PlayState.current.vocals.volume = 1;
                             justPressed[note.noteData] = false;
+                            noteDataTimes[note.noteData] = note.strumTime;
+
                             members[note.noteData].alpha = 1;
                             members[note.noteData].setColor();
                             members[note.noteData].colorSwap.enabled.value = [true];
@@ -303,6 +311,17 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote> {
                                 else
                                     PlayState.current.bf.playAnim(getSingAnimation(note.noteData), true);
                             }
+                        }
+                    }
+
+                    // we hate stacked notes!
+                    for(note in possibleNotes) {
+                        if(!note.isSustain && note.strumTime == noteDataTimes[note.noteData])
+                        {
+                            possibleNotes.remove(note);
+                            notes.remove(note, true);
+                            note.kill();
+                            note.destroy();
                         }
                     }
                 }
@@ -369,10 +388,6 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote> {
     {
         var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
 
-        note.kill();
-        note.destroy();
-        notes.remove(note, true);
-
         PlayState.current.health += PlayState.current.healthGain;
 
         PlayState.current.totalNotes++;
@@ -412,6 +427,13 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote> {
             else
                 PlayState.current.bf.playAnim(getSingAnimation(note.noteData), true);
         }
+
+        PlayState.current.callOnHScripts("goodNoteHit", [note]);
+        PlayState.current.callOnHScripts("playerNoteHit", [note]);
+
+        note.kill();
+        note.destroy();
+        notes.remove(note, true);
     }
 
     function boundHealth()

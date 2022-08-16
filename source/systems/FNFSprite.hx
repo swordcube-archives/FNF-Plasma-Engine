@@ -3,7 +3,7 @@ package systems;
 import flixel.FlxSprite;
 
 class FNFSprite extends FlxSprite {
-    public var animOffsets:Map<String, Array<Int>> = [];
+    public var animOffsets:Map<String, Array<Float>> = [];
 
     public function playAnim(anim:String, force:Bool = false, reversed:Bool = false, frame:Int = 0)
     {
@@ -18,7 +18,7 @@ class FNFSprite extends FlxSprite {
         }
     }
 
-    public function setOffset(anim:String, x:Int = 0, y:Int = 0)
+    public function setOffset(anim:String, x:Float = 0, y:Float = 0)
     {
         animOffsets.set(anim, [x, y]);
     }
