@@ -30,8 +30,5 @@ typedef Song = {
 
 class SongLoader {
     public static function getJSON(song:String, diff:String = "normal"):Song
-    {
-        var rawText:String = FNFAssets.returnAsset(TEXT, AssetPaths.json('songs/${song.toLowerCase()}/$diff'));
-        return Json.parse(rawText).song;
-    }
+        return Json.parse(FNFAssets.returnAsset(TEXT, AssetPaths.json('songs/${song.toLowerCase()}/$diff'))).song;
 }

@@ -73,20 +73,24 @@ class Conductor {
 		var totalPos:Float = 0;
 		for (i in 0...song.notes.length)
 		{
-			if (song.notes[i].changeBPM && song.notes[i].bpm != curBPM)
-			{
-				curBPM = song.notes[i].bpm;
-				var event:BPMChangeEvent = {
-					stepTime: totalSteps,
-					songTime: totalPos,
-					bpm: curBPM
-				};
-				bpmChangeMap.push(event);
-			}
+            // YCE charts have like 9273829 nulls in them so yknow balls
+            if (song.notes[i] != null)
+            {
+                if (song.notes[i].changeBPM && song.notes[i].bpm != curBPM)
+                {
+                    curBPM = song.notes[i].bpm;
+                    var event:BPMChangeEvent = {
+                        stepTime: totalSteps,
+                        songTime: totalPos,
+                        bpm: curBPM
+                    };
+                    bpmChangeMap.push(event);
+                }
 
-			var deltaSteps:Int = song.notes[i].lengthInSteps;
-			totalSteps += deltaSteps;
-			totalPos += ((60 / curBPM) * 1000 / 4) * deltaSteps;
+                var deltaSteps:Int = song.notes[i].lengthInSteps;
+                totalSteps += deltaSteps;
+                totalPos += ((60 / curBPM) * 1000 / 4) * deltaSteps;
+            }
 		}
 	}
 

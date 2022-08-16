@@ -12,6 +12,6 @@ typedef Section = {
     // Determines if the opponent/player should use alt anims for this section.
     var altAnim:Bool;
     // BPM Stuff
-    var bpm:Float;
-    var changeBPM:Bool;
+    var bpm:Null<Float>;
+    var changeBPM:Null<Bool>;
 }

@@ -31,6 +31,14 @@ import systems.UIControls;
 
 using StringTools;
 
+typedef UnspawnNote = {
+	var strumTime:Float; // 0 = strum tie m
+	var noteData:Int; // 1 = ntpeo data
+	var susLength:Float; // 2 = sussy amongle sus length! (sustain length)
+	var mustPress:Bool; // 3 = must press
+	var altAnim:Bool; // 4 = alt anim
+}
+
 class PlayState extends MusicBeatState {
 	public static var logs:String = "";
 	public static var current:PlayState;
@@ -41,7 +49,7 @@ class PlayState extends MusicBeatState {
 	public static var currentDifficulty:String = "hard";
 	public static var availableDifficulties:Array<String> = ["easy", "normal", "hard"];
 
-	public var unspawnNotes:Array<Note> = [];
+	public var unspawnNotes:Array<UnspawnNote> = [];
 
 	// Characters
 	public var dad:Character;
@@ -272,67 +280,29 @@ class PlayState extends MusicBeatState {
 		
 		for(section in SONG.notes)
 		{
-			for(note in section.sectionNotes)
+			if(section != null)
 			{
-				var strumTime:Float = note[0] + Init.trueSettings.get("Note Offset");
-				var gottaHitNote:Bool = section.mustHitSection;
-				if (note[1] > (SONG.keyCount - 1))
-					gottaHitNote = !section.mustHitSection;
-
-				var arrowSkin:String = currentSkin != "default" ? currentSkin : Init.trueSettings.get("Arrow Skin").toLowerCase();
-
-				var newNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount);
-				newNote.altAnim = section.altAnim;
-				if(note[3]) // week 7 moment!
-					newNote.altAnim = note[3];
-
-				// sustain
-				var susLength:Float = note[2] / Conductor.stepCrochet;
-
-				if(susLength > 0)
+				for(note in section.sectionNotes)
 				{
-					var susNote:Int = 0;
-					for(i in 0...Math.floor(susLength)-1)
-					{
-						var newSusNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount, true);
-						newSusNote.altAnim = newNote.altAnim;
-						newSusNote.strumTime = strumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
-						newSusNote.mustPress = gottaHitNote;
+					var strumTime:Float = note[0] + Init.trueSettings.get("Note Offset");
+					var gottaHitNote:Bool = section.mustHitSection;
+					if (note[1] > (SONG.keyCount - 1))
+						gottaHitNote = !section.mustHitSection;
 
-						var strumLine:StrumLine = gottaHitNote ? UI.playerStrums : UI.opponentStrums;
-						unspawnNotes.push(newSusNote);
+					var susLength:Float = note[2] / Conductor.stepCrochet;
 
-						newSusNote.parent = strumLine;
-						newSusNote.sustainParent = newNote;
-						newSusNote.loadSkin(arrowSkin);
-						susNote++;
-					}
+					var altAnim:Bool = section.altAnim;
+					if(note[3])
+						altAnim = note[3];
 
-					// end piece
-					var newSusNote:Note = new Note(-9999, -9999, Std.int(note[1]) % SONG.keyCount, true);
-					newSusNote.altAnim = newNote.altAnim;
-					newSusNote.strumTime = strumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet;
-					newSusNote.mustPress = gottaHitNote;
-					newSusNote.isEndPiece = true;
-
-					var strumLine:StrumLine = gottaHitNote ? UI.playerStrums : UI.opponentStrums;
-					unspawnNotes.push(newSusNote);
-
-					newSusNote.parent = strumLine;
-					newSusNote.sustainParent = newNote;
-					newSusNote.loadSkin(arrowSkin);
-
-					newSusNote.playAnim("tail");
+					unspawnNotes.push({
+						strumTime: strumTime, // 0 = strum tie m
+						noteData: Std.int(note[1] % SONG.keyCount), // 1 = ntpeo data
+						susLength: susLength, // 2 = sussy amongle sus length! (sustain length)
+						mustPress: gottaHitNote, // 3 = must press
+						altAnim: altAnim // 4 = alt anim
+					});
 				}
-
-				newNote.strumTime = strumTime;
-				newNote.mustPress = gottaHitNote;
-				
-				var strumLine:StrumLine = gottaHitNote ? UI.playerStrums : UI.opponentStrums;
-				unspawnNotes.push(newNote);
-
-				newNote.parent = strumLine;
-				newNote.loadSkin(arrowSkin);
 			}
 		}
 
@@ -591,7 +561,7 @@ class PlayState extends MusicBeatState {
 		Main.resetState();
 	}
 
-	function sortByShit(Obj1:Note, Obj2:Note):Int
+	function sortByShit(Obj1:UnspawnNote, Obj2:UnspawnNote):Int
 		return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime);
 
 	function spawnNotes()
@@ -600,11 +570,34 @@ class PlayState extends MusicBeatState {
 		{
 			while (unspawnNotes.length > 0 && (unspawnNotes[0].strumTime - Conductor.position) < 2500)
 			{
-				var dunceNote:Note = unspawnNotes[0];
+				var arrowSkin:String = currentSkin != "default" ? currentSkin : Init.trueSettings.get("Arrow Skin").toLowerCase();
+
+				var dunceNote:Note = new Note(-9999, -9999, unspawnNotes[0].noteData, false);
+				dunceNote.strumTime = unspawnNotes[0].strumTime;
+				dunceNote.mustPress = unspawnNotes[0].mustPress;
+				dunceNote.altAnim = unspawnNotes[0].altAnim;
+				dunceNote.parent = unspawnNotes[0].mustPress ? UI.playerStrums : UI.opponentStrums;
+				dunceNote.loadSkin(arrowSkin);
 				dunceNote.parent.notes.add(dunceNote);
 
-				var index:Int = unspawnNotes.indexOf(dunceNote);
-				unspawnNotes.splice(index, 1);
+				var cum:Int = Math.floor(unspawnNotes[0].susLength);
+				for(i in 0...cum)
+				{
+					var susNote:Note = new Note(-9999, -9999, unspawnNotes[0].noteData, true);
+					susNote.strumTime = unspawnNotes[0].strumTime + (Conductor.stepCrochet * i) + Conductor.stepCrochet;
+					susNote.mustPress = unspawnNotes[0].mustPress;
+					susNote.altAnim = unspawnNotes[0].altAnim;
+					susNote.parent = unspawnNotes[0].mustPress ? UI.playerStrums : UI.opponentStrums;
+					susNote.loadSkin(arrowSkin);
+					if(i >= cum-1)
+					{
+						susNote.isEndPiece = true;
+						susNote.playAnim("tail");
+					}
+					susNote.parent.notes.add(susNote);
+				}
+
+				unspawnNotes.shift();
 			}
 		}
 	}
@@ -686,26 +679,20 @@ class PlayState extends MusicBeatState {
 		{
 			if(!(Conductor.isAudioSynced(FlxG.sound.music) && Conductor.isAudioSynced(vocals)))
 			{
-				FlxG.sound.music.pause();
-				if(vocals.time < vocals.length)
-					vocals.pause();
-
-				FlxG.sound.music.time = Conductor.position;
-				if(vocals.time < vocals.length)
-					vocals.time = Conductor.position;
+				vocals.pause();
 
 				FlxG.sound.music.play();
-				if(vocals.time < vocals.length)
-					vocals.play();
+				Conductor.position = FlxG.sound.music.time;
+				if (Conductor.position <= vocals.length)
+					vocals.time = Conductor.position;
+				
+				vocals.play();
 			}
 		}
 		else
 		{
-			if(!Conductor.isAudioSynced(FlxG.sound.music))
-			{
-				FlxG.sound.music.pause();
-				FlxG.sound.music.time = Conductor.position;
-				FlxG.sound.music.play();
+			if(!Conductor.isAudioSynced(FlxG.sound.music)) {
+				Conductor.position = FlxG.sound.music.time;
 			}
 		}
 	}

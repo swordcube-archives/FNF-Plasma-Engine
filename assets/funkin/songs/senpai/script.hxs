@@ -18,7 +18,4 @@ function createPost() {
     PlayState.currentSkin = "arrows-pixel";
     PlayState.UI.opponentStrums.reloadSkin();
     PlayState.UI.playerStrums.reloadSkin();
-
-    for(note in PlayState.unspawnNotes)
-        note.loadSkin("arrows-pixel");
 }

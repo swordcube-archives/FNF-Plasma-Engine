@@ -1,6 +1,7 @@
 package ui;
 
 import flixel.FlxSprite;
+import sys.FileSystem;
 
 using StringTools;
 
@@ -45,11 +46,12 @@ class HealthIcon extends FlxSprite {
 			var pixelIcons:Array<String> = CoolUtil.listFromText(FNFAssets.returnAsset(TEXT, AssetPaths.txt("pixelIcons")));
 
 			// check if the icon exists, otherwise use default face
-			var image = FNFAssets.returnAsset(IMAGE, AssetPaths.image('icons/face'));
+			var image = null;
 
-			var iconExists = FNFAssets.returnAsset(IMAGE, AssetPaths.image('icons/$char'));
-			if (iconExists != null)
+			if(FileSystem.exists(AssetPaths.image('icons/$char')))
 				image = FNFAssets.returnAsset(IMAGE, AssetPaths.image('icons/$char'));
+			else
+				image = FNFAssets.returnAsset(IMAGE, AssetPaths.image('icons/face'));
 
 			loadGraphic(image);
 

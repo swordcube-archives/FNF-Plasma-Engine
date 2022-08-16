@@ -244,5 +244,7 @@ function changeSelection(change:Int) {
         i += 1;
     }
 
+    changeDifficulty(0);
+
     FlxG.sound.play(scrollMenu);
 }
