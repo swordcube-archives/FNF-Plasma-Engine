@@ -151,14 +151,23 @@ function update() {
     bgColor[1] = FlxMath.lerp(bgColor[1], color[1], time);
     bgColor[2] = FlxMath.lerp(bgColor[2], color[2], time);
 
+    if(FlxG.sound.music != null)
+        Conductor.position = FlxG.sound.music.time;
+
     bg.color = FlxColor.fromRGB(Std.int(bgColor[0]), Std.int(bgColor[1]), Std.int(bgColor[2]));
+
+    if(curPlaying == songs[curSelected].name)
+    {
+        var lerp = FlxMath.lerp(1.15, 1, FlxEase.cubeOut(Conductor.currentBeatFloat % 1));
+        grpIcons.members[curSelected].scale.set(lerp, lerp);
+    }
 
     updateScore();
 
     if(UIControls.justPressed("BACK"))
     {
         FlxG.sound.play(cancelMenu);
-        Main.switchState(new MainMenu());
+        Main.switchState(new ScriptedState('MainMenu'));
     }
 
     if(UIControls.justPressed("UP"))
@@ -203,6 +212,7 @@ function playTheFuckingSong() {
         FlxG.sound.music.play();
 
         FlxG.sound.music.fadeIn(1, 0, 1);
+        Conductor.changeBPM(songs[curSelected].bpm);
 
         loadingBox.visible = false;
         loadingIco.visible = false;
@@ -227,6 +237,8 @@ function changeDifficulty(change:Int) {
 }
 
 function changeSelection(change:Int) {
+    grpIcons.members[curSelected].scale.set(1, 1);
+
     curSelected += change;
 
     if(curSelected < 0)

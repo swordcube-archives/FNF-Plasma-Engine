@@ -68,19 +68,20 @@ class MusicBeatState extends FlxUIState {
 			FlxG.fullscreen = !FlxG.fullscreen;
 
 		var dumb:Int = 0;
-		notificationGroup.forEachAlive(function(notif:Notification) {
-			notif.scrollFactor.set();
-			notif.y = 20 + ((notif.box.height + 20) * dumb);
-			if(notif.shouldDie)
-			{
-				notificationGroup.remove(notif, true);
-				notif.kill();
-				notif.destroy();
-			}
-
-			dumb++;
-		});
-
+		if (notificationGroup != null) {
+			notificationGroup.forEachAlive(function(notif:Notification) {
+				notif.scrollFactor.set();
+				notif.y = 20 + ((notif.box.height + 20) * dumb);
+				if(notif.shouldDie)
+				{
+					notificationGroup.remove(notif, true);
+					notif.kill();
+					notif.destroy();
+				}
+	
+				dumb++;
+			});
+		}
 		updateContents();
 
 		// state refreshing

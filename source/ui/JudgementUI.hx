@@ -25,8 +25,8 @@ class JudgementUI extends FlxGroup
 
 		// Start the script
 		script.start(false); // Make the script function but don't automatically call the create function
-		script.callFunction("create", [judgement, combo]);
-		script.callFunction("createPost", [judgement, combo]);
+		script.call("create", [judgement, combo]);
+		script.call("createPost", [judgement, combo]);
 		// because we call it down here
 	}
 
@@ -35,6 +35,6 @@ class JudgementUI extends FlxGroup
 		super.update(elapsed);
 
 		script.update(elapsed);
-		script.callFunction("updatePost", [elapsed]);
+		script.call("updatePost", [elapsed]);
 	}
 }

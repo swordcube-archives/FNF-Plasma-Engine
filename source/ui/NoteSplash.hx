@@ -45,7 +45,7 @@ class NoteSplash extends FNFSprite
 		shader = colorSwap;
 		setColor();
 
-		script.callFunction("create", [skin]);
+		script.call("create", [skin]);
 	}
 
 	override function update(elapsed:Float)
@@ -56,7 +56,7 @@ class NoteSplash extends FNFSprite
 		// the function that makes the script update
 		// I am the dumbass ever.
 		script.update(elapsed);
-		script.callFunction("updatePost", [elapsed]);
+		script.call("updatePost", [elapsed]);
 	}
 
 	public function setColor()

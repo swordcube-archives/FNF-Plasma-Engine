@@ -163,8 +163,8 @@ class HScript {
             set("loadScript", function(scriptPath:String, ?args:Array<Any>)
             {
                 var new_script = new HScript(scriptPath);
-                new_script.callFunction("create", args);
-                new_script.callFunction("createPost", args);
+                new_script.call("create", args);
+                new_script.call("createPost", args);
 
                 otherScripts.push(new_script);
                 return new_script;
@@ -236,20 +236,13 @@ class HScript {
             }
 
             // Game states
-            set("TitleState", states.TitleState);
-            set("MainMenu", states.MainMenu);
-
-            set("StoryMenu", states.StoryMenu);
-            set("FreeplayMenu", states.FreeplayMenu);
-            set("OptionsMenu", states.OptionsMenu);
-
             set("ToolboxMain", toolbox.ToolboxMain);
 
             set("PlayState", PlayState.current);
             set("PlayState_", PlayState);
 
-            set("ModState", states.ModState);
-            set("ModSubState", substates.ModSubState);
+            set("ScriptedState", states.ScriptedState);
+            set("ScriptedSubState", substates.ScriptedSubState);
 
             // Game substates
             set("KeybindMenu", substates.KeybindMenu);
@@ -313,16 +306,16 @@ class HScript {
 		}
 
 		if (executedScript && callCreate)
-			callFunction("create");
+			call("create");
 	}
 
 	public function update(elapsed:Float)
 	{
 		if (executedScript)
-			callFunction("update", [elapsed]);
+			call("update", [elapsed]);
 	}
 
-	public function callFunction(func:String, ?args:Array<Dynamic>)
+	public function call(func:String, ?args:Array<Dynamic>)
 	{
 		if (!executedScript)
 			return;
@@ -346,7 +339,7 @@ class HScript {
 		}
 
 		for (otherScript in otherScripts)
-			otherScript.callFunction(func, args);
+			otherScript.call(func, args);
 	}
 
     public function set(variable:String, value:Dynamic)

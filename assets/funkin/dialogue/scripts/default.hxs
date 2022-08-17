@@ -133,10 +133,10 @@ function loadText(script) {
 }
 
 function type(text, speed) {
-    textScript.callFunction('type', [text, speed]);
+    textScript.call('type', [text, speed]);
 }
 function callTheTalk() {
-    boxScript.callFunction('talk');
-    portraitScript.callFunction('talk');
-    textScript.callFunction('talk');
+    boxScript.call('talk');
+    portraitScript.call('talk');
+    textScript.call('talk');
 }

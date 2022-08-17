@@ -395,9 +395,9 @@ class PlayState extends MusicBeatState {
 	public function getMenuToSwitchTo():Dynamic
 	{
 		if(isStoryMode)
-			return new states.StoryMenu(); // i changed it!!!
+			return new states.ScriptedState('StoryMenu'); // i changed it!!!
 		else
-			return new states.FreeplayMenu();
+			return new states.ScriptedState('FreeplayMenu');
 
 		return null;
 	}
@@ -742,6 +742,6 @@ class PlayState extends MusicBeatState {
 	public function callOnHScripts(func:String, ?args:Null<Array<Dynamic>>)
 	{
 		for(script in scripts)
-			script.callFunction(func, args);
+			script.call(func, args);
 	}
 }

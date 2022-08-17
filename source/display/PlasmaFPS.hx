@@ -45,7 +45,7 @@ class PlasmaFPS extends TextField {
 	private function onEnter(event:Event)
 	{
 		currentFPS = fpsCounter.currentFPS;
-		Main.deltaTime = 1.0 / currentFPS;
+		Main.deltaTime = currentFPS > 60 ? 1.0 / currentFPS : FlxG.elapsed;
 
 		infoDisplayed = [true, true, false];
 

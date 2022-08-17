@@ -30,7 +30,7 @@ class PauseMenu extends MusicBeatSubState {
         super.create();
 
         script.start();
-        script.callFunction("createPost", []);
+        script.call("createPost", []);
     }
 
     override public function update(elapsed:Float)
@@ -38,21 +38,21 @@ class PauseMenu extends MusicBeatSubState {
         super.update(elapsed);
 
         script.update(elapsed);
-        script.callFunction("updatePost", [elapsed]);
+        script.call("updatePost", [elapsed]);
     }
 
     override public function beatHit()
     {
         super.beatHit();
 
-        script.callFunction("beatHit", [Conductor.currentBeat]);
+        script.call("beatHit", [Conductor.currentBeat]);
     }
 
     override public function stepHit()
     {
         super.stepHit();
 
-        script.callFunction("stepHit", [Conductor.currentStep]);
+        script.call("stepHit", [Conductor.currentStep]);
     }
 
     override function destroy()
@@ -60,7 +60,7 @@ class PauseMenu extends MusicBeatSubState {
         if(PlayState.current.countdownTimer != null)
             PlayState.current.countdownTimer.active = true;
 
-        script.callFunction("destroy");
+        script.call("destroy");
         super.destroy();
     }
 }

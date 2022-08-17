@@ -141,7 +141,7 @@ function update(elapsed:Float) {
                 new FlxTimer().start(1, function(tmr:FlxTimer) {
                     state.persistentUpdate = true;
                     state.persistentDraw = true;
-                    Main.switchState(new MainMenu());
+                    Main.switchState(new ScriptedState('MainMenu'));
                 });
             }
         }
