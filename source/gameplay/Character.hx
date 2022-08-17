@@ -271,8 +271,7 @@ class Character extends FNFSprite
 			else
 				healthIcon = curCharacter;
 
-			var offset_text:String = FNFAssets.returnAsset(TEXT, AssetPaths.txt('${path}offsets'));
-			var offsets_string_array:Array<String> = offset_text.trim().split("\n");
+			var offsets_string_array:Array<String> = CoolUtil.listFromText(FNFAssets.returnAsset(TEXT, AssetPaths.txt('${path}offsets')));
 			
 			for (offset_string in offsets_string_array)
 			{
