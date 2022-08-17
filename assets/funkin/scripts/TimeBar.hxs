@@ -10,29 +10,26 @@ function create() {
     add(ui.timeBarBG);
 }
 
-function countdownTick(counter) {
-    if(counter == 4)
-    {
-        ui.timeBar = new FlxBar(ui.timeBarBG.x + 4, ui.timeBarBG.y + 4, FlxBarFillDirection.LEFT_TO_RIGHT, Std.int(ui.timeBarBG.width - 8), Std.int(ui.timeBarBG.height - 8), FlxG.sound.music,
-        'time', 0, FlxG.sound.music.length);
-        ui.timeBar.createFilledBar(0xFF000000, 0xFFFFFFFF);
-        ui.timeBar.color = PlayState_.SONG.notes[0].mustHitSection ? ui.healthColors[1] : ui.healthColors[0];
-        ui.timeBar.alpha = 0;
-        add(ui.timeBar);
+function startSong() {
+    ui.timeBar = new FlxBar(ui.timeBarBG.x + 4, ui.timeBarBG.y + 4, FlxBarFillDirection.LEFT_TO_RIGHT, Std.int(ui.timeBarBG.width - 8), Std.int(ui.timeBarBG.height - 8), FlxG.sound.music,
+    'time', 0, FlxG.sound.music.length);
+    ui.timeBar.createFilledBar(0xFF000000, 0xFFFFFFFF);
+    ui.timeBar.color = PlayState_.SONG.notes[0].mustHitSection ? ui.healthColors[1] : ui.healthColors[0];
+    ui.timeBar.alpha = 0;
+    add(ui.timeBar);
 
-        updateBar();
+    updateBar();
 
-        ui.timeTxt = new FlxText(0, ui.timeBarBG.y, 0, "0:00 / 0:00");
-        ui.timeTxt.setFormat(AssetPaths.font("vcr"), 18, FlxColor.WHITE, FlxTextAlign.CENTER);
-        ui.timeTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
-        ui.timeTxt.screenCenter(FlxAxes.X);
-        ui.timeTxt.alpha = 0;
-        add(ui.timeTxt);
+    ui.timeTxt = new FlxText(0, ui.timeBarBG.y, 0, "0:00 / 0:00");
+    ui.timeTxt.setFormat(AssetPaths.font("vcr"), 18, FlxColor.WHITE, FlxTextAlign.CENTER);
+    ui.timeTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
+    ui.timeTxt.screenCenter(FlxAxes.X);
+    ui.timeTxt.alpha = 0;
+    add(ui.timeTxt);
 
-        FlxTween.tween(ui.timeBarBG, { alpha: 1 }, 0.5, { ease: FlxEase.cubeInOut });
-        FlxTween.tween(ui.timeBar, { alpha: 1 }, 0.5, { ease: FlxEase.cubeInOut });
-        FlxTween.tween(ui.timeTxt, { alpha: 1 }, 0.5, { ease: FlxEase.cubeInOut });
-    }
+    FlxTween.tween(ui.timeBarBG, { alpha: 1 }, 0.5, { ease: FlxEase.cubeInOut });
+    FlxTween.tween(ui.timeBar, { alpha: 1 }, 0.5, { ease: FlxEase.cubeInOut });
+    FlxTween.tween(ui.timeTxt, { alpha: 1 }, 0.5, { ease: FlxEase.cubeInOut });
 }
 
 var oldMustHit:Bool = false;
