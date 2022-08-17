@@ -6,7 +6,8 @@
                 "normal"
             ],
             "icon": "bf-pixel",
-            "color": [104, 177, 232]
+            "color": [104, 177, 232],
+            "bpm": 150
         }
     ]
 }

@@ -23,7 +23,6 @@ import gameplay.StrumLine;
 import hscript.HScript;
 import openfl.media.Sound;
 import substates.GameOver;
-import substates.ScriptedSubState;
 import sys.FileSystem;
 import systems.Conductor;
 import systems.Highscore;
@@ -194,8 +193,8 @@ class PlayState extends MusicBeatState {
 
 		var gfVersion:String = "gf";
 
-		if(SONG.gfVersion != null)
-			gfVersion = SONG.gfVersion;
+		if(SONG.player3 != null)
+			gfVersion = SONG.player3;
 
 		if(SONG.gfVersion != null)
 			gfVersion = SONG.gfVersion;
@@ -558,7 +557,6 @@ class PlayState extends MusicBeatState {
 				persistentDraw = false;
 
 				openSubState(new GameOver(bf.x, bf.y, camFollowPos.x, camFollowPos.y, bf.deathCharacter));
-				//openSubState(new ScriptedSubState('GameOver'));
 			}
 		}
 

@@ -8,7 +8,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 100.0
         },
         {
             "name": "Bopeebo",
@@ -18,7 +19,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 100.0
         },
         {
             "name": "Fresh",
@@ -28,7 +30,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 120.0
         },
         {
             "name": "Dad Battle",
@@ -38,7 +41,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 180.0
         },
         {
             "name": "Spookeez",
@@ -48,7 +52,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 150.0
         },
         {
             "name": "South",
@@ -58,7 +63,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 165.0
         },
         {
             "name": "Monster",
@@ -68,7 +74,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 99.0
         },
         {
             "name": "Pico",
@@ -78,7 +85,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 150.0
         },
         {
             "name": "Philly Nice",
@@ -88,7 +96,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 175.0
         },
         {
             "name": "Blammed",
@@ -98,7 +107,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 165.0
         },
         {
             "name": "Satin Panties",
@@ -108,7 +118,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 110.0
         },
         {
             "name": "High",
@@ -118,7 +129,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 125.0
         },
         {
             "name": "M.I.L.F",
@@ -128,7 +140,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 180.0
         },
         {
             "name": "Cocoa",
@@ -138,7 +151,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 100.0
         },
         {
             "name": "Eggnog",
@@ -148,7 +162,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 150.0
         },
         {
             "name": "Winter Horrorland",
@@ -158,7 +173,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 79.0
         },
         {
             "name": "Senpai",
@@ -168,7 +184,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 144.0
         },
         {
             "name": "Roses",
@@ -178,7 +195,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 120.0
         },
         {
             "name": "Thorns",
@@ -188,7 +206,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 190.0
         },
         {
             "name": "Ugh",
@@ -198,7 +217,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 160.0
         },
         {
             "name": "Guns",
@@ -208,7 +228,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 185.0
         },
         {
             "name": "Stress",
@@ -218,7 +239,8 @@
                 "easy",
                 "normal",
                 "hard"
-            ]
+            ],
+            "bpm": 178.0
         }
     ]
 }
