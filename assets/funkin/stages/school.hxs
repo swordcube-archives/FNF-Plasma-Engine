@@ -76,6 +76,7 @@ function create() {
 
     bgGirls.setGraphicSize(Std.int(bgGirls.width * 6));
     bgGirls.updateHitbox();
+    bgGirls.antialiasing = false;
     add(bgGirls);
 }
 
