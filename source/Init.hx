@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
+import states.ScriptedState;
 import systems.ExtraKeys;
 import systems.Highscore;
 import systems.MusicBeat;
@@ -276,9 +277,7 @@ class Init extends MusicBeatState {
         if(trueSettings.get("Preload Assets"))
             Main.switchState(new states.PreloadState(), false);
         else
-            Main.switchState(new states.TitleState(), false);
-
-        startedGame = true;
+            Main.switchState(new states.ScriptedState('TitleState'), false);
     }
 
     /**

@@ -170,7 +170,7 @@ class Character extends FNFSprite
 
 		ogPosition = new FlxPoint(x, y);
 
-		script.callFunction("createPost");
+		script.call("createPost");
 	}
 
 	public function loadPsychJSON()
@@ -410,7 +410,7 @@ class Character extends FNFSprite
 		if (isLikeGF && canDance && animation.curAnim != null && animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
 			playAnim('danceRight');
 
-		script.callFunction("updatePost", [elapsed]);
+		script.call("updatePost", [elapsed]);
 	}
 
 	var danced:Bool = false;

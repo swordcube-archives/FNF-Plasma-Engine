@@ -23,6 +23,7 @@ import gameplay.StrumLine;
 import hscript.HScript;
 import openfl.media.Sound;
 import substates.GameOver;
+import substates.ScriptedSubState;
 import sys.FileSystem;
 import systems.Conductor;
 import systems.Highscore;
@@ -193,8 +194,8 @@ class PlayState extends MusicBeatState {
 
 		var gfVersion:String = "gf";
 
-		if(SONG.player3 != null)
-			gfVersion = SONG.player3;
+		if(SONG.gfVersion != null)
+			gfVersion = SONG.gfVersion;
 
 		if(SONG.gfVersion != null)
 			gfVersion = SONG.gfVersion;
@@ -395,9 +396,9 @@ class PlayState extends MusicBeatState {
 	public function getMenuToSwitchTo():Dynamic
 	{
 		if(isStoryMode)
-			return new states.StoryMenu(); // i changed it!!!
+			return new states.ScriptedState('StoryMenu'); // i changed it!!!
 		else
-			return new states.FreeplayMenu();
+			return new states.ScriptedState('FreeplayMenu');
 
 		return null;
 	}
@@ -557,6 +558,7 @@ class PlayState extends MusicBeatState {
 				persistentDraw = false;
 
 				openSubState(new GameOver(bf.x, bf.y, camFollowPos.x, camFollowPos.y, bf.deathCharacter));
+				//openSubState(new ScriptedSubState('GameOver'));
 			}
 		}
 
@@ -742,6 +744,6 @@ class PlayState extends MusicBeatState {
 	public function callOnHScripts(func:String, ?args:Null<Array<Dynamic>>)
 	{
 		for(script in scripts)
-			script.callFunction(func, args);
+			script.call(func, args);
 	}
 }

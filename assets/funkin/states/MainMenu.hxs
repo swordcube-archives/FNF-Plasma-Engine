@@ -114,7 +114,7 @@ function update() {
         if(UIControls.justPressed("BACK"))
         {
             FlxG.sound.play(cancelMenu);
-            Main.switchState(new TitleState());
+            Main.switchState(new ScriptedState('TitleState'));
         }
 
         if(UIControls.justPressed("UP"))
@@ -168,13 +168,13 @@ function switchToOtherStateShit() {
     switch(menuOptions[curSelected])
     {
         case 'story-mode':
-            Main.switchState(new StoryMenu());
+            Main.switchState(new ScriptedState('StoryMenu'));
         case 'freeplay':
-            Main.switchState(new FreeplayMenu());
+            Main.switchState(new ScriptedState('FreeplayMenu'));
         case 'toolbox':
             Main.switchState(new ToolboxMain());
         case 'options':
-            Main.switchState(new OptionsMenu());
+            Main.switchState(new ScriptedState('OptionsMenu'));
     }
 }
 

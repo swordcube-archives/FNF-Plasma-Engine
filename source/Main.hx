@@ -1,5 +1,6 @@
 package;
 
+import states.ScriptedState;
 import display.PlasmaFPS;
 import flixel.FlxG;
 import flixel.FlxGame;
@@ -116,11 +117,17 @@ class Main extends Sprite
 			FlxG.state.openSubState(new Transition(0.45, false));
 			Transition.finishCallback = function()
 			{
-				FlxG.resetState();
+				if (Std.isOfType(FlxG.state, states.ScriptedState))
+					FlxG.switchState(new ScriptedState(cast(FlxG.state, ScriptedState).name, cast(FlxG.state, ScriptedState).args));
+				else
+					FlxG.resetState();
 			};
 			return trace('reloaded current state ${Type.getClassName(currentState)} (with transition)');
 		}
-		FlxG.resetState();
+		if (Std.isOfType(FlxG.state, states.ScriptedState))
+			FlxG.switchState(new ScriptedState(cast(FlxG.state, ScriptedState).name, cast(FlxG.state, ScriptedState).args));
+		else
+			FlxG.resetState();
 		return trace('reloaded current state ${Type.getClassName(currentState)} (without transition)');
 	}
 

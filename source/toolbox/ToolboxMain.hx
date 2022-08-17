@@ -44,6 +44,6 @@ class ToolboxMain extends MusicBeatState {
         super.update(elapsed);
 
         if(UIControls.justPressed("BACK"))
-            Main.switchState(new states.MainMenu());
+            Main.switchState(new states.ScriptedState('MainMenu'));
     }
 }

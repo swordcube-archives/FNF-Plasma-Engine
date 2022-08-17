@@ -8,7 +8,7 @@ import openfl.media.Sound;
 class HScriptHelpers {
     // i didn't know you could do this whole
     //
-    // setVariable("Something" {
+    // set("Something" {
     //     "someVariableOrFunctionInThisBracketShit": function(balls:String) {
     //         return someActualFunctionThatHScriptHatesButCanBeDoneHere(balls);
     //     },

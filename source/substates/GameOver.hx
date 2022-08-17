@@ -7,8 +7,7 @@ import systems.MusicBeat;
 // Go to "assets/funkin/substates/GameOver.hxs" to edit the game over.
 // Can be overridden by currently loaded pack btw.
 
-class GameOver extends MusicBeatSubState {
-    var script:HScript;
+class GameOver extends ScriptedSubState {
     var character:String = "bf-dead";
 
     var x:Float = 0;
@@ -19,7 +18,7 @@ class GameOver extends MusicBeatSubState {
 
     public function new(x:Float, y:Float, camX:Float, camY:Float, character:String)
     {
-        super();
+        super('GameOver');
 
         this.x = x;
         this.y = y;
@@ -28,12 +27,6 @@ class GameOver extends MusicBeatSubState {
         this.camY = camY;
 
         this.character = character;
-
-        script = new HScript("substates/GameOver");
-
-        script.set("add", this.add);
-        script.set("remove", this.remove);
-        script.set("substate", this);
     }
 
     override public function create()
@@ -41,8 +34,8 @@ class GameOver extends MusicBeatSubState {
         super.create();
 
         script.start(false);
-        script.callFunction("create", [x, y, camX, camY, character]);
-        script.callFunction("createPost", [x, y, camX, camY, character]);
+        script.call("create", [x, y, camX, camY, character]);
+        script.call("createPost", [x, y, camX, camY, character]);
     }
 
     override public function update(elapsed:Float)
@@ -50,20 +43,20 @@ class GameOver extends MusicBeatSubState {
         super.update(elapsed);
 
         script.update(elapsed);
-        script.callFunction("updatePost", [elapsed]);
+        script.call("updatePost", [elapsed]);
     }
 
     override public function beatHit()
     {
         super.beatHit();
 
-        script.callFunction("beatHit", [Conductor.currentBeat]);
+        script.call("beatHit", [Conductor.currentBeat]);
     }
 
     override public function stepHit()
     {
         super.stepHit();
 
-        script.callFunction("stepHit", [Conductor.currentStep]);
+        script.call("stepHit", [Conductor.currentStep]);
     }
 }
