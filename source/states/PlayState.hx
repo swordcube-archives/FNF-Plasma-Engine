@@ -17,10 +17,8 @@ import gameplay.Boyfriend;
 import gameplay.Character;
 import gameplay.GameplayUI;
 import gameplay.Note;
-import gameplay.Section;
 import gameplay.Song;
 import gameplay.Stage;
-import gameplay.StrumLine;
 import hscript.HScript;
 import openfl.media.Sound;
 import sys.FileSystem;
@@ -743,5 +741,11 @@ class PlayState extends MusicBeatState {
 	{
 		for(script in scripts)
 			script.call(func, args);
+	}
+
+	override function destroy()
+	{
+		super.destroy();
+		current = null;
 	}
 }

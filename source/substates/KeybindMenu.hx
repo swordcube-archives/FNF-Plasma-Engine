@@ -62,8 +62,8 @@ class KeybindMenu extends MusicBeatSubState {
 
         for(i in 0...keyCount)
         {
-            var txt:FlxText = new FlxText(strumLine.members[i].x+(strumLine.members[i].width/3), strumLine.members[i].y+(strumLine.members[i].height/4)+10, 0, Init.keyBinds[keyCount-1][i], 48);
-            txt.setFormat(AssetPaths.font("vcr"), 48, FlxColor.WHITE, CENTER);
+            var txt:FlxText = new FlxText(strumLine.members[i].x+(strumLine.members[i].width/3), strumLine.members[i].y+(strumLine.members[i].height/4)+10, 58, Init.keyBinds[keyCount-1][i], 48);
+            txt.setFormat(AssetPaths.font("vcr"), 48, FlxColor.WHITE, LEFT);
             txt.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
             txt.scale.set(strumLine.members[i].scale.x + 0.3, strumLine.members[i].scale.y + 0.3);
             txt.scrollFactor.set();
