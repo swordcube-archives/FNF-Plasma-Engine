@@ -151,6 +151,9 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 			var possibleNotes:Array<Note> = [];
 			notes.forEachAlive(function(note:Note)
 			{
+				if (note.noteData < 0)
+					return;
+				
 				note.x = members[note.noteData].x;
 
 				var scrollAmount:Float = (note.isDownScroll ? -1 : 1) * 0.45;
