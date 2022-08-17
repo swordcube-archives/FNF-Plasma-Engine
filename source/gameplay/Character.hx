@@ -11,6 +11,8 @@ import systems.FNFSprite;
 
 using StringTools;
 
+// psych
+
 typedef PsychCharacter =
 {
 	var animations:Array<PsychCharacterAnimation>;
@@ -32,8 +34,10 @@ typedef PsychCharacterAnimation =
 	var anim:String;
 	var fps:Int;
 	var name:String;
-	var indices:Array<Int>;
+	var indices:Null<Array<Int>>;
 };
+
+// leather
 
 typedef LeatherCharacterConfig =
 {
@@ -74,6 +78,40 @@ typedef LeatherCharacterAnimation =
 	var indices:Null<Array<Int>>;
 	var fps:Int;
 	var looped:Bool;
+};
+
+// yoshi
+
+typedef YoshiCharacter =
+{
+    var arrowColors:Array<String>; // Unused
+    var camOffset:YoshiCharPosShit;
+    var globalOffset:YoshiCharPosShit;
+    var healthbarColor:String;
+    var flipX:Bool;
+    var anims:Array<YoshiCharacterAnimation>;
+    var danceSteps:Array<String>;
+    var antialiasing:Bool;
+    var healthIconSteps:Array<Array<Int>>; // I don't know exactly what this does, but it's gonna go unused because
+    // the way health icons work in plasma is different from yoshi
+    var scale:Float;
+};
+
+typedef YoshiCharPosShit = 
+{
+    var x:Float;
+    var y:Float;
+};
+
+typedef YoshiCharacterAnimation =
+{
+    var indices:Null<Array<Int>>;
+	var x:Float;
+    var y:Float;
+    var anim:String;
+	var loop:Bool;
+	var name:String;
+	var framerate:Int;
 };
 
 class Character extends FNFSprite
@@ -168,6 +206,39 @@ class Character extends FNFSprite
 			dance();
 		}
 	}
+
+    public function loadYoshiJSON()
+    {
+		var path:String = 'characters/$curCharacter/config';
+		if (FileSystem.exists(AssetPaths.json(path)))
+		{
+            var json:YoshiCharacter = Json.parse(FNFAssets.returnAsset(TEXT, AssetPaths.json(path)));
+            cameraPosition.set(json.camOffset.x, json.camOffset.y);
+            positionOffset.set(json.globalOffset.x, json.globalOffset.y);
+
+            healthIcon = curCharacter;
+            healthBarColor = FlxColor.fromString(json.healthbarColor);
+            flipX = json.flipX;
+
+            for(anim in json.anims)
+            {
+                if(anim.indices != null && anim.indices.length > 0)
+                    animation.addByIndices(anim.name, anim.anim, anim.indices, "", anim.framerate, anim.loop);
+                else
+                    animation.addByPrefix(anim.name, anim.anim, anim.framerate, anim.loop);
+
+                setOffset(anim.name, anim.x, anim.y);
+            }
+
+            isLikeGF = json.danceSteps.contains("danceLeft") && json.danceSteps.contains("danceRight");
+            antialiasing = json.antialiasing ? Init.trueSettings.get("Antialiasing") : false;
+
+            scale.set(json.scale, json.scale);
+            updateHitbox();
+
+            dance();
+        }
+    }
 
 	public function loadLeatherJSON()
 	{
