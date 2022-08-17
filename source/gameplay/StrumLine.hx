@@ -175,7 +175,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                             PlayState.current.totalNotes++;
                             PlayState.current.calculateAccuracy();
 
-							PlayState.current.UI.healthBarScript.callFunction("updateScoreText");
+							PlayState.current.UI.healthBarScript.call("updateScoreText");
 						}
 
 						if (note.canBeHit && PlayState.current.bf != null)
@@ -262,7 +262,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 							PlayState.current.totalNotes++;
 							PlayState.current.calculateAccuracy();
 
-							PlayState.current.UI.healthBarScript.callFunction("updateScoreText");
+							PlayState.current.UI.healthBarScript.call("updateScoreText");
 						}
 
                         strum.setColor();
@@ -428,7 +428,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		var judgeUI:JudgementUI = new JudgementUI(judgement, PlayState.current.combo, PlayState.current.ratingScale, PlayState.current.comboScale);
 		PlayState.current.insert(PlayState.current.members.length + 1, judgeUI);
 
-        PlayState.current.UI.healthBarScript.callFunction("updateScoreText");
+        PlayState.current.UI.healthBarScript.call("updateScoreText");
 
         if(PlayState.current.bf != null && !PlayState.current.bf.specialAnim)
         {

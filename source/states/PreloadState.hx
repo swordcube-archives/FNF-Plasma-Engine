@@ -150,7 +150,7 @@ class PreloadState extends MusicBeatState {
 		}
 
         Main.fpsCounter.visible = true;
-        Main.switchState(new states.TitleState(), false);
+        Main.switchState(new states.ScriptedState('TitleState'), false);
     }
 
     var textUpdateTimer:Float = 0.0;

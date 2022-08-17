@@ -158,7 +158,7 @@ function update() {
     if(UIControls.justPressed("BACK"))
     {
         FlxG.sound.play(cancelMenu);
-        Main.switchState(new MainMenu());
+        Main.switchState(new ScriptedState('MainMenu'));
     }
 
     if(UIControls.justPressed("UP"))
