@@ -1,5 +1,6 @@
 package states;
 
+import substates.ScriptedSubState;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -22,7 +23,6 @@ import gameplay.Stage;
 import gameplay.StrumLine;
 import hscript.HScript;
 import openfl.media.Sound;
-import substates.GameOver;
 import sys.FileSystem;
 import systems.Conductor;
 import systems.Highscore;
@@ -556,7 +556,7 @@ class PlayState extends MusicBeatState {
 				persistentUpdate = false;
 				persistentDraw = false;
 
-				openSubState(new GameOver(bf.x, bf.y, camFollowPos.x, camFollowPos.y, bf.deathCharacter));
+				openSubState(new ScriptedSubState('GameOver', [bf.x, bf.y, camFollowPos.x, camFollowPos.y, bf.deathCharacter]));
 			}
 		}
 
