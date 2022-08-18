@@ -1,28 +1,35 @@
 package;
 
+import sys.io.File;
+import haxe.Json;
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
 import states.ScriptedState;
 import systems.ExtraKeys;
 import systems.Highscore;
 import systems.MusicBeat;
+import sys.FileSystem;
 
-enum SettingType {
-    Checkbox;
-    Selector;
-    Number;
-    KeybindMenu;
-}
+using StringTools;
+
+// rip SettingType 2022-2022, you will be missed :(((
+// enum SettingType {
+//     Checkbox;
+//     Selector;
+//     Number;
+//     KeybindMenu;
+// }
 
 typedef OptionData = {
     var page:String;
     var name:String;
+    var ?saveData:Null<String>;
     var description:String;
-    var type:SettingType;
+    var type:String;
     var defaultValue:Dynamic;
     var ?values:Null<Array<Dynamic>>;
-    var ?valueMult:Float;
-    var ?decimals:Int;
+    var ?valueMult:Null<Float>;
+    var ?decimals:Null<Int>;
 };
 
 /**
@@ -40,190 +47,8 @@ class Init extends MusicBeatState {
 
         Use Settings.get("Option Name") to use your options.
     **/
-    public static var settings:Array<OptionData> = [
-        // preferences tab
-        {
-            page: "Preferences",
-            name: "Downscroll",
-            description: "Makes your notes scroll downwards instead of upwards.",
-            type: Checkbox,
-            defaultValue: false
-        },
-        {
-            page: "Preferences",
-            name: "Centered Notes",
-            description: "Makes your notes centered and hides the opponent's notes.",
-            type: Checkbox,
-            defaultValue: false
-        },
-        {
-            page: "Preferences",
-            name: "Ghost Tapping",
-            description: "Allows you to hit notes that don't exist.",
-            type: Checkbox,
-            defaultValue: true
-        },
-        {
-            page: "Preferences",
-            name: "Botplay",
-            description: "Makes the game play itself for you.",
-            type: Checkbox,
-            defaultValue: false
-        },
-        {
-            page: "Preferences",
-            name: "Auto Pause",
-            description: "Choose whether or not the game pauses while not focused on the window.",
-            type: Checkbox,
-            defaultValue: true
-        },
-        {
-            page: "Preferences",
-            name: "Preload Assets",
-            description: "Preloads assets like images, music, and sounds when the game starts to load into songs faster. (Enabling this option uses more memory, A restart is needed for this to take effect)",
-            type: Checkbox,
-            defaultValue: false
-        },
-        {
-            page: "Preferences",
-            name: "Note Offset",
-            description: "Change how early or late your notes spawn. (Negative = Earlier, Positive = Later)",
-            type: Number,
-            defaultValue: 0,
-            values: [-1000, 1000],
-            valueMult: 0.05,
-            decimals: 2
-        },
-        {
-            page: "Preferences",
-            name: "Scroll Speed",
-            description: "Change how fast the notes go on screen. (In seconds)",
-            type: Number,
-            defaultValue: 0,
-            values: [0, 10],
-            valueMult: 0.1,
-            decimals: 1
-        },
-
-        // appearance tab
-        {
-            page: "Appearance",
-            name: "Photosensitive Mode",
-            description: "Disables photosensitive content such as flashing lights. (May not work on some mods!)",
-            type: Checkbox,
-            defaultValue: false
-        },
-        {
-            page: "Appearance",
-            name: "Antialiasing",
-            description: "Gives the game extra performance at the cost of worse looking graphics.",
-            type: Checkbox,
-            defaultValue: true
-        },
-        {
-            page: "Appearance",
-            name: "Opaque Strums",
-            description: "Makes the strums opaque instead of transparent.",
-            type: Checkbox,
-            defaultValue: false
-        },
-        {
-            page: "Appearance",
-            name: "Opaque Sustains",
-            description: "Makes sustains opaque instead of transparent.",
-            type: Checkbox,
-            defaultValue: false
-        },
-        {
-            page: "Appearance",
-            name: "Note Splashes",
-            description: "Makes a firework effect appear when you hit a \"SiCK!!\" note.",
-            type: Checkbox,
-            defaultValue: true
-        },
-        {
-            page: "Appearance",
-            name: "Arrow Skin",
-            description: "Change the skin your arrows use.",
-            type: Selector,
-            defaultValue: "Arrows",
-            values: ["Arrows", "Quant", "Circles", "Quant Circles"]
-        },
-
-        // developers tab
-        {
-            page: "Developers",
-            name: "Developer Mode",
-            description: "Allows you to access the toolbox for making mods. (Also enables pressing F5 to reload state)",
-            type: Checkbox,
-            defaultValue: false
-        },
-
-        // controls menu
-        {
-            page: "Controls",
-            name: "1k Keybinds",
-            description: "Change your singular keybind for 1k.",
-            type: KeybindMenu,
-            defaultValue: null,
-        },
-        {
-            page: "Controls",
-            name: "2k Keybinds",
-            description: "Change your keybinds for 2k.",
-            type: KeybindMenu,
-            defaultValue: null,
-        },
-        {
-            page: "Controls",
-            name: "3k Keybinds",
-            description: "Change your keybinds for 3k.",
-            type: KeybindMenu,
-            defaultValue: null,
-        },
-        {
-            page: "Controls",
-            name: "4k Keybinds",
-            description: "Change your keybinds for 4k.",
-            type: KeybindMenu,
-            defaultValue: null,
-        },
-        {
-            page: "Controls",
-            name: "5k Keybinds",
-            description: "Change your keybinds for 5k.",
-            type: KeybindMenu,
-            defaultValue: null,
-        },
-        {
-            page: "Controls",
-            name: "6k Keybinds",
-            description: "Change your keybinds for 6k.",
-            type: KeybindMenu,
-            defaultValue: null,
-        },
-        {
-            page: "Controls",
-            name: "7k Keybinds",
-            description: "Change your keybinds for 7k.",
-            type: KeybindMenu,
-            defaultValue: null,
-        },
-        {
-            page: "Controls",
-            name: "8k Keybinds",
-            description: "Change your keybinds for 8k.",
-            type: KeybindMenu,
-            defaultValue: null,
-        },
-        {
-            page: "Controls",
-            name: "9k Keybinds",
-            description: "Change your keybinds for 9k.",
-            type: KeybindMenu,
-            defaultValue: null,
-        },
-    ];
+    public static var settings:Array<OptionData> = [];
+    public static var settingPages:Array<String> = [];
 
     public static var trueSettings:Map<String, Dynamic> = [];
 
@@ -250,9 +75,39 @@ class Init extends MusicBeatState {
     **/
     public static var arrowColors:Map<Int, Array<Array<Int>>> = [];
 
+    public static function reloadSettings()
+    {
+        settings = [];
+        settingPages = [];
+
+        for(pack in FileSystem.readDirectory('${Sys.getCwd()}assets'))
+        {
+            if(!pack.contains("."))
+            {
+                var path:String = '${Sys.getCwd()}assets/${pack}/optionsPages.txt';
+                if(FileSystem.exists(path))
+                {
+                    var txt:Array<String> = CoolUtil.listFromText(File.getContent(path));
+                    for(page in txt)
+                        settingPages.push(page);
+                }
+
+                var path:String = '${Sys.getCwd()}assets/${pack}/options.json';
+                if(FileSystem.exists(path))
+                {
+                    var json:Array<OptionData> = Json.parse(File.getContent(path)).options;
+                    for(setting in json)
+                        settings.push(setting);
+                }
+            }
+        }
+    }
+
     override function create()
     {
         super.create();
+
+        reloadSettings();
 
         // Bind save data to something apart from flixel.sol
         FlxG.save.bind("plasma-engine", "plasma-options");
@@ -286,16 +141,17 @@ class Init extends MusicBeatState {
     {
         for(setting in settings)
         {
-            if(Reflect.getProperty(FlxG.save.data, setting.name) != null)
+            var saveDataShit = setting.saveData != null ? setting.saveData : setting.name;
+            if(Reflect.getProperty(FlxG.save.data, saveDataShit) != null)
             {
-                trueSettings.set(setting.name, Reflect.getProperty(FlxG.save.data, setting.name));
+                trueSettings.set(saveDataShit, Reflect.getProperty(FlxG.save.data, saveDataShit));
             }
             else
             {
-                Reflect.setProperty(FlxG.save.data, setting.name, setting.defaultValue);
+                Reflect.setProperty(FlxG.save.data, saveDataShit, setting.defaultValue);
                 FlxG.save.flush();
 
-                trueSettings.set(setting.name, setting.defaultValue);
+                trueSettings.set(saveDataShit, setting.defaultValue);
             }
         }
         

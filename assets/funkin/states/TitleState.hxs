@@ -45,7 +45,7 @@ function create() {
     Conductor.changeBPM(102);
     Conductor.position = 0.0;
 
-    logo = new FlxSprite(0, 0);
+    logo = new FlxSprite(-20, 0);
     logo.frames = FNFAssets.getSparrow("title/fnfLogo");
     logo.antialiasing = Settings.get("Antialiasing");
     logo.animation.addByPrefix("bump", "bump", 24, false);

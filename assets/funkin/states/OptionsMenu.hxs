@@ -43,12 +43,17 @@ function getOptionsFromPage(page:String) {
 }
 
 function create() {
+    Init.reloadSettings();
+    Init.initializeSettings();
+
+    pages = Init.settingPages;
+
     pageContents = [
-        "Preferences"     => getOptionsFromPage("Preferences"),
-        "Appearance"      => getOptionsFromPage("Appearance"),
-        "Developers"      => getOptionsFromPage("Developers"),
-        "Controls"        => getOptionsFromPage("Controls"),
+        "HScript is definitely very strange" => [],
     ];
+
+    for(page in Init.settingPages)
+        pageContents[page] = getOptionsFromPage(page);
 
     scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
     confirmMenu = FNFAssets.getSound(AssetPaths.sound("menus/confirmMenu"));
@@ -131,7 +136,8 @@ function update() {
     {
         if(UIControls.pressed("LEFT") || UIControls.pressed("RIGHT"))
         {
-            if(Std.string(pageContents.get(pages[curPage])[curSelected].type) != "Checkbox")
+            var setting = pageContents.get(pages[curPage])[curSelected];
+            if(Std.string(setting.type) != "Checkbox")
                 changeValue(UIControls.pressed("LEFT") ? -1 : 1);
         }
         else
@@ -205,6 +211,7 @@ function refreshPage() {
     var i:Int = 0;
     for(option in pageContents.get(pages[curPage]))
     {
+        var saveDataShit = option.saveData != null ? option.saveData : option.name;
         optionTypes.push(option.type);
         
         switch(Std.string(option.type))
@@ -214,7 +221,7 @@ function refreshPage() {
                 alphabet.x += 300;
                 grpAlphabet.add(alphabet);
 
-                var checkbox:FNFCheckbox = new FNFCheckbox(0, 0, Settings.get(option.name));
+                var checkbox:FNFCheckbox = new FNFCheckbox(0, 0, Settings.get(saveDataShit));
                 checkbox.x = ((FlxG.width * 0.9) - checkbox.width);
                 checkbox.sprTracker = alphabet;
                 grpCheckbox.add(checkbox);
@@ -246,7 +253,7 @@ function refreshPage() {
                 alphabet.x += ((FlxG.width * 0.915) - alphabet.width);
                 grpAlphabet2.add(alphabet);
 
-                var alphabet:Alphabet = new Alphabet(0, 120 + (200 * i), Settings.get(option.name));
+                var alphabet:Alphabet = new Alphabet(0, 120 + (200 * i), Settings.get(saveDataShit));
                 alphabet.ID = i;
                 alphabet.screenCenter(FlxAxes.X);
                 alphabet.x += (FlxG.width * 0.23);
@@ -262,25 +269,28 @@ function refreshPage() {
 function changeValue(change:Float) {
     holdTimer += Main.deltaTime;
 
-    switch(Std.string(pageContents.get(pages[curPage])[curSelected].type))
+    var setting = pageContents.get(pages[curPage])[curSelected];
+    var saveDataShit = setting.saveData != null ? setting.saveData : setting.name;
+
+    switch(Std.string(setting.type))
     {
         case "Checkbox":
-            Settings.set(pageContents.get(pages[curPage])[curSelected].name, !Settings.get(pageContents.get(pages[curPage])[curSelected].name));
+            Settings.set(setting.name, !Settings.get(saveDataShit));
 
-            grpCheckbox.members[curSelected].status = Settings.get(pageContents.get(pages[curPage])[curSelected].name);
+            grpCheckbox.members[curSelected].status = Settings.get(saveDataShit);
             grpCheckbox.members[curSelected].refresh();
         case "Number":
             if((UIControls.justPressed("LEFT") || UIControls.justPressed("RIGHT")) || holdTimer > 0.5)
             {
-                var dumb:Float = Settings.get(pageContents.get(pages[curPage])[curSelected].name) + (pageContents.get(pages[curPage])[curSelected].valueMult * change);
-                dumb = FlxMath.roundDecimal(dumb, pageContents.get(pages[curPage])[curSelected].decimals);
-                if(dumb < pageContents.get(pages[curPage])[curSelected].values[0])
-                    dumb = pageContents.get(pages[curPage])[curSelected].values[0];
+                var dumb:Float = Settings.get(saveDataShit) + (setting.valueMult * change);
+                dumb = FlxMath.roundDecimal(dumb, setting.decimals);
+                if(dumb < setting.values[0])
+                    dumb = setting.values[0];
 
-                if(dumb > pageContents.get(pages[curPage])[curSelected].values[1])
-                    dumb = pageContents.get(pages[curPage])[curSelected].values[1];
+                if(dumb > setting.values[1])
+                    dumb = setting.values[1];
 
-                Settings.set(pageContents.get(pages[curPage])[curSelected].name, dumb);
+                Settings.set(saveDataShit, dumb);
 
                 for(yourCock in 0...grpAlphabet3.members.length)
                 {
@@ -296,17 +306,17 @@ function changeValue(change:Float) {
         case "Selector":
             if(UIControls.justPressed("LEFT") || UIControls.justPressed("RIGHT"))
             {
-                var index:Int = pageContents.get(pages[curPage])[curSelected].values.indexOf(Settings.get(pageContents.get(pages[curPage])[curSelected].name));
+                var index:Int = setting.values.indexOf(Settings.get(saveDataShit));
                 index += UIControls.justPressed("LEFT") ? -1 : 1;
                 
                 if(index < 0)
-                    index = pageContents.get(pages[curPage])[curSelected].values.length - 1;
+                    index = setting.values.length - 1;
 
-                if(index > pageContents.get(pages[curPage])[curSelected].values.length - 1)
+                if(index > setting.values.length - 1)
                     index = 0;
 
-                var dumb:String = pageContents.get(pages[curPage])[curSelected].values[index];
-                Settings.set(pageContents.get(pages[curPage])[curSelected].name, dumb);
+                var dumb:String = setting.values[index];
+                Settings.set(saveDataShit, dumb);
 
                 for(yourCock in 0...grpAlphabet3.members.length)
                 {
@@ -320,7 +330,7 @@ function changeValue(change:Float) {
                 }
             }
         case "KeybindMenu":
-            var keyCount:Int = Std.int(pageContents.get(pages[curPage])[curSelected].name.split("k Keybinds")[0]);
+            var keyCount:Int = Std.int(setting.name.split("k Keybinds")[0]);
             state.openSubState(new KeybindMenu(keyCount, true));
     }
 }
@@ -365,7 +375,8 @@ function changeSelection(change:Int) {
     camFollow.y = (grpAlphabet.members[curSelected].y - 120) + FlxG.height/2;
     FlxG.sound.play(scrollMenu);
 
-    descText.text = pageContents.get(pages[curPage])[curSelected].description + "\n\nPress SHIFT + arrow keys to switch pages.";
+    var setting = pageContents.get(pages[curPage])[curSelected];
+    descText.text = setting.description + "\n\nPress SHIFT + arrow keys to switch pages.";
     descBox.makeGraphic(FlxG.width * 0.85, descText.height + 10, FlxColor.BLACK);
     descBox.screenCenter(FlxAxes.X);
     descBox.y = FlxG.height - (descBox.height + 50);
