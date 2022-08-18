@@ -157,8 +157,8 @@ class Character extends FNFSprite
 		var path:String = 'characters/$char/script';
 		if (!FileSystem.exists(AssetPaths.hxs(path)))
 		{
-			curCharacter = "bf";
-			path = 'characters/bf/script';
+			curCharacter = "template";
+			path = 'characters/${curCharacter}/script';
 		}
 
 		script = new HScript(path);
