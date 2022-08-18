@@ -31,7 +31,7 @@ class Note extends FNFSprite {
 
     public var canBeHit:Bool = true;
 
-    public var isDownScroll:Bool = Init.trueSettings.get("Downscroll");
+    public var isDownScroll:Bool = Settings.get("Downscroll");
 
     public var colorSwap:ColorShader;
 
@@ -120,7 +120,7 @@ class Note extends FNFSprite {
                 animation.addByPrefix("tail", noteThing+" tail0", 24, true);
             }
 
-            antialiasing = json.skin_type != "pixel" ? Init.trueSettings.get("Antialiasing") : false;
+            antialiasing = json.skin_type != "pixel" ? Settings.get("Antialiasing") : false;
 
             var funnyScale:Float = json.note_scale * ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][2];
             scale.set(funnyScale, funnyScale);
@@ -129,7 +129,7 @@ class Note extends FNFSprite {
             playAnim("normal");
             if(isSustain)
             {
-                alpha = Init.trueSettings.get("Opaque Sustains") ? 1 : 0.6;
+                alpha = Settings.get("Opaque Sustains") ? 1 : 0.6;
                 playAnim(isEndPiece ? "tail" : "hold");
             }
         }

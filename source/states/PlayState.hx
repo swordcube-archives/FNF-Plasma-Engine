@@ -98,7 +98,7 @@ class PlayState extends MusicBeatState {
 	public var stage:Stage;
 	public var inCutscene:Bool = false;
 	
-	public var botPlay:Bool = Init.trueSettings.get("Botplay");
+	public var botPlay:Bool = Settings.get("Botplay");
 
 	public var script:HScript;
 	public var scripts:Array<HScript> = [];
@@ -169,7 +169,7 @@ class PlayState extends MusicBeatState {
 
 		Conductor.position = Conductor.crochet * -5.0;
 
-		scrollSpeed = (Init.trueSettings.get("Scroll Speed") > 0) ? Init.trueSettings.get("Scroll Speed") : SONG.speed;
+		scrollSpeed = (Settings.get("Scroll Speed") > 0) ? Settings.get("Scroll Speed") : SONG.speed;
 
 		loadedSong.set("inst", FNFAssets.returnAsset(SOUND, AssetPaths.songInst(SONG.song)));
 		
@@ -303,7 +303,7 @@ class PlayState extends MusicBeatState {
 			{
 				for(note in section.sectionNotes)
 				{
-					var strumTime:Float = note[0] + Init.trueSettings.get("Note Offset");
+					var strumTime:Float = note[0] + Settings.get("Note Offset");
 					var gottaHitNote:Bool = section.mustHitSection;
 					if (note[1] > (SONG.keyCount - 1))
 						gottaHitNote = !section.mustHitSection;
@@ -590,7 +590,7 @@ class PlayState extends MusicBeatState {
 		{
 			while (unspawnNotes.length > 0 && (unspawnNotes[0].strumTime - Conductor.position) < 2500)
 			{
-				var arrowSkin:String = currentSkin != "default" ? currentSkin : Init.trueSettings.get("Arrow Skin").toLowerCase();
+				var arrowSkin:String = currentSkin != "default" ? currentSkin : Settings.get("Arrow Skin").toLowerCase();
 
 				var dunceNote:Note = new Note(-9999, -9999, unspawnNotes[0].noteData, false);
 				dunceNote.strumTime = unspawnNotes[0].strumTime;

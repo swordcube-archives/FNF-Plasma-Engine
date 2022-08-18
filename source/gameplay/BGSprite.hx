@@ -27,7 +27,7 @@ class BGSprite extends FNFSprite
 			active = false;
 		}
 		scrollFactor.set(scrollX, scrollY);
-		antialiasing = Init.trueSettings.get("Antialiasing");
+		antialiasing = Settings.get("Antialiasing");
 	}
 
 	public function dance()

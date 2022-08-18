@@ -23,13 +23,13 @@ function create() {
     var bg:FlxSprite = new FlxSprite(-100);
     bg.loadGraphic(FNFAssets.getImage(AssetPaths.image("stages/philly/sky")));
     bg.scrollFactor.set(0.1, 0.1);
-    bg.antialiasing = Init.trueSettings.get("Antialiasing");
+    bg.antialiasing = Settings.get("Antialiasing");
     add(bg);
 
     var city:FlxSprite = new FlxSprite(-10);
     city.loadGraphic(FNFAssets.getImage(AssetPaths.image("stages/philly/city")));
     city.scrollFactor.set(0.3, 0.3);
-    city.antialiasing = Init.trueSettings.get("Antialiasing");
+    city.antialiasing = Settings.get("Antialiasing");
     city.setGraphicSize(Std.int(city.width * 0.85));
     city.updateHitbox();
     add(city);
@@ -39,22 +39,22 @@ function create() {
     light.scrollFactor.set(0.3, 0.3);
     light.setGraphicSize(Std.int(light.width * 0.85));
     light.updateHitbox();
-    light.antialiasing = Init.trueSettings.get("Antialiasing");
+    light.antialiasing = Settings.get("Antialiasing");
     add(light);
 
     var streetBehind:FlxSprite = new FlxSprite(-40, 50);
     streetBehind.loadGraphic(FNFAssets.getImage(AssetPaths.image("stages/philly/behindTrain")));
-    streetBehind.antialiasing = Init.trueSettings.get("Antialiasing");
+    streetBehind.antialiasing = Settings.get("Antialiasing");
     add(streetBehind);
 
     phillyTrain = new FlxSprite(2000, 360);
     phillyTrain.loadGraphic(FNFAssets.getImage(AssetPaths.image("stages/philly/train")));
-    phillyTrain.antialiasing = Init.trueSettings.get("Antialiasing");
+    phillyTrain.antialiasing = Settings.get("Antialiasing");
     add(phillyTrain);
 
     var street:FlxSprite = new FlxSprite(-40, streetBehind.y);
     street.loadGraphic(FNFAssets.getImage(AssetPaths.image("stages/philly/street")));
-    street.antialiasing = Init.trueSettings.get("Antialiasing");
+    street.antialiasing = Settings.get("Antialiasing");
     add(street);
 }
 

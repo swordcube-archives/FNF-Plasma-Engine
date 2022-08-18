@@ -45,26 +45,26 @@ function create() {
     Conductor.changeBPM(102);
     Conductor.position = 0.0;
 
-    logo = new FlxSprite(-150, -100);
+    logo = new FlxSprite(0, 0);
     logo.frames = FNFAssets.getSparrow("title/fnfLogo");
-    logo.antialiasing = Settings["Antialiasing"];
+    logo.antialiasing = Settings.get("Antialiasing");
     logo.animation.addByPrefix("bump", "bump", 24, false);
     logo.animation.play("bump", true);
     logo.alpha = 0.0000001;
-    add(logo);
 
     gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
     gfDance.frames = FNFAssets.getSparrow("title/gfTitle");
-    gfDance.antialiasing = Settings["Antialiasing"];
+    gfDance.antialiasing = Settings.get("Antialiasing");
     gfDance.animation.addByPrefix("danceLeft", "danceLeft0", 24, false);
     gfDance.animation.addByPrefix("danceRight", "danceRight0", 24, false);
     gfDance.animation.play("danceRight", true);
     gfDance.alpha = 0.0000001;
     add(gfDance);
+    add(logo);
 
     titleText = new FlxSprite(100, FlxG.height * 0.8);
     titleText.frames = FNFAssets.getSparrow("title/titleEnter");
-    titleText.antialiasing = Settings["Antialiasing"];
+    titleText.antialiasing = Settings.get("Antialiasing");
     titleText.animation.addByPrefix("idle", "Press Enter to Begin", 24, true);
     titleText.animation.addByPrefix("confirm", "ENTER PRESSED", 24, true);
     titleText.animation.play("idle", true);
@@ -73,7 +73,7 @@ function create() {
 
     ngSpr = new FlxSprite(0, FlxG.height * 0.52);
     ngSpr.loadGraphic(FNFAssets.getImage(AssetPaths.image("title/newgrounds")));
-    ngSpr.antialiasing = Settings["Antialiasing"];
+    ngSpr.antialiasing = Settings.get("Antialiasing");
     ngSpr.alpha = 0.0000001;
     ngSpr.scale.set(0.8, 0.8);
     ngSpr.updateHitbox();

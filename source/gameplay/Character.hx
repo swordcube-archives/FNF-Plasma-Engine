@@ -149,7 +149,7 @@ class Character extends FNFSprite
 	{
 		super(x, y);
 
-		antialiasing = Init.trueSettings.get("Antialiasing");
+		antialiasing = Settings.get("Antialiasing");
 
 		this.isPlayer = isPlayer;
 		curCharacter = char;
@@ -191,7 +191,7 @@ class Character extends FNFSprite
 
 			healthIcon = json.healthicon;
 			healthBarColor = FlxColor.fromRGB(json.healthbar_colors[0], json.healthbar_colors[1], json.healthbar_colors[2]);
-			antialiasing = json.no_antialiasing ? false : Init.trueSettings.get("Antialiasing");
+			antialiasing = json.no_antialiasing ? false : Settings.get("Antialiasing");
 			flipX = json.flip_x;
 
 			singDuration = json.sing_duration;
@@ -231,7 +231,7 @@ class Character extends FNFSprite
             }
 
             isLikeGF = json.danceSteps.contains("danceLeft") && json.danceSteps.contains("danceRight");
-            antialiasing = json.antialiasing ? Init.trueSettings.get("Antialiasing") : false;
+            antialiasing = json.antialiasing ? Settings.get("Antialiasing") : false;
 
             scale.set(json.scale, json.scale);
             updateHitbox();

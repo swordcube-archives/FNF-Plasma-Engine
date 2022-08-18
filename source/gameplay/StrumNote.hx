@@ -85,7 +85,7 @@ class StrumNote extends FNFSprite {
                 animation.addByPrefix("confirm", noteThing+" confirm0", json.framerate, false);
             }
 
-            antialiasing = json.skin_type != "pixel" ? Init.trueSettings.get("Antialiasing") : false;
+            antialiasing = json.skin_type != "pixel" ? Settings.get("Antialiasing") : false;
 
             var funnyScale:Float = json.strum_scale * ExtraKeys.arrowInfo[parent.keyCount-1][2];
             scale.set(funnyScale, funnyScale);

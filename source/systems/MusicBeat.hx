@@ -62,7 +62,7 @@ class MusicBeatState extends FlxUIState {
 
 	override function update(elapsed:Float)
 	{
-		FlxG.autoPause = Init.trueSettings.get("Auto Pause");
+		FlxG.autoPause = Settings.get("Auto Pause");
 
 		if(FlxG.keys.justPressed.F11)
 			FlxG.fullscreen = !FlxG.fullscreen;
