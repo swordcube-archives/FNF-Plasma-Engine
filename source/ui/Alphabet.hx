@@ -1,5 +1,6 @@
 package ui;
 
+import flixel.util.FlxColor;
 import flash.media.Sound;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -45,7 +46,9 @@ class Alphabet extends FlxSpriteGroup {
 	public var typed:Bool = false;
 
 	public var typingSpeed:Float = 0.05;
-	public function new(x:Float, y:Float, text:String = "", ?bold:Bool = false, typed:Bool = false, ?typingSpeed:Float = 0.05, ?textSize:Float = 1)
+	public var textColor:FlxColor;
+
+	public function new(x:Float, y:Float, text:String = "", ?bold:Bool = false, color:FlxColor = FlxColor.BLACK, typed:Bool = false, ?typingSpeed:Float = 0.05, ?textSize:Float = 1)
 	{
 		super(x, y);
 		forceX = Math.NEGATIVE_INFINITY;
@@ -54,6 +57,7 @@ class Alphabet extends FlxSpriteGroup {
 		_finalText = text;
 		this.text = text;
 		this.typed = typed;
+		textColor = color;
 		isBold = bold;
 
 		if (text != "")
@@ -145,7 +149,7 @@ class Alphabet extends FlxSpriteGroup {
 				consecutiveSpaces = 0;
 
 				// var letter:AlphaCharacter = new AlphaCharacter(30 * loopNum, 0, textSize);
-				var letter:AlphaCharacter = new AlphaCharacter(xPos, 0, textSize);
+				var letter:AlphaCharacter = new AlphaCharacter(xPos, 0, textSize, textColor);
 
 				if (isBold)
 				{
@@ -286,7 +290,7 @@ class Alphabet extends FlxSpriteGroup {
 				consecutiveSpaces = 0;
 
 				// var letter:AlphaCharacter = new AlphaCharacter(30 * loopNum, 0, textSize);
-				var letter:AlphaCharacter = new AlphaCharacter(xPos, 55 * yMulti, textSize);
+				var letter:AlphaCharacter = new AlphaCharacter(xPos, 55 * yMulti, textSize, textColor);
 				letter.row = curRow;
 				if (isBold)
 				{
@@ -380,7 +384,9 @@ class AlphaCharacter extends FlxSprite {
 
 	private var textSize:Float = 1;
 
-	public function new(x:Float, y:Float, textSize:Float)
+	var textColor:FlxColor;
+
+	public function new(x:Float, y:Float, textSize:Float, color:FlxColor)
 	{
 		super(x, y);
 		var tex = FNFAssets.returnAsset(SPARROW, 'alphabet');
@@ -389,6 +395,7 @@ class AlphaCharacter extends FlxSprite {
 		setGraphicSize(Std.int(width * textSize));
 		updateHitbox();
 		this.textSize = textSize;
+		textColor = color;
 		antialiasing = Settings.get("Antialiasing");
 	}
 
@@ -461,6 +468,8 @@ class AlphaCharacter extends FlxSprite {
 		animation.play(letter);
 		updateHitbox();
 
+		color = textColor;
+
 		y = (110 - height);
 		y += row * 60;
 	}
@@ -471,6 +480,8 @@ class AlphaCharacter extends FlxSprite {
 		animation.play(letter);
 
 		updateHitbox();
+
+		color = textColor;
 
 		y = (110 - height);
 		y += row * 60;
@@ -497,6 +508,8 @@ class AlphaCharacter extends FlxSprite {
 				animation.addByPrefix(letter, letter, 24);
 		}
 		animation.play(letter);
+
+		color = textColor;
 
 		updateHitbox();
 

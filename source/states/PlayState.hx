@@ -614,6 +614,7 @@ class PlayState extends MusicBeatState {
 						susNote.isEndPiece = true;
 						susNote.playAnim("tail");
 					}
+					susNote.sustainParent = dunceNote;
 					susNote.parent.notes.add(susNote);
 				}
 

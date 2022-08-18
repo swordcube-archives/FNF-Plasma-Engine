@@ -47,7 +47,7 @@ function create() {
     {
         var displayName:String = song.displayname != null ? song.displayname : song.name;
 
-        var songText:Alphabet = new Alphabet(0, (70 * i) + 30, displayName, true, false);
+        var songText:Alphabet = new Alphabet(0, (70 * i) + 30, displayName, true, FlxColor.BLACK, false);
         songText.isMenuItem = true;
         songText.targetY = i;
         grpSongs.add(songText);

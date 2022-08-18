@@ -53,12 +53,12 @@ class Conductor {
     /**
         The amount of safe frames you get when hitting notes.
     **/
-	public static var safeFrames:Int = 15;
+	public static var safeFrames:Float = 11.5;
 
     /**
         safeFrames but in milliseconds.
     **/
-	public static var safeZoneOffset:Float = (safeFrames / 60) * 1000;
+	public static var safeZoneOffset:Float = (safeFrames / 60.0) * 1000.0;
 
     public static var timeScale:Array<Int> = [4, 4];
 

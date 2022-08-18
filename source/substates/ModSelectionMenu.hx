@@ -56,12 +56,13 @@ class ModSelectionMenu extends MusicBeatSubState {
             {
                 var json:PackJSON = Json.parse(FNFAssets.returnAsset(TEXT, AssetPaths.json("pack", folder)));
 
-                var alphabet:Alphabet = new Alphabet(0, (70 * i) + 30, json.name, true);
+                var alphabet:Alphabet = new Alphabet(0, (70 * i) + 30, json.name, false, FlxColor.WHITE);
                 alphabet.x += 100;
                 alphabet.xAdd += 150;
                 alphabet.isMenuItem = true;
                 alphabet.targetY = i;
                 alphabet.scrollFactor.set();
+                alphabet.offset.add(20, 20);
                 grpAlphabet.add(alphabet);
 
                 var icon:ModSelectionIcon = new ModSelectionIcon(alphabet, folder);

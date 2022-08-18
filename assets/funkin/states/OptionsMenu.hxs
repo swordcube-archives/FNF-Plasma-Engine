@@ -78,12 +78,12 @@ function create() {
     dumb.scrollFactor.set();
     add(dumb);
 
-    pageText = new Alphabet(0, 35, pages[curPage], true, false, 0.05, 0.8);
+    pageText = new Alphabet(0, 35, pages[curPage], true, FlxColor.BLACK, false, 0.05, 0.8);
     pageText.screenCenter(FlxAxes.X);
     pageText.scrollFactor.set();
     add(pageText);
 
-    var arrowShitCrapBalls:Alphabet = new Alphabet(0, 30, "<              >", true, false, 0.05, 0.8);
+    var arrowShitCrapBalls:Alphabet = new Alphabet(0, 30, "<              >", true, FlxColor.BLACK, false, 0.05, 0.8);
     arrowShitCrapBalls.screenCenter(FlxAxes.X);
     arrowShitCrapBalls.alpha = 0.4;
     arrowShitCrapBalls.scrollFactor.set();

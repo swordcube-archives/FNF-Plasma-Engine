@@ -97,7 +97,7 @@ var danceLeft:Bool = false;
 function createCoolText(textArray:Array<String>) {
     for (i in 0...textArray.length)
     {
-        var money:Alphabet = new Alphabet(0, 0, textArray[i], true, false);
+        var money:Alphabet = new Alphabet(0, 0, textArray[i], true, FlxColor.BLACK, false);
         money.screenCenter(FlxAxes.X);
         money.y += (i * 60) + 200;
         credGroup.add(money);
@@ -105,7 +105,7 @@ function createCoolText(textArray:Array<String>) {
 }
 
 function addMoreText(text:String) {
-    var coolText:Alphabet = new Alphabet(0, 0, text, true, false);
+    var coolText:Alphabet = new Alphabet(0, 0, text, true, FlxColor.BLACK, false);
     coolText.screenCenter(FlxAxes.X);
     coolText.y += (credGroup.length * 60) + 200;
     credGroup.add(coolText);
@@ -187,7 +187,8 @@ function beatHit(currentBeat:Int) {
         case 15:
             addMoreText('Funkin');
         case 16:
-            skipIntro();
+            if(currentBeat >= 16)
+                skipIntro();
     }
 }
 
