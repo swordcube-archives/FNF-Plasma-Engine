@@ -191,8 +191,11 @@ class PlayState extends MusicBeatState {
 
 		var gfVersion:String = "gf";
 
-		if(SONG.player3 != null)
-			gfVersion = SONG.player3;
+		//if(SONG.player3 != null)
+		//	gfVersion = SONG.player3;
+
+		// me when deprecated variable that makes me angy on compile >:(
+		//   -Raf
 
 		if(SONG.gfVersion != null)
 			gfVersion = SONG.gfVersion;
@@ -554,6 +557,7 @@ class PlayState extends MusicBeatState {
 				persistentUpdate = false;
 				persistentDraw = false;
 
+				//openSubState(new GameOver(bf.x, bf.y, camFollowPos.x, camFollowPos.y, bf.deathCharacter));
 				openSubState(new ScriptedSubState('GameOver', [bf.x, bf.y, camFollowPos.x, camFollowPos.y, bf.deathCharacter]));
 			}
 		}

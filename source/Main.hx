@@ -140,13 +140,18 @@ class Main extends Sprite
 		{
 			case "error":
 				trace('[   ERROR   ] ' + text);
+				return;
 
 			case "warn" | "warning":
 				trace('[  WARNING  ] ' + text);
+				return;
 
 			case "hxs" | "hscript":
 				trace('[  HSCRIPT  ] ' + text);
+				return;
 		}
+		trace(text);
+		return;
 	}
 
 	/**

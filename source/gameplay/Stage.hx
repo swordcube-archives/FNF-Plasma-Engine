@@ -103,7 +103,7 @@ class Stage extends FlxGroup {
 				// To make their own custom stage
 				if(FileSystem.exists(AssetPaths.hxs('stages/$curStage')))
 				{
-					trace("TRYING TO RUN SCRIPT! " + 'stages/$curStage.hxs');
+					Main.print('trace', 'Trying to run "stages/$curStage"');
 					script = new HScript('stages/$curStage');
                     script.set("stage", this);
 					script.set("add", this.addSprite);
@@ -115,7 +115,7 @@ class Stage extends FlxGroup {
 					PlayState.current.scripts.push(script);
 				}
 				else
-					trace('SCRIPT DOESN\'T EXIST IN STAGE DIRECTORY! (stages/$curStage.hxs)');
+					Main.print('error', 'Could not run "stages/$curStage"');
 		}
     }
 

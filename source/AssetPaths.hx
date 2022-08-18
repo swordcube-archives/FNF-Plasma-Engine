@@ -116,6 +116,24 @@ class AssetPaths {
 
         return goodPath;
     }
+    public static function frag(path:String, packOverride:Null<String> = null):String
+    {
+        var goodPath:String = asset('$path.frag', packOverride);
+        if(!FileSystem.exists(goodPath))
+            // Try to get the asset from funkin (default pack) if it doesn't exist in current
+            goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
+
+        return goodPath;
+    }
+    public static function vert(path:String, packOverride:Null<String> = null):String
+    {
+        var goodPath:String = asset('$path.frag', packOverride);
+        if(!FileSystem.exists(goodPath))
+            // Try to get the asset from funkin (default pack) if it doesn't exist in current
+            goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
+
+        return goodPath;
+    }
 
     /**
         Turns `path` into `assets/somePack/images/path.ext` (.ext can be: .png, .jpg, & .bmp)

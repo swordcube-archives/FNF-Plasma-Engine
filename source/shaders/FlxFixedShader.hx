@@ -74,51 +74,19 @@ class FlxFixedShader extends FlxShader {
 			{
 				glProgram = program.__glProgram;
 
-				for (input in __inputBitmapData)
-				{
-					if (input.__isUniform)
-					{
-						input.index = gl.getUniformLocation(glProgram, input.name);
-					}
-					else
-					{
-						input.index = gl.getAttribLocation(glProgram, input.name);
-					}
-				}
+				var _tempShit:Array<Array<Dynamic>> = [__inputBitmapData, __paramBool, __paramFloat, __paramInt];
 
-				for (parameter in __paramBool)
+				for (_shit in _tempShit)
 				{
-					if (parameter.__isUniform)
-					{
-						parameter.index = gl.getUniformLocation(glProgram, parameter.name);
-					}
-					else
-					{
-						parameter.index = gl.getAttribLocation(glProgram, parameter.name);
-					}
-				}
-
-				for (parameter in __paramFloat)
-				{
-					if (parameter.__isUniform)
-					{
-						parameter.index = gl.getUniformLocation(glProgram, parameter.name);
-					}
-					else
-					{
-						parameter.index = gl.getAttribLocation(glProgram, parameter.name);
-					}
-				}
-
-				for (parameter in __paramInt)
-				{
-					if (parameter.__isUniform)
-					{
-						parameter.index = gl.getUniformLocation(glProgram, parameter.name);
-					}
-					else
-					{
-						parameter.index = gl.getAttribLocation(glProgram, parameter.name);
+					for (shit in _shit) {
+						if (shit.__isUniform)
+						{
+							shit.index = gl.getUniformLocation(glProgram, shit.name);
+						}
+						else
+						{
+							shit.index = gl.getAttribLocation(glProgram, shit.name);
+						}
 					}
 				}
 			}
