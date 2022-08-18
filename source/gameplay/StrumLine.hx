@@ -79,7 +79,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 			strum.parent = this;
 			strum.alpha = 0;
 			var arrowSkin:String = (PlayState.current != null
-				&& PlayState.current.currentSkin != "default") ? PlayState.current.currentSkin : Settings.get("Arrow Skin").toLowerCase();
+				&& PlayState.current.currentSkin != "default") ? PlayState.current.currentSkin : cast(Settings.get("Arrow Skin"), String).toLowerCase();
 			strum.loadSkin(arrowSkin);
 			add(strum);
 			FlxTween.tween(strum, {y: strum.y + 10, alpha: Settings.get("Opaque Strums") ? 1 : 0.75}, 0.5,
@@ -90,7 +90,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 	public function reloadSkin()
 	{
-		var arrowSkin:String = PlayState.current.currentSkin != "default" ? PlayState.current.currentSkin : Settings.get("Arrow Skin").toLowerCase();
+		var arrowSkin:String = PlayState.current.currentSkin != "default" ? PlayState.current.currentSkin : cast(Settings.get("Arrow Skin"), String).toLowerCase();
 		for (bemb in members)
 			bemb.loadSkin(arrowSkin);
 	}

@@ -3,7 +3,7 @@ package;
 class Settings
 {
     public static function get(option:String)
-        return Settings.get(option);
+        return Init.trueSettings.get(option);
 
     public static function set(option:String, value:Dynamic, flush:Bool = true)
     {

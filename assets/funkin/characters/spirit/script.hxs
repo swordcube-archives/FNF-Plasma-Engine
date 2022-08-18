@@ -23,7 +23,7 @@ function create() {
     character.antialiasing = false;
 
     character.positionOffset.x -= 150;
-    character.positionOffset.x += 100;
+    character.positionOffset.y += 100;
 
     character.trail = new FlxTrail(character, null, 4, 24, 0.3, 0.069);
 
