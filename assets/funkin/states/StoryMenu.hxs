@@ -2,10 +2,34 @@ var scrollMenu:Sound;
 var confirmMenu:Sound;
 var cancelMenu:Sound;
 
+var scoreText:FlxText;
+
+var storyWeeksJSON:Dynamic;
+
+var grpWeeks:FlxGroup;
+
 function create() {
     scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
     confirmMenu = FNFAssets.getSound(AssetPaths.sound("menus/confirmMenu"));
     cancelMenu = FNFAssets.getSound(AssetPaths.sound("menus/cancelMenu"));
+
+    if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
+        FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music("freakyMenu")));
+
+    storyWeeksJSON = Json.parse(FNFAssets.getText(AssetPaths.json("storyWeeks"))).weeks;
+
+    grpWeeks = new FlxGroup();
+    add(grpWeeks);
+
+    var blackBarThingie:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, 56, FlxColor.BLACK);
+    add(blackBarThingie);
+
+    var yellowBG:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 400, 0xFFF9CF51);
+    add(yellowBG);
+
+    scoreText = new FlxText(10, 10, 0, "PERSONAL BEST: 0", 32);
+    scoreText.setFormat(AssetPaths.font("vcr"), 32);
+    add(scoreText);
 }
 
 function update() {

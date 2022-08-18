@@ -29,6 +29,9 @@ function create() {
     state.persistentUpdate = true;
     state.persistentDraw = true;
 
+    if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
+        FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music("freakyMenu")));
+
     if(!Settings.get("Developer Mode"))
         menuOptions.remove("toolbox");
 

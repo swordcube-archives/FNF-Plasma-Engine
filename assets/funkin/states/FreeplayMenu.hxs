@@ -204,7 +204,9 @@ function playTheFuckingSong() {
 
     Thread.create(function() {
         FNFAssets.getSound(AssetPaths.songInst(songs[curSelected].name));
-        FlxG.sound.music.stop();
+        if(FlxG.sound.music != null)
+            FlxG.sound.music.stop();
+        
         FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.songInst(songs[curSelected].name)), 0, true);
 
         FlxG.sound.music.pause();
