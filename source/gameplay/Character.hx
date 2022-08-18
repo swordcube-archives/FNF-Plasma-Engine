@@ -420,9 +420,10 @@ class Character extends FNFSprite
 		{
 			if (canDance)
 			{
-				if (animation.curAnim != null && (animation.curAnim.name != "hairBlow" || animation.curAnim.name != "hairFall"))
+				if ((animation.curAnim != null && (animation.curAnim.name != "hairBlow" || animation.curAnim.name != "hairFall")) || animation.curAnim == null)
 				{
 					danced = !danced;
+					
 					if (danced)
 						playAnim("danceRight");
 					else
