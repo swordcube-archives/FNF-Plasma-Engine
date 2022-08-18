@@ -198,7 +198,7 @@ class HScript {
             set("FNFAssets", HScriptHelpers.getFNFAssetsClass());
             set("Main", Main);
             set("Init", Init);
-            set("Settings", Init.trueSettings);
+            set("Settings", Settings);
             set("Transition", Transition);
 
             set("Alphabet", ui.Alphabet);
