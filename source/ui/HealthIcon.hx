@@ -89,7 +89,7 @@ class HealthIcon extends FlxSprite {
 			if(pixelIcons.contains(char))
 				antialiasing = false;
 			else
-				antialiasing = Init.trueSettings.get('Antialiasing');
+				antialiasing = Settings.get('Antialiasing');
 		}
 	}
 }

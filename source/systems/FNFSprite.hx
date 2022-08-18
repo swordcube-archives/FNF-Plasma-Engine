@@ -9,7 +9,7 @@ class FNFSprite extends FlxSprite
 	public function new(X:Float = 0, Y:Float = 0, ?SimpleGraphic:flixel.system.FlxAssets.FlxGraphicAsset)
 	{
 		super(X, Y, SimpleGraphic);
-		antialiasing = Init.trueSettings.get("Antialiasing");
+		antialiasing = Settings.get("Antialiasing");
 	}
 
 	public function playAnim(anim:String, force:Bool = false, reversed:Bool = false, frame:Int = 0)

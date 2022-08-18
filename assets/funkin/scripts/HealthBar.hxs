@@ -16,7 +16,7 @@ function create() {
         PlayState.bf != null ? PlayState.bf.healthBarColor : 0xFF00ff00, // player
     ];
 
-    ui.healthBarBG = new FlxSprite(0, Settings["Downscroll"] ? 60 : FlxG.height - 80);
+    ui.healthBarBG = new FlxSprite(0, Settings.get("Downscroll") ? 60 : FlxG.height - 80);
     ui.healthBarBG.loadGraphic(FNFAssets.getImage(AssetPaths.image("healthBar")));
     ui.healthBarBG.screenCenter(FlxAxes.X);
     add(ui.healthBarBG);

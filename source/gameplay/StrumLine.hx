@@ -79,10 +79,10 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 			strum.parent = this;
 			strum.alpha = 0;
 			var arrowSkin:String = (PlayState.current != null
-				&& PlayState.current.currentSkin != "default") ? PlayState.current.currentSkin : Init.trueSettings.get("Arrow Skin").toLowerCase();
+				&& PlayState.current.currentSkin != "default") ? PlayState.current.currentSkin : Settings.get("Arrow Skin").toLowerCase();
 			strum.loadSkin(arrowSkin);
 			add(strum);
-			FlxTween.tween(strum, {y: strum.y + 10, alpha: Init.trueSettings.get("Opaque Strums") ? 1 : 0.75}, 0.5,
+			FlxTween.tween(strum, {y: strum.y + 10, alpha: Settings.get("Opaque Strums") ? 1 : 0.75}, 0.5,
 				{ease: FlxEase.circOut, startDelay: i * 0.3})
 				.start();
 		}
@@ -90,7 +90,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 	public function reloadSkin()
 	{
-		var arrowSkin:String = PlayState.current.currentSkin != "default" ? PlayState.current.currentSkin : Init.trueSettings.get("Arrow Skin").toLowerCase();
+		var arrowSkin:String = PlayState.current.currentSkin != "default" ? PlayState.current.currentSkin : Settings.get("Arrow Skin").toLowerCase();
 		for (bemb in members)
 			bemb.loadSkin(arrowSkin);
 	}
@@ -127,7 +127,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 				{
 					strum.resetColor();
 					strum.colorSwap.enabled.value = [false];
-					strum.alpha = Init.trueSettings.get("Opaque Strums") ? 1 : 0.75;
+					strum.alpha = Settings.get("Opaque Strums") ? 1 : 0.75;
 					strum.playAnim("static");
 				}
 			}
@@ -253,7 +253,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                     var key:FlxKey = Init.keyBinds[keyCount-1][i];
                     if(FlxG.keys.checkStatus(key, JUST_PRESSED) && !inCutscene && !botPlay)
                     {
-                        if(!Init.trueSettings.get("Ghost Tapping") && possibleNotes.length <= 0)
+                        if(!Settings.get("Ghost Tapping") && possibleNotes.length <= 0)
                         {
                             PlayState.current.health -= PlayState.current.healthLoss;
                             
@@ -279,7 +279,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                         strum.colorSwap.enabled.value = [false];
                         strum.resetColor();
                         strum.playAnim("static", true);
-                        strum.alpha = Init.trueSettings.get("Opaque Strums") ? 1 : 0.75;
+                        strum.alpha = Settings.get("Opaque Strums") ? 1 : 0.75;
                     }
     
                     i++;
@@ -416,7 +416,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		PlayState.current.health += judgeData.health;
 		boundHealth();
 
-		if (Init.trueSettings.get("Note Splashes") && judgeData.noteSplash)
+		if (Settings.get("Note Splashes") && judgeData.noteSplash)
 		{
 			var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
 			splash.alpha = 1;

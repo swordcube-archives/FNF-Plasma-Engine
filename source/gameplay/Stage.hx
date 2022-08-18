@@ -80,7 +80,7 @@ class Stage extends FlxGroup {
 				bg = new FlxSprite(-600, -200);
 				bg.loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image('stages/stage/stageback')));
 				bg.scrollFactor.set(0.9, 0.9);
-                bg.antialiasing = Init.trueSettings.get("Antialiasing");
+                bg.antialiasing = Settings.get("Antialiasing");
 				add(bg);
 
 				stageFront = new FlxSprite(-650, 600);
@@ -88,7 +88,7 @@ class Stage extends FlxGroup {
 				stageFront.scrollFactor.set(0.9, 0.9);
 				stageFront.scale.set(1.1, 1.1);
 				stageFront.updateHitbox();
-                stageFront.antialiasing = Init.trueSettings.get("Antialiasing");
+                stageFront.antialiasing = Settings.get("Antialiasing");
 				add(stageFront);
 
 				stageCurtains = new FlxSprite(-500, -300);
@@ -96,7 +96,7 @@ class Stage extends FlxGroup {
 				stageCurtains.scrollFactor.set(1.3, 1.3);
 				stageCurtains.scale.set(0.9, 0.9);
 				stageCurtains.updateHitbox();
-                stageCurtains.antialiasing = Init.trueSettings.get("Antialiasing");
+                stageCurtains.antialiasing = Settings.get("Antialiasing");
 				add(stageCurtains);
 
 				// Run hscript and allow users to do removeDefaultStage();

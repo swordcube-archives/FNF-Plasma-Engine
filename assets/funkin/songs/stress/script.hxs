@@ -23,7 +23,7 @@ function createPost() {
             man.setGraphicSize(Std.int(man.width * 0.8));
             man.updateHitbox();
             man.scrollFactor.set(0.95, 0.95);
-            man.antialiasing = Init.trueSettings.get("Antialiasing");
+            man.antialiasing = Settings.get("Antialiasing");
             man.flipX = !direction;
             
             man.animation.play("run");

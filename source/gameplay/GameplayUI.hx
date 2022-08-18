@@ -44,7 +44,7 @@ class GameplayUI extends FlxGroup {
     
         // Arrows
         var arrowOffset:Float = 90.0;
-        var strumY:Float = Init.trueSettings.get("Downscroll") ? FlxG.height - 165 : 50.0;
+        var strumY:Float = Settings.get("Downscroll") ? FlxG.height - 165 : 50.0;
 
         opponentStrums = new StrumLine(arrowOffset, strumY, PlayState.SONG.keyCount);
         opponentStrums.hasInput = false;
@@ -58,7 +58,7 @@ class GameplayUI extends FlxGroup {
         add(playerStrums.notes);
         add(playerStrums.grpNoteSplashes);
 
-        if(Init.trueSettings.get("Centered Notes"))
+        if(Settings.get("Centered Notes"))
         {
             opponentStrums.x = -9999;
             playerStrums.screenCenter(X);

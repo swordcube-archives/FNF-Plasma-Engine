@@ -10,7 +10,7 @@ function create() {
     var skyBG:FlxSprite = new FlxSprite(-120, -50);
     skyBG.loadGraphic(FNFAssets.getImage(AssetPaths.image('stages/limo/limoSunset')));
     skyBG.scrollFactor.set(0.1, 0.1);
-    skyBG.antialiasing = Init.trueSettings.get("Antialiasing");
+    skyBG.antialiasing = Settings.get("Antialiasing");
     add(skyBG);
 
     var bgLimo:FlxSprite = new FlxSprite(-200, 480);
@@ -18,7 +18,7 @@ function create() {
     bgLimo.animation.addByPrefix('drive', "background limo pink", 24);
     bgLimo.animation.play('drive');
     bgLimo.scrollFactor.set(0.4, 0.4);
-    bgLimo.antialiasing = Init.trueSettings.get("Antialiasing");
+    bgLimo.antialiasing = Settings.get("Antialiasing");
     add(bgLimo);
 
     grpLimoDancers = new FlxGroup();
@@ -31,7 +31,7 @@ function create() {
 		dancer.animation.addByIndices('danceLeft', 'bg dancer sketch PINK', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 		dancer.animation.addByIndices('danceRight', 'bg dancer sketch PINK', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
         dancer.scrollFactor.set(0.4, 0.4);
-        dancer.antialiasing = Init.trueSettings.get("Antialiasing");
+        dancer.antialiasing = Settings.get("Antialiasing");
         dancer.dance();
         grpLimoDancers.add(dancer);
     }
@@ -40,7 +40,7 @@ function create() {
     limo.frames = FNFAssets.getSparrow('stages/limo/limoDrive');
     limo.animation.addByPrefix('drive', "Limo stage", 24);
     limo.animation.play('drive');
-    limo.antialiasing = Init.trueSettings.get("Antialiasing");
+    limo.antialiasing = Settings.get("Antialiasing");
     add(limo, "gf");
 }
 

@@ -30,7 +30,7 @@ function create() {
 
     bg = new FlxSprite();
     bg.loadGraphic(FNFAssets.getImage(AssetPaths.image('menuBGDesat')));
-    bg.antialiasing = Settings["Antialiasing"];
+    bg.antialiasing = Settings.get("Antialiasing");
     add(bg);
 
     songs = Json.parse(FNFAssets.getText(AssetPaths.json("freeplaySongs"))).songs;
@@ -98,7 +98,7 @@ function create() {
     loadingIco.setGraphicSize(loadingBox.height + 15, loadingBox.height + 15);
     loadingIco.updateHitbox();
     loadingIco.setPosition(loadingBox.x + 10, loadingBox.y - 5);
-    loadingIco.antialiasing = Init.trueSettings.get("Antialiasing");
+    loadingIco.antialiasing = Settings.get("Antialiasing");
     add(loadingIco);
 
     loadingTxt.setFormat(AssetPaths.font("vcr"), 24);

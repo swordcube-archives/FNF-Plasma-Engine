@@ -33,7 +33,7 @@ class Notification extends FlxSpriteGroup
         box.scale.set(0.9, 0.9);
         box.updateHitbox();
         box.x = FlxG.width - (box.width - 10);
-        box.antialiasing = Init.trueSettings.get("Antialiasing");
+        box.antialiasing = Settings.get("Antialiasing");
         add(box);
 
         icon = new FlxSprite(box.x + 25, box.y + 25);
@@ -50,7 +50,7 @@ class Notification extends FlxSpriteGroup
             case Info | Information:
                 icon.animation.play("info");
         }
-        icon.antialiasing = Init.trueSettings.get("Antialiasing");
+        icon.antialiasing = Settings.get("Antialiasing");
         icon.scale.set(0.9, 0.9);
         icon.updateHitbox();
         add(icon);

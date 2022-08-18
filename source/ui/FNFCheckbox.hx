@@ -18,7 +18,7 @@ class FNFCheckbox extends FNFSprite {
 
         scale.set(0.2, 0.2);
 
-        antialiasing = Init.trueSettings.get("Antialiasing");
+        antialiasing = Settings.get("Antialiasing");
 
         setOffset("off", 0, 0);
         setOffset("on", 7, 7);
