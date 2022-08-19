@@ -352,6 +352,20 @@ class Character extends FNFSprite
 		}
 	}
 
+	/**
+	 * Gets camera position for the character
+	 */
+	 public function getCamPos() {
+		var midpoint = getMidpoint();
+		var pos:FlxPoint = null;
+		if (isPlayer) {
+			pos = new FlxPoint(midpoint.x - 100 + cameraPosition.x, midpoint.y - 100 + cameraPosition.y);
+		} else {
+			pos = new FlxPoint(midpoint.x + 150 + cameraPosition.x, midpoint.y - 100 + cameraPosition.y);
+		}
+		return pos;
+	 }
+
 	public function goToPosition(X:Float, Y:Float)
 	{
 		super.setPosition(X, Y);

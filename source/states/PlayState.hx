@@ -644,14 +644,10 @@ class PlayState extends MusicBeatState {
 		{
 			case "dad":
 				if(dad == null) return trace("dad is null!!");
-				camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
-				camFollow.x += dad.cameraPosition.x;
-				camFollow.y += dad.cameraPosition.y;
+				camFollow.set(dad.getCamPos().x, dad.getCamPos().y);
 			case "bf":
 				if(bf == null) return trace("bf is null!!");
-				camFollow.set(bf.getMidpoint().x - 100, bf.getMidpoint().y - 100);
-				camFollow.x -= bf.cameraPosition.x;
-				camFollow.y += bf.cameraPosition.y;
+				camFollow.set(bf.getCamPos().x, bf.getCamPos().y);
 		}
 	}
 
