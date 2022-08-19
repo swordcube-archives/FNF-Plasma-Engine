@@ -32,6 +32,9 @@ class GameplayUI extends FlxGroup {
     public var timeBar:FlxSprite;
     public var timeTxt:FlxText;
 
+    public var laneUnderlayOpponent:FlxSprite;
+    public var laneUnderlayPlayer:FlxSprite;
+
     // Scripts
     public var healthBarScript:HScript;
     public var timeBarScript:HScript;
@@ -63,6 +66,14 @@ class GameplayUI extends FlxGroup {
             opponentStrums.x = -9999;
             playerStrums.screenCenter(X);
         }
+
+        laneUnderlayOpponent = new FlxSprite(opponentStrums.x - 5).makeGraphic(Std.int(opponentStrums.width) + 10, FlxG.height, FlxColor.BLACK);
+        laneUnderlayOpponent.alpha = Settings.get("Lane Underlay");
+        insert(members.indexOf(opponentStrums) - 1, laneUnderlayOpponent);
+
+        laneUnderlayPlayer = new FlxSprite(playerStrums.x - 5).makeGraphic(Std.int(playerStrums.width) + 10, FlxG.height, FlxColor.BLACK);
+        laneUnderlayPlayer.alpha = Settings.get("Lane Underlay");
+        insert(members.indexOf(playerStrums) - 1, laneUnderlayPlayer);
 
         // Text
         songTxt = new FlxText(5, FlxG.height - 25, 0, '${PlayState.SONG.song} - ${PlayState.currentDifficulty.toUpperCase()}', 16);

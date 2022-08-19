@@ -17,6 +17,16 @@ class CoolUtil
 		return a;
 	}
 
+	public static function firstLetterUppercase(s:String):String
+	{
+		var strArray:Array<String> = s.split(' ');
+		var newArray:Array<String> = [];
+		for (str in strArray)
+			newArray.push(str.charAt(0).toUpperCase()+str.substring(1));
+	
+		return newArray.join(' ');
+	}
+
 	public static function listFromText(text:String):Array<String>
 	{
 		var a:Array<String> = text.trim().split('\n');

@@ -46,6 +46,11 @@ function create() {
     Init.reloadSettings();
     Init.initializeSettings();
 
+    DiscordRPC.changePresence(
+        "In the Options Menu",
+        null
+    );
+
     pages = Init.settingPages;
 
     pageContents = [

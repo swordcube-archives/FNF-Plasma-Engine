@@ -28,6 +28,11 @@ class ToolboxEditor extends MusicBeatState
     override function create() {
         super.create();
 
+        DiscordRPC.changePresence(
+            "In the Toolbox",
+            "Editing a mod"
+        );
+
         Main.fpsCounter.visible = false;
 
         bg = new FlxSprite().loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image("menuBGGradient")));

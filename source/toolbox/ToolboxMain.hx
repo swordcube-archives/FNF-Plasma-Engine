@@ -21,6 +21,11 @@ class ToolboxMain extends MusicBeatState
     override function create() {
         super.create();
 
+        DiscordRPC.changePresence(
+            "In the Toolbox",
+            "Selecting a mod"
+        );
+
         FlxG.mouse.visible = true;
 
         bg = new FlxSprite().loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image("menuBGGradient")));

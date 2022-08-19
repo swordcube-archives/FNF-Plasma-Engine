@@ -152,13 +152,16 @@ class Character extends FNFSprite
 		antialiasing = Settings.get("Antialiasing");
 
 		this.isPlayer = isPlayer;
-		curCharacter = char;
+		curCharacter = "template";
 
-		var path:String = 'characters/$char/script';
-		if (!FileSystem.exists(AssetPaths.hxs(path)))
+		var path:String = 'characters/template/script';
+		for(ext in HScript.hscriptExts)
 		{
-			curCharacter = "template";
-			path = 'characters/${curCharacter}/script';
+			if(FileSystem.exists(AssetPaths.asset('characters/$char/script'+ext)))
+			{
+				curCharacter = char;
+				path = 'characters/$curCharacter/script';
+			}
 		}
 
 		script = new HScript(path);

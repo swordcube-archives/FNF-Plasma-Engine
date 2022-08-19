@@ -1,5 +1,6 @@
 package substates;
 
+import Init.DiscordRPCConfig;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -98,6 +99,13 @@ class ModSelectionMenu extends MusicBeatSubState {
 
             FlxG.save.data.currentPack = AssetPaths.currentPack;
             FlxG.save.flush();
+
+            #if discord_rpc
+            var rpcConfig:DiscordRPCConfig = Json.parse(FNFAssets.returnAsset(TEXT, AssetPaths.json("discordRPC")));
+            DiscordRPC.data = rpcConfig;
+            DiscordRPC.shutdown();
+            DiscordRPC.initialize(rpcConfig.clientID, true);
+            #end
 
             Main.resetState();
             close();

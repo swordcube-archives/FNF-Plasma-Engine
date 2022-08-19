@@ -1,5 +1,6 @@
 package states;
 
+import flixel.util.FlxStringUtil;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -164,6 +165,11 @@ class PlayState extends MusicBeatState {
 		if(SONG.keyCount == null)
 			SONG.keyCount = 4;
 
+		DiscordRPC.changePresence(
+			'Playing ${SONG.song}',
+			'Starting song...'
+		);
+
 		Conductor.changeBPM(SONG.bpm);
 		Conductor.mapBPMChanges(SONG);
 
@@ -255,12 +261,34 @@ class PlayState extends MusicBeatState {
 
 		callOnHScripts("createAfterChars");
 
+		// load the song script
 		var path:String = 'songs/${actualSongName.toLowerCase()}/script';
 		script = new HScript(path);
 		script.set("add", this.add);
 		script.set("remove", this.remove);
 		scripts.push(script);
 		script.start();
+
+		// load global scripts
+		if(FileSystem.exists(AssetPaths.asset('global_scripts')))
+		{
+			for(item in FileSystem.readDirectory(AssetPaths.asset('global_scripts')))
+			{
+				if(item.contains("."))
+				{
+					var real = item;
+					for(ext in HScript.hscriptExts)
+						real = real.replace(ext, "");
+
+					var path:String = 'global_scripts/$real';
+					var script = new HScript(path);
+					script.set("add", this.add);
+					script.set("remove", this.remove);
+					scripts.push(script);
+					script.start();
+				}
+			}
+		}
 
 		// precache the countdown bullshit
 		countdownGraphics = [
@@ -487,6 +515,8 @@ class PlayState extends MusicBeatState {
 	{
 		if(!inCutscene)
 		{
+			endingSong = true;
+
 			FlxG.sound.music.stop();
 			vocals.stop();
 
@@ -496,16 +526,21 @@ class PlayState extends MusicBeatState {
 			if(!usedPractice && songScore > Highscore.getScore(actualSongName+"-"+currentDifficulty))
 				Highscore.setScore(actualSongName+"-"+currentDifficulty, songScore);
 			
-			callOnHScripts("endSong", [actualSongName]);
+			var ret:Dynamic = callOnHScripts("endSong", [actualSongName]);
 			
-			if(isStoryMode)
+			if(ret != HScript.function_stop)
 			{
-				trace("die, now.");
+				if(isStoryMode)
+				{
+					trace("die, now.");
+				}
+				else
+					Main.switchState(getMenuToSwitchTo());
 			}
-			else
-				Main.switchState(getMenuToSwitchTo());
 		}
 	}
+
+	var discordRPCTimer:Float = 0.0;
 
 	override function update(elapsed:Float)
 	{
@@ -549,6 +584,19 @@ class PlayState extends MusicBeatState {
 			Conductor.position += elapsed * 1000.0;
 			if(Conductor.position >= 0.0 && !startedSong)
 				startSong();
+		}
+
+		if(startedSong && !endingSong)
+		{
+			discordRPCTimer += elapsed;
+			if(discordRPCTimer > 1.0)
+			{
+				discordRPCTimer = 0.0;
+				DiscordRPC.changePresence(
+					'Playing ${SONG.song} on ${CoolUtil.firstLetterUppercase(currentDifficulty)}',
+					'Time remaining: ${FlxStringUtil.formatTime((FlxG.sound.music.length-FlxG.sound.music.time)/1000.0)} / ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)}'
+				);
+			}
 		}
 
 		if(health <= minHealth)
@@ -638,7 +686,7 @@ class PlayState extends MusicBeatState {
 		callOnHScripts("startSong", [SONG.song]);
 	}
 
-	function focusCamera(onWho:String = "dad")
+	public function focusCamera(onWho:String = "dad")
 	{
 		switch(onWho.toLowerCase())
 		{
@@ -741,10 +789,21 @@ class PlayState extends MusicBeatState {
 		FlxG.cameras.add(camNotif, false);
 	}
 
-	public function callOnHScripts(func:String, ?args:Null<Array<Dynamic>>)
+	public function callOnHScripts(func:String, ?args:Null<Array<Dynamic>>):Dynamic
 	{
+		var returnVal:Dynamic = HScript.function_continue;
 		for(script in scripts)
-			script.call(func, args);
+		{
+			var ret:Dynamic = script.call(func, args);
+			if(ret == HScript.function_stop)
+				break;
+
+			var bool:Bool = ret == HScript.function_continue;
+			if(!bool)
+				returnVal = cast ret;
+		}
+		
+		return returnVal;
 	}
 
 	override function destroy()

@@ -20,6 +20,12 @@ using StringTools;
 //     KeybindMenu;
 // }
 
+typedef DiscordRPCConfig = {
+    var clientID:String;
+    var largeImageKey:String;
+    var largeImageText:String;
+};
+
 typedef OptionData = {
     var page:String;
     var name:String;
@@ -132,6 +138,12 @@ class Init extends MusicBeatState {
             Main.switchState(new states.PreloadState(), false);
         else
             Main.switchState(new states.ScriptedState('TitleState'), false);
+
+        #if discord_rpc
+        var rpcConfig:DiscordRPCConfig = Json.parse(FNFAssets.returnAsset(TEXT, AssetPaths.json("discordRPC")));
+        DiscordRPC.data = rpcConfig;
+        DiscordRPC.initialize(rpcConfig.clientID);
+        #end
     }
 
     /**

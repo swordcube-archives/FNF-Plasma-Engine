@@ -57,6 +57,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
 		var splash:NoteSplash = new NoteSplash(100, 100, 0);
+		splash.alpha = 0.1;
 		splash.kill();
 		grpNoteSplashes.add(splash);
 

@@ -37,6 +37,7 @@
 	<haxelib name="flixel-ui" />
 
 	<!-- libraries for the engine -->
+	<haxelib name="discord_rpc" if="desktop"/>
 	<haxelib name="hscript-improved" /> <!-- INSTALL: haxelib git hscript-improved https://github.com/YoshiCrafter29/hscript-improved -->
 	<haxedef name="hscriptPos" />
 
