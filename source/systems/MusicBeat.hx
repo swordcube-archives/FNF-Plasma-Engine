@@ -25,6 +25,8 @@ class MusicBeatState extends FlxUIState {
 	{
 		Global.reset();
 		Init.initializeSettings();
+
+		Init.arrowSkins = Init.getArrowSkins();
 		
 		if (!FlxTransitionableState.skipNextTransOut)
 			openSubState(new Transition(0.45, true));
