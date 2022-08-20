@@ -28,6 +28,11 @@ function create() {
     scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
     cancelMenu = FNFAssets.getSound(AssetPaths.sound("menus/cancelMenu"));
 
+    DiscordRPC.changePresence(
+        "In the Freeplay Menu",
+        null
+    );
+
     bg = new FlxSprite();
     bg.loadGraphic(FNFAssets.getImage(AssetPaths.image('menuBGDesat')));
     bg.antialiasing = Settings.get("Antialiasing");
@@ -234,6 +239,13 @@ function changeDifficulty(change:Int) {
         curDifficulty = 0;
 
     diffText.text = "< " + songs[curSelected].difficulties[curDifficulty].toUpperCase() + " >";
+
+    var display:String = songs[curSelected].displayName != null ? songs[curSelected].displayName : songs[curSelected].name;
+
+    DiscordRPC.changePresence(
+        "In the Freeplay Menu",
+        "Selecting " + CoolUtil.firstLetterUppercase(display) + " on " + CoolUtil.firstLetterUppercase(songs[curSelected].difficulties[curDifficulty])
+    );
 
     updateScore();
 }

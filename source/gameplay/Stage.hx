@@ -101,7 +101,14 @@ class Stage extends FlxGroup {
 
 				// Run hscript and allow users to do removeDefaultStage();
 				// To make their own custom stage
-				if(FileSystem.exists(AssetPaths.hxs('stages/$curStage')))
+                var path:String = AssetPaths.hxs('stages/$curStage');
+                for(ext in HScript.hscriptExts)
+                {
+                    if(FileSystem.exists(AssetPaths.asset('stages/$curStage'+ext)))
+                        path = AssetPaths.asset('stages/$curStage'+ext);
+                }
+                
+				if(FileSystem.exists(path))
 				{
 					Main.print('trace', 'Trying to run "stages/$curStage"');
 					script = new HScript('stages/$curStage');

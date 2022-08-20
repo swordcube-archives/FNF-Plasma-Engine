@@ -13,6 +13,11 @@ function create() {
     confirmMenu = FNFAssets.getSound(AssetPaths.sound("menus/confirmMenu"));
     cancelMenu = FNFAssets.getSound(AssetPaths.sound("menus/cancelMenu"));
 
+    DiscordRPC.changePresence(
+        "In the Story Mode Menu",
+        null
+    );
+
     if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
         FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music("freakyMenu")));
 

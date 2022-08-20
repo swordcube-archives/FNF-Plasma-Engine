@@ -1,5 +1,6 @@
 package hscript;
 
+import sys.FileSystem;
 import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
 import flixel.text.FlxText.FlxTextAlign;
@@ -29,12 +30,35 @@ class HScript {
 
 	public var executedScript:Bool = false;
 
-    public function new(path:String)
+    public static var function_continue:String = "FUNCTION_CONTINUE";
+    public static var function_stop:String = "FUNCTION_STOP";
+
+    public static var hscriptExts:Array<String> = [
+        ".hxs",
+        ".hx",
+        ".hsc",
+        ".hscript"
+    ];
+
+    public var usedExtension:String = ".hxs";
+
+    public function new(path:String, fileExt:String = ".hxs")
     {
+        var awesomeSwagPath:String = AssetPaths.asset(path+fileExt);
+
+        for(ext in hscriptExts)
+        {
+            if(FileSystem.exists(AssetPaths.asset(path+ext)))
+            {
+                usedExtension = ext;
+                awesomeSwagPath = AssetPaths.asset(path+ext);
+            }
+        }
+
         try
         {
             _path = path;
-            script = FNFAssets.returnAsset(TEXT, AssetPaths.hxs(path));
+            script = FNFAssets.returnAsset(TEXT, awesomeSwagPath);
 
             parser = new Parser();
 
@@ -121,6 +145,9 @@ class HScript {
             set("Window", Application.current.window);
             set("Application", Application.current);
             set("Application_", Application);
+            #if discord_rpc
+            set("DiscordRPC", DiscordRPC);
+            #end
 
             set("BitmapData", openfl.display.BitmapData);
             set("FlxGraphic", flixel.graphics.FlxGraphic);
@@ -171,6 +198,9 @@ class HScript {
             });
 
             // Game classes
+            set("function_continue", function_continue);
+            set("function_stop", function_stop);
+
             set("Global", Global);
             set("CoolUtil", CoolUtil);
             set("UIControls", systems.UIControls);
@@ -316,10 +346,10 @@ class HScript {
 			call("update", [elapsed]);
 	}
 
-	public function call(func:String, ?args:Array<Dynamic>)
+	public function call(func:String, ?args:Array<Dynamic>):Dynamic
 	{
 		if (!executedScript)
-			return;
+			return null;
 
 		if (interp.variables.exists(func))
 		{
@@ -328,19 +358,21 @@ class HScript {
 			try
 			{
 				if (args == null)
-					real_func();
+					return real_func();
 				else
-					Reflect.callMethod(null, real_func, args);
+					return Reflect.callMethod(null, real_func, args);
 			}
 			catch (e)
 			{
 				log(e.details(), true);
-				log(_path + ".hxs: ERROR Caused in " + func + " with " + Std.string(args) + " args", true);
+				log(_path + usedExtension + ": ERROR Caused in " + func + " with " + Std.string(args) + " args", true);
 			}
 		}
 
 		for (otherScript in otherScripts)
 			otherScript.call(func, args);
+
+        return null;
 	}
 
     public function set(variable:String, value:Dynamic)

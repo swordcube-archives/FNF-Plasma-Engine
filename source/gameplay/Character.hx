@@ -152,13 +152,16 @@ class Character extends FNFSprite
 		antialiasing = Settings.get("Antialiasing");
 
 		this.isPlayer = isPlayer;
-		curCharacter = char;
+		curCharacter = "template";
 
-		var path:String = 'characters/$char/script';
-		if (!FileSystem.exists(AssetPaths.hxs(path)))
+		var path:String = 'characters/template/script';
+		for(ext in HScript.hscriptExts)
 		{
-			curCharacter = "template";
-			path = 'characters/${curCharacter}/script';
+			if(FileSystem.exists(AssetPaths.asset('characters/$char/script'+ext)))
+			{
+				curCharacter = char;
+				path = 'characters/$curCharacter/script';
+			}
 		}
 
 		script = new HScript(path);
@@ -352,6 +355,20 @@ class Character extends FNFSprite
 		}
 	}
 
+	/**
+	 * Gets camera position for the character
+	 */
+	 public function getCamPos() {
+		var midpoint = getMidpoint();
+		var pos:FlxPoint = null;
+		if (isPlayer) {
+			pos = new FlxPoint(midpoint.x - 100 + cameraPosition.x, midpoint.y - 100 + cameraPosition.y);
+		} else {
+			pos = new FlxPoint(midpoint.x + 150 + cameraPosition.x, midpoint.y - 100 + cameraPosition.y);
+		}
+		return pos;
+	 }
+
 	public function goToPosition(X:Float, Y:Float)
 	{
 		super.setPosition(X, Y);
@@ -420,9 +437,10 @@ class Character extends FNFSprite
 		{
 			if (canDance)
 			{
-				if (animation.curAnim != null && (animation.curAnim.name != "hairBlow" || animation.curAnim.name != "hairFall"))
+				if ((animation.curAnim != null && (animation.curAnim.name != "hairBlow" || animation.curAnim.name != "hairFall")) || animation.curAnim == null)
 				{
 					danced = !danced;
+					
 					if (danced)
 						playAnim("danceRight");
 					else

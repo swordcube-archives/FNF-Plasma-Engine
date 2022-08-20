@@ -57,6 +57,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
 		var splash:NoteSplash = new NoteSplash(100, 100, 0);
+		splash.alpha = 0.1;
 		splash.kill();
 		grpNoteSplashes.add(splash);
 
@@ -148,6 +149,25 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 				});
 			}
 
+            var justPressed:Array<Bool> = [];
+            var pressed:Array<Bool> = [];
+            var noteDataTimes:Array<Float> = [];
+
+            if(hasInput)
+            {
+                justPressed = [];
+                pressed = [];
+                noteDataTimes = [];
+
+                var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
+                for(i in 0...keyCount)
+                {
+                    justPressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], JUST_PRESSED)) : false);
+                    pressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], PRESSED)) : false);
+                    noteDataTimes.push(-1);
+                }
+			}
+
 			var possibleNotes:Array<Note> = [];
 			notes.forEachAlive(function(note:Note)
 			{
@@ -196,8 +216,11 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
                     // Make the note possible to hit if it's in the safe zone to be hit.
                     var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
-                    if(note.canBeHit && ((Conductor.position - note.strumTime) >= (botPlay ? 0.0 : -Conductor.safeZoneOffset)))
+                    if((pressed.contains(true) || botPlay) && note.canBeHit && ((Conductor.position - note.strumTime) >= (botPlay ? 0.0 : -Conductor.safeZoneOffset)))
+					{
                         possibleNotes.push(note);
+						possibleNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
+					}
                 }
                 else
                 {
@@ -227,29 +250,15 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                 }
             });
 
-            var justPressed:Array<Bool> = [];
-            var pressed:Array<Bool> = [];
-            var noteDataTimes:Array<Float> = [];
+
 
             if(hasInput)
             {
-                justPressed = [];
-                pressed = [];
-                noteDataTimes = [];
-
-                var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
-                for(i in 0...keyCount)
-                {
-                    justPressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], JUST_PRESSED)) : false);
-                    pressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], PRESSED)) : false);
-                    noteDataTimes.push(-1);
-                }
+				var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
 
                 var i:Int = 0;
                 for(strum in members)
                 {
-                    var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
-    
                     var key:FlxKey = Init.keyBinds[keyCount-1][i];
                     if(FlxG.keys.checkStatus(key, JUST_PRESSED) && !inCutscene && !botPlay)
                     {
@@ -287,10 +296,12 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 				if (possibleNotes.length > 0)
 				{
-					possibleNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
-
 					for (note in possibleNotes)
 					{
+						// If we're not sending inputs to the keyboard, why even try to do input?
+						if(!pressed.contains(true))
+							break;
+
 						// Check if we just pressed the keybind the note has and if we're allowed to hit the note
 						// If both are true, then we delete the note.
 

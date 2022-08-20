@@ -1,6 +1,6 @@
 package states;
 
-import substates.ScriptedSubState;
+import flixel.util.FlxStringUtil;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -21,6 +21,7 @@ import gameplay.Song;
 import gameplay.Stage;
 import hscript.HScript;
 import openfl.media.Sound;
+import substates.ScriptedSubState;
 import sys.FileSystem;
 import systems.Conductor;
 import systems.Highscore;
@@ -164,6 +165,11 @@ class PlayState extends MusicBeatState {
 		if(SONG.keyCount == null)
 			SONG.keyCount = 4;
 
+		DiscordRPC.changePresence(
+			'Playing ${SONG.song}',
+			'Starting song...'
+		);
+
 		Conductor.changeBPM(SONG.bpm);
 		Conductor.mapBPMChanges(SONG);
 
@@ -191,11 +197,14 @@ class PlayState extends MusicBeatState {
 
 		var gfVersion:String = "gf";
 
-		//if(SONG.player3 != null)
-		//	gfVersion = SONG.player3;
+		if(SONG.player3 != null)
+			gfVersion = SONG.player3;
 
 		// me when deprecated variable that makes me angy on compile >:(
 		//   -Raf
+
+		// me when that breaks compatibility with some psych charts so we have it back and just make it not deprecated instead?
+		//   -Leather
 
 		if(SONG.gfVersion != null)
 			gfVersion = SONG.gfVersion;
@@ -252,12 +261,34 @@ class PlayState extends MusicBeatState {
 
 		callOnHScripts("createAfterChars");
 
+		// load the song script
 		var path:String = 'songs/${actualSongName.toLowerCase()}/script';
 		script = new HScript(path);
 		script.set("add", this.add);
 		script.set("remove", this.remove);
 		scripts.push(script);
 		script.start();
+
+		// load global scripts
+		if(FileSystem.exists(AssetPaths.asset('global_scripts')))
+		{
+			for(item in FileSystem.readDirectory(AssetPaths.asset('global_scripts')))
+			{
+				if(item.contains("."))
+				{
+					var real = item;
+					for(ext in HScript.hscriptExts)
+						real = real.replace(ext, "");
+
+					var path:String = 'global_scripts/$real';
+					var script = new HScript(path);
+					script.set("add", this.add);
+					script.set("remove", this.remove);
+					scripts.push(script);
+					script.start();
+				}
+			}
+		}
 
 		// precache the countdown bullshit
 		countdownGraphics = [
@@ -484,6 +515,8 @@ class PlayState extends MusicBeatState {
 	{
 		if(!inCutscene)
 		{
+			endingSong = true;
+
 			FlxG.sound.music.stop();
 			vocals.stop();
 
@@ -493,16 +526,21 @@ class PlayState extends MusicBeatState {
 			if(!usedPractice && songScore > Highscore.getScore(actualSongName+"-"+currentDifficulty))
 				Highscore.setScore(actualSongName+"-"+currentDifficulty, songScore);
 			
-			callOnHScripts("endSong", [actualSongName]);
+			var ret:Dynamic = callOnHScripts("endSong", [actualSongName]);
 			
-			if(isStoryMode)
+			if(ret != HScript.function_stop)
 			{
-				trace("die, now.");
+				if(isStoryMode)
+				{
+					trace("die, now.");
+				}
+				else
+					Main.switchState(getMenuToSwitchTo());
 			}
-			else
-				Main.switchState(getMenuToSwitchTo());
 		}
 	}
+
+	var discordRPCTimer:Float = 0.0;
 
 	override function update(elapsed:Float)
 	{
@@ -546,6 +584,19 @@ class PlayState extends MusicBeatState {
 			Conductor.position += elapsed * 1000.0;
 			if(Conductor.position >= 0.0 && !startedSong)
 				startSong();
+		}
+
+		if(startedSong && !endingSong)
+		{
+			discordRPCTimer += elapsed;
+			if(discordRPCTimer > 1.0)
+			{
+				discordRPCTimer = 0.0;
+				DiscordRPC.changePresence(
+					'Playing ${SONG.song} on ${CoolUtil.firstLetterUppercase(currentDifficulty)}',
+					'Time remaining: ${FlxStringUtil.formatTime((FlxG.sound.music.length-FlxG.sound.music.time)/1000.0)} / ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)}'
+				);
+			}
 		}
 
 		if(health <= minHealth)
@@ -635,20 +686,16 @@ class PlayState extends MusicBeatState {
 		callOnHScripts("startSong", [SONG.song]);
 	}
 
-	function focusCamera(onWho:String = "dad")
+	public function focusCamera(onWho:String = "dad")
 	{
 		switch(onWho.toLowerCase())
 		{
 			case "dad":
 				if(dad == null) return trace("dad is null!!");
-				camFollow.set(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
-				camFollow.x += dad.cameraPosition.x;
-				camFollow.y += dad.cameraPosition.y;
+				camFollow.set(dad.getCamPos().x, dad.getCamPos().y);
 			case "bf":
 				if(bf == null) return trace("bf is null!!");
-				camFollow.set(bf.getMidpoint().x - 100, bf.getMidpoint().y - 100);
-				camFollow.x -= bf.cameraPosition.x;
-				camFollow.y += bf.cameraPosition.y;
+				camFollow.set(bf.getCamPos().x, bf.getCamPos().y);
 		}
 	}
 
@@ -742,10 +789,21 @@ class PlayState extends MusicBeatState {
 		FlxG.cameras.add(camNotif, false);
 	}
 
-	public function callOnHScripts(func:String, ?args:Null<Array<Dynamic>>)
+	public function callOnHScripts(func:String, ?args:Null<Array<Dynamic>>):Dynamic
 	{
+		var returnVal:Dynamic = HScript.function_continue;
 		for(script in scripts)
-			script.call(func, args);
+		{
+			var ret:Dynamic = script.call(func, args);
+			if(ret == HScript.function_stop)
+				break;
+
+			var bool:Bool = ret == HScript.function_continue;
+			if(!bool)
+				returnVal = cast ret;
+		}
+		
+		return returnVal;
 	}
 
 	override function destroy()

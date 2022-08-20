@@ -21,6 +21,11 @@ class ToolboxMain extends MusicBeatState
     override function create() {
         super.create();
 
+        DiscordRPC.changePresence(
+            "In the Toolbox",
+            "Selecting a mod"
+        );
+
         FlxG.mouse.visible = true;
 
         bg = new FlxSprite().loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image("menuBGGradient")));
@@ -56,11 +61,14 @@ class ToolboxMain extends MusicBeatState
         selectBTN.setPosition(drr.x + (drr.width - (selectBTN.width + 10)), drr.y + (drr.height - (selectBTN.height + 10)));
         add(selectBTN);
 
-        editBTN = new FlxButton(0, 0, "Edit Mod", function() {
-            Main.switchState(new toolbox.ToolboxEditor());
-        });
-        editBTN.setPosition(selectBTN.x - (selectBTN.width + 10), selectBTN.y);
-        add(editBTN);
+        if(!json.locked)
+        {
+            editBTN = new FlxButton(0, 0, "Edit Mod", function() {
+                Main.switchState(new toolbox.ToolboxEditor());
+            });
+            editBTN.setPosition(selectBTN.x - (selectBTN.width + 10), selectBTN.y);
+            add(editBTN);
+        }
 
         FlxSpriteUtil.drawRoundRect(drr, 0, 0, drr.width, drr.height, 15, 15, FlxColor.BLACK);
     }

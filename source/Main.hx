@@ -1,5 +1,6 @@
 package;
 
+import lime.app.Application;
 import states.ScriptedState;
 import display.PlasmaFPS;
 import flixel.FlxG;
@@ -47,6 +48,13 @@ class Main extends Sprite
 		// FPS Counter
 		fpsCounter = new PlasmaFPS(10, 3, 0xFFFFFFFF);
 		addChild(fpsCounter);
+
+		Application.current.onExit.add(function(exitCode) {
+			#if discord_rpc
+			DiscordRPC.shutdown();
+			#end
+			Init.saveSettings();
+		});
 	}
 
 	public static function getSizeLabel(num:Int):String

@@ -25,7 +25,7 @@ function create() {
     character.setOffset("singLEFTmiss");
     character.setOffset("singDOWNmiss");
 
-    character.cameraPosition.x += 150;
+    character.cameraPosition.x -= 150;
     character.cameraPosition.y -= 160;
 
     character.positionOffset.y += 350;

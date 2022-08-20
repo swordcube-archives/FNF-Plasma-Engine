@@ -29,6 +29,11 @@ function create() {
     state.persistentUpdate = true;
     state.persistentDraw = true;
 
+    DiscordRPC.changePresence(
+        "In the Main Menu",
+        null
+    );
+
     if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
         FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music("freakyMenu")));
 
@@ -205,5 +210,11 @@ function changeSelection(change:Int) {
 
     camFollow.y = menuButtons.members[curSelected].y;
 
+    DiscordRPC.changePresence(
+        "In the Main Menu",
+        "Selecting " + CoolUtil.firstLetterUppercase(StringTools.replace(menuOptions[curSelected], "-", " "))
+    );
+
     FlxG.sound.play(scrollMenu);
 }
+

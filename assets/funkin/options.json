@@ -49,8 +49,8 @@
             "type": "Number",
             "defaultValue": 0,
             "values": [-1000, 1000],
-            "valueMult": 0.05,
-            "decimals": 2
+            "valueMult": 0.1,
+            "decimals": 1
         },
         {
             "page": "Preferences",
@@ -59,6 +59,16 @@
             "type": "Number",
             "defaultValue": 0,
             "values": [0, 10],
+            "valueMult": 0.1,
+            "decimals": 1
+        },
+        {
+            "page": "Preferences",
+            "name": "Lane Underlay",
+            "description": "Shows a black rectangle behind your notes with an alpha from 0 to 1. 0 = Invisible, 1 = Completely Visible, Anything in-between = Slightly/Half Visible",
+            "type": "Number",
+            "defaultValue": 0,
+            "values": [0, 1],
             "valueMult": 0.1,
             "decimals": 1
         },
