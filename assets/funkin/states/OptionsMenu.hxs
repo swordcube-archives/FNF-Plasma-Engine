@@ -280,7 +280,7 @@ function changeValue(change:Float) {
     switch(Std.string(setting.type))
     {
         case "Checkbox":
-            Settings.set(setting.name, !Settings.get(saveDataShit));
+            Settings.set(setting.name, !Settings.get(saveDataShit), false);
 
             grpCheckbox.members[curSelected].status = Settings.get(saveDataShit);
             grpCheckbox.members[curSelected].refresh();
@@ -295,7 +295,7 @@ function changeValue(change:Float) {
                 if(dumb > setting.values[1])
                     dumb = setting.values[1];
 
-                Settings.set(saveDataShit, dumb);
+                Settings.set(saveDataShit, dumb, false);
 
                 for(yourCock in 0...grpAlphabet3.members.length)
                 {
@@ -321,7 +321,7 @@ function changeValue(change:Float) {
                     index = 0;
 
                 var dumb:String = setting.values[index];
-                Settings.set(saveDataShit, dumb);
+                Settings.set(saveDataShit, dumb, false);
 
                 for(yourCock in 0...grpAlphabet3.members.length)
                 {

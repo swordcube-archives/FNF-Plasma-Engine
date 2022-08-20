@@ -222,7 +222,6 @@ class HScript {
             set("Character", gameplay.Character);
             set("Boyfriend", gameplay.Boyfriend);
 
-            set("JudgementUI", ui.JudgementUI);
             set("NoteSplash", ui.NoteSplash);
             
             set("FNFAssets", HScriptHelpers.getFNFAssetsClass());
@@ -354,7 +353,6 @@ class HScript {
 		if (interp.variables.exists(func))
 		{
 			var real_func = interp.variables.get(func);
-
 			try
 			{
 				if (args == null)

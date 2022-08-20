@@ -32,8 +32,9 @@ function create() {
 		dancer.animation.addByIndices('danceRight', 'bg dancer sketch PINK', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
         dancer.scrollFactor.set(0.4, 0.4);
         dancer.antialiasing = Settings.get("Antialiasing");
-        //dancer.shader = new CustomShader().loadFrag('shaders/blur'); // my brain hurts too much to want to do shader shit
-        // someone else can do it i am not smart enough for this
+        //dancer.shader = new CustomShader().loadFrag('shaders/blur');
+        // someone else can do it i am not smart enough for this - Raf
+        // haxeflixel shaders are very wack 👍👍👍👍👍 - swordcube
         dancer.dance();
         grpLimoDancers.add(dancer);
     }

@@ -1,5 +1,6 @@
 package ui;
 
+import flixel.FlxG;
 import flixel.group.FlxGroup;
 import gameplay.StrumLine;
 import hscript.HScript;
@@ -18,45 +19,41 @@ class NoteSplash extends FNFSprite
 
 	var script:HScript;
 
-	public function new(x:Float, y:Float, noteData:Int = 0)
+	public function new(x:Float, y:Float, noteData:Int = 0, skin:String = "splashes/NOTE_splashes")
 	{
 		super(x, y);
-		
-		script = new HScript("scripts/NoteSplash");
 
-		// Set some variables
-		script.set("noteData", noteData);
-
-		script.set("sprite", this);
-		script.set("kill", this.kill);
-		script.set("destroy", this.destroy);
-
-		// Start the script
-		script.start(false);
-	}
-
-	public function setupNoteSplash(x:Float, y:Float, skin:String = "splashes/NOTE_splashes", noteData:Int)
-	{
-		started = true;
 		this.noteData = noteData;
-		setPosition(x, y);
+		
+		frames = FNFAssets.returnAsset(SPARROW, skin);
+		animation.addByPrefix("splash1", "splash 1", 24, false);
+		animation.addByPrefix("splash2", "splash 2", 24, false);
+	
+		scale.set(0.7, 0.7);
+		updateHitbox();
+	
+		offset.x = frameWidth / 2;
+		offset.y = frameHeight / 2;
+	
+		offset.x -= 156 * (scale.x / 2);
+		offset.y -= 156 * (scale.y / 2);
+	
+		animation.play("splash"+FlxG.random.int(1, 2));
+		if(animation.curAnim != null) animation.curAnim.frameRate *= 1.35;
 
 		colorSwap = new ColorShader(255, 255, 255);
 		shader = colorSwap;
 		setColor();
-
-		script.call("create", [skin]);
 	}
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
-		// I love when my brain goes "why no update work?" then i realize i'm not even calling
-		// the function that makes the script update
-		// I am the dumbass ever.
-		script.update(elapsed);
-		script.call("updatePost", [elapsed]);
+		if(animation.curAnim != null && animation.curAnim.finished) {
+			kill();
+			destroy();
+		}
 	}
 
 	public function setColor()
