@@ -130,7 +130,7 @@ class Note extends FNFSprite {
             if(isSustain)
             {
                 alpha = Settings.get("Opaque Sustains") ? 1 : 0.6;
-                playAnim(isEndPiece ? "tail" : "hold");
+                playAnim("tail");
             }
         }
         else
