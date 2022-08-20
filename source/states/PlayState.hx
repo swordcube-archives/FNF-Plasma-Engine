@@ -1,5 +1,6 @@
 package states;
 
+import systems.Replay;
 import flixel.util.FlxStringUtil;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -110,6 +111,18 @@ class PlayState extends MusicBeatState {
 	public var endingSong:Bool = false;
 
 	public var scrollSpeed:Float = 1.0;
+
+	public var inReplay:Bool = false;
+
+	public var replayData:ReplayData = {
+		packUsed: AssetPaths.currentPack,
+
+		justPressed: [],
+		pressed: [],
+		justReleased: [],
+
+		notes: []
+	};
 
 	public function calculateAccuracy()
 	{

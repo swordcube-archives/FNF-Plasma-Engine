@@ -88,53 +88,39 @@ class Note extends FNFSprite {
             alpha = 0.35;
     }
 
-    public function loadSkin(skinToLoad:String)
+    public function loadSkin(skin:String)
     {
-        var skin:String = skinToLoad;
-        
-        var path:String = AssetPaths.json('images/skins/$skin');
-        if(!FileSystem.exists(path))
+        this.skin = skin;
+        json = Init.arrowSkins[skin];
+
+        var noteThing:String = ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][0][noteData];
+        if(json.skin_type == "pixel")
         {
-            skin = "arrows";
-            path = AssetPaths.json('images/skins/$skin');
-        }
-        
-        if(FileSystem.exists(path))
-        {
-            this.skin = skin;
-            json = Json.parse(FNFAssets.returnAsset(TEXT, AssetPaths.json('images/skins/$skin')));
-
-            var noteThing:String = ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][0][noteData];
-            if(json.skin_type == "pixel")
-            {
-                loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image(json.note_assets)), true, 17, 17);
-                animation.add("normal", [noteData+4], 24, true);
-                animation.add("hold", [noteData+20], 24, true);
-                animation.add("tail", [noteData+24], 24, true);
-            }
-            else
-            {
-                frames = FNFAssets.returnAsset(SPARROW, json.note_assets);
-                animation.addByPrefix("normal", noteThing+"0", 24, true);
-                animation.addByPrefix("hold", noteThing+" hold0", 24, true);
-                animation.addByPrefix("tail", noteThing+" tail0", 24, true);
-            }
-
-            antialiasing = json.skin_type != "pixel" ? Settings.get("Antialiasing") : false;
-
-            var funnyScale:Float = json.note_scale * ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][2];
-            scale.set(funnyScale, funnyScale);
-            updateHitbox();
-
-            playAnim("normal");
-            if(isSustain)
-            {
-                alpha = Settings.get("Opaque Sustains") ? 1 : 0.6;
-                playAnim("tail");
-            }
+            loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image(json.note_assets)), true, 17, 17);
+            animation.add("normal", [noteData+4], 24, true);
+            animation.add("hold", [noteData+20], 24, true);
+            animation.add("tail", [noteData+24], 24, true);
         }
         else
-            Main.print("error", "Skin JSON file at "+path+" doesn't exist!");
+        {
+            frames = FNFAssets.returnAsset(SPARROW, json.note_assets);
+            animation.addByPrefix("normal", noteThing+"0", 24, true);
+            animation.addByPrefix("hold", noteThing+" hold0", 24, true);
+            animation.addByPrefix("tail", noteThing+" tail0", 24, true);
+        }
+
+        antialiasing = json.skin_type != "pixel" ? Settings.get("Antialiasing") : false;
+
+        var funnyScale:Float = json.note_scale * ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][2];
+        scale.set(funnyScale, funnyScale);
+        updateHitbox();
+
+        playAnim("normal");
+        if(isSustain)
+        {
+            alpha = Settings.get("Opaque Sustains") ? 1 : 0.6;
+            playAnim("hold");
+        }
     }
 
     override public function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame:Int = 0)

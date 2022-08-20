@@ -1,100 +1,64 @@
-import flixel.math.FlxPoint;
+function popUpScore(fakeJudge, combo, rScale, cScale) {
+    var coolText:FlxText = new FlxText(0, 0, 0, fakeJudge, 32);
+    coolText.screenCenter();
+    coolText.x = FlxG.width * 0.55;
 
-var ratingPos:FlxText;
+    var judgement = PlayState.songAccuracy >= 1 ? "marvelous" : (PlayState.songAccuracy < 1 && fakeJudge == "marvelous" ? "sick" : fakeJudge);
 
-var rating:FlxSprite;
-var grpCombo:FlxGroup;
-
-var started:Bool = false;
-
-function create(judgement, combo) {
-    ratingPos = new FlxText(0, 0, 0, combo, 32);
-    ratingPos.screenCenter();
-    ratingPos.x = FlxG.width * 0.55;
+    var rating:FlxSprite = new FlxSprite();
+    rating.loadGraphic(PlayState.cachedRatings[judgement]);
+    rating.screenCenter();
+    rating.x = coolText.x - 40;
+    rating.y -= 60;
+    rating.acceleration.y = 550;
+    rating.velocity.y -= FlxG.random.int(140, 175);
+    rating.velocity.x -= FlxG.random.int(0, 10);
+    rating.antialiasing = PlayState.ratingAntialiasing ? Settings.get("Antialiasing") : false;
+    rating.scale.set(rScale, rScale);
+    rating.updateHitbox();
+    PlayState.insert(PlayState.members.length+1, rating);
 
     var seperatedScore:Array<Int> = [];
 
     if(combo >= 1000)
         seperatedScore.push(Math.floor(combo / 1000) % 10);
-
+    
     seperatedScore.push(Math.floor(combo / 100) % 10);
     seperatedScore.push(Math.floor(combo / 10) % 10);
     seperatedScore.push(combo % 10);
 
-    rating = new FlxSprite();
-    var judgementThing:String = PlayState.songAccuracy >= 1 ? "marvelous" : (PlayState.songAccuracy < 1 && judgement == "marvelous" ? "sick" : judgement);
-    rating.screenCenter();
-    rating.x = ratingPos.x - 40;
-    rating.y -= 80;
-    rating.loadGraphic(PlayState.cachedRatings[judgementThing]);
-    //trace("R: load graphic check");
-    rating.acceleration.y = 550;
-    rating.velocity.y -= FlxG.random.int(140, 175);
-    rating.velocity.x -= FlxG.random.int(0, 10);
-    //trace("R: velocity check");
-    rating.antialiasing = PlayState.ratingAntialiasing ? Settings.get("Antialiasing") : false;
-    rating.scale.set(ratingScale, ratingScale);
-    rating.updateHitbox();
-    //trace("R: scale check");
-    add(rating);
-
-    grpCombo = new FlxGroup();
-    add(grpCombo);
-
     var daLoop:Int = 0;
-    for(i in seperatedScore)
+    for (i in seperatedScore)
     {
         var numScore:FlxSprite = new FlxSprite();
-        numScore.loadGraphic(PlayState.cachedCombo[PlayState.songAccuracy >= 1 ? "marvelous" : "default"]["num"+Std.int(i)]);
-        //trace("load graphic check");
-
+        numScore.loadGraphic(PlayState.cachedCombo[PlayState.songAccuracy >= 1 ? "marvelous" : "default"]["num"+i]);
         numScore.screenCenter();
-        numScore.x = ratingPos.x + (43 * daLoop) - 90;
-        numScore.y += 120;
-        //trace("pos check");
+        numScore.x = coolText.x + (43 * daLoop) - 90;
+        numScore.y += 80;
 
-        numScore.antialiasing = PlayState.comboAntialiasing ? Settings.get("Antialiasing") : false;
-        numScore.scale.set(comboScale, comboScale);
+        numScore.scale.set(cScale, cScale);
         numScore.updateHitbox();
-        //trace("scale check");
 
         numScore.acceleration.y = FlxG.random.int(200, 300);
         numScore.velocity.y -= FlxG.random.int(140, 160);
         numScore.velocity.x = FlxG.random.float(-5, 5);
-        //trace("velocity check");
-
-        grpCombo.add(numScore);
+        numScore.antialiasing = PlayState.comboAntialiasing ? Settings.get("Antialiasing") : false;
+        PlayState.insert(PlayState.members.length+1, numScore);
 
         FlxTween.tween(numScore, {alpha: 0}, 0.2, {
             onComplete: function(tween:FlxTween) {
-                grpCombo.remove(numScore, true);
-                numScore.kill();
                 numScore.destroy();
             },
             startDelay: Conductor.crochet * 0.002
         });
-        //trace("tween check");
 
-        daLoop += 1;
+        daLoop++;
     }
 
     FlxTween.tween(rating, {alpha: 0}, 0.2, {
         onComplete: function(tween:FlxTween) {
-            remove(rating, true);
-            rating.kill();
             rating.destroy();
-            rating = null;
         },
         startDelay: Conductor.crochet * 0.001
     });
-    //trace("R: tween check");
-    started = true;
-}
-
-function update() {
-    if(grpCombo.members.length <= 0 && rating == null && started)
-    {
-        PlayState.remove(this);
-        destroy();
-    }
 }

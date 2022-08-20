@@ -67,7 +67,7 @@ class StrumNote extends FNFSprite {
 
         if(FileSystem.exists(path))
         {
-            json = Json.parse(FNFAssets.returnAsset(TEXT, AssetPaths.json('images/skins/$skin')));
+            json = Init.arrowSkins[skin];
 
             var noteThing:String = ExtraKeys.arrowInfo[parent.keyCount-1][0][noteData];
             if(json.skin_type == "pixel")

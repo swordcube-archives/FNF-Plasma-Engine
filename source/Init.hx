@@ -1,5 +1,6 @@
 package;
 
+import gameplay.StrumNote.ArrowSkin;
 import sys.io.File;
 import haxe.Json;
 import flixel.FlxG;
@@ -60,6 +61,8 @@ class Init extends MusicBeatState {
 
     public static var startedGame:Bool = false;
 
+    public static var arrowSkins:Map<String, ArrowSkin> = [];
+
     /**
         Put keybinds for extra keys here!
         Go to systems/ExtraKeys.hx to make info for your extra keys.
@@ -80,6 +83,27 @@ class Init extends MusicBeatState {
         Go to systems/ExtraKeys.hx to change the default arrow colors for each keycount.
     **/
     public static var arrowColors:Map<Int, Array<Array<Int>>> = [];
+
+    public static function getArrowSkins():Map<String, ArrowSkin>
+    {
+        var a:Map<String, ArrowSkin> = [];
+        for(folder in FileSystem.readDirectory('${AssetPaths.cwd}assets'))
+        {
+            if(!folder.contains("."))
+            {
+                var p:String = '${AssetPaths.cwd}assets/$folder/images/skins';
+                if(FileSystem.exists(p))
+                {
+                    for(item in FileSystem.readDirectory(p))
+                    {
+                        if(item.endsWith(".json"))
+                            a.set(item.split(".json")[0], Json.parse(FNFAssets.returnAsset(TEXT, '$p/$item')));
+                    }
+                }
+            }
+        }
+        return a;
+    }
 
     public static function reloadSettings()
     {

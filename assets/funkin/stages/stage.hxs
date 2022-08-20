@@ -1,0 +1,3 @@
+function create() {
+    PlayState.defaultCamZoom = 0.9;
+}

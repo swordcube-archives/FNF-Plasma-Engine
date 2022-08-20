@@ -1,5 +1,6 @@
 package gameplay;
 
+import hscript.HScript;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
@@ -14,7 +15,6 @@ import states.PlayState;
 import systems.Conductor;
 import systems.ExtraKeys;
 import systems.Ranking;
-import ui.JudgementUI;
 import ui.NoteSplash;
 
 using StringTools;
@@ -37,7 +37,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 	function getSingAnimation(noteData:Int):String
 	{
 		var dir:String = ExtraKeys.arrowInfo[keyCount - 1][0][noteData];
-		switch (dir)
+		switch(dir)
 		{
 			case "space":
 				dir = "up";
@@ -46,6 +46,9 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		return "sing" + dir.toUpperCase();
 	}
 
+	public var judgementScript:HScript;
+	public var noteSplashScript:HScript;
+
 	public function new(x:Float, y:Float, keyCount:Int = 4)
 	{
 		super(x, y);
@@ -53,15 +56,21 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		this.keyCount = keyCount;
 
 		notes = new FlxTypedGroup<Note>();
+		generateArrows();
+
+		judgementScript = new HScript('scripts/Judgement');
+		judgementScript.start();
 
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
-		var splash:NoteSplash = new NoteSplash(100, 100, 0);
-		splash.alpha = 0.1;
-		splash.kill();
-		grpNoteSplashes.add(splash);
+		var cacheSplash:NoteSplash = new NoteSplash(100, 100, 0, members[0].json.splash_assets);
+		cacheSplash.alpha = 0.001;
+		grpNoteSplashes.add(cacheSplash);
 
-		generateArrows();
+		noteSplashScript = new HScript('scripts/NoteSplash');
+		noteSplashScript.set("add", grpNoteSplashes.add);
+		noteSplashScript.set("remove", grpNoteSplashes.remove);
+		noteSplashScript.start();
 	}
 
 	public function generateArrows()
@@ -107,16 +116,6 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 		var inCutscene:Bool = PlayState.current != null ? PlayState.current.inCutscene : false;
 
-		grpNoteSplashes.forEachDead(function(sprite:NoteSplash)
-		{
-            if (grpNoteSplashes.length > 1)
-            {
-                grpNoteSplashes.remove(sprite, true);
-                sprite.kill();
-                sprite.destroy();
-            }
-		});
-
 		if (!hasInput)
 		{
 			for (strum in members)
@@ -136,7 +135,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 		if (PlayState.current != null)
 		{
-			var stepHeight = (0.45 * Conductor.stepCrochet * PlayState.current.scrollSpeed);
+			var stepHeight = (0.45 * Conductor.stepCrochet * PlayState.SONG.speed);
 
 			noteSortTimer += elapsed;
 
@@ -176,8 +175,9 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 				
 				note.x = members[note.noteData].x;
 
-				var scrollAmount:Float = (note.isDownScroll ? -1 : 1) * 0.45;
-				note.y = members[note.noteData].y - (scrollAmount * (Conductor.position - note.strumTime) * PlayState.current.scrollSpeed);
+				var scrollAmount:Float = (note.isDownScroll ? 0.45 : -0.45);
+				var cum:Float = (note.isDownScroll ? note.noteYOff : -note.noteYOff);
+				note.y = members[note.noteData].y + (scrollAmount * (Conductor.position - note.strumTime) * PlayState.current.scrollSpeed) - cum;
 
 				if (hasInput)
 				{
@@ -249,8 +249,6 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                     }
                 }
             });
-
-
 
             if(hasInput)
             {
@@ -370,7 +368,6 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 					if (note.isSustain)
 					{
 						note.y -= note.height - stepHeight;
-						note.y += 10;
 
 						if ((botPlay || !hasInput || (hasInput && note.canBeHit && pressed[note.noteData]))
 							&& note.y - note.offset.y * note.scale.y + note.height >= (this.y + Note.swagWidth / 2))
@@ -388,7 +385,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 				{
 					if (note.isSustain)
 					{
-						note.y += 10;
+						note.y += 5;
 
 						if ((botPlay || !hasInput || (hasInput && note.canBeHit && pressed[note.noteData]))
 							&& note.y + note.offset.y * note.scale.y <= (this.y + Note.swagWidth / 2))
@@ -425,19 +422,13 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		boundHealth();
 
 		if (Settings.get("Note Splashes") && judgeData.noteSplash)
-		{
-			var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
-			splash.alpha = 1;
-			splash.setupNoteSplash(members[note.noteData].x, members[note.noteData].y, members[note.noteData].json.splash_assets, note.noteData);
-			grpNoteSplashes.add(splash);
-		}
+			noteSplashScript.call("spawnSplash", [members[note.noteData].x, members[note.noteData].y, note.noteData, members[note.noteData].json.splash_assets]);
 
 		PlayState.current.calculateAccuracy();
 
 		PlayState.current.combo++;
 
-		var judgeUI:JudgementUI = new JudgementUI(judgement, PlayState.current.combo, PlayState.current.ratingScale, PlayState.current.comboScale);
-		PlayState.current.insert(PlayState.current.members.length + 1, judgeUI);
+		judgementScript.call("popUpScore", [judgeData.name, PlayState.current.combo, PlayState.current.ratingScale, PlayState.current.comboScale]);
 
         PlayState.current.UI.healthBarScript.call("updateScoreText");
 

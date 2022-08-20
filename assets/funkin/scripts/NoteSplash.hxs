@@ -1,22 +1,2 @@
-function create(skin:String) {
-    sprite.frames = FNFAssets.getSparrow(skin);
-    sprite.animation.addByPrefix("splash1", "splash 1", 24, false);
-    sprite.animation.addByPrefix("splash2", "splash 2", 24, false);
-
-    sprite.scale.set(0.7, 0.7);
-    sprite.updateHitbox();
-
-    sprite.offset.x = sprite.frameWidth / 2;
-    sprite.offset.y = sprite.frameHeight / 2;
-
-    sprite.offset.x -= 156 * (sprite.scale.x / 2);
-    sprite.offset.y -= 156 * (sprite.scale.y / 2);
-
-    sprite.animation.play("splash"+FlxG.random.int(1, 2));
-    if(sprite.animation.curAnim != null) sprite.animation.curAnim.frameRate *= 1.35;
-}
-
-function update(elapsed) {
-    if(sprite.started && sprite.animation.curAnim != null && sprite.animation.curAnim.finished)
-        kill();
-}
+function spawnSplash(x, y, noteData, skin)
+    add(new NoteSplash(x, y, noteData, skin));
