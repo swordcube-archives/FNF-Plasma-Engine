@@ -303,7 +303,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 						// Check if we just pressed the keybind the note has and if we're allowed to hit the note
 						// If both are true, then we delete the note.
 
-						if ((justPressed[note.noteData] || botPlay) && !note.isSustain)
+						if ((justPressed[note.noteData] || botPlay) && !note.isSustain && noteDataTimes[note.noteData] == -1)
 						{
 							PlayState.current.vocals.volume = 1;
 							justPressed[note.noteData] = false;
@@ -314,6 +314,14 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 							members[note.noteData].colorSwap.enabled.value = [true];
 							members[note.noteData].playAnim("confirm", true);
 							goodNoteHit(note);
+						}
+						else if (!note.isSustain && Math.abs(note.strumTime - noteDataTimes[note.noteData]) <= 5)
+						{
+							// we hate stacked notes >:((((
+							possibleNotes.remove(note);
+                            notes.remove(note, true);
+                            note.kill();
+                            note.destroy();
 						}
 
 						if ((pressed[note.noteData] || botPlay) && note.isSustain && (Conductor.position - note.strumTime) >= 0.0)
@@ -338,17 +346,6 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 							}
 						}
 					}
-
-                    // we hate stacked notes!
-                    for(note in possibleNotes) {
-                        if(!note.isSustain && note.strumTime == noteDataTimes[note.noteData])
-                        {
-                            possibleNotes.remove(note);
-                            notes.remove(note, true);
-                            note.kill();
-                            note.destroy();
-                        }
-                    }
 				}
 
 				if (PlayState.current != null

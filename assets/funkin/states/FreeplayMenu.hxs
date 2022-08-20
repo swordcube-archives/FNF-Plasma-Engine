@@ -17,6 +17,7 @@ var intendedScore:Int = 0;
 
 var curSelected:Int = 0;
 var curDifficulty:Int = 1;
+var musicSelected:Int = -1;
 
 var curPlaying:String = "";
 
@@ -161,10 +162,10 @@ function update() {
 
     bg.color = FlxColor.fromRGB(Std.int(bgColor[0]), Std.int(bgColor[1]), Std.int(bgColor[2]));
 
-    if(curPlaying == songs[curSelected].name)
+    if (musicSelected != -1)
     {
         var lerp = FlxMath.lerp(1.15, 1, FlxEase.cubeOut(Conductor.currentBeatFloat % 1));
-        grpIcons.members[curSelected].scale.set(lerp, lerp);
+        grpIcons.members[musicSelected].scale.set(lerp, lerp);
     }
 
     updateScore();
@@ -207,8 +208,13 @@ function playTheFuckingSong() {
     loadingIco.visible = true;
     loadingTxt.visible = true;
 
+    if (musicSelected != -1)
+    {
+        grpIcons.members[musicSelected].scale.set(1, 1);
+        musicSelected = -1;
+    }
+
     Thread.create(function() {
-        FNFAssets.getSound(AssetPaths.songInst(songs[curSelected].name));
         if(FlxG.sound.music != null)
             FlxG.sound.music.stop();
         
@@ -226,6 +232,7 @@ function playTheFuckingSong() {
         loadingTxt.visible = false;
 
         curPlaying = songs[curSelected].name;
+        musicSelected = curSelected;
     });
 } 
 

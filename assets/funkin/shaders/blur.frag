@@ -1,8 +1,8 @@
 #pragma header
 
-float Directions = 16.0;
-float Quality = 3.0;
-float Size = 16.0;
+uniform float Directions = 16.0;
+uniform float Quality = 3.0;
+uniform float Size = 16.0;
 
 void main()
 {
