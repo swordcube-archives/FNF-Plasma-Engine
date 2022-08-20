@@ -1,7 +1,7 @@
 package shaders;
 
 class Pragmas {
-    public static var entireFuckingCustomFragmentHeaderThatIStoleFromYCE = "
+    public static var fragHead = "
     
     varying float openfl_Alphav;
     varying vec4 openfl_ColorMultiplierv;
@@ -48,18 +48,6 @@ class Pragmas {
             return vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);
         }
         return vec4(0.0, 0.0, 0.0, 0.0);
-    }
-
-    uniform vec4 _camSize;
-
-    vec2 getCamPos(vec2 pos) {
-        return (pos * openfl_TextureSize / vec2(_camSize.z, _camSize.w)) + vec2(_camSize.x / _camSize.z, _camSize.y / _camSize.z);
-    }
-    vec2 camToOg(vec2 pos) {
-        return ((pos - vec2(_camSize.x / _camSize.z, _camSize.y / _camSize.z)) * vec2(_camSize.z, _camSize.w) / openfl_TextureSize);
-    }
-    vec4 textureCam(sampler2D bitmap, vec2 pos) {
-        return texture2D(bitmap, camToOg(pos));
     }
     ";
 }
