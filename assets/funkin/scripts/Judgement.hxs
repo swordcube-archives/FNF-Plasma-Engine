@@ -1,14 +1,16 @@
 import flixel.math.FlxPoint;
 
-var ratingPos:FlxText;
+var judgementArray:Array<Map<String, Dynamic>> = [];
 
-var rating:FlxSprite;
-var grpCombo:FlxGroup;
+function create(judgement, combo)
+{
+    var judgementIndex:Int = judgementArray.length;
 
-var started:Bool = false;
+    var grpCombo:FlxGroup;
 
-function create(judgement, combo) {
-    ratingPos = new FlxText(0, 0, 0, combo, 32);
+    var started:Bool = false;
+
+    var ratingPos:FlxText = new FlxText(0, 0, 0, combo, 32);
     ratingPos.screenCenter();
     ratingPos.x = FlxG.width * 0.55;
 
@@ -21,7 +23,7 @@ function create(judgement, combo) {
     seperatedScore.push(Math.floor(combo / 10) % 10);
     seperatedScore.push(combo % 10);
 
-    rating = new FlxSprite();
+    var rating:FlxSprite = new FlxSprite();
     var judgementThing:String = PlayState.songAccuracy >= 1 ? "marvelous" : (PlayState.songAccuracy < 1 && judgement == "marvelous" ? "sick" : judgement);
     rating.screenCenter();
     rating.x = ratingPos.x - 40;
@@ -42,6 +44,7 @@ function create(judgement, combo) {
     add(grpCombo);
 
     var daLoop:Int = 0;
+
     for(i in seperatedScore)
     {
         var numScore:FlxSprite = new FlxSprite();
@@ -89,12 +92,23 @@ function create(judgement, combo) {
     });
     //trace("R: tween check");
     started = true;
+
+    judgementArray.push([
+        "ratingPos" => ratingPos,
+        "grpCombo" => grpCombo,
+        "rating" => rating,
+        "started" => started
+    ]);
 }
 
 function update() {
-    if(grpCombo.members.length <= 0 && rating == null && started)
+    for (map in judgementArray)
     {
-        PlayState.remove(this);
-        destroy();
+        if(map.get("grpCombo").members.length <= 0 && map.get("rating") == null && map.get("started"))
+        {
+            map.get("grpCombo").destroy();
+            map.get("rating").destroy();
+            map.get("ratingPos").destroy();
+        }
     }
 }

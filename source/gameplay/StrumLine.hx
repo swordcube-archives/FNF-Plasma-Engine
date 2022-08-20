@@ -9,6 +9,7 @@ import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxSort;
+import hscript.HScript;
 import openfl.media.Sound;
 import states.PlayState;
 import systems.Conductor;
@@ -33,6 +34,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		"miss2" => FNFAssets.returnAsset(SOUND, AssetPaths.sound("missnote2")),
 		"miss3" => FNFAssets.returnAsset(SOUND, AssetPaths.sound("missnote3")),
 	];
+
+	public var judgementHandler:JudgementUI = new JudgementUI();
 
 	function getSingAnimation(noteData:Int):String
 	{
@@ -250,8 +253,6 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                 }
             });
 
-
-
             if(hasInput)
             {
 				var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
@@ -436,8 +437,9 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 		PlayState.current.combo++;
 
-		var judgeUI:JudgementUI = new JudgementUI(judgement, PlayState.current.combo, PlayState.current.ratingScale, PlayState.current.comboScale);
-		PlayState.current.insert(PlayState.current.members.length + 1, judgeUI);
+		judgementHandler.spawn_judgement(judgement, PlayState.current.combo, PlayState.current.ratingScale, PlayState.current.comboScale);
+		PlayState.current.remove(judgementHandler, true);
+		PlayState.current.insert(PlayState.current.members.length + 1, judgementHandler);
 
         PlayState.current.UI.healthBarScript.call("updateScoreText");
 

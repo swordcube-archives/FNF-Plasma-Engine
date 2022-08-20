@@ -28,7 +28,7 @@ class HScript {
 
 	public var otherScripts:Array<HScript> = [];
 
-	public var executedScript:Bool = false;
+	public var executedScript:Null<Bool> = false;
 
     public static var function_continue:String = "FUNCTION_CONTINUE";
     public static var function_stop:String = "FUNCTION_STOP";
@@ -382,4 +382,19 @@ class HScript {
 
     public function set(variable:String, value:Dynamic)
         interp.variables.set(variable, value);
+
+    public function destroy():Void
+    {
+        _path = null;
+        script = null;
+        parser = null;
+        program = null;
+        interp = null;
+        otherScripts = null;
+        executedScript = null;
+        usedExtension = null;
+
+        // haha i fucked your mom last night :3
+        // - Leather128 2022
+    }
 }
