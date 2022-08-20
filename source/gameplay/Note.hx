@@ -127,11 +127,10 @@ class Note extends FNFSprite {
             updateHitbox();
 
             playAnim("normal");
-
             if(isSustain)
             {
                 alpha = Settings.get("Opaque Sustains") ? 1 : 0.6;
-                playAnim("hold");
+                playAnim("tail");
             }
         }
         else
