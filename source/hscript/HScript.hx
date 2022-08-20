@@ -1,6 +1,5 @@
 package hscript;
 
-import sys.FileSystem;
 import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
 import flixel.text.FlxText.FlxTextAlign;
@@ -12,6 +11,7 @@ import hscript.Parser;
 import lime.app.Application;
 import openfl.display.BlendMode;
 import states.PlayState;
+import sys.FileSystem;
 import sys.thread.Thread;
 import systems.MusicBeat.MusicBeatState;
 import ui.Notification;
@@ -52,6 +52,11 @@ class HScript {
             {
                 usedExtension = ext;
                 awesomeSwagPath = AssetPaths.asset(path+ext);
+            }
+            else if(FileSystem.exists(AssetPaths.asset(path+ext, 'funkin')))
+            {
+                usedExtension = ext;
+                awesomeSwagPath = AssetPaths.asset(path+ext, 'funkin');
             }
         }
 

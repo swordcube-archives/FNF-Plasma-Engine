@@ -157,7 +157,7 @@ class Character extends FNFSprite
 		var path:String = 'characters/template/script';
 		for(ext in HScript.hscriptExts)
 		{
-			if(FileSystem.exists(AssetPaths.asset('characters/$char/script'+ext)))
+			if(FileSystem.exists(AssetPaths.asset('characters/$char/script'+ext)) || FileSystem.exists(AssetPaths.asset('characters/$char/script'+ext, 'funkin')))
 			{
 				curCharacter = char;
 				path = 'characters/$curCharacter/script';
