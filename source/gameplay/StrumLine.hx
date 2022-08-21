@@ -421,7 +421,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		PlayState.current.health += judgeData.health;
 		boundHealth();
 
-		if (Settings.get("Note Splashes") && judgeData.noteSplash)
+		if(Settings.get("Note Splashes") && judgeData.noteSplash)
 			noteSplashScript.call("spawnSplash", [members[note.noteData].x, members[note.noteData].y, note.noteData, members[note.noteData].json.splash_assets]);
 
 		PlayState.current.calculateAccuracy();
