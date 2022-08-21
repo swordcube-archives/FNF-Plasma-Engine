@@ -14,14 +14,14 @@ class DiscordRPC
     
 	public function new(clientID:String = "969729521341329449")
 	{
-		trace("Discord Client starting...");
+		//trace("Discord Client starting...");
 		DiscordRpc.start({
 			clientID: clientID,
 			onReady: onReady,
 			onError: onError,
 			onDisconnected: onDisconnected
 		});
-		trace("Discord Client started.");
+		//trace("Discord Client started.");
 
 		while (true)
 		{
@@ -67,7 +67,7 @@ class DiscordRPC
             dontDoTitle = noTitle;
 			new DiscordRPC(clientID);
 		});
-		trace("Discord Client initialized");
+		//trace("Discord Client initialized");
 	}
 
 	public static function changePresence(details:String, state:Null<String>, ?smallImageKey : String, ?hasStartTimestamp : Bool, ?endTimestamp: Float)
