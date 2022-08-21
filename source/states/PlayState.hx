@@ -161,6 +161,8 @@ class PlayState extends MusicBeatState {
 		current = this;
 		super.create();
 
+		openSubState(new ScriptedSubState('Logs'));
+
 		ChartEditor.stateClass = PlayState;
 
 		// cache "breakfast" from music folder because pause menu!

@@ -4,6 +4,9 @@ import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.util.FlxColor;
 import openfl.media.Sound;
+import flixel.text.FlxText;
+import openfl.display.BlendMode;
+import flixel.FlxCamera.FlxCameraFollowStyle;
 
 class HScriptHelpers {
     // i didn't know you could do this whole
@@ -24,7 +27,7 @@ class HScriptHelpers {
         I have to add each color and function here manually, and there is a bit much to add.
         So i'm only adding the important stuff, If you want to add more yourself, go nuts.
     **/
-    public static function getFlxColorClass()
+    public static function getFlxColor()
     {
         return {
             // color lore
@@ -57,7 +60,7 @@ class HScriptHelpers {
         };
     }
 
-    public static function getFNFAssetsClass()
+    public static function getFNFAssets()
     {
         return {
             "getImage": function(path:String):FlxGraphic {
@@ -82,5 +85,78 @@ class HScriptHelpers {
                 return FNFAssets.returnAsset(TEXT, path);
             }
         };
+    }
+
+    public static function getBlendMode()
+    {
+        return {"ADD": BlendMode.ADD,
+        "ALPHA": BlendMode.ALPHA,
+        "DARKEN": BlendMode.DARKEN,
+        "DIFFERENCE": BlendMode.DIFFERENCE,
+        "ERASE": BlendMode.ERASE,
+        "HARDLIGHT": BlendMode.HARDLIGHT,
+        "INVERT": BlendMode.INVERT,
+        "LAYER": BlendMode.LAYER,
+        "LIGHTEN": BlendMode.LIGHTEN,
+        "MULTIPLY": BlendMode.MULTIPLY,
+        "NORMAL": BlendMode.NORMAL,
+        "OVERLAY": BlendMode.OVERLAY,
+        "SCREEN": BlendMode.SCREEN,
+        "SHADER": BlendMode.SHADER,
+        "SUBTRACT": BlendMode.SUBTRACT};
+    }
+
+    public static function getFlxCameraFollowStyle()
+    {
+        return {
+            "LOCKON": FlxCameraFollowStyle.LOCKON,
+            "PLATFORMER": FlxCameraFollowStyle.PLATFORMER,
+            "TOPDOWN": FlxCameraFollowStyle.TOPDOWN,
+            "TOPDOWN_TIGHT": FlxCameraFollowStyle.TOPDOWN_TIGHT,
+            "SCREEN_BY_SCREEN": FlxCameraFollowStyle.SCREEN_BY_SCREEN,
+            "NO_DEAD_ZONE": FlxCameraFollowStyle.NO_DEAD_ZONE
+        };
+    }
+    
+    public static function getFlxTextAlign()
+    {
+        return {
+            "LEFT": "left",
+            "CENTER": "center",
+            "RIGHT": "right",
+            "JUSTIFY": "justify",
+            "fromOpenFL": FlxTextAlign.fromOpenFL,
+            "toOpenFL": FlxTextAlign.toOpenFL
+        };
+    }
+    
+    public static function getFlxTextBorderStyle()
+    {
+        return {
+            "NONE": FlxTextBorderStyle.NONE,
+            "SHADOW": FlxTextBorderStyle.SHADOW,
+            "OUTLINE": FlxTextBorderStyle.OUTLINE,
+            "OUTLINE_FAST": FlxTextBorderStyle.OUTLINE_FAST
+        };
+    }
+
+    /*
+        you can use
+        "var Thing = importScript('scripts/balls');"
+        or some shit for using this
+    */
+    public static function importScript(source)
+    {
+        var the = {};
+        var balls = new HScript(StringTools.replace(source, '.', '/'));
+        for (i in Reflect.fields(balls.getAll())) {
+            Reflect.setField(the, i, balls.get(i));
+        }
+        try{
+            return the;
+        } catch(e) {
+            Main.print("error", "Could not get fields of the script " + source);
+            return null;
+        }
     }
 }

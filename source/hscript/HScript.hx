@@ -19,6 +19,16 @@ import ui.Notification;
 using StringTools;
 
 class HScript {
+    public var locals(get, set):Map<String, {r:Dynamic, depth:Int}>;
+    function get_locals():Map<String, {r:Dynamic, depth:Int}> {
+        @:privateAccess
+        return interp.locals;
+    }
+    function set_locals(local:Map<String, {r:Dynamic, depth:Int}>) {
+        @:privateAccess
+        return interp.locals = local;
+    }
+
 	public var _path:String;
 	public var script:String;
 
@@ -79,7 +89,7 @@ class HScript {
 
             // Haxe/HaxeFlixel classes
             set("trace", function(text:String) {
-                log(text);
+                Main.print("trace", text);
             });
             set("traceError", function(text:String) {
                 Main.print("error", text);
@@ -112,24 +122,11 @@ class HScript {
             set("FlxSpriteGroup", flixel.group.FlxSpriteGroup);
             set("FlxTypedSpriteGroup", flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup);
 
-            set("FlxTextBorderStyle", {
-                "NONE": FlxTextBorderStyle.NONE,
-                "SHADOW": FlxTextBorderStyle.SHADOW,
-                "OUTLINE": FlxTextBorderStyle.OUTLINE,
-                "OUTLINE_FAST": FlxTextBorderStyle.OUTLINE_FAST
-            });
-
-            set("FlxTextAlign", {
-                "LEFT": "left",
-                "CENTER": "center",
-                "RIGHT": "right",
-                "JUSTIFY": "justify",
-                "fromOpenFL": FlxTextAlign.fromOpenFL,
-                "toOpenFL": FlxTextAlign.toOpenFL
-            });
+            set("FlxTextBorderStyle", HScriptHelpers.getFlxTextBorderStyle());
+            set("FlxTextAlign", HScriptHelpers.getFlxTextAlign());
 
             // flxcolor is a stupid abstract class so i am doing this
-            set("FlxColor", HScriptHelpers.getFlxColorClass());
+            set("FlxColor", HScriptHelpers.getFlxColor());
 
             set("Json", {
                 "parse": haxe.Json.parse,
@@ -162,41 +159,16 @@ class HScript {
 
             set("Type", Type);
 
-            set("FlxCameraFollowStyle", {
-                "LOCKON": FlxCameraFollowStyle.LOCKON,
-                "PLATFORMER": FlxCameraFollowStyle.PLATFORMER,
-                "TOPDOWN": FlxCameraFollowStyle.TOPDOWN,
-                "TOPDOWN_TIGHT": FlxCameraFollowStyle.TOPDOWN_TIGHT,
-                "SCREEN_BY_SCREEN": FlxCameraFollowStyle.SCREEN_BY_SCREEN,
-                "NO_DEAD_ZONE": FlxCameraFollowStyle.NO_DEAD_ZONE
-            });
+            set("FlxCameraFollowStyle", HScriptHelpers.getFlxCameraFollowStyle());
 
-            set("BlendMode", {
-                "ADD": BlendMode.ADD,
-                "ALPHA": BlendMode.ALPHA,
-                "DARKEN": BlendMode.DARKEN,
-                "DIFFERENCE": BlendMode.DIFFERENCE,
-                "ERASE": BlendMode.ERASE,
-                "HARDLIGHT": BlendMode.HARDLIGHT,
-                "INVERT": BlendMode.INVERT,
-                "LAYER": BlendMode.LAYER,
-                "LIGHTEN": BlendMode.LIGHTEN,
-                "MULTIPLY": BlendMode.MULTIPLY,
-                "NORMAL": BlendMode.NORMAL,
-                "OVERLAY": BlendMode.OVERLAY,
-                "SCREEN": BlendMode.SCREEN,
-                "SHADER": BlendMode.SHADER,
-                "SUBTRACT": BlendMode.SUBTRACT
-            });
-
+            set("BlendMode", HScriptHelpers.getBlendMode());
             set("isDebugBuild", #if debug true #else false #end);
 
             // Game functions
             set("loadScript", function(scriptPath:String, ?args:Array<Any>)
             {
                 var new_script = new HScript(scriptPath);
-                new_script.call("create", args);
-                new_script.call("createPost", args);
+                new_script.start(true, args);
 
                 otherScripts.push(new_script);
                 return new_script;
@@ -229,7 +201,7 @@ class HScript {
 
             set("NoteSplash", ui.NoteSplash);
             
-            set("FNFAssets", HScriptHelpers.getFNFAssetsClass());
+            set("FNFAssets", HScriptHelpers.getFNFAssets());
             set("Main", Main);
             set("Init", Init);
             set("Settings", Settings);
@@ -326,7 +298,7 @@ class HScript {
 		PlayState.logs += text+"\n";
 	}
 
-	public function start(callCreate:Bool = true)
+	public function start(callFuncs:Bool = true, ?args:Array<Any>)
 	{
 		executedScript = true;
 		try
@@ -340,8 +312,10 @@ class HScript {
 			log(e.details(), true);
 		}
 
-		if (executedScript && callCreate)
-			call("create");
+		if (executedScript && callFuncs) {
+			call("create", args);
+            call("new", args);
+        }
 	}
 
 	public function update(elapsed:Float)
@@ -378,6 +352,27 @@ class HScript {
         return null;
 	}
 
-    public function set(variable:String, value:Dynamic)
+    public function set(variable:String, value:Dynamic) {
         interp.variables.set(variable, value);
+        locals.set(variable, {r: value, depth: 0});
+    }
+    
+    public function get(variable:String):Dynamic
+    {
+        if (locals.exists(variable) && @:privateAccess locals[variable] != null) {
+            return locals.get(variable).r;
+        } else if (interp.variables.exists(variable))
+            return interp.variables.get(variable);
+        return null;
+    }
+    //the "locals" things are for the script's own variables!!
+
+    public function getAll():Map<String, Dynamic>
+    {
+        var balls:Map<String, Dynamic> = [];
+        for (i in Reflect.fields(locals)) {
+            balls.set(i, locals.get(i));
+        }
+        return balls;
+    }
 }

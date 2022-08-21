@@ -28,8 +28,7 @@ class ScriptedState extends MusicBeatState
     override public function create() 
     {  
         super.create();
-        script.start(false);
-        script.call('create', args);
+        script.start(true, args);
     }
 
     override public function update(elapsed:Float)

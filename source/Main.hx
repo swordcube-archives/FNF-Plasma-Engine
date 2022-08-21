@@ -106,10 +106,16 @@ class Main extends Sprite
 			{
 				FlxG.switchState(newState);
 			};
-			return trace('changed state to ${Type.getClassName(currentState)} (with transition)');
+			if (Std.isOfType(newState, states.ScriptedState))
+				return print('trace', 'Switched state to states.ScriptedState [${cast(newState, ScriptedState).name}] (transition)');
+			else
+				return print('trace', 'Switched state to ${Type.getClassName(currentState)} (transition)');
 		}
 		FlxG.switchState(newState);
-		return trace('changed state to ${Type.getClassName(currentState)} (without transition)');
+		if (Std.isOfType(newState, states.ScriptedState))
+			return print('trace', 'Switched state to states.ScriptedState [${cast(newState, ScriptedState).name}] (no transition)');
+		else
+			return print('trace', 'Switched state to ${Type.getClassName(currentState)} (no transition)');
 	}
 
 	/**
@@ -130,13 +136,18 @@ class Main extends Sprite
 				else
 					FlxG.resetState();
 			};
-			return trace('reloaded current state ${Type.getClassName(currentState)} (with transition)');
+			if (Std.isOfType(FlxG.state, states.ScriptedState))
+				return trace('Reloaded state states.ScriptedState [${cast(FlxG.state, ScriptedState).name}] (transition)');
+			else
+				return trace('Reloaded state ${Type.getClassName(currentState)} (transition)');
 		}
-		if (Std.isOfType(FlxG.state, states.ScriptedState))
-			FlxG.switchState(new ScriptedState(cast(FlxG.state, ScriptedState).name, cast(FlxG.state, ScriptedState).args));
-		else
+		if (Std.isOfType(FlxG.state, states.ScriptedState)) {
+			FlxG.switchState(new ScriptedState(cast(currentState, ScriptedState).name, cast(currentState, ScriptedState).args));
+			return trace('Reloaded state states.ScriptedState [${cast(currentState, ScriptedState).name}] (no transition)');
+		} else {
 			FlxG.resetState();
-		return trace('reloaded current state ${Type.getClassName(currentState)} (without transition)');
+			return trace('Reloaded state ${Type.getClassName(currentState)} (no transition)');
+		}
 	}
 
 	/**
@@ -148,17 +159,21 @@ class Main extends Sprite
 		{
 			case "error":
 				trace('[   ERROR   ] ' + text);
+				Init.log('error', text);
 				return;
 
 			case "warn" | "warning":
 				trace('[  WARNING  ] ' + text);
+				Init.log('warning', text);
 				return;
 
 			case "hxs" | "hscript":
 				trace('[  HSCRIPT  ] ' + text);
+				Init.log('hscript', text);
 				return;
 		}
 		trace(text);
+		Init.log('trace', text);
 		return;
 	}
 

@@ -26,7 +26,7 @@ function getIntroTextShit() {
 }
 
 function startIntro() {
-    trace("PLAYING MUSIC OR SOMETHING!");
+    //trace("PLAYING MUSIC OR SOMETHING!");
 
     if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
     {

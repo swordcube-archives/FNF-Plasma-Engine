@@ -28,8 +28,7 @@ class ScriptedSubState extends MusicBeatSubState
     override public function create() 
     {  
         super.create();
-        script.start(false);
-        script.call('create', args);
+        script.start(true, args);
     }
 
     override public function update(elapsed:Float)
@@ -41,14 +40,12 @@ class ScriptedSubState extends MusicBeatSubState
     override public function beatHit()
     {
         super.beatHit();
-
         script.call("beatHit", [Conductor.currentBeat]);
     }
 
     override public function stepHit()
     {
         super.stepHit();
-
         script.call("stepHit", [Conductor.currentStep]);
     }
 }
