@@ -652,7 +652,7 @@ class PlayState extends MusicBeatState {
 	{
 		if(unspawnNotes[0] != null)
 		{
-			while (unspawnNotes.length > 0 && (unspawnNotes[0].strumTime - Conductor.position) < 2500)
+			while (unspawnNotes.length > 0 && (unspawnNotes[0].strumTime - Conductor.position) < 1500 / scrollSpeed)
 			{
 				var arrowSkin:String = currentSkin != "default" ? currentSkin : Settings.get("Arrow Skin").toLowerCase();
 
@@ -662,7 +662,6 @@ class PlayState extends MusicBeatState {
 				dunceNote.altAnim = unspawnNotes[0].altAnim;
 				dunceNote.parent = unspawnNotes[0].mustPress ? UI.playerStrums : UI.opponentStrums;
 				dunceNote.loadSkin(arrowSkin);
-				dunceNote.parent.notes.add(dunceNote);
 
 				var cum:Int = Math.floor(unspawnNotes[0].susLength);
 				for(i in 0...cum)
@@ -681,6 +680,8 @@ class PlayState extends MusicBeatState {
 					susNote.sustainParent = dunceNote;
 					susNote.parent.notes.add(susNote);
 				}
+
+				dunceNote.parent.notes.add(dunceNote);
 
 				unspawnNotes.shift();
 			}

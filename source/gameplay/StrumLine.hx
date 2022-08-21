@@ -297,7 +297,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 					for (note in possibleNotes)
 					{
 						// If we're not sending inputs to the keyboard, why even try to do input?
-						if(!pressed.contains(true))
+						if(!pressed.contains(true) && !botPlay)
 							break;
 
 						// Check if we just pressed the keybind the note has and if we're allowed to hit the note
