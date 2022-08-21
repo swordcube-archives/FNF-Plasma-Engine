@@ -159,17 +159,21 @@ class Main extends Sprite
 		{
 			case "error":
 				trace('[   ERROR   ] ' + text);
+				Init.log('error', text);
 				return;
 
 			case "warn" | "warning":
 				trace('[  WARNING  ] ' + text);
+				Init.log('warning', text);
 				return;
 
 			case "hxs" | "hscript":
 				trace('[  HSCRIPT  ] ' + text);
+				Init.log('hscript', text);
 				return;
 		}
 		trace(text);
+		Init.log('trace', text);
 		return;
 	}
 

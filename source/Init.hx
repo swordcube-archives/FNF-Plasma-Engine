@@ -63,6 +63,8 @@ class Init extends MusicBeatState {
 
     public static var arrowSkins:Map<String, ArrowSkin> = [];
 
+    public static var logs:Array<Dynamic> = [];
+
     /**
         Put keybinds for extra keys here!
         Go to systems/ExtraKeys.hx to make info for your extra keys.
@@ -247,5 +249,13 @@ class Init extends MusicBeatState {
         //trace('SAVED CURRENTLY SELECTED PACK');
 
         trace('ALL SETTINGS SAVED!');
+    }
+
+    public static function log(type, text) {
+        if (logs[logs.length-1] != null && logs[logs.length-1][0] == [type, text]) {
+            logs[logs.length-1][1] ++;
+        } else {
+            logs.push([[type, text], 1]);
+        }
     }
 }
