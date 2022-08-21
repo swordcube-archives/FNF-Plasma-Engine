@@ -17,8 +17,6 @@ class NoteSplash extends FNFSprite
 	public var parent:StrumLine;
 	public var colorSwap:ColorShader;
 
-	var script:HScript;
-
 	public function new(x:Float, y:Float, noteData:Int = 0, skin:String = "splashes/NOTE_splashes")
 	{
 		super(x, y);

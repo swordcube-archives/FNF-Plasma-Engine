@@ -21,6 +21,7 @@ class CoolUtil
 	{
 		var strArray:Array<String> = s.split(' ');
 		var newArray:Array<String> = [];
+		
 		for (str in strArray)
 			newArray.push(str.charAt(0).toUpperCase()+str.substring(1));
 	
@@ -37,6 +38,16 @@ class CoolUtil
 		return a;
 	}
 
+	/**
+		Gets the position of `character` at `position` in a Leather Engine stage.
+
+		@param character The character to get the position of.
+		@param position `FlxPoint` representing the position in the stage.
+
+		@return `Array<Float>` that represents the position of the character.
+
+		@author Leather128
+	**/
     public static function getLeatherStagePos(character:Character, position:FlxPoint):Array<Float>
         return [(position.x - (character.width / 2)), (position.y - character.height)];
 }
