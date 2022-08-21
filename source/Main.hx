@@ -137,16 +137,16 @@ class Main extends Sprite
 					FlxG.resetState();
 			};
 			if (Std.isOfType(FlxG.state, states.ScriptedState))
-				return trace('Reloaded state    states.ScriptedState [${cast(FlxG.state, ScriptedState).name}] (transition)');
+				return trace('Reloaded state states.ScriptedState [${cast(FlxG.state, ScriptedState).name}] (transition)');
 			else
-				return trace('Reloaded state    ${Type.getClassName(currentState)} (transition)');
+				return trace('Reloaded state ${Type.getClassName(currentState)} (transition)');
 		}
 		if (Std.isOfType(FlxG.state, states.ScriptedState)) {
 			FlxG.switchState(new ScriptedState(cast(currentState, ScriptedState).name, cast(currentState, ScriptedState).args));
-			return trace('Reloaded state    states.ScriptedState [${cast(currentState, ScriptedState).name}] (no transition)');
+			return trace('Reloaded state states.ScriptedState [${cast(currentState, ScriptedState).name}] (no transition)');
 		} else {
 			FlxG.resetState();
-			return trace('Reloaded state    ${Type.getClassName(currentState)} (no transition)');
+			return trace('Reloaded state ${Type.getClassName(currentState)} (no transition)');
 		}
 	}
 
