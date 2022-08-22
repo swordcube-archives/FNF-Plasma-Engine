@@ -155,13 +155,13 @@ class PlayState extends MusicBeatState {
 
 	public var cachedRatings:Map<String, FlxGraphic> = [];
 	public var cachedCombo:Map<String, Map<String, FlxGraphic>> = [];
+
+	public var logsOpen:Bool = false;
 	
 	override function create()
 	{
 		current = this;
 		super.create();
-
-		openSubState(new ScriptedSubState('Logs'));
 
 		ChartEditor.stateClass = PlayState;
 
@@ -575,6 +575,12 @@ class PlayState extends MusicBeatState {
 			Main.switchState(new ChartEditor());
 		}
 
+		if(FlxG.keys.justPressed.F6 && !logsOpen)
+		{
+			logsOpen = true;
+			openSubState(new ScriptedSubState('Logs'));
+		}
+
 		if(UIControls.justPressed("BACK") || (Conductor.position >= FlxG.sound.music.length))
 		{
 			persistentUpdate = false;
@@ -588,6 +594,8 @@ class PlayState extends MusicBeatState {
 
 		if(!inCutscene && !UIControls.justPressed("BACK") && UIControls.justPressed("PAUSE"))
 		{
+			logsOpen = false;
+			
 			persistentUpdate = false;
 			persistentDraw = true;
 

@@ -7,6 +7,9 @@ var text;
 var _logs = [];
 
 function create() {
+    PlayState.persistentUpdate = true;
+    PlayState.persistentDraw = true;
+
     bg = new FlxSprite().makeGraphic(1280, 720, 0x7F000000);
     bg.cameras = [PlayState.camOther];
     add(bg);
@@ -29,6 +32,15 @@ function update(elapsed) {
     if (_logs != Init.logs) {
         _logs = Init.logs;
         reloadLogs();
+    }
+
+    if(FlxG.keys.justPressed.F6 && PlayState.logsOpen)
+    {
+        PlayState.persistentUpdate = false;
+        PlayState.persistentDraw = true;
+
+        PlayState.logsOpen = false;
+        substate.close();
     }
 }
 
