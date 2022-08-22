@@ -665,11 +665,12 @@ class PlayState extends MusicBeatState {
 	{
 		if(unspawnNotes[0] != null)
 		{
-			while (unspawnNotes.length > 0 && (unspawnNotes[0].strumTime - Conductor.position) < 1500 / scrollSpeed)
+			while (unspawnNotes.length > 0 && (unspawnNotes[0].strumTime - Conductor.position) < 2500 / scrollSpeed)
 			{
 				var arrowSkin:String = currentSkin != "default" ? currentSkin : Settings.get("Arrow Skin").toLowerCase();
 
 				var dunceNote:Note = new Note(-9999, -9999, unspawnNotes[0].noteData, false);
+				dunceNote.stepCrochet = Conductor.stepCrochet;
 				dunceNote.strumTime = unspawnNotes[0].strumTime;
 				dunceNote.mustPress = unspawnNotes[0].mustPress;
 				dunceNote.altAnim = unspawnNotes[0].altAnim;
@@ -680,6 +681,7 @@ class PlayState extends MusicBeatState {
 				for(i in 0...cum)
 				{
 					var susNote:Note = new Note(-9999, -9999, unspawnNotes[0].noteData, true);
+					susNote.stepCrochet = Conductor.stepCrochet;
 					susNote.strumTime = unspawnNotes[0].strumTime + (Conductor.stepCrochet * i) + Conductor.stepCrochet;
 					susNote.mustPress = unspawnNotes[0].mustPress;
 					susNote.altAnim = unspawnNotes[0].altAnim;

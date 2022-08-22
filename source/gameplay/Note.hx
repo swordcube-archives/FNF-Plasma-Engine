@@ -65,16 +65,17 @@ class Note extends FNFSprite {
             colorSwap.setColors(255, 255, 255);
     }
 
+    public var stepCrochet:Float = 0.0;
     var stepHeight:Float = 0.0;
 
     override function update(elapsed:Float)
     {
         super.update(elapsed);
 
-		stepHeight = ((0.45 * Conductor.stepCrochet) * PlayState.current.scrollSpeed);
+		stepHeight = ((0.45 * stepCrochet) * PlayState.current.scrollSpeed);
 
         if(isSustain && animation.curAnim != null && animation.curAnim.name != "tail")
-            scale.y = (json.sustain_scale / ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][2]) * ((Conductor.stepCrochet / 100 * 1.5) * PlayState.current.scrollSpeed);
+            scale.y = (json.sustain_scale / ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][2]) * ((stepCrochet / 100 * 1.5) * PlayState.current.scrollSpeed);
 
         if(isSustain)
         {
