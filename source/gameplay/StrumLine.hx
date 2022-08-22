@@ -193,6 +193,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 							PlayState.current.combo = 0;
 							PlayState.current.songMisses++;
 
+							PlayState.current.songScore -= 10; // i forgor to put this here 💀💀💀💀💀
+
 							FlxG.sound.play(missSounds["miss" + FlxG.random.int(1, 3)], FlxG.random.float(0.1, 0.2));
 
                             PlayState.current.totalNotes++;

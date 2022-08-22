@@ -89,21 +89,23 @@ class HScriptHelpers {
 
     public static function getBlendMode()
     {
-        return {"ADD": BlendMode.ADD,
-        "ALPHA": BlendMode.ALPHA,
-        "DARKEN": BlendMode.DARKEN,
-        "DIFFERENCE": BlendMode.DIFFERENCE,
-        "ERASE": BlendMode.ERASE,
-        "HARDLIGHT": BlendMode.HARDLIGHT,
-        "INVERT": BlendMode.INVERT,
-        "LAYER": BlendMode.LAYER,
-        "LIGHTEN": BlendMode.LIGHTEN,
-        "MULTIPLY": BlendMode.MULTIPLY,
-        "NORMAL": BlendMode.NORMAL,
-        "OVERLAY": BlendMode.OVERLAY,
-        "SCREEN": BlendMode.SCREEN,
-        "SHADER": BlendMode.SHADER,
-        "SUBTRACT": BlendMode.SUBTRACT};
+        return {
+            "ADD": BlendMode.ADD,
+            "ALPHA": BlendMode.ALPHA,
+            "DARKEN": BlendMode.DARKEN,
+            "DIFFERENCE": BlendMode.DIFFERENCE,
+            "ERASE": BlendMode.ERASE,
+            "HARDLIGHT": BlendMode.HARDLIGHT,
+            "INVERT": BlendMode.INVERT,
+            "LAYER": BlendMode.LAYER,
+            "LIGHTEN": BlendMode.LIGHTEN,
+            "MULTIPLY": BlendMode.MULTIPLY,
+            "NORMAL": BlendMode.NORMAL,
+            "OVERLAY": BlendMode.OVERLAY,
+            "SCREEN": BlendMode.SCREEN,
+            "SHADER": BlendMode.SHADER,
+            "SUBTRACT": BlendMode.SUBTRACT
+        };
     }
 
     public static function getFlxCameraFollowStyle()

@@ -335,7 +335,7 @@ class HScript {
 			try
 			{
 				if (args == null)
-					return real_func();
+					return Reflect.callMethod(null, real_func, []);
 				else
 					return Reflect.callMethod(null, real_func, args);
 			}

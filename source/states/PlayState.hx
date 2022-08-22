@@ -521,7 +521,6 @@ class PlayState extends MusicBeatState {
 		vocals.stop();
 		FlxG.sound.music.time = 0;
 		FlxG.sound.playMusic(freakyMenu);
-		callOnHScripts("endSong", [actualSongName]);
 		
 		Main.switchState(getMenuToSwitchTo());
 	}
@@ -530,7 +529,12 @@ class PlayState extends MusicBeatState {
 	{
 		if(!inCutscene)
 		{
+			persistentUpdate = false;
+			persistentDraw = true;
+			
 			endingSong = true;
+
+			var ret:Dynamic = callOnHScripts("endSong", [actualSongName]);
 
 			FlxG.sound.music.stop();
 			vocals.stop();
@@ -541,8 +545,6 @@ class PlayState extends MusicBeatState {
 			if(!usedPractice && songScore > Highscore.getScore(actualSongName+"-"+currentDifficulty))
 				Highscore.setScore(actualSongName+"-"+currentDifficulty, songScore);
 			
-			var ret:Dynamic = callOnHScripts("endSong", [actualSongName]);
-			
 			if(ret != HScript.function_stop)
 			{
 				if(isStoryMode)
@@ -552,6 +554,8 @@ class PlayState extends MusicBeatState {
 				else
 					Main.switchState(getMenuToSwitchTo());
 			}
+
+			callOnHScripts("endSongPost", [actualSongName]);
 		}
 	}
 
@@ -581,15 +585,14 @@ class PlayState extends MusicBeatState {
 			openSubState(new ScriptedSubState('Logs'));
 		}
 
-		if(UIControls.justPressed("BACK") || (Conductor.position >= FlxG.sound.music.length))
+		if(UIControls.justPressed("BACK"))
 		{
 			persistentUpdate = false;
 			persistentDraw = true;
 			
 			endingSong = true;
 
-			var func = UIControls.justPressed("BACK") ? kindaEndSong : endSong;
-			func();
+			kindaEndSong();
 		}
 
 		if(!inCutscene && !UIControls.justPressed("BACK") && UIControls.justPressed("PAUSE"))
@@ -706,6 +709,8 @@ class PlayState extends MusicBeatState {
 		if(hasVocals)
 			vocals.play();
 
+		FlxG.sound.music.onComplete = endSong;
+
 		Conductor.position = 0.0;
 		callOnHScripts("startSong", [SONG.song]);
 	}
@@ -753,6 +758,9 @@ class PlayState extends MusicBeatState {
 			camHUD.zoom += 0.04;
 		}
 
+		if(startedSong && !endingSong)
+			resyncSong();
+
 		callOnHScripts("beatHitPost", [Conductor.currentBeat]);
 	}
 
@@ -761,10 +769,6 @@ class PlayState extends MusicBeatState {
 		super.stepHit();
 
 		callOnHScripts("stepHit", [Conductor.currentStep]);
-
-		// Resync song if it gets out of sync with song position
-		resyncSong();
-
 		callOnHScripts("stepHitPost", [Conductor.currentStep]);
 	}
 
@@ -774,15 +778,11 @@ class PlayState extends MusicBeatState {
 		{
 			if(!(Conductor.isAudioSynced(FlxG.sound.music) && Conductor.isAudioSynced(vocals)))
 			{
-				FlxG.sound.music.pause();
-				if(vocals.time < vocals.length)
-					vocals.pause();
-
-				FlxG.sound.music.time = Conductor.position;
-				if(vocals.time < vocals.length)
-					vocals.time = Conductor.position;
+				vocals.pause();
 
 				FlxG.sound.music.play();
+				Conductor.position = FlxG.sound.music.time;
+				vocals.time = FlxG.sound.music.time;
 				if(vocals.time < vocals.length)
 					vocals.play();
 			}
@@ -790,11 +790,7 @@ class PlayState extends MusicBeatState {
 		else
 		{
 			if(!Conductor.isAudioSynced(FlxG.sound.music))
-			{
-				FlxG.sound.music.pause();
-				FlxG.sound.music.time = Conductor.position;
-				FlxG.sound.music.play();
-			}
+				Conductor.position = FlxG.sound.music.time;
 		}
 	}
 
