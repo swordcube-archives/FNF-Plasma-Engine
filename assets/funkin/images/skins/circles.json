@@ -9,5 +9,7 @@
     "strum_scale": 0.7,
     "note_scale": 0.7,
 
-    "sustain_scale": 0.7
+    "sustain_scale": 0.7,
+
+    "is_quant": false
 }

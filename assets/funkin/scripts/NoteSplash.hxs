@@ -1,2 +1,2 @@
-function spawnSplash(x, y, noteData, skin)
-    add(new NoteSplash(x, y, noteData, skin));
+function spawnSplash(x, y, colors, skin)
+    add(new NoteSplash(x, y, colors, skin));

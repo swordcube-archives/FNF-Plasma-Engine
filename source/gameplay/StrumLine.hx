@@ -63,7 +63,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
-		var cacheSplash:NoteSplash = new NoteSplash(100, 100, 0, members[0].json.splash_assets);
+		var cacheSplash:NoteSplash = new NoteSplash(100, 100, [255, 0, 0], members[0].json.splash_assets);
 		cacheSplash.alpha = 0.001;
 		grpNoteSplashes.add(cacheSplash);
 
@@ -91,6 +91,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 			var arrowSkin:String = (PlayState.current != null
 				&& PlayState.current.currentSkin != "default") ? PlayState.current.currentSkin : cast(Settings.get("Arrow Skin"), String).toLowerCase();
 			strum.loadSkin(arrowSkin);
+			strum.setColor();
 			add(strum);
 			FlxTween.tween(strum, {y: strum.y + 10, alpha: Settings.get("Opaque Strums") ? 1 : 0.75}, 0.5,
 				{ease: FlxEase.circOut, startDelay: i * 0.3})
@@ -125,7 +126,6 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 					&& strum.animation.curAnim.name == "confirm"
 					&& strum.animation.curAnim.finished)
 				{
-					strum.resetColor();
 					strum.colorSwap.enabled.value = [false];
 					strum.alpha = Settings.get("Opaque Strums") ? 1 : 0.75;
 					strum.playAnim("static");
@@ -239,7 +239,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                         
                         PlayState.current.vocals.volume = 1;
                         members[note.noteData].alpha = 1;
-                        members[note.noteData].setColor();
+                        members[note.noteData].colorSwap.setColors(note.theColor[0], note.theColor[1], note.theColor[2]);
                         members[note.noteData].colorSwap.enabled.value = [true];
                         members[note.noteData].playAnim("confirm", true);
 
@@ -277,7 +277,6 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 							PlayState.current.UI.healthBarScript.call("updateScoreText");
 						}
 
-                        strum.setColor();
                         strum.colorSwap.enabled.value = [true];
                         strum.playAnim("press", true);
                         strum.alpha = 1;
@@ -286,7 +285,6 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                     if((FlxG.keys.checkStatus(key, JUST_RELEASED) && !inCutscene && !botPlay) || (botPlay && strum.animation.curAnim != null && strum.animation.curAnim.name == "confirm" && strum.animation.curAnim.finished))
                     {
                         strum.colorSwap.enabled.value = [false];
-                        strum.resetColor();
                         strum.playAnim("static", true);
                         strum.alpha = Settings.get("Opaque Strums") ? 1 : 0.75;
                     }
@@ -312,7 +310,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                             noteDataTimes[note.noteData] = note.strumTime;
 
 							members[note.noteData].alpha = 1;
-							members[note.noteData].setColor();
+							members[note.noteData].colorSwap.setColors(note.theColor[0], note.theColor[1], note.theColor[2]);
 							members[note.noteData].colorSwap.enabled.value = [true];
 							members[note.noteData].playAnim("confirm", true);
 							goodNoteHit(note);
@@ -332,7 +330,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 							PlayState.current.health += PlayState.current.healthGain;
 							boundHealth();
 							members[note.noteData].alpha = 1;
-							members[note.noteData].setColor();
+							members[note.noteData].colorSwap.setColors(note.theColor[0], note.theColor[1], note.theColor[2]);
 							members[note.noteData].colorSwap.enabled.value = [true];
 							members[note.noteData].playAnim("confirm", true);
 							note.kill();
@@ -424,7 +422,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		boundHealth();
 
 		if(Settings.get("Note Splashes") && judgeData.noteSplash)
-			noteSplashScript.call("spawnSplash", [members[note.noteData].x, members[note.noteData].y, note.noteData, members[note.noteData].json.splash_assets]);
+			noteSplashScript.call("spawnSplash", [members[note.noteData].x, members[note.noteData].y, note.theColor, members[note.noteData].json.splash_assets]);
 
 		PlayState.current.calculateAccuracy();
 

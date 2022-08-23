@@ -18,6 +18,8 @@ typedef ArrowSkin = {
     var note_scale:Float;
 
     var sustain_scale:Float;
+
+    var is_quant:Bool;
 };
 
 class StrumNote extends FNFSprite {

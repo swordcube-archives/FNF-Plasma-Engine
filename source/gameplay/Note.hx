@@ -10,6 +10,19 @@ import systems.ExtraKeys;
 import systems.FNFSprite;
 
 class Note extends FNFSprite {
+    public static final quantColors:Array<Array<Int>> = [
+        [249, 57, 63],    // red
+        [83, 107, 239],   // blue
+        [194, 75, 153],   // purple
+        [0, 229, 80],     // green
+        [96, 103, 137],   // gray
+        [255, 122, 215],  // pink
+        [255, 232, 61],   // yellow
+        [174, 54, 230],   // purple but uglier
+        [15, 235, 255],   // cyan
+        [96, 103, 137],   // gray again
+    ];
+
     public static var swagWidth:Float = 160*0.7;
 
     public var rawStrumTime:Float = 0.0;
@@ -39,6 +52,8 @@ class Note extends FNFSprite {
     public var noteYOff:Int = 0;
 
     public var altAnim:Bool = false;
+
+    public var theColor:Array<Int> = [0, 0, 0];
     
     public function new(x:Float, y:Float, noteData:Int = 0, isSustain:Bool = false)
     {
@@ -50,14 +65,59 @@ class Note extends FNFSprite {
         colorSwap = new ColorShader(255, 255, 255);
 
         shader = colorSwap;
-        setColor();
     }
 
     public function setColor()
     {
-        var colorArray:Array<Int> = Init.arrowColors[parent != null ? parent.keyCount-1 : keyCount-1][noteData];
-        if(colorSwap != null && colorArray != null) // haxeflixel
-            colorSwap.setColors(colorArray[0], colorArray[1], colorArray[2]);
+        if(json.is_quant) {
+            // forever engine code lol!!!!!!!!!
+            // i have no fucking idea how quants work!!!
+            // https://github.com/Yoshubs/Forever-Engine-Legacy/blob/master/source/gameObjects/userInterface/notes/Note.hx#L193
+            // https://github.com/Yoshubs/Forever-Engine-Legacy/blob/master/source/gameObjects/userInterface/notes/Note.hx#L193
+            // https://github.com/Yoshubs/Forever-Engine-Legacy/blob/master/source/gameObjects/userInterface/notes/Note.hx#L193
+            // https://github.com/Yoshubs/Forever-Engine-Legacy/blob/master/source/gameObjects/userInterface/notes/Note.hx#L193
+            // https://github.com/Yoshubs/Forever-Engine-Legacy/blob/master/source/gameObjects/userInterface/notes/Note.hx#L193
+            // https://github.com/Yoshubs/Forever-Engine-Legacy/blob/master/source/gameObjects/userInterface/notes/Note.hx#L193
+            // https://github.com/Yoshubs/Forever-Engine-Legacy/blob/master/source/gameObjects/userInterface/notes/Note.hx#L193
+            // https://github.com/Yoshubs/Forever-Engine-Legacy/blob/master/source/gameObjects/userInterface/notes/Note.hx#L193
+
+			final quantArray:Array<Int> = [4, 8, 12, 16, 20, 24, 32, 48, 64, 192]; // different quants
+
+			var curBPM:Float = Conductor.bpm;
+			var newTime = rawStrumTime;
+			for (i in 0...Conductor.bpmChangeMap.length)
+			{
+				if (rawStrumTime > Conductor.bpmChangeMap[i].songTime)
+				{
+					curBPM = Conductor.bpmChangeMap[i].bpm;
+					newTime = rawStrumTime - Conductor.bpmChangeMap[i].songTime;
+				}
+			}
+
+			final beatTimeSeconds:Float = (60 / curBPM); // beat in seconds
+			final beatTime:Float = beatTimeSeconds * 1000; // beat in milliseconds
+			// assumed 4 beats per measure?
+			final measureTime:Float = beatTime * 4;
+
+			final smallestDeviation:Float = measureTime / quantArray[quantArray.length - 1];
+
+			for (quant in 0...quantArray.length)
+			{
+				final quantTime = (measureTime / quantArray[quant]);
+				if ((newTime + smallestDeviation) % quantTime < smallestDeviation * 2)
+				{
+                    theColor = quantColors[quant];
+					if(colorSwap != null)
+                        colorSwap.setColors(quantColors[quant][0], quantColors[quant][1], quantColors[quant][2]);
+					break;
+				}
+			}
+        } else {
+            var colorArray:Array<Int> = Init.arrowColors[parent != null ? parent.keyCount-1 : keyCount-1][noteData];
+            theColor = colorArray;
+            if(colorSwap != null && colorArray != null) // haxeflixel
+                colorSwap.setColors(colorArray[0], colorArray[1], colorArray[2]);
+        }
     }
 
     public function resetColor()
@@ -123,6 +183,8 @@ class Note extends FNFSprite {
             alpha = Settings.get("Opaque Sustains") ? 1 : 0.6;
             playAnim("hold");
         }
+
+        setColor();
     }
 
     override public function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame:Int = 0)

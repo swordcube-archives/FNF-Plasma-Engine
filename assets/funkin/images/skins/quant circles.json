@@ -1,6 +1,6 @@
 {
     "skin_type": "default",
-    "note_assets": "arrows/NOTE_assets",
+    "note_assets": "arrows/CIRCLENOTE_assets",
 
     "splash_assets": "splashes/NOTE_splashes",
 
@@ -11,5 +11,5 @@
 
     "sustain_scale": 0.7,
 
-    "is_quant": false
+    "is_quant": true
 }

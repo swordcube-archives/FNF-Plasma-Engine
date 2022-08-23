@@ -11,17 +11,12 @@ class NoteSplash extends FNFSprite
 {
 	public var started:Bool = false;
 
-	public var noteData:Int = 0;
-	public var keyCount:Int = 4;
-
 	public var parent:StrumLine;
 	public var colorSwap:ColorShader;
 
-	public function new(x:Float, y:Float, noteData:Int = 0, skin:String = "splashes/NOTE_splashes")
+	public function new(x:Float, y:Float, colors:Array<Int>, skin:String = "splashes/NOTE_splashes")
 	{
 		super(x, y);
-
-		this.noteData = noteData;
 		
 		frames = FNFAssets.returnAsset(SPARROW, skin);
 		animation.addByPrefix("splash1", "splash 1", 24, false);
@@ -41,7 +36,7 @@ class NoteSplash extends FNFSprite
 
 		colorSwap = new ColorShader(255, 255, 255);
 		shader = colorSwap;
-		setColor();
+		colorSwap.setColors(colors[0], colors[1], colors[2]);
 	}
 
 	override function update(elapsed:Float)
@@ -52,14 +47,6 @@ class NoteSplash extends FNFSprite
 			kill();
 			destroy();
 		}
-	}
-
-	public function setColor()
-	{
-		var colorArray:Array<Int> = Init.arrowColors[parent != null ? parent.keyCount - 1 : keyCount - 1][noteData];
-		
-		if (colorSwap != null && colorArray != null) // haxeflixel
-			colorSwap.setColors(colorArray[0], colorArray[1], colorArray[2]);
 	}
 
 	public function resetColor()
