@@ -35,7 +35,7 @@ function create() {
     bg.alpha = 0;
     add(bg);
 
-    var levelInfo:FlxText = new FlxText(20, 15, 0, PlayState_.SONG.song, 32);
+    var levelInfo:FlxText = new FlxText(20, 15, 0, PlayState_.actualSongName, 32);
     levelInfo.scrollFactor.set();
     levelInfo.setFormat(AssetPaths.font("vcr"), 32);
     levelInfo.updateHitbox();
@@ -129,7 +129,7 @@ function update(elapsed) {
 
                 default:
                     changingDifficulty = false;
-                    PlayState_.SONG = SongLoader.getJSON(PlayState_.SONG.song, menuItems[curSelected]);
+                    PlayState_.SONG = SongLoader.getJSON(PlayState_.actualSongName, menuItems[curSelected]);
                     Main.resetState();
             }
         }

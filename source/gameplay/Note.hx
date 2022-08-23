@@ -12,6 +12,7 @@ import systems.FNFSprite;
 class Note extends FNFSprite {
     public static var swagWidth:Float = 160*0.7;
 
+    public var rawStrumTime:Float = 0.0;
     public var strumTime:Float = 0.0;
 
     public var parent:StrumLine;

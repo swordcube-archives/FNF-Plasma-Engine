@@ -349,7 +349,7 @@ class PlayState extends MusicBeatState {
 			{
 				for(note in section.sectionNotes)
 				{
-					var strumTime:Float = note[0] + Settings.get("Note Offset");
+					var strumTime:Float = note[0];
 					var gottaHitNote:Bool = section.mustHitSection;
 					if (note[1] > (SONG.keyCount - 1))
 						gottaHitNote = !section.mustHitSection;
@@ -665,13 +665,14 @@ class PlayState extends MusicBeatState {
 	{
 		if(unspawnNotes[0] != null)
 		{
-			while (unspawnNotes.length > 0 && (unspawnNotes[0].strumTime - Conductor.position) < 2500 / scrollSpeed)
+			while (unspawnNotes.length > 0 && ((unspawnNotes[0].strumTime + Settings.get("Note Offset")) - Conductor.position) < 2500 / scrollSpeed)
 			{
 				var arrowSkin:String = currentSkin != "default" ? currentSkin : Settings.get("Arrow Skin").toLowerCase();
 
 				var dunceNote:Note = new Note(-9999, -9999, unspawnNotes[0].noteData, false);
 				dunceNote.stepCrochet = Conductor.stepCrochet;
-				dunceNote.strumTime = unspawnNotes[0].strumTime;
+				dunceNote.rawStrumTime = unspawnNotes[0].strumTime;
+				dunceNote.strumTime = unspawnNotes[0].strumTime + Settings.get("Note Offset");
 				dunceNote.mustPress = unspawnNotes[0].mustPress;
 				dunceNote.altAnim = unspawnNotes[0].altAnim;
 				dunceNote.parent = unspawnNotes[0].mustPress ? UI.playerStrums : UI.opponentStrums;
@@ -682,7 +683,8 @@ class PlayState extends MusicBeatState {
 				{
 					var susNote:Note = new Note(-9999, -9999, unspawnNotes[0].noteData, true);
 					susNote.stepCrochet = Conductor.stepCrochet;
-					susNote.strumTime = unspawnNotes[0].strumTime + (Conductor.stepCrochet * i) + Conductor.stepCrochet;
+					susNote.rawStrumTime = unspawnNotes[0].strumTime;
+					susNote.strumTime = dunceNote.strumTime + (Conductor.stepCrochet * i) + Conductor.stepCrochet;
 					susNote.mustPress = unspawnNotes[0].mustPress;
 					susNote.altAnim = unspawnNotes[0].altAnim;
 					susNote.parent = unspawnNotes[0].mustPress ? UI.playerStrums : UI.opponentStrums;

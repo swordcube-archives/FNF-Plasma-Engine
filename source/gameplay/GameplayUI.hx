@@ -76,7 +76,7 @@ class GameplayUI extends FlxGroup {
         insert(members.indexOf(playerStrums) - 1, laneUnderlayPlayer);
 
         // Text
-        songTxt = new FlxText(5, FlxG.height - 25, 0, '${PlayState.SONG.song} - ${PlayState.currentDifficulty.toUpperCase()}', 16);
+        songTxt = new FlxText(5, FlxG.height - 25, 0, '${PlayState.actualSongName} - ${PlayState.currentDifficulty.toUpperCase()}', 16);
         songTxt.setFormat(AssetPaths.font("vcr"), 16, FlxColor.WHITE, LEFT);
         songTxt.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
         add(songTxt);
