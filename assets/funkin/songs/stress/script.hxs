@@ -1,85 +1,89 @@
-var tankmanRun:Array<FlxSprite> = [];
-var strumTimes:Array<Float> = [];
+if(!Settings.get("Ultra Performance")) {
+    var tankmanRun:Array<FlxSprite> = [];
+    var strumTimes:Array<Float> = [];
 
-var tankSpeeds:Array<Float> = [];
-var endingOffsets:Array<Float> = [];
+    var tankSpeeds:Array<Float> = [];
+    var endingOffsets:Array<Float> = [];
 
-function createPost() {
-    var animNotes = Global.get("animationNotes");
-    for (i in 0...animNotes.length)
-    {
-        if (FlxG.random.bool(16))
+    function createPost() {
+        var animNotes = Global.get("animationNotes");
+        for (i in 0...animNotes.length)
         {
-            strumTimes.push(animNotes[i][0]);
-            tankSpeeds.push(FlxG.random.float(0.6, 1));
-            endingOffsets.push(FlxG.random.float(50, 200));
+            if (FlxG.random.bool(16))
+            {
+                strumTimes.push(animNotes[i][0]);
+                tankSpeeds.push(FlxG.random.float(0.6, 1));
+                endingOffsets.push(FlxG.random.float(50, 200));
 
-            var direction:Bool = (i % 2 == 0);
-            var johnShotNumber = FlxG.random.int(1, 2);
-            var man:FlxSprite = new FlxSprite(500, 200 + FlxG.random.int(50, 100));
-            man.frames = FNFAssets.getSparrow('stages/tank/tankmanKilled1');
-            man.animation.addByPrefix("run", "tankman running", 24);
-            man.animation.addByPrefix("shot", "John Shot " + johnShotNumber, 24, false);
-            man.setGraphicSize(Std.int(man.width * 0.8));
-            man.updateHitbox();
-            man.scrollFactor.set(0.95, 0.95);
-            man.antialiasing = Settings.get("Antialiasing");
-            man.flipX = !direction;
-            
-            man.animation.play("run");
+                var direction:Bool = (i % 2 == 0);
+                var johnShotNumber = FlxG.random.int(1, 2);
+                var man:FlxSprite = new FlxSprite(500, 200 + FlxG.random.int(50, 100));
+                man.frames = FNFAssets.getSparrow('stages/tank/tankmanKilled1');
+                man.animation.addByPrefix("run", "tankman running", 24);
+                man.animation.addByPrefix("shot", "John Shot " + johnShotNumber, 24, false);
+                man.setGraphicSize(Std.int(man.width * 0.8));
+                man.updateHitbox();
+                man.scrollFactor.set(0.95, 0.95);
+                man.antialiasing = Settings.get("Antialiasing");
+                man.flipX = !direction;
+                
+                man.animation.play("run");
 
-            tankmanRun.push(man);
-            Global.variables["tankmanRun"].add(man);
+                tankmanRun.push(man);
+                Global.variables["tankmanRun"].add(man);
+            }
         }
     }
-}
 
-function stepHit(curStep)
-{
-    switch(curStep)
+    function stepHit(curStep)
     {
-        case 736:
-            if(PlayState.dad != null)
-                PlayState.dad.canDance = false;
-        case 768:
-            if(PlayState.dad != null)
-                PlayState.dad.canDance = true;
-    }
-}
-
-function update(elapsed:Float) {
-    var i:Int = 0;
-    for(e in tankmanRun) {
-        if(e.x >= FlxG.width * 1.2 || e.x <= FlxG.width * -0.5)
-            e.visible = false;
-        else
-            e.visible = true;
-
-        if(e.animation.curAnim.name == 'run')
+        switch(curStep)
         {
-            var wackyShit:Float = FlxG.width * 0.74 + endingOffsets[i];
-            if (e.flipX)
-            {
-                wackyShit = FlxG.width * 0.02 - endingOffsets[i];
-                e.x = wackyShit + (Conductor.position - strumTimes[i]) * tankSpeeds[i];
-            }
+            case 736:
+                if(PlayState.dad != null)
+                    PlayState.dad.canDance = false;
+            case 768:
+                if(PlayState.dad != null)
+                    PlayState.dad.canDance = true;
+        }
+    }
+
+    function update(elapsed:Float) {
+        var i:Int = 0;
+        for(e in tankmanRun) {
+            if(e.x >= FlxG.width * 1.2 || e.x <= FlxG.width * -0.5)
+                e.visible = false;
             else
-                e.x = wackyShit - (Conductor.position - strumTimes[i]) * tankSpeeds[i];
-        }
-        
-        if (Conductor.position > strumTimes[i])
-        {
-            e.animation.play('shot');
-            if (e.flipX)
-            {
-                e.offset.y = 200;
-                e.offset.x = 300;
-            }
-        }
-        
-        if (e.animation.curAnim.name == 'shot' && e.animation.curAnim.curFrame >= e.animation.curAnim.frames.length - 1)
-            e.kill();
+                e.visible = true;
 
-        i++;
+            if(e.animation.curAnim.name == 'run')
+            {
+                var wackyShit:Float = FlxG.width * 0.74 + endingOffsets[i];
+                if (e.flipX)
+                {
+                    wackyShit = FlxG.width * 0.02 - endingOffsets[i];
+                    e.x = wackyShit + (Conductor.position - strumTimes[i]) * tankSpeeds[i];
+                }
+                else
+                    e.x = wackyShit - (Conductor.position - strumTimes[i]) * tankSpeeds[i];
+            }
+            
+            if (Conductor.position > strumTimes[i])
+            {
+                e.animation.play('shot');
+                if (e.flipX)
+                {
+                    e.offset.y = 200;
+                    e.offset.x = 300;
+                }
+            }
+            
+            if (e.animation.curAnim.name == 'shot' && e.animation.curAnim.curFrame >= e.animation.curAnim.frames.length - 1)
+                e.kill();
+
+            i++;
+        }
     }
+} else {
+    trace("We are not loading this script because Ultra Performance is on!");
 }

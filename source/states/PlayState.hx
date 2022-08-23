@@ -205,73 +205,77 @@ class PlayState extends MusicBeatState {
 
 		callOnHScripts("create");
 
-		stage = new Stage(SONG.stage != null ? SONG.stage : "stage");
-		add(stage);
+		if(!Settings.get("Ultra Performance")) {
+			stage = new Stage(SONG.stage != null ? SONG.stage : "stage");
+			add(stage);
+		}
 
 		callOnHScripts("createAfterStage");
 
-		var gfVersion:String = "gf";
+		if(!Settings.get("Ultra Performance")) {
+			var gfVersion:String = "gf";
 
-		if(SONG.player3 != null)
-			gfVersion = SONG.player3;
+			if(SONG.player3 != null)
+				gfVersion = SONG.player3;
 
-		// me when deprecated variable that makes me angy on compile >:(
-		//   -Raf
+			// me when deprecated variable that makes me angy on compile >:(
+			//   -Raf
 
-		// me when that breaks compatibility with some psych charts so we have it back and just make it not deprecated instead?
-		//   -Leather
+			// me when that breaks compatibility with some psych charts so we have it back and just make it not deprecated instead?
+			//   -Leather
 
-		if(SONG.gfVersion != null)
-			gfVersion = SONG.gfVersion;
+			if(SONG.gfVersion != null)
+				gfVersion = SONG.gfVersion;
 
-		if(SONG.gf != null)
-			gfVersion = SONG.gf;
+			if(SONG.gf != null)
+				gfVersion = SONG.gf;
 
-		gf = new Character(stage.gfPosition.x, stage.gfPosition.y, gfVersion);
-		gf.scrollFactor.set(0.95, 0.95);
-
-		if (gf.trail != null)
-			add(gf.trail);
-
-		add(gf);
-		add(stage.inFrontOfGFSprites);
-
-		dad = new Character(stage.dadPosition.x, stage.dadPosition.y, SONG.player2);
-		dad.isPlayer = false;
-
-		if (dad.trail != null)
-			add(dad.trail);
-
-		add(dad);
-
-		// what if i told you the dad was the impostor!?!!?!
-		if(dad.curCharacter == gf.curCharacter)
-		{
-			dad.goToPosition(stage.gfPosition.x, stage.gfPosition.y);
+			gf = new Character(stage.gfPosition.x, stage.gfPosition.y, gfVersion);
+			gf.scrollFactor.set(0.95, 0.95);
 
 			if (gf.trail != null)
-				remove(gf.trail, true);
+				add(gf.trail);
 
-			remove(gf, true);
-			gf.kill();
-			gf.destroy();
-			gf = null;
-		}
+			add(gf);
+			add(stage.inFrontOfGFSprites);
 
-		bf = new Boyfriend(stage.bfPosition.x, stage.bfPosition.y, SONG.player1);
-		bf.flipX = !bf.flipX;
+			dad = new Character(stage.dadPosition.x, stage.dadPosition.y, SONG.player2);
+			dad.isPlayer = false;
 
-		if (bf.trail != null)
-			add(bf.trail);
+			if (dad.trail != null)
+				add(dad.trail);
 
-		add(bf);
-		add(stage.foregroundSprites);
+			add(dad);
 
-		if(stage.script != null)
-		{
-			stage.script.set("dad", dad);
-			stage.script.set("gf", gf);
-			stage.script.set("bf", bf);
+			// what if i told you the dad was the impostor!?!!?!
+			if(dad.curCharacter == gf.curCharacter)
+			{
+				dad.goToPosition(stage.gfPosition.x, stage.gfPosition.y);
+
+				if (gf.trail != null)
+					remove(gf.trail, true);
+
+				remove(gf, true);
+				gf.kill();
+				gf.destroy();
+				gf = null;
+			}
+
+			bf = new Boyfriend(stage.bfPosition.x, stage.bfPosition.y, SONG.player1);
+			bf.flipX = !bf.flipX;
+
+			if (bf.trail != null)
+				add(bf.trail);
+
+			add(bf);
+			add(stage.foregroundSprites);
+
+			if(stage.script != null)
+			{
+				stage.script.set("dad", dad);
+				stage.script.set("gf", gf);
+				stage.script.set("bf", bf);
+			}
 		}
 
 		callOnHScripts("createAfterChars");
@@ -635,7 +639,24 @@ class PlayState extends MusicBeatState {
 				persistentDraw = false;
 
 				//openSubState(new GameOver(bf.x, bf.y, camFollowPos.x, camFollowPos.y, bf.deathCharacter));
-				openSubState(new ScriptedSubState('GameOver', [bf.x, bf.y, camFollowPos.x, camFollowPos.y, bf.deathCharacter]));
+				var deathInfo = {
+					x: 700.0,
+					y: 360.0,
+					camX: camFollowPos.x,
+					camY: camFollowPos.y,
+					deathChar: "bf-dead"
+				};
+
+				if(bf != null)
+					deathInfo = {
+						x: bf.x,
+						y: bf.y,
+						camX: camFollowPos.x,
+						camY: camFollowPos.y,
+						deathChar: bf.deathCharacter
+					};
+				
+				openSubState(new ScriptedSubState('GameOver', [deathInfo.x, deathInfo.y, deathInfo.camX, deathInfo.camY, deathInfo.deathChar]));
 			}
 		}
 
@@ -724,10 +745,16 @@ class PlayState extends MusicBeatState {
 		switch(onWho.toLowerCase())
 		{
 			case "dad":
-				if(dad == null) return trace("dad is null!!");
+				if(dad == null) {
+					camFollow.set(700, 360);
+					return;
+				};
 				camFollow.set(dad.getCamPos().x, dad.getCamPos().y);
 			case "bf":
-				if(bf == null) return trace("bf is null!!");
+				if(bf == null) {
+					camFollow.set(700, 360);
+					return;
+				}
 				camFollow.set(bf.getCamPos().x, bf.getCamPos().y);
 		}
 	}

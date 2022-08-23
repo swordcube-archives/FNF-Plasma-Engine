@@ -75,6 +75,13 @@
 
         {
             "page": "Appearance",
+            "name": "Ultra Performance",
+            "description": "Removes the background and characters from gameplay and leaves you with just the UI. Gives much better performance on worse pcs.",
+            "type": "Checkbox",
+            "defaultValue": false
+        },
+        {
+            "page": "Appearance",
             "name": "Photosensitive Mode",
             "description": "Disables photosensitive content such as flashing lights. (May not work on some mods!)",
             "type": "Checkbox",

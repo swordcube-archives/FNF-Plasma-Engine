@@ -7,7 +7,7 @@ using StringTools;
 
 class HealthIcon extends FlxSprite {
 	public var sprTracker:FlxSprite;
-	public var char:String = 'face';
+	public var char:String = '???';
 
 	public var isPlayer:Bool = false;
 
@@ -46,12 +46,10 @@ class HealthIcon extends FlxSprite {
 			var pixelIcons:Array<String> = CoolUtil.listFromText(FNFAssets.returnAsset(TEXT, AssetPaths.txt("pixelIcons")));
 
 			// check if the icon exists, otherwise use default face
-			var image = null;
+			var image = FNFAssets.returnAsset(IMAGE, AssetPaths.image('icons/face'));
 
 			if(FileSystem.exists(AssetPaths.image('icons/$char')))
 				image = FNFAssets.returnAsset(IMAGE, AssetPaths.image('icons/$char'));
-			else
-				image = FNFAssets.returnAsset(IMAGE, AssetPaths.image('icons/face'));
 
 			loadGraphic(image);
 
