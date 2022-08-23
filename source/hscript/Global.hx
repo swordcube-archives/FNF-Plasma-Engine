@@ -28,7 +28,9 @@ class Global
 			}
 			catch (e)
 			{
+				#if DEBUG_PRINTING
 				trace(e.details(), true);
+				#end
 			}
 		}
     }

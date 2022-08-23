@@ -42,6 +42,7 @@ class HScript {
 
     public static var function_continue:String = "FUNCTION_CONTINUE";
     public static var function_stop:String = "FUNCTION_STOP";
+    public static var function_stop_script:String = "FUNCTION_STOP_SCRIPT";
 
     public static var hscriptExts:Array<String> = [
         ".hxs",
@@ -177,6 +178,7 @@ class HScript {
             // Game classes
             set("function_continue", function_continue);
             set("function_stop", function_stop);
+            set("function_stop_script", function_stop_script);
 
             set("Global", Global);
             set("CoolUtil", CoolUtil);
@@ -258,7 +260,9 @@ class HScript {
             program = parser.parseString(script);
 
             interp.errorHandler = function(e:hscript.Error) {
+                #if DEBUG_PRINTING
                 trace('$e');
+                #end
                 if(!flixel.FlxG.keys.pressed.SHIFT) {
                     var posInfo = interp.posInfos();
 
@@ -327,7 +331,7 @@ class HScript {
 	public function call(func:String, ?args:Array<Dynamic>):Dynamic
 	{
 		if (!executedScript)
-			return null;
+			return function_continue;
 
 		if (interp.variables.exists(func))
 		{
@@ -335,7 +339,7 @@ class HScript {
 			try
 			{
 				if (args == null)
-					return Reflect.callMethod(null, real_func, []);
+					return real_func();
 				else
 					return Reflect.callMethod(null, real_func, args);
 			}
@@ -349,7 +353,7 @@ class HScript {
 		for (otherScript in otherScripts)
 			otherScript.call(func, args);
 
-        return null;
+        return function_continue;
 	}
 
     public function set(variable:String, value:Dynamic) {

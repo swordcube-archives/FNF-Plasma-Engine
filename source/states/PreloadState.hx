@@ -139,14 +139,18 @@ class PreloadState extends MusicBeatState {
 			graph.persist = true;
 			graph.destroyOnNoUse = false;
 			FNFAssets.permCache.set(i+":IMAGE", graph);
+            #if DEBUG_PRINTING
             trace("LOADED IMAGE "+i);
+            #end
         }
 
 		for (i in sounds)
 		{
             loadedSoFar++;
             FNFAssets.permCache.set(i+":SOUND", Sound.fromFile(i));
+            #if DEBUG_PRINTING
 			trace("LOADED SOUND "+i);
+            #end
 		}
 
         Main.fpsCounter.visible = true;

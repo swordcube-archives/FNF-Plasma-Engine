@@ -110,7 +110,9 @@ class Stage extends FlxGroup {
                 
 				if(FileSystem.exists(path))
 				{
+                    #if DEBUG_PRINTING
 					Main.print('trace', 'Trying to run "stages/$curStage"');
+                    #end
 					script = new HScript('stages/$curStage');
                     script.set("stage", this);
 					script.set("add", this.addSprite);

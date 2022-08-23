@@ -26,8 +26,6 @@ function getIntroTextShit() {
 }
 
 function startIntro() {
-    //trace("PLAYING MUSIC OR SOMETHING!");
-
     if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
     {
         FlxG.sound.playMusic(freakyMenu, 0);

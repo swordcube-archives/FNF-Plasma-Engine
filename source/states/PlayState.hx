@@ -461,62 +461,66 @@ class PlayState extends MusicBeatState {
 	public var countdownTimer:FlxTimer;
 
 	public var countdownTick:Int = 0;
+
 	public function startCountdown()
 	{		
-		countdownTimer = new FlxTimer().start(Conductor.crochet / 1000.0, function(tmr:FlxTimer) {
-			if(dad != null)
-				dad.dance();
+		var ret:Dynamic = callOnHScripts("startCountdown", [], false);
+		if(ret != HScript.function_stop) {
+			countdownTimer = new FlxTimer().start(Conductor.crochet / 1000.0, function(tmr:FlxTimer) {
+				if(dad != null)
+					dad.dance();
 
-			if(gf != null)
-				gf.dance();
+				if(gf != null)
+					gf.dance();
 
-			if(bf != null)
-				bf.dance();
+				if(bf != null)
+					bf.dance();
 
-			switch(countdownTick)
-			{
-				case 0:
-					callOnHScripts("countdownTick", [countdownTick]);
-					FlxG.sound.play(countdownSounds["preready"]);
-					countdownPreReady.loadGraphic(countdownGraphics["preready"]);
-					countdownPreReady.scale.set(countdownScale, countdownScale);
-					countdownPreReady.updateHitbox();
-					countdownPreReady.screenCenter();
-					countdownPreReady.alpha = 1;
-					FlxTween.tween(countdownPreReady, { alpha: 0 }, Conductor.crochet / 1000.0, { ease: FlxEase.cubeInOut });
-				case 1:
-					callOnHScripts("countdownTick", [countdownTick]);
-					FlxG.sound.play(countdownSounds["ready"]);
-					countdownReady.loadGraphic(countdownGraphics["ready"]);
-					countdownReady.scale.set(countdownScale, countdownScale);
-					countdownReady.updateHitbox();
-					countdownReady.screenCenter();
-					countdownReady.alpha = 1;
-					FlxTween.tween(countdownReady, { alpha: 0 }, Conductor.crochet / 1000.0, { ease: FlxEase.cubeInOut });
-				case 2:
-					callOnHScripts("countdownTick", [countdownTick]);
-					FlxG.sound.play(countdownSounds["set"]);
-					countdownSet.loadGraphic(countdownGraphics["set"]);
-					countdownSet.scale.set(countdownScale, countdownScale);
-					countdownSet.updateHitbox();
-					countdownSet.screenCenter();
-					countdownSet.alpha = 1;
-					FlxTween.tween(countdownSet, { alpha: 0 }, Conductor.crochet / 1000.0, { ease: FlxEase.cubeInOut });
-				case 3:
-					callOnHScripts("countdownTick", [countdownTick]);
-					FlxG.sound.play(countdownSounds["go"]);
-					countdownGo.loadGraphic(countdownGraphics["go"]);
-					countdownGo.scale.set(countdownScale, countdownScale);
-					countdownGo.updateHitbox();
-					countdownGo.screenCenter();
-					countdownGo.alpha = 1;
-					FlxTween.tween(countdownGo, { alpha: 0 }, Conductor.crochet / 1000.0, { ease: FlxEase.cubeInOut });
-				case 4:
-					callOnHScripts("countdownTick", [countdownTick]);
-			}
+				switch(countdownTick)
+				{
+					case 0:
+						callOnHScripts("countdownTick", [countdownTick]);
+						FlxG.sound.play(countdownSounds["preready"]);
+						countdownPreReady.loadGraphic(countdownGraphics["preready"]);
+						countdownPreReady.scale.set(countdownScale, countdownScale);
+						countdownPreReady.updateHitbox();
+						countdownPreReady.screenCenter();
+						countdownPreReady.alpha = 1;
+						FlxTween.tween(countdownPreReady, { alpha: 0 }, Conductor.crochet / 1000.0, { ease: FlxEase.cubeInOut });
+					case 1:
+						callOnHScripts("countdownTick", [countdownTick]);
+						FlxG.sound.play(countdownSounds["ready"]);
+						countdownReady.loadGraphic(countdownGraphics["ready"]);
+						countdownReady.scale.set(countdownScale, countdownScale);
+						countdownReady.updateHitbox();
+						countdownReady.screenCenter();
+						countdownReady.alpha = 1;
+						FlxTween.tween(countdownReady, { alpha: 0 }, Conductor.crochet / 1000.0, { ease: FlxEase.cubeInOut });
+					case 2:
+						callOnHScripts("countdownTick", [countdownTick]);
+						FlxG.sound.play(countdownSounds["set"]);
+						countdownSet.loadGraphic(countdownGraphics["set"]);
+						countdownSet.scale.set(countdownScale, countdownScale);
+						countdownSet.updateHitbox();
+						countdownSet.screenCenter();
+						countdownSet.alpha = 1;
+						FlxTween.tween(countdownSet, { alpha: 0 }, Conductor.crochet / 1000.0, { ease: FlxEase.cubeInOut });
+					case 3:
+						callOnHScripts("countdownTick", [countdownTick]);
+						FlxG.sound.play(countdownSounds["go"]);
+						countdownGo.loadGraphic(countdownGraphics["go"]);
+						countdownGo.scale.set(countdownScale, countdownScale);
+						countdownGo.updateHitbox();
+						countdownGo.screenCenter();
+						countdownGo.alpha = 1;
+						FlxTween.tween(countdownGo, { alpha: 0 }, Conductor.crochet / 1000.0, { ease: FlxEase.cubeInOut });
+					case 4:
+						callOnHScripts("countdownTick", [countdownTick]);
+				}
 
-			countdownTick++;
-		}, 5);
+				countdownTick++;
+			}, 5);
+		}
 	}
 
 	function kindaEndSong()
@@ -538,19 +542,29 @@ class PlayState extends MusicBeatState {
 			
 			endingSong = true;
 
-			var ret:Dynamic = callOnHScripts("endSong", [actualSongName]);
-
-			FlxG.sound.music.stop();
-			vocals.stop();
-
-			FlxG.sound.music.time = 0;
-			FlxG.sound.playMusic(freakyMenu);
+			var ret:Dynamic = callOnHScripts("endSong", [actualSongName], false);
 			
 			if(!usedPractice && songScore > Highscore.getScore(actualSongName+"-"+currentDifficulty))
 				Highscore.setScore(actualSongName+"-"+currentDifficulty, songScore);
+
+			for(object in [UI.timeBarBG, UI.timeBar, UI.timeTxt]) {
+				if(object != null) {
+					UI.remove(object, true);
+					object.kill();
+					object.destroy();
+					object = null;
+				}
+			}
+			UI.timeBarScript = null;
 			
 			if(ret != HScript.function_stop)
 			{
+				FlxG.sound.music.stop();
+				vocals.stop();
+	
+				FlxG.sound.music.time = 0;
+				FlxG.sound.playMusic(freakyMenu);
+				
 				if(isStoryMode)
 				{
 					trace("die, now.");
@@ -589,7 +603,7 @@ class PlayState extends MusicBeatState {
 			openSubState(new ScriptedSubState('Logs'));
 		}
 
-		if(UIControls.justPressed("BACK"))
+		if(!endingSong && UIControls.justPressed("BACK"))
 		{
 			persistentUpdate = false;
 			persistentDraw = true;
@@ -599,7 +613,7 @@ class PlayState extends MusicBeatState {
 			kindaEndSong();
 		}
 
-		if(!inCutscene && !UIControls.justPressed("BACK") && UIControls.justPressed("PAUSE"))
+		if(!inCutscene && !endingSong && !UIControls.justPressed("BACK") && UIControls.justPressed("PAUSE"))
 		{
 			logsOpen = false;
 			
@@ -609,7 +623,7 @@ class PlayState extends MusicBeatState {
 			openSubState(new substates.PauseMenu());
 		}
 
-		if(!inCutscene)
+		if(!inCutscene && !endingSong)
 		{
 			Conductor.position += elapsed * 1000.0;
 			if(Conductor.position >= 0.0 && !startedSong)
@@ -618,10 +632,8 @@ class PlayState extends MusicBeatState {
 
 		if(startedSong && !endingSong)
 		{
-			discordRPCTimer += elapsed;
-			if(discordRPCTimer > 1.0)
-			{
-				discordRPCTimer = 0.0;
+			var ret:Dynamic = callOnHScripts("discordRPCUpdate", [], false);
+			if(ret != HScript.function_stop) {
 				DiscordRPC.changePresence(
 					'Playing ${SONG.song} on ${CoolUtil.firstLetterUppercase(currentDifficulty)}',
 					'Time remaining: ${FlxStringUtil.formatTime((FlxG.sound.music.length-FlxG.sound.music.time)/1000.0)} / ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)}'
@@ -633,30 +645,33 @@ class PlayState extends MusicBeatState {
 		{
 			health = minHealth;
 
-			if(!practiceMode)
-			{
-				persistentUpdate = false;
-				persistentDraw = false;
+			var ret:Dynamic = callOnHScripts("gameOver", [], false);
 
-				//openSubState(new GameOver(bf.x, bf.y, camFollowPos.x, camFollowPos.y, bf.deathCharacter));
-				var deathInfo = {
-					x: 700.0,
-					y: 360.0,
-					camX: camFollowPos.x,
-					camY: camFollowPos.y,
-					deathChar: "bf-dead"
-				};
+			if(ret != HScript.function_stop) {
+				if(!practiceMode) {
+					persistentUpdate = false;
+					persistentDraw = false;
 
-				if(bf != null)
-					deathInfo = {
-						x: bf.x,
-						y: bf.y,
+					//openSubState(new GameOver(bf.x, bf.y, camFollowPos.x, camFollowPos.y, bf.deathCharacter));
+					var deathInfo = {
+						x: 700.0,
+						y: 360.0,
 						camX: camFollowPos.x,
 						camY: camFollowPos.y,
-						deathChar: bf.deathCharacter
+						deathChar: "bf-dead"
 					};
-				
-				openSubState(new ScriptedSubState('GameOver', [deathInfo.x, deathInfo.y, deathInfo.camX, deathInfo.camY, deathInfo.deathChar]));
+
+					if(bf != null)
+						deathInfo = {
+							x: bf.x,
+							y: bf.y,
+							camX: camFollowPos.x,
+							camY: camFollowPos.y,
+							deathChar: bf.deathCharacter
+						};
+					
+					openSubState(new ScriptedSubState('GameOver', [deathInfo.x, deathInfo.y, deathInfo.camX, deathInfo.camY, deathInfo.deathChar]));
+				}
 			}
 		}
 
@@ -840,20 +855,20 @@ class PlayState extends MusicBeatState {
 		FlxG.cameras.add(camNotif, false);
 	}
 
-	public function callOnHScripts(func:String, ?args:Null<Array<Dynamic>>):Dynamic
+	public function callOnHScripts(func:String, ?args:Null<Array<Dynamic>>, ignoreStops = true):Dynamic
 	{
 		var returnVal:Dynamic = HScript.function_continue;
-		for(script in scripts)
-		{
+		for(script in scripts) {
 			var ret:Dynamic = script.call(func, args);
-			if(ret == HScript.function_stop)
+
+			if(ret == HScript.function_stop_script && !ignoreStops)
 				break;
 
 			var bool:Bool = ret == HScript.function_continue;
 			if(!bool)
 				returnVal = cast ret;
 		}
-		
+
 		return returnVal;
 	}
 
