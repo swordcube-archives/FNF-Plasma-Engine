@@ -1,15 +1,11 @@
 package hscript;
 
-import flixel.FlxCamera.FlxCameraFollowStyle;
 import flixel.FlxG;
-import flixel.text.FlxText.FlxTextAlign;
-import flixel.text.FlxText.FlxTextBorderStyle;
 import haxe.Exception;
 import hscript.Expr.Error;
 import hscript.Interp;
 import hscript.Parser;
 import lime.app.Application;
-import openfl.display.BlendMode;
 import states.PlayState;
 import sys.FileSystem;
 import sys.thread.Thread;
@@ -118,6 +114,8 @@ class HScript {
             set("FlxTween", flixel.tweens.FlxTween);
             set("FlxEase", flixel.tweens.FlxEase);
 
+            set("Reflect", Reflect);
+
             set("FlxGroup", flixel.group.FlxGroup);
             set("FlxTypedGroup", flixel.group.FlxGroup.FlxTypedGroup);
             set("FlxSpriteGroup", flixel.group.FlxSpriteGroup);
@@ -164,6 +162,7 @@ class HScript {
 
             set("BlendMode", HScriptHelpers.getBlendMode());
             set("isDebugBuild", #if debug true #else false #end);
+            set("currentOS", Main.getOS());
 
             // Game functions
             set("loadScript", function(scriptPath:String, ?args:Array<Any>)

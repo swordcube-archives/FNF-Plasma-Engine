@@ -111,6 +111,10 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 	var noteSortTimer:Float = 0.0;
 
+	var justPressed:Array<Bool> = [];
+	var pressed:Array<Bool> = [];
+	var noteDataTimes:Array<Float> = [];
+
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
@@ -147,10 +151,6 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 					return sortNotes(FlxSort.DESCENDING, Obj1, Obj2);
 				});
 			}
-
-            var justPressed:Array<Bool> = [];
-            var pressed:Array<Bool> = [];
-            var noteDataTimes:Array<Float> = [];
 
             if(hasInput)
             {
@@ -200,6 +200,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                             PlayState.current.totalNotes++;
                             PlayState.current.calculateAccuracy();
 
+							PlayState.current.callOnHScripts("noteMiss", [note]);
 							PlayState.current.UI.healthBarScript.call("updateScoreText");
 						}
 

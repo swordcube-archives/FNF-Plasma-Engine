@@ -57,6 +57,28 @@ class Main extends Sprite
 		});
 	}
 
+	public static function getOS()
+	{
+		#if windows
+		return "Windows";
+		#end
+		#if html5
+		return "HTML5";
+		#end
+		#if mac
+		return "Mac";
+		#end
+		#if linux
+		return "Linux";
+		#end
+		#if android
+		return "Android";
+		#end
+
+		// Fallback if we can't find the OS the user is on
+		return "Unknown";
+	}
+
 	public static function getSizeLabel(num:Int):String
 	{
 		// 2147483648 is 2048 mb btw lmao
