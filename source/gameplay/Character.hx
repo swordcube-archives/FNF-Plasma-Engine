@@ -431,6 +431,13 @@ class Character extends FNFSprite
 
 	var danced:Bool = false;
 
+	override public function draw():Void {
+		//if(trail != null)
+		//	trail.draw();
+		// didn't work :skull:
+		super.draw();
+	}
+
 	public function dance()
 	{
 		if (isLikeGF)
