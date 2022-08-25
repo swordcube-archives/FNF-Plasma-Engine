@@ -53,7 +53,7 @@ class Conductor {
     /**
         The amount of safe frames you get when hitting notes.
     **/
-	public static var safeFrames:Float = 11.5;
+	public static var safeFrames:Float = 10.0;
 
     /**
         safeFrames but in milliseconds.

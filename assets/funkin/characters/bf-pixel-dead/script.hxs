@@ -10,8 +10,8 @@ function create() {
     character.animation.addByPrefix('deathConfirm', "RETRY CONFIRM", 24, false);
 
     character.setOffset('firstDeath');
-    character.setOffset('deathLoop');
-    character.setOffset('deathConfirm');
+    character.setOffset('deathLoop', -30, -12);
+    character.setOffset('deathConfirm', -26, -12);
 
     character.setGraphicSize(Std.int(character.width * 6));
     character.updateHitbox();
