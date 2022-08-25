@@ -440,25 +440,25 @@ class Character extends FNFSprite
 
 	public function dance()
 	{
-		if (isLikeGF)
-		{
-			if (canDance)
+		if (canDance) {
+			if (isLikeGF)
 			{
-				if ((animation.curAnim != null && (animation.curAnim.name != "hairBlow" || animation.curAnim.name != "hairFall")) || animation.curAnim == null)
 				{
-					danced = !danced;
+					if ((animation.curAnim != null && (animation.curAnim.name != "hairBlow" || animation.curAnim.name != "hairFall")) || animation.curAnim == null)
+					{
+						danced = !danced;
 					
-					if (danced)
-						playAnim("danceRight");
+						if (danced)
+							playAnim("danceRight");
 					else
 						playAnim("danceLeft");
+					}
 				}
 			}
-		}
-		else
-		{
-			if (canDance)
+			else
+			{
 				playAnim("idle");
+			}
 		}
 	}
 }
