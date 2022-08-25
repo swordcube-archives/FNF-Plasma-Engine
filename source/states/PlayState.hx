@@ -206,13 +206,6 @@ class PlayState extends MusicBeatState {
 		callOnHScripts("create");
 
 		if(!Settings.get("Ultra Performance")) {
-			stage = new Stage(SONG.stage != null ? SONG.stage : "stage");
-			add(stage);
-		}
-
-		callOnHScripts("createAfterStage");
-
-		if(!Settings.get("Ultra Performance")) {
 			var gfVersion:String = "gf";
 
 			if(SONG.player3 != null)
@@ -230,28 +223,36 @@ class PlayState extends MusicBeatState {
 			if(SONG.gf != null)
 				gfVersion = SONG.gf;
 
+			stage = new Stage(SONG.stage != null ? SONG.stage : "stage");
+			add(stage);
+
 			gf = new Character(stage.gfPosition.x, stage.gfPosition.y, gfVersion);
 			gf.scrollFactor.set(0.95, 0.95);
-
-			if (gf.trail != null)
-				add(gf.trail);
-
-			add(gf);
-			add(stage.inFrontOfGFSprites);
 
 			dad = new Character(stage.dadPosition.x, stage.dadPosition.y, SONG.player2);
 			dad.isPlayer = false;
 
+			bf = new Boyfriend(stage.bfPosition.x, stage.bfPosition.y, SONG.player1);
+			bf.flipX = !bf.flipX;
+
+
+			if (gf.trail != null)
+				stage.add(gf.trail);
+			stage.add(gf);
+			stage.script.call("create_gf");
 			if (dad.trail != null)
-				add(dad.trail);
-
-			add(dad);
-
-			// what if i told you the dad was the impostor!?!!?!
-			if(dad.curCharacter == gf.curCharacter)
-			{
-				dad.goToPosition(stage.gfPosition.x, stage.gfPosition.y);
-
+				stage.add(dad.trail);
+			stage.add(dad);
+			stage.script.call("create_dad");
+			if (bf.trail != null)
+				stage.add(bf.trail);
+			stage.add(bf);
+			stage.script.call("create_bf");
+			stage.script.call("create_front");
+			
+			if(dad.curCharacter == gf.curCharacter) {
+				dad.goToPosition(gf.x, gf.y);
+	
 				if (gf.trail != null)
 					remove(gf.trail, true);
 
@@ -260,25 +261,7 @@ class PlayState extends MusicBeatState {
 				gf.destroy();
 				gf = null;
 			}
-
-			bf = new Boyfriend(stage.bfPosition.x, stage.bfPosition.y, SONG.player1);
-			bf.flipX = !bf.flipX;
-
-			if (bf.trail != null)
-				add(bf.trail);
-
-			add(bf);
-			add(stage.foregroundSprites);
-
-			if(stage.script != null)
-			{
-				stage.script.set("dad", dad);
-				stage.script.set("gf", gf);
-				stage.script.set("bf", bf);
-			}
 		}
-
-		callOnHScripts("createAfterChars");
 
 		// load the song script
 		var path:String = 'songs/${actualSongName.toLowerCase()}/script';
@@ -311,17 +294,17 @@ class PlayState extends MusicBeatState {
 
 		// precache the countdown bullshit
 		countdownGraphics = [
-			"preready"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(countdownImageLocation+"/"+"preready")),
-			"ready"      => FNFAssets.returnAsset(IMAGE, AssetPaths.image(countdownImageLocation+"/"+"ready")),
-			"set"        => FNFAssets.returnAsset(IMAGE, AssetPaths.image(countdownImageLocation+"/"+"set")),
-			"go"         => FNFAssets.returnAsset(IMAGE, AssetPaths.image(countdownImageLocation+"/"+"go")),
+			"preready"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(countdownImageLocation+"/preready")),
+			"ready"      => FNFAssets.returnAsset(IMAGE, AssetPaths.image(countdownImageLocation+"/ready")),
+			"set"        => FNFAssets.returnAsset(IMAGE, AssetPaths.image(countdownImageLocation+"/set")),
+			"go"         => FNFAssets.returnAsset(IMAGE, AssetPaths.image(countdownImageLocation+"/go")),
 		];
 
 		countdownSounds = [
-			"preready"   => FNFAssets.returnAsset(SOUND, AssetPaths.sound(countdownSoundLocation+"/"+"intro3")),
-			"ready"      => FNFAssets.returnAsset(SOUND, AssetPaths.sound(countdownSoundLocation+"/"+"intro2")),
-			"set"        => FNFAssets.returnAsset(SOUND, AssetPaths.sound(countdownSoundLocation+"/"+"intro1")),
-			"go"         => FNFAssets.returnAsset(SOUND, AssetPaths.sound(countdownSoundLocation+"/"+"introGo")),
+			"preready"   => FNFAssets.returnAsset(SOUND, AssetPaths.sound(countdownSoundLocation+"/intro3")),
+			"ready"      => FNFAssets.returnAsset(SOUND, AssetPaths.sound(countdownSoundLocation+"/intro2")),
+			"set"        => FNFAssets.returnAsset(SOUND, AssetPaths.sound(countdownSoundLocation+"/intro1")),
+			"go"         => FNFAssets.returnAsset(SOUND, AssetPaths.sound(countdownSoundLocation+"/introGo")),
 		];
 
 		countdownPreReady.cameras = [camHUD];
@@ -403,11 +386,11 @@ class PlayState extends MusicBeatState {
 	function getRatingCache(ratingPath:String = "ratings/default")
 	{
 		return [
-			"marvelous"  => FNFAssets.returnAsset(IMAGE, AssetPaths.image(ratingPath+"/"+"marvelous")),
-			"sick"       => FNFAssets.returnAsset(IMAGE, AssetPaths.image(ratingPath+"/"+"sick")),
-			"good"       => FNFAssets.returnAsset(IMAGE, AssetPaths.image(ratingPath+"/"+"good")),
-			"bad"        => FNFAssets.returnAsset(IMAGE, AssetPaths.image(ratingPath+"/"+"bad")),
-			"shit"       => FNFAssets.returnAsset(IMAGE, AssetPaths.image(ratingPath+"/"+"shit")),
+			"marvelous"  => FNFAssets.returnAsset(IMAGE, AssetPaths.image(ratingPath+"/marvelous")),
+			"sick"       => FNFAssets.returnAsset(IMAGE, AssetPaths.image(ratingPath+"/sick")),
+			"good"       => FNFAssets.returnAsset(IMAGE, AssetPaths.image(ratingPath+"/good")),
+			"bad"        => FNFAssets.returnAsset(IMAGE, AssetPaths.image(ratingPath+"/bad")),
+			"shit"       => FNFAssets.returnAsset(IMAGE, AssetPaths.image(ratingPath+"/shit")),
 		];
 	}
 
@@ -415,30 +398,30 @@ class PlayState extends MusicBeatState {
 	{
 		return [
 			"marvelous"  => [
-				"combo"  => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/"+"combo")),
-				"num0"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/"+"num0")),
-				"num1"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/"+"num1")),
-				"num2"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/"+"num2")),
-				"num3"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/"+"num3")),
-				"num4"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/"+"num4")),
-				"num5"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/"+"num5")),
-				"num6"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/"+"num6")),
-				"num7"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/"+"num7")),
-				"num8"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/"+"num8")),
-				"num9"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/"+"num9")),
+				"combo"  => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/combo")),
+				"num0"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/num0")),
+				"num1"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/num1")),
+				"num2"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/num2")),
+				"num3"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/num3")),
+				"num4"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/num4")),
+				"num5"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/num5")),
+				"num6"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/num6")),
+				"num7"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/num7")),
+				"num8"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/num8")),
+				"num9"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/marvelous/num9")),
 			],
 			"default"    => [
-				"combo"  => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/"+"combo")),
-				"num0"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/"+"num0")),
-				"num1"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/"+"num1")),
-				"num2"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/"+"num2")),
-				"num3"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/"+"num3")),
-				"num4"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/"+"num4")),
-				"num5"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/"+"num5")),
-				"num6"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/"+"num6")),
-				"num7"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/"+"num7")),
-				"num8"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/"+"num8")),
-				"num9"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/"+"num9")),
+				"combo"  => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/combo")),
+				"num0"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/num0")),
+				"num1"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/num1")),
+				"num2"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/num2")),
+				"num3"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/num3")),
+				"num4"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/num4")),
+				"num5"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/num5")),
+				"num6"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/num6")),
+				"num7"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/num7")),
+				"num8"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/num8")),
+				"num9"   => FNFAssets.returnAsset(IMAGE, AssetPaths.image(comboPath+"/num9")),
 			],
 		];
 	}
@@ -858,6 +841,17 @@ class PlayState extends MusicBeatState {
 	public function callOnHScripts(func:String, ?args:Null<Array<Dynamic>>, ignoreStops = true):Dynamic
 	{
 		var returnVal:Dynamic = HScript.function_continue;
+
+		// stages are separate cuz sword doesn't let me use push() >:((((
+
+		if (stage != null) {
+			var s_ret:Dynamic = stage.script.call(func, args);
+
+			var s_bool:Bool = s_ret == HScript.function_continue;
+			if(!s_bool == true)
+				returnVal = cast s_ret;
+		}
+
 		for(script in scripts) {
 			var ret:Dynamic = script.call(func, args);
 

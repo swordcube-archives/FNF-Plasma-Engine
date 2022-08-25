@@ -5,7 +5,6 @@ var tankmanRun:FlxGroup;
 var tanks:Array<BGSprite> = [];
 
 function create() {
-    removeStage();
     PlayState.defaultCamZoom = 0.9;
 
     stage.dadPosition.set(20, 100);
@@ -57,36 +56,38 @@ function create() {
 
     moveTank();
 
-    var tankdude0:BGSprite = new BGSprite('stages/tank/tank0', -500, 650, 1.7, 1.5, ['fg']);
-    tanks.push(tankdude0);
-    add(tankdude0, 'front');
-    
-    var tankdude1:BGSprite = new BGSprite('stages/tank/tank1', -300, 750, 2, 0.2, ['fg']);
-    tanks.push(tankdude1);
-    add(tankdude1, 'front');
-    
-    var tankdude2:BGSprite = new BGSprite('stages/tank/tank2', 450, 940, 1.5, 1.5, ['foreground']);
-    tanks.push(tankdude2);
-    add(tankdude2, 'front');
-    
-    var tankdude4:BGSprite = new BGSprite('stages/tank/tank4', 1300, 900, 1.5, 1.5, ['fg']);
-    tanks.push(tankdude4);
-    add(tankdude4, 'front');
-    
-    var tankdude5:BGSprite = new BGSprite('stages/tank/tank5', 1620, 700, 1.5, 1.5, ['fg']);
-    tanks.push(tankdude5);
-    add(tankdude5, 'front');
-    
-    var tankdude3:BGSprite = new BGSprite('stages/tank/tank3', 1300, 1200, 3.5, 2.5, ['fg']);
-    tanks.push(tankdude3);
-    add(tankdude3, 'front');
-
     Global.set("tankGround", tankGround);
     Global.set("tankmanRun", tankmanRun);
 }
 
 function update() {
     moveTank();
+}
+
+function create_front() {
+    var tankdude0:BGSprite = new BGSprite('stages/tank/tank0', -500, 650, 1.7, 1.5, ['fg']);
+    tanks.push(tankdude0);
+    add(tankdude0);
+    
+    var tankdude1:BGSprite = new BGSprite('stages/tank/tank1', -300, 750, 2, 0.2, ['fg']);
+    tanks.push(tankdude1);
+    add(tankdude1);
+    
+    var tankdude2:BGSprite = new BGSprite('stages/tank/tank2', 450, 940, 1.5, 1.5, ['foreground']);
+    tanks.push(tankdude2);
+    add(tankdude2);
+    
+    var tankdude4:BGSprite = new BGSprite('stages/tank/tank4', 1300, 900, 1.5, 1.5, ['fg']);
+    tanks.push(tankdude4);
+    add(tankdude4);
+    
+    var tankdude5:BGSprite = new BGSprite('stages/tank/tank5', 1620, 700, 1.5, 1.5, ['fg']);
+    tanks.push(tankdude5);
+    add(tankdude5);
+    
+    var tankdude3:BGSprite = new BGSprite('stages/tank/tank3', 1300, 1200, 3.5, 2.5, ['fg']);
+    tanks.push(tankdude3);
+    add(tankdude3);
 }
 
 function countdownTick() {

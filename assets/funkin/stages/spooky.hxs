@@ -6,7 +6,6 @@ var lightningStrikeBeat:Int = 0;
 var lightningOffset:Int = 8;
 
 function create() {
-    removeStage();
     PlayState.defaultCamZoom = 1.05;
 
     thunder1 = FNFAssets.getSound(AssetPaths.sound('thunder_1'));
