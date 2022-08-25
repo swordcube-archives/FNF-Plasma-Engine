@@ -13,11 +13,6 @@ function create() {
     character.setOffset('deathLoop');
     character.setOffset('deathConfirm');
 
-    character.cameraPosition.x -= 150;
-    character.cameraPosition.y -= 160;
-
-    character.positionOffset.y += 350;
-
     character.setGraphicSize(Std.int(character.width * 6));
     character.updateHitbox();
 
