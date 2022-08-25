@@ -523,7 +523,7 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	function kindaEndSong()
+	public function kindaEndSong()
 	{
 		FlxG.sound.music.stop();
 		vocals.stop();
@@ -533,7 +533,22 @@ class PlayState extends MusicBeatState {
 		Main.switchState(getMenuToSwitchTo());
 	}
 
-	function endSong()
+	public function finishSong(?ignoreNoteOffset:Bool = false)
+	{
+		FlxG.sound.music.stop();
+		vocals.stop();
+
+		FlxG.sound.music.time = 0;
+		if(Settings.get("Note Offset") <= 0 || ignoreNoteOffset) {
+			endSong();
+		} else {
+			new FlxTimer().start(Settings.get("Note Offset") / 1000, function(tmr:FlxTimer) {
+				endSong();
+			});
+		}
+	}
+
+	public function endSong()
 	{
 		if(!inCutscene)
 		{
@@ -749,7 +764,7 @@ class PlayState extends MusicBeatState {
 		if(hasVocals)
 			vocals.play();
 
-		FlxG.sound.music.onComplete = endSong;
+		FlxG.sound.music.onComplete = finishSong.bind();
 
 		Conductor.position = 0.0;
 		callOnHScripts("startSong", [SONG.song]);
