@@ -132,8 +132,6 @@ class HScript {
                 "stringify": haxe.Json.stringify
             });
             
-            set("BGSprite", gameplay.BGSprite);
-            set("BackgroundDancer", gameplay.BackgroundDancer);
             set("FNFSprite", systems.FNFSprite);
             set("FlxSprite", flixel.FlxSprite);
             set("FlxTimer", flixel.util.FlxTimer);
@@ -250,6 +248,7 @@ class HScript {
 
             set("ScriptedState", states.ScriptedState);
             set("ScriptedSubState", substates.ScriptedSubState);
+            set("ScriptedSprite", systems.ScriptedSprite);
             set("CustomShader", shaders.CustomShader);
 
             // Game substates
@@ -297,8 +296,6 @@ class HScript {
 	{
 		if (doTrace)
 			Main.print("hscript", text);
-
-		PlayState.logs += text+"\n";
 	}
 
 	public function start(callFuncs:Bool = true, ?args:Array<Any>)
@@ -362,7 +359,7 @@ class HScript {
     
     public function get(variable:String):Dynamic
     {
-        if (locals.exists(variable) && @:privateAccess locals[variable] != null) {
+        if (locals.exists(variable) && locals[variable] != null) {
             return locals.get(variable).r;
         } else if (interp.variables.exists(variable))
             return interp.variables.get(variable);
@@ -377,5 +374,9 @@ class HScript {
             balls.set(i, locals.get(i));
         }
         return balls;
+    }
+    
+    public function setScriptObject(obj:Dynamic) {
+        interp.scriptObject = obj;
     }
 }

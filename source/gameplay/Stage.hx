@@ -56,26 +56,19 @@ class Stage extends FlxGroup {
                     #if DEBUG_PRINTING
 					Main.print('trace', 'Trying to run "stages/$curStage"');
                     #end
-					script = new HScript('stages/$curStage');
-                    script.set("stage", this);
-					script.set("add", this.add);
-                    script.set("insert", this.insert);
-                    script.set("remove", this.remove);
-                    script.set("members", this.members);
-					script.start();
 				} else {
 					#if DEBUG_PRINTING
 					Main.print('error', 'Could not run "stages/$curStage", loading default instead...');
 					#end
-
-					script = new HScript('stages/stage');
-                    script.set("stage", this);
-					script.set("add", this.add);
-                    script.set("insert", this.insert);
-                    script.set("remove", this.remove);
-                    script.set("members", this.members);
-					script.start();
+					curStage = 'stage';
 				}
+				script = new HScript('stages/$curStage');
+				script.set("stage", this);
+				script.set("add", this.add);
+				script.set("insert", this.insert);
+				script.set("remove", this.remove);
+				script.set("members", this.members);
+				script.start();
 		}
     }
 }

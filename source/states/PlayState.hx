@@ -40,7 +40,6 @@ typedef UnspawnNote = {
 }
 
 class PlayState extends MusicBeatState {
-	public static var logs:String = "";
 	public static var current:PlayState;
 
 	// Song

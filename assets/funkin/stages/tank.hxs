@@ -1,8 +1,8 @@
-var tankWatchtower:BGSprite;
-var tankGround:BGSprite;
+var tankWatchtower:ScriptedSprite;
+var tankGround:ScriptedSprite;
 var tankmanRun:FlxGroup;
 
-var tanks:Array<BGSprite> = [];
+var tanks:Array<ScriptedSprite> = [];
 
 function create() {
     PlayState.defaultCamZoom = 0.9;
@@ -11,45 +11,45 @@ function create() {
     stage.gfPosition.set(200, 65);
     stage.bfPosition.set(810, 100);
 
-    var sky:BGSprite = new BGSprite('stages/tank/tankSky', -400, -400, 0, 0);
+    var sky:ScriptedSprite = new ScriptedSprite('BGSprite', [-400, -400, 'stages/tank/tankSky', 0, 0]);
     add(sky);
     
-    var clouds:BGSprite = new BGSprite('stages/tank/tankClouds', FlxG.random.int(-700, -100), FlxG.random.int(-20, 20), 0.1, 0.1);
+    var clouds:ScriptedSprite = new ScriptedSprite('BGSprite', [FlxG.random.int(-700, -100), FlxG.random.int(-20, 20), 'stages/tank/tankClouds', 0.1, 0.1]);
     clouds.active = true;
     clouds.velocity.x = FlxG.random.float(5, 15);
     add(clouds);
     
-    var mountains:BGSprite = new BGSprite('stages/tank/tankMountains', -300, -20, 0.2, 0.2);
+    var mountains:ScriptedSprite = new ScriptedSprite('BGSprite', [-300, -20, 'stages/tank/tankMountains', 0.2, 0.2]);
     mountains.setGraphicSize(Std.int(mountains.width * 1.2));
     mountains.updateHitbox();
     add(mountains);
     
-    var buildings:BGSprite = new BGSprite('stages/tank/tankBuildings', -200, 0, 0.3, 0.3);
+    var buildings:ScriptedSprite = new ScriptedSprite('BGSprite', [-200, 0, 'stages/tank/tankBuildings', 0.3, 0.3]);
     buildings.setGraphicSize(Std.int(buildings.width * 1.1));
     buildings.updateHitbox();
     add(buildings);
     
-    var ruins:BGSprite = new BGSprite('stages/tank/tankRuins', -200, 0, 0.35, 0.35);
+    var ruins:ScriptedSprite = new ScriptedSprite('BGSprite', [-200, 0, 'stages/tank/tankRuins', 0.35, 0.35]);
     ruins.setGraphicSize(Std.int(ruins.width * 1.1));
     ruins.updateHitbox();
     add(ruins);
     
-    var smokeL:BGSprite = new BGSprite('stages/tank/smokeLeft', -200, -100, 0.4, 0.4, ['SmokeBlurLeft'], true);
+    var smokeL:ScriptedSprite = new ScriptedSprite('BGSprite', [-200, -100, 'stages/tank/smokeLeft', 0.4, 0.4, ['SmokeBlurLeft'], true]);
     add(smokeL);
     
-    var smokeR:BGSprite = new BGSprite('stages/tank/smokeRight', 1100, -100, 0.4, 0.4, ['SmokeRight'], true);
+    var smokeR:ScriptedSprite = new ScriptedSprite('BGSprite', [1100, -100, 'stages/tank/smokeRight', 0.4, 0.4, ['SmokeRight'], true]);
     add(smokeR);
 
-    tankWatchtower = new BGSprite('stages/tank/tankWatchtower', 100, 50, 0.5, 0.5, ['watchtower gradient color']);
+    tankWatchtower = new ScriptedSprite('BGSprite', [100, 50, 'stages/tank/tankWatchtower', 0.5, 0.5, ['watchtower gradient color']]);
     add(tankWatchtower);
     
-    tankGround = new BGSprite('stages/tank/tankRolling', 300, 300, 0.5, 0.5, ['BG tank w lighting'], true);
+    tankGround = new ScriptedSprite('BGSprite', [300, 300, 'stages/tank/tankRolling', 0.5, 0.5, ['BG tank w lighting'], true]);
     add(tankGround);
     
     tankmanRun = new FlxGroup();
     add(tankmanRun);
     
-    var ground:BGSprite = new BGSprite('stages/tank/tankGround', -420, -150);
+    var ground:ScriptedSprite = new ScriptedSprite('BGSprite', [-420, -150, 'stages/tank/tankGround']);
     ground.setGraphicSize(Std.int(ground.width * 1.15));
     ground.updateHitbox();
     add(ground);
@@ -65,27 +65,27 @@ function update() {
 }
 
 function create_front() {
-    var tankdude0:BGSprite = new BGSprite('stages/tank/tank0', -500, 650, 1.7, 1.5, ['fg']);
+    var tankdude0:ScriptedSprite = new ScriptedSprite('BGSprite', [-500, 650, 'stages/tank/tank0', 1.7, 1.5, ['fg']]);
     tanks.push(tankdude0);
     add(tankdude0);
     
-    var tankdude1:BGSprite = new BGSprite('stages/tank/tank1', -300, 750, 2, 0.2, ['fg']);
+    var tankdude1:ScriptedSprite = new ScriptedSprite('BGSprite', [-300, 750, 'stages/tank/tank1', 2, 0.2, ['fg']]);
     tanks.push(tankdude1);
     add(tankdude1);
     
-    var tankdude2:BGSprite = new BGSprite('stages/tank/tank2', 450, 940, 1.5, 1.5, ['foreground']);
+    var tankdude2:ScriptedSprite = new ScriptedSprite('BGSprite', [450, 940, 'stages/tank/tank2', 1.5, 1.5, ['foreground']]);
     tanks.push(tankdude2);
     add(tankdude2);
     
-    var tankdude4:BGSprite = new BGSprite('stages/tank/tank4', 1300, 900, 1.5, 1.5, ['fg']);
+    var tankdude4:ScriptedSprite = new ScriptedSprite('BGSprite', [1300, 900, 'stages/tank/tank4', 1.5, 1.5, ['fg']]);
     tanks.push(tankdude4);
     add(tankdude4);
     
-    var tankdude5:BGSprite = new BGSprite('stages/tank/tank5', 1620, 700, 1.5, 1.5, ['fg']);
+    var tankdude5:ScriptedSprite = new ScriptedSprite('BGSprite', [1620, 700, 'stages/tank/tank5', 1.5, 1.5, ['fg']]);
     tanks.push(tankdude5);
     add(tankdude5);
     
-    var tankdude3:BGSprite = new BGSprite('stages/tank/tank3', 1300, 1200, 3.5, 2.5, ['fg']);
+    var tankdude3:ScriptedSprite = new ScriptedSprite('BGSprite', [1300, 1200, 'stages/tank/tank3', 3.5, 2.5, ['fg']]);
     tanks.push(tankdude3);
     add(tankdude3);
 }
