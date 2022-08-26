@@ -227,26 +227,26 @@ class PlayState extends MusicBeatState {
 
 			gf = new Character(stage.gfPosition.x, stage.gfPosition.y, gfVersion);
 			gf.scrollFactor.set(0.95, 0.95);
+			add(gf);
+			if(gf.trail != null)
+				add(gf.trail);
+			add(stage.inFrontOfGFSprites);
 
 			dad = new Character(stage.dadPosition.x, stage.dadPosition.y, SONG.player2);
 			dad.isPlayer = false;
+			add(dad);
+			if(dad.trail != null)
+				add(dad.trail);
+			add(stage.inFrontOfDadSprites);
 
 			bf = new Boyfriend(stage.bfPosition.x, stage.bfPosition.y, SONG.player1);
 			bf.flipX = !bf.flipX;
+			add(bf);
+			if(bf.trail != null)
+				add(bf.trail);
+			add(stage.foregroundSprites);
 
-			if (gf.trail != null)
-				stage.add(gf.trail);
-			stage.add(gf);
-			stage.script.call("create_gf");
-			if (dad.trail != null)
-				stage.add(dad.trail);
-			stage.add(dad);
-			stage.script.call("create_dad");
-			if (bf.trail != null)
-				stage.add(bf.trail);
-			stage.add(bf);
-			stage.script.call("create_bf");
-			stage.script.call("create_front");
+			// raf istg if you change this shit back
 			
 			if(dad.curCharacter == gf.curCharacter) {
 				dad.goToPosition(gf.x, gf.y);

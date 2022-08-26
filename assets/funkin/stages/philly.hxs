@@ -5,6 +5,7 @@ var light:FlxSprite;
 var phillyTrain:FlxSprite;
 
 function create() {
+    removeStage();
     PlayState.defaultCamZoom = 1.05;
 
     windows = [

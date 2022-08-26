@@ -1,6 +1,8 @@
 var grpLimoDancers:FlxGroup;
 
 function create() {
+    removeStage();
+
     stage.dadPosition.set(100, 100);
     stage.gfPosition.set(400, 130);
     stage.bfPosition.set(1030, -120);
@@ -36,15 +38,13 @@ function create() {
         dancer.call('dance');
         grpLimoDancers.add(dancer);
     }
-}
 
-function create_gf() {
     limo = new FlxSprite(-120, 550);
     limo.frames = FNFAssets.getSparrow('stages/limo/limoDrive');
     limo.animation.addByPrefix('drive', "Limo stage", 24);
     limo.animation.play('drive');
     limo.antialiasing = Settings.get("Antialiasing");
-    add(limo);
+    add(limo, "gf");
 }
 
 function countdownTick()

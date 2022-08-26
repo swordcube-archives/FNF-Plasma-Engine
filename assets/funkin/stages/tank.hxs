@@ -5,6 +5,7 @@ var tankmanRun:FlxGroup;
 var tanks:Array<ScriptedSprite> = [];
 
 function create() {
+    removeStage();
     PlayState.defaultCamZoom = 0.9;
 
     stage.dadPosition.set(20, 100);
@@ -54,6 +55,31 @@ function create() {
     ground.updateHitbox();
     add(ground);
 
+    // foreground
+    var tankdude0:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank0', 1.7, 1.5, ['fg'], false], -500, 650);
+    tanks.push(tankdude0);
+    add(tankdude0, "front");
+    
+    var tankdude1:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank1', 2, 0.2, ['fg'], false], -300, 750);
+    tanks.push(tankdude1);
+    add(tankdude1, "front");
+    
+    var tankdude2:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank2', 1.5, 1.5, ['foreground'], false], 450, 940);
+    tanks.push(tankdude2);
+    add(tankdude2, "front");
+    
+    var tankdude4:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank4', 1.5, 1.5, ['fg'], false], 1300, 900);
+    tanks.push(tankdude4);
+    add(tankdude4, "front");
+    
+    var tankdude5:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank5', 1.5, 1.5, ['fg'], false], 1620, 700);
+    tanks.push(tankdude5);
+    add(tankdude5, "front");
+    
+    var tankdude3:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank3', 3.5, 2.5, ['fg'], false], 1300, 1200);
+    tanks.push(tankdude3);
+    add(tankdude3, "front");
+
     moveTank();
 
     Global.set("tankGround", tankGround);
@@ -63,33 +89,6 @@ function create() {
 function update() {
     moveTank();
 }
-
-function create_front() {
-    var tankdude0:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank0', 1.7, 1.5, ['fg'], false], -500, 650);
-    tanks.push(tankdude0);
-    add(tankdude0);
-    
-    var tankdude1:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank1', 2, 0.2, ['fg'], false], -300, 750);
-    tanks.push(tankdude1);
-    add(tankdude1);
-    
-    var tankdude2:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank2', 1.5, 1.5, ['foreground'], false], 450, 940);
-    tanks.push(tankdude2);
-    add(tankdude2);
-    
-    var tankdude4:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank4', 1.5, 1.5, ['fg'], false], 1300, 900);
-    tanks.push(tankdude4);
-    add(tankdude4);
-    
-    var tankdude5:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank5', 1.5, 1.5, ['fg'], false], 1620, 700);
-    tanks.push(tankdude5);
-    add(tankdude5);
-    
-    var tankdude3:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank3', 3.5, 2.5, ['fg'], false], 1300, 1200);
-    tanks.push(tankdude3);
-    add(tankdude3);
-}
-
 function countdownTick() {
     beatHit(Conductor.currentBeat);
 }

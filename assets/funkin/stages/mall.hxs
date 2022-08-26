@@ -3,6 +3,7 @@ var bottomBoppers:FlxSprite;
 var santa:FlxSprite;
 
 function create() {
+    removeStage();
     PlayState.defaultCamZoom = 0.8;
 
     stage.dadPosition.set(100, 100);
