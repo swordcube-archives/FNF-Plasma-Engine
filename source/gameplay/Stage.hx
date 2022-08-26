@@ -54,11 +54,11 @@ class Stage extends FlxGroup {
                 
 				if(FileSystem.exists(path)) {
                     #if DEBUG_PRINTING
-					Main.print('trace', 'Trying to run "stages/$curStage"');
+					Main.print('debug', 'Trying to run "stages/$curStage"');
                     #end
 				} else {
 					#if DEBUG_PRINTING
-					Main.print('error', 'Could not run "stages/$curStage", loading default instead...');
+					Main.print('debug', 'Could not run "stages/$curStage", loading default instead...');
 					#end
 					curStage = 'stage';
 				}

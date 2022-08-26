@@ -46,12 +46,21 @@ function update(elapsed) {
         state.logsOpen = false;
         substate.close();
     }
+
+    if(FlxG.keys.justPressed.F7 && state.logsOpen)
+    {
+        Init.logs = [];
+        Main.print("trace", "Cleared logs!");
+        reloadLogs();
+    }
 }
 
 function reloadLogs() {
     text.text = '';
     for (i in Init.logs) {
         switch(i[0][0]) {
+            case 'debug':
+                text.text += '\n<d>[   DEBUG   ] ' + i[0][1] + '<d>';
             case 'error':
                 text.text += '\n<e>[   ERROR   ] ' + i[0][1] + '<e>';
             case 'warning':
@@ -62,9 +71,10 @@ function reloadLogs() {
                 text.text += '\n<t>[   TRACE   ] ' + i[0][1] + '<t>';
         }
     }
-    var errorformat = new FlxTextFormatMarkerPair(new FlxTextFormat(0xFFFF0000,  true), "<e>");
-    var warnformat  = new FlxTextFormatMarkerPair(new FlxTextFormat(0xFFFFFF00, false), "<w>");
-    var hxsformat   = new FlxTextFormatMarkerPair(new FlxTextFormat(0xFFFFFFFF, false), "<h>");
-    var traceformat = new FlxTextFormatMarkerPair(new FlxTextFormat(0xFFFFFFFF, false), "<t>");
-    text.applyMarkup(text.text, [errorformat, warnformat, hxsformat, traceformat]);
+    var errorformat = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED,  true), "<e>");
+    var warnformat  = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.YELLOW, false), "<w>");
+    var hxsformat   = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.MAGENTA, false), "<h>");
+    var traceformat = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.WHITE, false), "<t>");
+    var debugformat = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.CYAN, false), "<t>");
+    text.applyMarkup(text.text, [errorformat, warnformat, hxsformat, traceformat, debugformat]);
 }

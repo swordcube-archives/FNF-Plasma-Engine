@@ -79,6 +79,10 @@ function create() {
     add(bgGirls);
 }
 
+function countdownTick() {
+    beatHit(Conductor.currentBeat);
+}
+
 function beatHit() {
     bgGirls.call('dance');
 }

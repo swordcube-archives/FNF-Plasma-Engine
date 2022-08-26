@@ -86,7 +86,10 @@ class HScript {
 
             // Haxe/HaxeFlixel classes
             set("trace", function(text:String) {
-                Main.print("trace", text);
+                Main.print("hscript", text);
+            });
+            set("traceDebug", function(text:String) {
+                Main.print("debug", text);
             });
             set("traceError", function(text:String) {
                 Main.print("error", text);
@@ -268,11 +271,7 @@ class HScript {
                     var methodName = posInfo.methodName;
                     var className = posInfo.className;
 
-                    #if windows
-                    Application.current.window.alert('Exception occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'}\n\n${e}\n\nIf the message boxes blocks the engine, hold down SHIFT to bypass.', 'HScript error! - $path.hxs');
-                    #else
                     Main.print("error", 'Exception occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'}\n\n${e}\n\nHX File: $path.hxs');
-                    #end
 
                     cast(FlxG.state, MusicBeatState).notificationGroup.add(new Notification(
                         '${e}',

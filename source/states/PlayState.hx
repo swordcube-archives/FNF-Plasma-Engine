@@ -234,7 +234,6 @@ class PlayState extends MusicBeatState {
 			bf = new Boyfriend(stage.bfPosition.x, stage.bfPosition.y, SONG.player1);
 			bf.flipX = !bf.flipX;
 
-
 			if (gf.trail != null)
 				stage.add(gf.trail);
 			stage.add(gf);
@@ -306,18 +305,22 @@ class PlayState extends MusicBeatState {
 			"go"         => FNFAssets.returnAsset(SOUND, AssetPaths.sound(countdownSoundLocation+"/introGo")),
 		];
 
+		countdownPreReady.antialiasing = Settings.get("Antialiasing");
 		countdownPreReady.cameras = [camHUD];
 		countdownPreReady.alpha = 0;
 		add(countdownPreReady);
 
+		countdownReady.antialiasing = Settings.get("Antialiasing");
 		countdownReady.cameras = [camHUD];
 		countdownReady.alpha = 0;
 		add(countdownReady);
 
+		countdownSet.antialiasing = Settings.get("Antialiasing");
 		countdownSet.cameras = [camHUD];
 		countdownSet.alpha = 0;
 		add(countdownSet);
 
+		countdownGo.antialiasing = Settings.get("Antialiasing");
 		countdownGo.cameras = [camHUD];
 		countdownGo.alpha = 0;
 		add(countdownGo);

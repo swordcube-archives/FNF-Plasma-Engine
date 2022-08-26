@@ -1,13 +1,11 @@
-import systems.FNFSprite;
-
 var danceDir:Bool = false;
 
 function dance()
 {
-	danceDir = !danceDir;
+    danceDir = !danceDir;
 
-	if (danceDir)
-		sprite.animation.play('danceRight', true);
-	else
-		sprite.animation.play('danceLeft', true);
+    if (danceDir)
+        animation.play('danceRight', true);
+    else
+        animation.play('danceLeft', true);
 }

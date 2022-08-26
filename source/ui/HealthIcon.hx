@@ -62,7 +62,7 @@ class HealthIcon extends FlxSprite {
 				{
 					icons = i;
 					#if DEBUG_PRINTING
-					trace("detected " + icons + " icons");
+					Main.print("debug", "detected " + icons + " icons");
 					#end
 					break;
 				}
@@ -73,7 +73,7 @@ class HealthIcon extends FlxSprite {
 				{
 					icons = 2;
 					#if DEBUG_PRINTING
-					trace("failed to detect icon count, icon count is now " + icons);
+					Main.print("debug", "failed to detect icon count, icon count is now " + icons);
 					#end
 					break;
 				}

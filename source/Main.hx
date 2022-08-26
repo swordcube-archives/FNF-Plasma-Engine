@@ -35,12 +35,15 @@ class Main extends Sprite
 
 	public static var currentState:Class<flixel.FlxState> = Init; // The FlxState the game starts with.
 
+	public static var ansiColors:Map<String,String> = new Map();
+
 	public function new()
 	{
 		super();
 		startTime = getTime(true);
 
 		setupZoom(); // Setup the "zoom" variable
+		initAnsiColors();
 
 		// Start the game
 		addChild(new FlxGame(gameWidth, gameHeight, currentState, zoom, framerate, framerate, skipSplash, startFullscreen));
@@ -55,6 +58,22 @@ class Main extends Sprite
 			#end
 			Init.saveSettings();
 		});
+	}
+
+	public static function initAnsiColors()
+	{
+		ansiColors['black'] = '\033[0;30m';
+		ansiColors['red'] = '\033[31m';
+		ansiColors['green'] = '\033[32m';
+		ansiColors['yellow'] = '\033[33m';
+		ansiColors['blue'] = '\033[1;34m';
+		ansiColors['magenta'] = '\033[1;35m';
+		ansiColors['cyan'] = '\033[0;36m';
+		ansiColors['grey'] = '\033[0;37m';
+		ansiColors['white'] = '\033[1;37m';
+
+		// reuse it for quick lookups of colors to log levels
+		ansiColors['default'] = ansiColors['grey'];
 	}
 
 	public static function getOS()
@@ -129,15 +148,15 @@ class Main extends Sprite
 				FlxG.switchState(newState);
 			};
 			if (Std.isOfType(newState, states.ScriptedState))
-				return print('trace', 'Switched state to states.ScriptedState [${cast(newState, ScriptedState).name}] (transition)');
+				return #if DEBUG_PRINTING print('debug', 'Switched state to states.ScriptedState [${cast(newState, ScriptedState).name}] (transition)') #end;
 			else
-				return print('trace', 'Switched state to ${Type.getClassName(currentState)} (transition)');
+				return #if DEBUG_PRINTING print('debug', 'Switched state to ${Type.getClassName(currentState)} (transition)') #end;
 		}
 		FlxG.switchState(newState);
 		if (Std.isOfType(newState, states.ScriptedState))
-			return print('trace', 'Switched state to states.ScriptedState [${cast(newState, ScriptedState).name}] (no transition)');
+			return #if DEBUG_PRINTING print('debug', 'Switched state to states.ScriptedState [${cast(newState, ScriptedState).name}] (no transition)') #end;
 		else
-			return print('trace', 'Switched state to ${Type.getClassName(currentState)} (no transition)');
+			return #if DEBUG_PRINTING print('debug', 'Switched state to ${Type.getClassName(currentState)} (no transition)') #end;
 	}
 
 	/**
@@ -159,16 +178,16 @@ class Main extends Sprite
 					FlxG.resetState();
 			};
 			if (Std.isOfType(FlxG.state, states.ScriptedState))
-				return trace('Reloaded state states.ScriptedState [${cast(FlxG.state, ScriptedState).name}] (transition)');
+				return #if DEBUG_PRINTING print('debug', 'Reloaded state states.ScriptedState [${cast(FlxG.state, ScriptedState).name}] (transition)') #end;
 			else
-				return trace('Reloaded state ${Type.getClassName(currentState)} (transition)');
+				return #if DEBUG_PRINTING print('debug', 'Reloaded state ${Type.getClassName(currentState)} (transition)') #end;
 		}
 		if (Std.isOfType(FlxG.state, states.ScriptedState)) {
 			FlxG.switchState(new ScriptedState(cast(currentState, ScriptedState).name, cast(currentState, ScriptedState).args));
-			return trace('Reloaded state states.ScriptedState [${cast(currentState, ScriptedState).name}] (no transition)');
+			return #if DEBUG_PRINTING print('debug', 'Reloaded state states.ScriptedState [${cast(currentState, ScriptedState).name}] (no transition)') #end;
 		} else {
 			FlxG.resetState();
-			return trace('Reloaded state ${Type.getClassName(currentState)} (no transition)');
+			return #if DEBUG_PRINTING print('debug', 'Reloaded state ${Type.getClassName(currentState)} (no transition)') #end;
 		}
 	}
 
@@ -179,18 +198,23 @@ class Main extends Sprite
 	{
 		switch (type.toLowerCase())
 		{
+			case "debug":
+				trace('${ansiColors["cyan"]}[   DEBUG   ] ${ansiColors["default"]}' + text);
+				Init.log('debug', text);
+				return;
+
 			case "error":
-				trace('[   ERROR   ] ' + text);
+				trace('${ansiColors["red"]}[   ERROR   ] ${ansiColors["default"]}' + text);
 				Init.log('error', text);
 				return;
 
 			case "warn" | "warning":
-				trace('[  WARNING  ] ' + text);
+				trace('${ansiColors["yellow"]}[  WARNING  ] ${ansiColors["default"]}' + text);
 				Init.log('warning', text);
 				return;
 
 			case "hxs" | "hscript":
-				trace('[  HSCRIPT  ] ' + text);
+				trace('${ansiColors["magenta"]}[  HSCRIPT  ] ${ansiColors["default"]}' + text);
 				Init.log('hscript', text);
 				return;
 		}

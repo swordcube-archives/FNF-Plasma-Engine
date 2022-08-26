@@ -153,9 +153,11 @@ function update() {
 
     var color = songs[curSelected].color;
 
-    bgColor[0] = FlxMath.lerp(bgColor[0], color[0], time);
-    bgColor[1] = FlxMath.lerp(bgColor[1], color[1], time);
-    bgColor[2] = FlxMath.lerp(bgColor[2], color[2], time);
+    if(color != null) {
+        bgColor[0] = FlxMath.lerp(bgColor[0], color[0], time);
+        bgColor[1] = FlxMath.lerp(bgColor[1], color[1], time);
+        bgColor[2] = FlxMath.lerp(bgColor[2], color[2], time);
+    }
 
     if(FlxG.sound.music != null)
         Conductor.position = FlxG.sound.music.time;

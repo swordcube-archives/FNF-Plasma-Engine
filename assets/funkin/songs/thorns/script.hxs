@@ -7,14 +7,19 @@ function create() {
     PlayState.ratingAssetPath = "ratings/pixel";
     PlayState.comboAssetPath = "combo/pixel";
 
-    PlayState.ratingScale = 5.1;
-    PlayState.comboScale = 6;
+    PlayState.ratingScale = 4.1;
+    PlayState.comboScale = 5;
 
     PlayState.ratingAntialiasing = false;
     PlayState.comboAntialiasing = false;
 }
 
 function createPost() {
+    PlayState.countdownPreReady.antialiasing = false;
+    PlayState.countdownReady.antialiasing = false;
+    PlayState.countdownSet.antialiasing = false;
+    PlayState.countdownGo.antialiasing = false;
+    
     PlayState.currentSkin = "arrows-pixel";
     PlayState.UI.opponentStrums.reloadSkin();
     PlayState.UI.playerStrums.reloadSkin();
