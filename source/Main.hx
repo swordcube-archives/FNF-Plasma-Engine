@@ -71,6 +71,7 @@ class Main extends Sprite
 		ansiColors['cyan'] = '\033[0;36m';
 		ansiColors['grey'] = '\033[0;37m';
 		ansiColors['white'] = '\033[1;37m';
+		ansiColors['orange'] = '\033[38;5;214m';
 
 		// reuse it for quick lookups of colors to log levels
 		ansiColors['default'] = ansiColors['grey'];
@@ -214,7 +215,7 @@ class Main extends Sprite
 				return;
 
 			case "hxs" | "hscript":
-				trace('${ansiColors["magenta"]}[  HSCRIPT  ] ${ansiColors["default"]}' + text);
+				trace('${ansiColors["orange"]}[  HSCRIPT  ] ${ansiColors["default"]}' + text);
 				Init.log('hscript', text);
 				return;
 		}
