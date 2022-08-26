@@ -859,16 +859,6 @@ class PlayState extends MusicBeatState {
 	{
 		var returnVal:Dynamic = HScript.function_continue;
 
-		// stages are separate cuz sword doesn't let me use push() >:((((
-
-		if (stage != null) {
-			var s_ret:Dynamic = stage.script.call(func, args);
-
-			var s_bool:Bool = s_ret == HScript.function_continue;
-			if(!s_bool == true)
-				returnVal = cast s_ret;
-		}
-
 		for(script in scripts) {
 			var ret:Dynamic = script.call(func, args);
 
