@@ -44,18 +44,15 @@ class Stage extends FlxGroup {
 		// Spawn objects for current stage
 		// The switch statement is here if you wanna hardcode
 		// For whatever reason
-		switch(curStage)
-		{
+		switch(curStage) {
 			default:
                 var path:String = AssetPaths.hxs('stages/$curStage');
-                for(ext in HScript.hscriptExts)
-                {
+                for(ext in HScript.hscriptExts) {
                     if(FileSystem.exists(AssetPaths.asset('stages/$curStage'+ext)))
                         path = AssetPaths.asset('stages/$curStage'+ext);
                 }
                 
-				if(FileSystem.exists(path))
-				{
+				if(FileSystem.exists(path)) {
                     #if DEBUG_PRINTING
 					Main.print('trace', 'Trying to run "stages/$curStage"');
                     #end
@@ -66,9 +63,19 @@ class Stage extends FlxGroup {
                     script.set("remove", this.remove);
                     script.set("members", this.members);
 					script.start();
+				} else {
+					#if DEBUG_PRINTING
+					Main.print('error', 'Could not run "stages/$curStage", loading default instead...');
+					#end
+
+					script = new HScript('stages/stage');
+                    script.set("stage", this);
+					script.set("add", this.add);
+                    script.set("insert", this.insert);
+                    script.set("remove", this.remove);
+                    script.set("members", this.members);
+					script.start();
 				}
-				else
-					Main.print('error', 'Could not run "stages/$curStage"');
 		}
     }
 }
