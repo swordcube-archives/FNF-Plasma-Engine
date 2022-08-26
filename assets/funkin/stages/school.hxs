@@ -1,7 +1,6 @@
 var bgGirls:ScriptedSprite;
 
 function create() {
-    removeStage();
     PlayState.defaultCamZoom = 1.05;
 
     stage.dadPosition.set(100, 100);
@@ -56,7 +55,7 @@ function create() {
     bgTrees.updateHitbox();
     treeLeaves.updateHitbox();
 
-    bgGirls = new ScriptedSprite('BackgroundDancer', [-100, 190]);
+    bgGirls = new ScriptedSprite('BackgroundDancer', [], -100, 190);
     bgGirls.scrollFactor.set(0.9, 0.9);
 
     bgGirls.frames = FNFAssets.getSparrow('stages/school/bgFreaks');
