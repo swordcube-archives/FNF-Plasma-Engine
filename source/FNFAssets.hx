@@ -14,6 +14,7 @@ enum FNFAssetType {
     IMAGE;
     SPARROW;
     PACKER;
+    STORY_CHARACTER_SPARROW;
     CHARACTER_SPARROW;
     CHARACTER_PACKER;
     SOUND;
@@ -104,6 +105,9 @@ class FNFAssets {
 
             case PACKER:
                 return FlxAtlasFrames.fromSpriteSheetPacker(returnGraphic(AssetPaths.image(path)), returnAsset(TEXT, AssetPaths.txt('images/$path')));
+
+            case STORY_CHARACTER_SPARROW:
+                return FlxAtlasFrames.fromSparrow(returnGraphic(AssetPaths.storyCharacterSpriteSheet(path)), returnText(AssetPaths.xml('story_characters/$path/spritesheet')));
 
             case CHARACTER_SPARROW:
                 return FlxAtlasFrames.fromSparrow(returnGraphic(AssetPaths.characterSpriteSheet(path)), returnText(AssetPaths.xml('characters/$path/spritesheet')));

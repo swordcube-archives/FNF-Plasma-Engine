@@ -1,0 +1,3 @@
+function create() {
+    frames = FNFAssets.getStoryCharacterSparrow("bf");
+}

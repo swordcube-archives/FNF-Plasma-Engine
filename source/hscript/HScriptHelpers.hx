@@ -78,6 +78,9 @@ class HScriptHelpers {
             "getCharacterPacker": function(path:String):FlxAtlasFrames {
                 return FNFAssets.returnAsset(CHARACTER_PACKER, path);
             },
+            "getStoryCharacterSparrow": function(path:String):FlxAtlasFrames {
+                return FNFAssets.returnAsset(CHARACTER_SPARROW, path);
+            },
             "getSound": function(path:String):Sound {
                 return FNFAssets.returnAsset(SOUND, path);
             },

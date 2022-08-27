@@ -464,6 +464,16 @@ class PlayState extends MusicBeatState {
 				if(bf != null)
 					bf.dance();
 
+				for(c in dads) {
+					if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))
+						c.dance();
+				}
+		
+				for(c in bfs) {
+					if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))
+						c.dance();
+				}
+
 				switch(countdownTick)
 				{
 					case 0:
