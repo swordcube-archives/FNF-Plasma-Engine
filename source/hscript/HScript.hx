@@ -204,6 +204,7 @@ class HScript {
             set("NoteSplash", ui.NoteSplash);
             
             set("FNFAssets", HScriptHelpers.getFNFAssets());
+            set("FNFAssets_", FNFAssets);
             set("Main", Main);
             set("Init", Init);
             set("Settings", Settings);

@@ -47,6 +47,11 @@ class PlayState extends MusicBeatState {
 	public static var SONG:Song = SongLoader.getJSON("m.i.l.f", "hard");
 	public static var actualSongName:String = "";
 
+	public static var storyScore:Int = 0;
+
+	public static var actualWeekName:String = "";
+	public static var storyPlaylist:Array<String> = [];
+
 	public static var currentDifficulty:String = "hard";
 	public static var availableDifficulties:Array<String> = ["easy", "normal", "hard"];
 
@@ -580,7 +585,20 @@ class PlayState extends MusicBeatState {
 				
 				if(isStoryMode)
 				{
-					trace("die, now.");
+					storyPlaylist.shift();
+					storyScore += songScore;
+
+					if(storyPlaylist.length > 0) {
+						SONG = SongLoader.getJSON(storyPlaylist[0], currentDifficulty);
+						Main.switchState(new states.PlayState());
+					} else {
+						FlxG.sound.playMusic(FNFAssets.returnAsset(SOUND, AssetPaths.music("freakyMenu")));
+
+						if(storyScore > Highscore.getScore(actualWeekName+"-"+currentDifficulty))
+							Highscore.setScore(actualWeekName+"-"+currentDifficulty, storyScore);
+						
+						Main.switchState(getMenuToSwitchTo());
+					}
 				}
 				else
 					Main.switchState(getMenuToSwitchTo());

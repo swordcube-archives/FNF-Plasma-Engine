@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="assets.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Pico Idle Dance0000" x="2" y="2" width="453" height="475"/>
+	<SubTexture name="Pico Idle Dance0001" x="2" y="2" width="453" height="475"/>
+	<SubTexture name="Pico Idle Dance0002" x="457" y="2" width="453" height="475"/>
+	<SubTexture name="Pico Idle Dance0003" x="457" y="2" width="453" height="475"/>
+	<SubTexture name="Pico Idle Dance0004" x="912" y="2" width="453" height="475"/>
+	<SubTexture name="Pico Idle Dance0005" x="1367" y="2" width="453" height="475"/>
+	<SubTexture name="Pico Idle Dance0006" x="2" y="479" width="453" height="475"/>
+	<SubTexture name="Pico Idle Dance0007" x="457" y="479" width="453" height="475"/>
+	<SubTexture name="Pico Idle Dance0008" x="912" y="479" width="453" height="475"/>
+	<SubTexture name="Pico Idle Dance0009" x="912" y="479" width="453" height="475"/>
+	<SubTexture name="Pico Idle Dance0010" x="912" y="479" width="453" height="475"/>
+	<SubTexture name="Pico Idle Dance0011" x="912" y="479" width="453" height="475"/>
+	<SubTexture name="Pico Idle Dance0012" x="912" y="479" width="453" height="475"/>
+	<SubTexture name="Pico Idle Dance0013" x="912" y="479" width="453" height="475"/>
+</TextureAtlas>

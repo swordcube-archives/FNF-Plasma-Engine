@@ -1,0 +1,12 @@
+function create() {
+    frames = FNFAssets.getStoryCharacterSparrow("parents-christmas");
+    scale.set(0.45, 0.45);
+    updateHitbox();
+    animation.addByPrefix("idle", "Parent Christmas Idle Black Line", 24, false);
+    setOffset("idle");
+
+    dance();
+
+    x -= 300;
+    y -= 200;
+}
