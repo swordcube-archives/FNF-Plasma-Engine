@@ -270,6 +270,7 @@ function selectWeek() {
     grpWeeks.members[curSelected].call("startFlashing");
 
     new FlxTimer().start(1, function() {
+        selected = false;
         Main.switchState(new PlayState_());
     });
 }
