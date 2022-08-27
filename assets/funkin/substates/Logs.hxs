@@ -60,21 +60,21 @@ function reloadLogs() {
     for (i in Init.logs) {
         switch(i[0][0]) {
             case 'debug':
-                text.text += '\n<d>[   DEBUG   ] ' + i[0][1] + '<d>';
+                text.text += '\n<d>[   DEBUG   ]<d> ' + i[0][1];
             case 'error':
-                text.text += '\n<e>[   ERROR   ] ' + i[0][1] + '<e>';
+                text.text += '\n<e>[   ERROR   ]<e> ' + i[0][1];
             case 'warning':
-                text.text += '\n<w>[  WARNING  ] ' + i[0][1] + '<w>';
+                text.text += '\n<w>[  WARNING  ]<w> ' + i[0][1];
             case 'hscript':
-                text.text += '\n<h>[  HSCRIPT  ] ' + i[0][1] + '<h>';
+                text.text += '\n<h>[  HSCRIPT  ]<h> ' + i[0][1];
             case 'trace':
-                text.text += '\n<t>[   TRACE   ] ' + i[0][1] + '<t>';
+                text.text += '\n<t>[   TRACE   ]<t> ' + i[0][1];
         }
     }
     var errorformat = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED,  true), "<e>");
     var warnformat  = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.YELLOW, false), "<w>");
     var hxsformat   = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.MAGENTA, false), "<h>");
     var traceformat = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.WHITE, false), "<t>");
-    var debugformat = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.CYAN, false), "<t>");
+    var debugformat = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.CYAN, false), "<d>");
     text.applyMarkup(text.text, [errorformat, warnformat, hxsformat, traceformat, debugformat]);
 }

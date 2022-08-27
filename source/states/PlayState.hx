@@ -68,7 +68,7 @@ class PlayState extends MusicBeatState {
 	public var camFollow:FlxPoint;
 	public var camFollowPos:FlxObject;
 
-	public var cameraSpeed:Float = 1;
+	public var cameraSpeed:Float = 1.5;
 
 	// Music & Sounds
 	public var freakyMenu:Sound = FNFAssets.returnAsset(SOUND, AssetPaths.music("freakyMenu"));
