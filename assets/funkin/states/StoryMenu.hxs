@@ -4,7 +4,7 @@ var cancelMenu:Sound;
 
 var scoreText:FlxText;
 
-var storyWeeksJSON:Dynamic;
+var storyWeeksJSON:Array<Dynamic> = [];
 
 var grpWeeks:FlxGroup;
 
@@ -35,6 +35,8 @@ function create() {
     scoreText = new FlxText(10, 10, 0, "PERSONAL BEST: 0", 32);
     scoreText.setFormat(AssetPaths.font("vcr"), 32);
     add(scoreText);
+
+    
 }
 
 function update() {
