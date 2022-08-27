@@ -208,8 +208,10 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 							PlayState.current.bf.playAnim(getSingAnimation(note.noteData) + "miss", true);
 
 							for(c in PlayState.current.bfs) {
-								if(PlayState.current.bf.animation.curAnim.name != null && c != null && c.animation.curAnim != null)
+								if(PlayState.current.bf.animation.curAnim.name != null && c != null && c.animation.curAnim != null) {
+									c.holdTimer = 0.0;
 									c.playAnim(PlayState.current.bf.animation.curAnim.name, true);
+								}
 							}
 						}
 
@@ -244,8 +246,10 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                                 PlayState.current.dad.playAnim(getSingAnimation(note.noteData), true);
 
 							for(c in PlayState.current.dads) {
-								if(PlayState.current.dad.animation.curAnim != null && c != null && c.animation.curAnim != null)
+								if(PlayState.current.dad.animation.curAnim != null && c != null && c.animation.curAnim != null) {
+									c.holdTimer = 0.0;
 									c.playAnim(PlayState.current.dad.animation.curAnim.name, true);
+								}
 							}
                         }
                         
@@ -357,8 +361,10 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 									PlayState.current.bf.playAnim(getSingAnimation(note.noteData), true);
 
 								for(c in PlayState.current.bfs) {
-									if(PlayState.current.bf.animation.curAnim != null && c != null && c.animation.curAnim != null)
+									if(PlayState.current.bf.animation.curAnim != null && c != null && c.animation.curAnim != null) {
+										c.holdTimer = 0.0;
 										c.playAnim(PlayState.current.bf.animation.curAnim.name, true);
+									}
 								}
 							}
 						}
@@ -376,8 +382,10 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 						PlayState.current.bf.dance();
 
 						for(c in PlayState.current.bfs) {
-							if(PlayState.current.bf.animation.curAnim.name != null && c != null && c.animation.curAnim != null)
+							if(PlayState.current.bf.animation.curAnim.name != null && c != null && c.animation.curAnim != null) {
+								c.holdTimer = 0.0;
 								c.playAnim(PlayState.current.bf.animation.curAnim.name, true);
+							}
 						}
 					}
 				}
@@ -464,8 +472,10 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                 PlayState.current.bf.playAnim(getSingAnimation(note.noteData), true);
 
 			for(c in PlayState.current.bfs) {
-				if(PlayState.current.bf.animation.curAnim != null && c != null && c.animation.curAnim != null)
+				if(PlayState.current.bf.animation.curAnim != null && c != null && c.animation.curAnim != null) {
+					c.holdTimer = 0.0;
 					c.playAnim(PlayState.current.bf.animation.curAnim.name, true);
+				}
 			}
         }
 
