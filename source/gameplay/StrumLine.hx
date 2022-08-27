@@ -204,8 +204,14 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 							PlayState.current.UI.healthBarScript.call("updateScoreText");
 						}
 
-						if (note.canBeHit && PlayState.current.bf != null)
+						if (note.canBeHit && PlayState.current.bf != null) {
 							PlayState.current.bf.playAnim(getSingAnimation(note.noteData) + "miss", true);
+
+							for(c in PlayState.current.bfs) {
+								if(PlayState.current.bf.animation.curAnim.name != null && c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))
+									c.playAnim(PlayState.current.bf.animation.curAnim.name, true);
+							}
+						}
 
 						notes.forEachAlive(function(deezNote:Note)
 						{
@@ -236,6 +242,11 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                                 PlayState.current.dad.playAnim(getSingAnimation(note.noteData)+"-alt", true);
                             else
                                 PlayState.current.dad.playAnim(getSingAnimation(note.noteData), true);
+
+							for(c in PlayState.current.dads) {
+								if(PlayState.current.dad.animation.curAnim != null && c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))
+									c.playAnim(PlayState.current.dad.animation.curAnim.name, true);
+							}
                         }
                         
                         PlayState.current.vocals.volume = 1;
@@ -344,6 +355,11 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 									PlayState.current.bf.playAnim(getSingAnimation(note.noteData) + "-alt", true);
 								else
 									PlayState.current.bf.playAnim(getSingAnimation(note.noteData), true);
+
+								for(c in PlayState.current.bfs) {
+									if(PlayState.current.bf.animation.curAnim != null && c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))
+										c.playAnim(PlayState.current.bf.animation.curAnim.name, true);
+								}
 							}
 						}
 					}
@@ -356,8 +372,14 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 					&& !pressed.contains(true))
 				{
 					if (PlayState.current.bf.animation.curAnim.name.startsWith('sing')
-						&& !PlayState.current.bf.animation.curAnim.name.endsWith('miss'))
+						&& !PlayState.current.bf.animation.curAnim.name.endsWith('miss')) {
 						PlayState.current.bf.dance();
+
+						for(c in PlayState.current.bfs) {
+							if(PlayState.current.bf.animation.curAnim.name != null && c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))
+								c.playAnim(PlayState.current.bf.animation.curAnim.name, true);
+						}
+					}
 				}
 			}
 
@@ -440,6 +462,11 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                 PlayState.current.bf.playAnim(getSingAnimation(note.noteData)+"-alt", true);
             else
                 PlayState.current.bf.playAnim(getSingAnimation(note.noteData), true);
+
+			for(c in PlayState.current.bfs) {
+				if(PlayState.current.bf.animation.curAnim != null && c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))
+					c.playAnim(PlayState.current.bf.animation.curAnim.name, true);
+			}
         }
 
         PlayState.current.callOnHScripts("goodNoteHit", [note]);

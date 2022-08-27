@@ -241,6 +241,7 @@ class HScript {
                 set("dad", PlayState.current.dad);
                 set("gf", PlayState.current.gf);
                 set("bf", PlayState.current.bf);
+                set("boyfriend", PlayState.current.bf);
             }
 
             // Game states

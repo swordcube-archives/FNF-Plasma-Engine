@@ -57,6 +57,9 @@ class PlayState extends MusicBeatState {
 	public var gf:Character;
 	public var bf:Boyfriend;
 
+	public var dads:Array<Character> = [];
+	public var bfs:Array<Character> = [];
+
 	// Camera
 	public var camZooming:Bool = true;
 	public var defaultCamZoom:Float = 1.0;
@@ -583,6 +586,11 @@ class PlayState extends MusicBeatState {
 	{
 		super.update(elapsed);
 
+		for(c in bfs) {
+			if(c != null)
+				c.isPlayer = true;
+		}
+
 		if(!inCutscene)
 		{
 			var lerpVal:Float = FlxMath.bound(Main.deltaTime * 2.4 * cameraSpeed, 0, 1);
@@ -795,6 +803,16 @@ class PlayState extends MusicBeatState {
 
 		if(bf != null && bf.animation.curAnim != null && !bf.animation.curAnim.name.startsWith("sing"))
 			bf.dance();
+
+		for(c in dads) {
+			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))
+				c.dance();
+		}
+
+		for(c in bfs) {
+			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))
+				c.dance();
+		}
 
 		callOnHScripts("beatHit", [Conductor.currentBeat]);
 
