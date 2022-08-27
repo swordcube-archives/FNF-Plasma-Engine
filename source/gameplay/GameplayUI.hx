@@ -1,5 +1,6 @@
 package gameplay;
 
+import flixel.ui.FlxBar;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
@@ -24,7 +25,7 @@ class GameplayUI extends FlxGroup {
     public var engineVersion:String = 'Plasma Engine v${Main.engineVersion}';
 
     public var healthBarBG:FlxSprite;
-    public var healthBar:FlxSprite;
+    public var healthBar:FlxBar;
     public var iconP2:HealthIcon;
     public var iconP1:HealthIcon;
 

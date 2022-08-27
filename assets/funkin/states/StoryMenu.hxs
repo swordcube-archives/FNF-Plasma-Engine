@@ -10,7 +10,7 @@ var grpWeeks:FlxGroup;
 
 var storyCharacters:Array<ScriptedSprite> = [];
 
-var curSelected:Int = 1;
+var curSelected:Int = 0;
 
 function create() {
     scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
@@ -42,10 +42,25 @@ function create() {
 
     for(i in 0...3) {
         var char:ScriptedSprite = new ScriptedSprite("StoryModeCharacter", [weeks[curSelected].characters[i]], 100 + (i * 320), 60);
-        char.call("adjustPosition");
         add(char);
         storyCharacters.push(char);
     }
+
+    for(i in weeks) {
+        var spr:FlxSprite = new FlxSprite(FNFAssets.getImage(AssetPaths.image("weeks/" + i.texture)));
+        
+    }
+
+    var dumbStripThing = new FlxSprite(0, FlxG.height - 30);
+    dumbStripThing.makeGraphic(FlxG.width, 30, FlxColor.BLACK);
+    dumbStripThing.alpha = 0.6;
+    add(dumbStripThing);
+
+    var modPackJSON = Json.parse(FNFAssets.getText(AssetPaths.json("pack")));
+
+    var dumbText = new FlxText(5, dumbStripThing.y + 5, 0, "Current Mod: "+modPackJSON.name+" - Press TAB to switch", 16);
+    dumbText.setFormat(AssetPaths.font("vcr"), 16, FlxColor.WHITE, FlxTextAlign.LEFT);
+    add(dumbText);
 }
 
 function beatHit() {
@@ -55,6 +70,9 @@ function beatHit() {
 }
 
 function update(elapsed) {
+    if(FlxG.keys.justPressed.TAB)
+        state.openSubState(new ModSelectionMenu());
+    
     if(FlxG.sound.music != null && FlxG.sound.music.playing)
         Conductor.position = FlxG.sound.music.time;
     else

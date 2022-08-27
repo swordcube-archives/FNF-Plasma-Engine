@@ -34,6 +34,9 @@ function create() {
         null
     );
 
+    if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
+        FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music("freakyMenu")));
+
     bg = new FlxSprite();
     bg.loadGraphic(FNFAssets.getImage(AssetPaths.image('menuBGDesat')));
     bg.antialiasing = Settings.get("Antialiasing");
