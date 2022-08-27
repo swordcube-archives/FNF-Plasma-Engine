@@ -438,8 +438,6 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 	{
 		var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
 
-        PlayState.current.health += PlayState.current.healthGain;
-
 		PlayState.current.totalNotes++;
 
 		var judgement:String = Ranking.judgeNote(note.strumTime);
@@ -449,6 +447,9 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 			PlayState.current.songScore += judgeData.score;
 
 		PlayState.current.totalHit += judgeData.mod;
+		if (judgement != "bad")
+			PlayState.current.health += PlayState.current.healthGain;
+		
 		PlayState.current.health += judgeData.health;
 		boundHealth();
 

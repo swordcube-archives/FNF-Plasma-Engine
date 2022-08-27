@@ -1,3 +1,4 @@
 function create() {
-    trace("lol we loaded absolutely nothing");
+    scale.set(0.1, 0.1);
+    updateHitbox();
 }

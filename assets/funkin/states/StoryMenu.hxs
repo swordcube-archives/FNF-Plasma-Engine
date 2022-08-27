@@ -4,9 +4,13 @@ var cancelMenu:Sound;
 
 var scoreText:FlxText;
 
-var storyWeeksJSON:Array<Dynamic> = [];
+var weeks:Array<Dynamic> = [];
 
 var grpWeeks:FlxGroup;
+
+var storyCharacters:Array<ScriptedSprite> = [];
+
+var curSelected:Int = 1;
 
 function create() {
     scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
@@ -21,7 +25,7 @@ function create() {
     if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
         FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music("freakyMenu")));
 
-    storyWeeksJSON = Json.parse(FNFAssets.getText(AssetPaths.json("storyWeeks"))).weeks;
+    weeks = Json.parse(FNFAssets.getText(AssetPaths.json("storyWeeks"))).weeks;
 
     grpWeeks = new FlxGroup();
     add(grpWeeks);
@@ -36,10 +40,26 @@ function create() {
     scoreText.setFormat(AssetPaths.font("vcr"), 32);
     add(scoreText);
 
-    
+    for(i in 0...3) {
+        var char:ScriptedSprite = new ScriptedSprite("StoryModeCharacter", [weeks[curSelected].characters[i]], 100 + (i * 320), 60);
+        char.call("adjustPosition");
+        add(char);
+        storyCharacters.push(char);
+    }
 }
 
-function update() {
+function beatHit() {
+    storyCharacters[0].call("dance");
+    storyCharacters[1].call("dance");
+    storyCharacters[2].call("dance");
+}
+
+function update(elapsed) {
+    if(FlxG.sound.music != null && FlxG.sound.music.playing)
+        Conductor.position = FlxG.sound.music.time;
+    else
+        Conductor.position += elapsed;
+
     if(UIControls.justPressed("BACK"))
     {
         FlxG.sound.play(cancelMenu);

@@ -1,8 +1,0 @@
-var script:HScript;
-
-function create(character) {
-    script = new HScript('story_characters/$character/script');
-    script.setScriptObject(this);
-    script.set("this", this);
-    script.start(true, [character]);
-}
