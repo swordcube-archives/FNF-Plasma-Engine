@@ -883,6 +883,11 @@ class PlayState extends MusicBeatState {
 		FlxG.cameras.add(camNotif, false);
 	}
 
+	public function refreshHealthBar() {
+		UI.healthBar.setRange(minHealth, maxHealth);
+		UI.healthBar.createFilledBar(UI.healthColors[0], UI.healthColors[1]);
+	}
+
 	public function callOnHScripts(func:String, ?args:Null<Array<Dynamic>>, ignoreStops = true):Dynamic
 	{
 		var returnVal:Dynamic = HScript.function_continue;
