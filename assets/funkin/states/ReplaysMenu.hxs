@@ -57,7 +57,7 @@ function changeSelection(change:Int) {
 
     DiscordRPC.changePresence(
         "In the Replays Menu",
-        "Selecting " + cum[curSelected].split(".json")[0];
+        "Selecting " + cum[curSelected].split(".json")[0]
     );
 
     FlxG.sound.play(FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu")));
