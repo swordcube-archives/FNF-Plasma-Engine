@@ -673,7 +673,7 @@ class PlayState extends MusicBeatState {
 
 		if(!inCutscene && !endingSong)
 		{
-			Conductor.position += elapsed * 1000.0;
+			Conductor.position += FlxG.elapsed * 1000.0;
 			if(Conductor.position >= 0.0 && !startedSong)
 				startSong();
 		}
