@@ -17,6 +17,11 @@ function create() {
     bg.scrollFactor.set();
     add(bg);
 
+    DiscordRPC.changePresence(
+        "In the Replays Menu",
+        null
+    );
+
     grpAlphabet = new FlxGroup();
     add(grpAlphabet);
 
@@ -49,6 +54,11 @@ function changeSelection(change:Int) {
 
         i++;
     }
+
+    DiscordRPC.changePresence(
+        "In the Replays Menu",
+        "Selecting " + cum[curSelected].split(".json")[0];
+    );
 
     FlxG.sound.play(FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu")));
 }
