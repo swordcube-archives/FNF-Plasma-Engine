@@ -71,6 +71,7 @@ function update() {
         changeSelection(1);
 
     if(UIControls.justPressed("ACCEPT")) {
+        AssetPaths.currentPack = data.packUsed;
         var iSuckAtNamingVariables:String = cum[curSelected].split(".json")[0];
         var data = Replay.loadReplay(iSuckAtNamingVariables);
         PlayState_.SONG = SongLoader.getJSON(iSuckAtNamingVariables, data.difficulty);
@@ -80,7 +81,6 @@ function update() {
         Main.switchState(new PlayState_());
         PlayState_.current.inReplay = true;
         PlayState_.current.replayData = data;
-        AssetPaths.currentPack = data.packUsed;
     }
 
     if(UIControls.justPressed("BACK"))
