@@ -612,6 +612,7 @@ class PlayState extends MusicBeatState {
 					else
 						Main.switchState(getMenuToSwitchTo());
 				} else {
+					AssetPaths.currentPack = FlxG.save.data.currentPack;
 					Main.switchState(new ScriptedState("ReplaysMenu"));
 				}
 			}

@@ -80,6 +80,7 @@ function update() {
         Main.switchState(new PlayState_());
         PlayState_.current.inReplay = true;
         PlayState_.current.replayData = data;
+        AssetPaths.currentPack = data.packUsed;
     }
 
     if(UIControls.justPressed("BACK"))
