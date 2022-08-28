@@ -197,6 +197,7 @@ function update() {
         playTheFuckingSong();
     } else if(UIControls.justPressed("ACCEPT"))
     {
+        PlayState_.isStoryMode = false;
         PlayState_.actualSongName = songs[curSelected].name;
         PlayState_.SONG = SongLoader.getJSON(songs[curSelected].name, StringTools.trim(songs[curSelected].difficulties[curDifficulty]));
         PlayState_.currentDifficulty = StringTools.trim(songs[curSelected].difficulties[curDifficulty]);

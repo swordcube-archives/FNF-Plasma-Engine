@@ -61,6 +61,8 @@ function updateScoreText() {
         "Misses: " + PlayState.songMisses + scoreDivider +
         "Rank: " + Ranking.getRank(PlayState.songAccuracy*100.0)
     );
+    if(PlayState.inReplay)
+        ui.scoreTxt.text += scoreDivider + "[REPLAY]";
     if(PlayState.botPlay)
         ui.scoreTxt.text += scoreDivider + "[BOTPLAY]";
 

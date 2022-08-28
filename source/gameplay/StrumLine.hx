@@ -1,5 +1,6 @@
 package gameplay;
 
+import systems.Replay;
 import hscript.HScript;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -71,6 +72,16 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		noteSplashScript.set("add", grpNoteSplashes.add);
 		noteSplashScript.set("remove", grpNoteSplashes.remove);
 		noteSplashScript.start();
+
+		if(PlayState.current.inReplay) {
+			for(i in 0...keyCount)
+			{
+				justPressed.push(false);
+				pressed.push(false);
+				justReleased.push(false);
+				noteDataTimes.push(-1);
+			}
+		}
 	}
 
 	public function generateArrows()
@@ -113,6 +124,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 	var justPressed:Array<Bool> = [];
 	var pressed:Array<Bool> = [];
+	var justReleased:Array<Bool> = [];
 	var noteDataTimes:Array<Float> = [];
 
 	override function update(elapsed:Float)
@@ -152,10 +164,11 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 				});
 			}
 
-            if(hasInput)
+            if(hasInput && !PlayState.current.inReplay)
             {
                 justPressed = [];
                 pressed = [];
+				justReleased = [];
                 noteDataTimes = [];
 
                 var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
@@ -163,10 +176,52 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                 {
                     justPressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], JUST_PRESSED)) : false);
                     pressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], PRESSED)) : false);
+					justReleased.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount-1][i], JUST_RELEASED)) : false);
                     noteDataTimes.push(-1);
                 }
 			}
 
+            if(hasInput && PlayState.current.inReplay)
+            {
+                for(i in PlayState.current.replayData.keyData) {
+					if(Conductor.position >= i.time) {
+						switch(i.status) {
+							case 0:
+								justPressed[i.noteData] = true;
+								pressed[i.noteData] = true;
+							case 1:
+								justReleased[i.noteData] = true;
+								pressed[i.noteData] = false;
+						}
+						PlayState.current.replayData.keyData.remove(i);
+					} else break;
+				}
+			}
+
+			if(!PlayState.current.inReplay) {
+				for(i in 0...justPressed.length) {
+					if(justPressed[i]) {
+						PlayState.current.replayData.keyData.push({
+							noteData: i,
+							time: Conductor.position,
+							status: 0
+						});
+					}
+				}
+			}
+
+			if(!PlayState.current.inReplay) {
+				for(i in 0...justReleased.length) {
+					if(justReleased[i]) {
+						PlayState.current.replayData.keyData.push({
+							noteData: i,
+							time: Conductor.position,
+							status: 1
+						});
+					}
+				}
+			}
+			
 			var possibleNotes:Array<Note> = [];
 			notes.forEachAlive(function(note:Note)
 			{
@@ -227,7 +282,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
                     // Make the note possible to hit if it's in the safe zone to be hit.
                     var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
-                    if((pressed.contains(true) || botPlay) && note.canBeHit && ((Conductor.position - note.strumTime) >= (botPlay ? 0.0 : -Conductor.safeZoneOffset)))
+                    if(note.canBeHit && ((Conductor.position - note.strumTime) >= (botPlay ? 0.0 : -Conductor.safeZoneOffset)))
 					{
                         possibleNotes.push(note);
 						possibleNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
@@ -275,8 +330,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                 var i:Int = 0;
                 for(strum in members)
                 {
-                    var key:FlxKey = Init.keyBinds[keyCount-1][i];
-                    if(FlxG.keys.checkStatus(key, JUST_PRESSED) && !inCutscene && !botPlay)
+                    if(justPressed[i] && !inCutscene && !botPlay)
                     {
                         if(!Settings.get("Ghost Tapping") && possibleNotes.length <= 0)
                         {
@@ -298,7 +352,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
                         strum.alpha = 1;
                     }
     
-                    if((FlxG.keys.checkStatus(key, JUST_RELEASED) && !inCutscene && !botPlay) || (botPlay && strum.animation.curAnim != null && strum.animation.curAnim.name == "confirm" && strum.animation.curAnim.finished))
+                    if((justReleased[i] && !inCutscene && !botPlay) || (botPlay && strum.animation.curAnim != null && strum.animation.curAnim.name == "confirm" && strum.animation.curAnim.finished))
                     {
                         strum.colorSwap.enabled.value = [false];
                         strum.playAnim("static", true);
@@ -432,6 +486,14 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 				}
 			});
 		}
+
+		for(i in 0...justPressed.length) {
+			justPressed[i] = false;
+		}
+
+		for(i in 0...justReleased.length) {
+			justReleased[i] = false;
+		}
 	}
 
 	function goodNoteHit(note:Note)
@@ -440,7 +502,14 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 		PlayState.current.totalNotes++;
 
-		var judgement:String = Ranking.judgeNote(note.strumTime);
+		var killme:ReplayNote = null;
+		for(n in PlayState.current.replayData.notes) {
+			if(n.strumTime == note.strumTime) {
+				killme = n;
+				break;
+			}
+		}
+		var judgement:String = PlayState.current.inReplay ? killme.rating : Ranking.judgeNote(note.strumTime);
 		var judgeData:Judgement = Ranking.getInfo(botPlay ? "marvelous" : judgement);
 
 		if (!botPlay)
@@ -479,6 +548,13 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 				}
 			}
         }
+
+		if(!PlayState.current.inReplay)
+			PlayState.current.replayData.notes.push({
+				strumTime: note.strumTime,
+				noteData: note.noteData,
+				rating: judgement
+			});
 
         PlayState.current.callOnHScripts("goodNoteHit", [note]);
         PlayState.current.callOnHScripts("playerNoteHit", [note]);

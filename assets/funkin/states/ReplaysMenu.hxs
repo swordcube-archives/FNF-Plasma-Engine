@@ -1,0 +1,77 @@
+import systems.Replay;
+import sys.FileSystem;
+import sys.io.File;
+import haxe.Json;
+
+var bg:FlxSprite;
+var grpAlphabet:FlxGroup;
+
+var curSelected:Int = 0;
+
+var cum:Array<String> = [];
+
+function create() {
+    bg = new FlxSprite();
+    bg.loadGraphic(FNFAssets.getImage(AssetPaths.image("menuBGDesat")));
+    bg.color = 0xFFea71fd;
+    bg.scrollFactor.set();
+    add(bg);
+
+    grpAlphabet = new FlxGroup();
+    add(grpAlphabet);
+
+    var i:Int = 0;
+    var shit = FileSystem.readDirectory(AssetPaths.cwd+'replays');
+    shit.remove("replays-go-here.txt");
+    for(cock in shit) {
+        cum.push(cock);
+        var alphabet:Alphabet = new Alphabet(0, (70 * i) + 30, cock.split(".json")[0], true, FlxColor.BLACK, false);
+        alphabet.isMenuItem = true;
+        alphabet.targetY = i;
+        grpAlphabet.add(alphabet);
+        i++;
+    }
+
+    changeSelection(0);
+}
+
+function changeSelection(change:Int) {
+    curSelected += change;
+    if(curSelected < 0)
+        curSelected = grpAlphabet.length - 1;
+    if(curSelected > grpAlphabet.length - 1)
+        curSelected = 0;
+
+    var i:Int = 0;
+    for(a in grpAlphabet.members) {
+        a.targetY = i - curSelected;
+        a.alpha = curSelected == i ? 1 : 0.6;
+
+        i++;
+    }
+
+    FlxG.sound.play(FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu")));
+}
+
+function update() {
+    if(UIControls.justPressed("UP"))
+        changeSelection(-1);
+
+    if(UIControls.justPressed("DOWN"))
+        changeSelection(1);
+
+    if(UIControls.justPressed("ACCEPT")) {
+        var iSuckAtNamingVariables:String = cum[curSelected].split(".json")[0];
+        var data = Replay.loadReplay(iSuckAtNamingVariables);
+        PlayState_.SONG = SongLoader.getJSON(iSuckAtNamingVariables, data.difficulty);
+        PlayState_.actualSongName = iSuckAtNamingVariables;
+        PlayState_.availableDifficulties = [data.difficulty];
+        PlayState_.isStoryMode = false;
+        Main.switchState(new PlayState_());
+        PlayState_.current.inReplay = true;
+        PlayState_.current.replayData = data;
+    }
+
+    if(UIControls.justPressed("BACK"))
+        Main.switchState(new ScriptedState("MainMenu"));
+}
