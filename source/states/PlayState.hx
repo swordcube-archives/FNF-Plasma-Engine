@@ -174,10 +174,7 @@ class PlayState extends MusicBeatState {
 	override function create()
 	{
 		super.create();
-
 		current = this;
-
-		ChartEditor.stateClass = PlayState;
 
 		// cache "breakfast" from music folder because pause menu!
 		FNFAssets.returnAsset(SOUND, AssetPaths.music("breakfast"));
@@ -274,6 +271,7 @@ class PlayState extends MusicBeatState {
 				gf.destroy();
 				gf = null;
 			}
+			stage.script.call('createPost');
 		}
 
 		// load the song script
@@ -644,8 +642,7 @@ class PlayState extends MusicBeatState {
 
 		if(FlxG.keys.justPressed.SEVEN)
 		{
-			ChartEditor.stateClass = PlayState;
-			Main.switchState(new ChartEditor());
+			Main.switchState(new ScriptedState('ChartingState'));
 		}
 
 		if(FlxG.keys.justPressed.F6 && !logsOpen)

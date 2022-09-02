@@ -1,0 +1,102 @@
+import systems.ExtraKeys;
+import openfl.geom.Matrix;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import openfl.display.Bitmap;
+import openfl.geom.ColorTransform;
+
+var dummy:FlxSprite;
+var noteArray = [];
+var selectedNoteArray = [];
+var size = [];
+var gridSize = 40;
+var theNotes = [];
+
+var bpm = 150;
+var keyCount = 4;
+
+function new(w,h) {
+    size = [w,h];
+    pixels = new BitmapData(w,h,true,0);
+    for (i in 0...keyCount) {
+        dummy = new FlxSprite();
+        dummy.frames = FNFAssets.getSparrow('charter/charter-notes');
+        dummy.useFramePixels = true;
+        dummy.animation.addByPrefix('idle', ExtraKeys.arrowInfo[keyCount-1][0][i], 24, true);
+        dummy.animation.play('idle');
+        theNotes.push(dummy);
+    }
+    for (i in theNotes)
+        i.draw();
+}
+
+function addNote(section, noteData, strumTime, mustPress) {
+    noteArray[section].push({
+        noteData: noteData,
+        strumTime: strumTime,
+        mustPress: mustPress
+    });
+    redrawNotes(section);
+}
+function removeNote(section, note) {
+    noteArray[section].remove(note);
+    selectedNoteArray.remove(note);
+    redrawNotes(section);
+}
+function selectNotes(section, note, clear) {
+    if (!clear) {
+        selectedNoteArray = [note];
+    } else {
+        if (!selectedNoteArray.contains(note)) {
+            selectedNoteArray.push(note);
+        } else {
+            selectedNoteArray.remove(note);
+        }
+    }
+    redrawNotes(section);
+}
+function addSection(section) {
+    if (noteArray[section] == null)
+        noteArray[section] = [];
+}
+function goToSection(section) {
+    selectedNoteArray = [];
+    addSection(section);
+    redrawNotes(section);
+}
+function redrawNotes(section) {
+    pixels = new BitmapData(size[0], size[1], true, 0);
+    for (note in noteArray[section]) {
+        var bitmapthingy = theNotes[note.noteData].framePixels;
+        var colorTrans = null;
+        if (selectedNoteArray.contains(note)) {
+            colorTrans = new ColorTransform(1,1,1,1,96,96,96);
+        }
+
+        pixels.draw(
+            bitmapthingy,
+            new Matrix(
+                gridSize/bitmapthingy.width, 0, 0,
+                gridSize/bitmapthingy.height, note.noteData * gridSize + (Std.int(note.mustPress)*gridSize*keyCount), (note.strumTime) / ((60.0 / bpm) * 1000.0)
+            ),
+            /*new Matrix(
+                gridSize/bitmapthingy.width, 0, 0,
+                gridSize/bitmapthingy.height, note.noteData * gridSize + (Std.int(note.mustPress)*gridSize*keyCount), (note.strumTime) / ((60.0 / bpm) * 1000.0)
+            ),*/
+            colorTrans,
+            null,null,
+            false
+        );
+    }
+}
+/*function drawCell(thex, they, bitmap) {
+    pixels.draw(
+        bitmap,
+        new Matrix(
+            args.cellW/bitmap.width, 0, 0,
+            args.cellH/bitmap.height, thex*args.cellW, they*args.cellH
+        ),
+        null,null,null,
+        true
+    );
+}*/
