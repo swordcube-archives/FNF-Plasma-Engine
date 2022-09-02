@@ -253,7 +253,7 @@ class Init extends MusicBeatState {
 
     public static function log(type, text) {
         if (logs[logs.length-1] != null && logs[logs.length-1][0] == [type, text]) {
-            logs[logs.length-1][1] ++;
+            logs[logs.length-1][1] += 1;
         } else {
             logs.push([[type, text], 1]);
         }

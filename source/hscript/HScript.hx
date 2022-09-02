@@ -175,6 +175,9 @@ class HScript {
                     return new_script;
                 });
             set("importScript", HScriptHelpers.importScript);
+            set("updateClass", function(name) {
+                HScriptHelpers.updateClass(name, this);
+            });
 
             // Game classes
             set("function_continue", function_continue);

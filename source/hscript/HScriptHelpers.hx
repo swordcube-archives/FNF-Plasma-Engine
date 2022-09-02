@@ -157,4 +157,9 @@ class HScriptHelpers {
         balls.start(false);
         return balls.getAll();
     }
+    
+    public static function updateClass(name, _script)
+    {
+        _script.set(name, Type.resolveClass(name));
+    }
 }
