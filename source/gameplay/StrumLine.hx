@@ -73,7 +73,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		noteSplashScript.set("remove", grpNoteSplashes.remove);
 		noteSplashScript.start();
 
-		if (PlayState.current.inReplay)
+		if (PlayState.current != null && PlayState.current.inReplay)
 		{
 			for (i in 0...keyCount)
 			{
@@ -112,8 +112,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 	public function reloadSkin()
 	{
-		var arrowSkin:String = PlayState.current.currentSkin != "default" ? PlayState.current.currentSkin : cast(Settings.get("Arrow Skin"), String)
-			.toLowerCase();
+		var arrowSkin:String = (PlayState.current != null
+			&& PlayState.current.currentSkin != "default") ? PlayState.current.currentSkin : cast(Settings.get("Arrow Skin"), String).toLowerCase();
 		for (bemb in members)
 			bemb.loadSkin(arrowSkin);
 	}
