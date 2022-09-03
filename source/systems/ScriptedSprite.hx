@@ -9,6 +9,7 @@ import hscript.HScript;
 
 class ScriptedSprite extends FNFSprite {
     public var script:HScript;
+    public var doesDefaultDraw = true;
 
     public function call(key:String, ?args:Array<Any>) {
         return script.call(key, args);
@@ -43,5 +44,10 @@ class ScriptedSprite extends FNFSprite {
     override public function destroy() {
         script.call("destroy");
         super.destroy();
+    }
+    override public function draw() {
+        script.call('draw');
+        if (doesDefaultDraw)
+            super.draw();
     }
 }

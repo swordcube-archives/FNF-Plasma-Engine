@@ -127,9 +127,19 @@
         {
             "page": "Developers",
             "name": "Developer Mode",
-            "description": "Allows you to access the toolbox for making mods. (Also enables pressing F5 to reload state)",
+            "description": "Allows you to access the toolbox for making mods. (Also enables pressing F5 to reload state if the state allows for it)",
             "type": "Checkbox",
             "defaultValue": false
+        },
+        {
+            "page": "Developers",
+            "name": "Max Logs",
+            "description": "Sets the maximum of logs in the logs menu. (Increasing this may have an impact on your CPU)",
+            "type": "Number",
+            "defaultValue": 500,
+            "values": [10, 5000],
+            "valueMult": 10,
+            "decimals": 0
         },
 
         {

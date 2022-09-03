@@ -1,0 +1,68 @@
+import openfl.display.Graphics;
+import openfl.display.Shape;
+var BitmapHelper = importScript('helpers.BitmapHelper');
+
+var tabsArr = [];
+
+var bg;
+var tabsGrp;
+var tabsGrpArr;
+var selectedTab;
+
+function new(w:Int,h:Int,tabs:Array<Any>) {
+    tabsArr = tabs;
+    makeGraphic(w,h,0);
+    doesDefaultDraw = false;
+
+    tabsGrp = new FlxTypedGroup();
+
+    bg = new FlxSprite(x,y+60).loadGraphic(BitmapHelper.newRoundRect(w, h-60, 36, 36, 0x9999CC));
+    bg.antialiasing = Settings.get("Antialiasing");
+
+    for (i in 0...tabs.length) {
+        var tab = new FlxTypedGroup();
+
+        var tabbg = new FlxSprite(x+(w/tabs.length)*i, y).loadGraphic(BitmapHelper.newRoundRect(w/tabs.length, 90, 36, 36, 0xFFFFFF));
+        tabbg.color = 0x666699;
+        tabbg.antialiasing = Settings.get("Antialiasing");
+        tab.add(tabbg);
+
+        var tabtxt = new FlxText(x+(w/tabs.length)*i, y+18, w/tabs.length, tabs[i] + '\n', 24);
+        tabtxt.alignment = 'center';
+        tabtxt.font = AssetPaths.font("funkin");
+        tabtxt.antialiasing = Settings.get("Antialiasing");
+        tab.add(tabtxt);
+
+        tabsGrp.add(tab);
+    }
+
+    loadTab(0);
+}
+
+function draw() {
+    tabsGrp.draw();
+    bg.draw();
+}
+
+function update(elapsed) {
+    if (
+        FlxG.mouse.x > x && 
+        FlxG.mouse.x < x+width && 
+        FlxG.mouse.y > y && 
+        FlxG.mouse.y < y+60 && 
+        FlxG.mouse.justPressed
+    ) {
+        loadTab(Math.floor((FlxG.mouse.x - x)/width*tabsArr.length));
+    }
+}
+
+function loadTab(tab) {
+    selectedTab = tab;
+    for (i in 0...tabsGrp.members.length) {
+        if (i == selectedTab) {
+            tabsGrp.members[i].members[0].color = 0x9999CC;
+        } else {
+            tabsGrp.members[i].members[0].color = 0x666699;
+        }
+    }
+}

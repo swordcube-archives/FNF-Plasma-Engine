@@ -4,7 +4,9 @@ import flixel.text.FlxTextBorderStyle;
 
 var bg;
 var text;
-var _logs = [];
+var _logs = Init.logs;
+var logs = Init.logs;
+var mouseScroll = 0;
 
 var state = FlxG.state;
 
@@ -15,27 +17,44 @@ function create() {
     bg = new FlxSprite().makeGraphic(1280, 720, 0x7F000000);
     if(PlayState != null)
         bg.cameras = [PlayState.camOther];
+    else
+        bg.scrollFactor.set();
     add(bg);
     text = new FlxText(10,10, 1260, '', 20);
-    text.font = AssetPaths.font('vcr', '.ttf');
+    text.font = AssetPaths.font('funkin', '.ttf');
     text.setBorderStyle(FlxTextBorderStyle.OUTLINE_FAST, 0, 10, 1);
     text.antialiasing = false;
     if(PlayState != null)
         text.cameras = [PlayState.camOther];
+    else
+        text.scrollFactor.set();
     add(text);
-    reloadLogs();
 
-    /*Main.print('error', 'test');
+    Main.print('error', 'test');
     Main.print('warn', 'test');
     Main.print('hscript', 'test');
-    Main.print('trace', 'test');*/
+    Main.print('trace', 'test');
+    Main.print('debug', 'test');
+    Main.print('debug', 'test');
+
+    reloadLogs();
 }
 function update(elapsed) {
+    updateClass('Init');
+    if (Init.logs.length > Settings.get('Max Logs')) {
+        for (i in 0...Init.logs.length-500) {
+            Init.logs.remove(Init.logs[0]);
+        }
+    }
+
+    logs = Init.logs;
+    mouseScroll += FlxG.mouse.wheel * 10;
+    if (mouseScroll < 0) mouseScroll = 0;
     //reloadLogs();
-    text.y = 710-text.height;
-    if (_logs != Init.logs) {
-        _logs = Init.logs;
+    text.y = 710-text.height + mouseScroll;
+    if (_logs != logs && state.logsOpen) {
         reloadLogs();
+        _logs = logs;
     }
 
     if(FlxG.keys.justPressed.F6 && state.logsOpen)
@@ -53,6 +72,11 @@ function update(elapsed) {
         Main.print("trace", "Cleared logs!");
         reloadLogs();
     }
+
+    if(FlxG.keys.justPressed.G)
+    {
+        trace(Init.logs[Init.logs.length-1]);
+    }
 }
 
 function reloadLogs() {
@@ -68,13 +92,12 @@ function reloadLogs() {
             case 'hscript':
                 text.text += '\n<h>[  HSCRIPT  ]<h> ' + i[0][1];
             case 'trace':
-                text.text += '\n<t>[   TRACE   ]<t> ' + i[0][1];
+                text.text += '\n[   TRACE   ] ' + i[0][1];
         }
     }
     var errorformat = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED,  true), "<e>");
     var warnformat  = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.YELLOW, false), "<w>");
     var hxsformat   = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.MAGENTA, false), "<h>");
-    var traceformat = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.WHITE, false), "<t>");
     var debugformat = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.CYAN, false), "<d>");
-    text.applyMarkup(text.text, [errorformat, warnformat, hxsformat, traceformat, debugformat]);
+    //text.applyMarkup(text.text, [errorformat, warnformat, hxsformat, debugformat]);
 }

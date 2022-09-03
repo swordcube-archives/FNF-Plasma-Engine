@@ -17,6 +17,8 @@ class MusicBeatState extends FlxUIState {
 	private var lastBeat:Float = 0;
 	private var lastStep:Float = 0;
 
+	public var allowF5:Bool = true;
+
 	public var camNotif:FlxCamera;
 
 	public var notificationGroup:FlxTypedGroup<Notification>;
@@ -88,7 +90,8 @@ class MusicBeatState extends FlxUIState {
 
 		// state refreshing
 		if(FlxG.keys.justPressed.F5)
-			resetState();
+			if (allowF5)
+				resetState();
 
 		super.update(elapsed);
 	}

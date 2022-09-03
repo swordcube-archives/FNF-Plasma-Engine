@@ -1,0 +1,120 @@
+var gridSize = 40;
+var balls;
+var notetest;
+var tabBG;
+var info;
+var strumTime;
+
+var curStrumTimeRAW = 0;
+var curStrumTime;
+
+var selecting = false;
+var selection;
+var selectStart = [];
+
+var bpm = 150;
+var crochet = 0;
+var keyCount = 4;
+var sectionSize = 16;
+
+var curSection = 0;
+
+function new() {
+    DiscordRPC.changePresence(
+        "In the Chart Editor",
+        null
+    );
+    FlxG.mouse.visible = true;
+    balls = new ScriptedSprite('charter/Grid', [gridSize, gridSize, gridSize*keyCount*2, gridSize*sectionSize, 0xffe7e6e6, 0xffd9d5d5], 100, 40);
+    add(balls);
+    var separation = new FlxSprite(balls.x+balls.width/2-1, balls.y).makeGraphic(2,balls.height, 0xFF000000);
+    add(separation);
+    strumTime = new FlxSprite(balls.x, balls.y).makeGraphic(balls.width,2, 0xFFFFFFFF);
+    add(strumTime);
+    notetest = new ScriptedSprite('charter/NotesRender', [balls.width, balls.height], balls.x, balls.y);
+    add(notetest);
+    tabBG = new ScriptedSprite('ui/TabbedBG', [500, FlxG.height-80, ['Charter', 'Note', 'Section', 'Song']], FlxG.width-600, 40);
+    add(tabBG);
+    info = new FlxText(120+balls.width, 40, 200, 'Strumtime: 0\nSection: 0', 24);
+    info.color = 0xFFFFFFFF;
+    info.font = AssetPaths.font("funkin");
+    info.antialiasing = Settings.get("Antialiasing");
+    add(info);
+
+    notetest.call('addSection', [0]);
+}
+
+function update(elapsed) {
+    if (FlxG.keys.pressed.ESCAPE) {
+        Main.switchState(new PlayState_());
+    }
+
+    curStrumTimeRAW -= FlxG.mouse.wheel*10;
+    curStrumTime = (curStrumTimeRAW*crochet + (gridSize*crochet*16*curSection)) / 160000;
+    strumTime.y = curStrumTimeRAW+balls.y;
+
+    if (FlxG.keys.justPressed.LEFT) {
+        curSection--;
+        if (curSection < 0)
+            curSection = 0;
+        notetest.call('goToSection', [curSection]);
+    }
+    if (FlxG.keys.justPressed.RIGHT) {
+        curSection++;
+        notetest.call('goToSection', [curSection]);
+    }
+
+    info.text = 'Strumtime: '+curStrumTime+'\nSection: '+curSection;
+
+    if (FlxG.mouse.justPressed) {
+        crochet = ((60.0 / bpm) * 1000.0);
+        var mouseCell = balls.call('getCellAt', [FlxG.mouse.x, FlxG.mouse.y]);
+        if (mouseCell.x >= 0 && mouseCell.x < keyCount*2 && mouseCell.y >= 0 && mouseCell.y < sectionSize) {
+            var removedNote = false;
+            var theArray = [];
+            for (i in 0...notetest.get('noteArray')[curSection].length) {
+                theArray.push(notetest.get('noteArray')[curSection][notetest.get('noteArray')[curSection].length-1-i]);
+            }
+            for (i in theArray) {
+                if ((FlxG.mouse.y-balls.y)*crochet >= i.strumTime && 
+                    (FlxG.mouse.y-balls.y)*crochet <= i.strumTime+(gridSize*crochet) && 
+                    mouseCell.x%keyCount == i.noteData &&
+                    (mouseCell.x >= keyCount && mouseCell.x < keyCount*2) == i.mustPress &&
+                    !removedNote
+                    ) {
+                    notetest.call('removeNote', [curSection, i]);
+                    removedNote = true;
+                }
+            }
+            if (!removedNote) {
+                if (FlxG.keys.pressed.SHIFT)
+                    notetest.call('addNote', [curSection, mouseCell.x%keyCount, (FlxG.mouse.y-balls.y)*crochet, (mouseCell.x >= keyCount && mouseCell.x < keyCount*2)]);
+                else
+                    notetest.call('addNote', [curSection, mouseCell.x%keyCount, (mouseCell.y*gridSize)*crochet, (mouseCell.x >= keyCount && mouseCell.x < keyCount*2)]);
+            }
+        }
+    }
+    if (FlxG.mouse.justPressedRight) {
+        crochet = ((60.0 / bpm) * 1000.0);
+        var mouseCell = balls.call('getCellAt', [FlxG.mouse.x, FlxG.mouse.y]);
+        selecting = true;
+        selectStart = [FlxG.mouse.x,FlxG.mouse.y];
+        var selectedNote = false;
+        var theArray = [];
+        for (i in 0...notetest.get('noteArray')[curSection].length) {
+            theArray.push(notetest.get('noteArray')[curSection][notetest.get('noteArray')[curSection].length-1-i]);
+        }
+        for (i in theArray) {
+            if ((FlxG.mouse.y-balls.y)*crochet >= i.strumTime && 
+                (FlxG.mouse.y-balls.y)*crochet <= i.strumTime+(gridSize*crochet) && 
+                mouseCell.x%keyCount == i.noteData &&
+                (mouseCell.x >= keyCount && mouseCell.x < keyCount*2) == i.mustPress &&
+                !selectedNote
+                ) {
+                var replace = FlxG.keys.pressed.SHIFT;
+                notetest.call('selectNotes', [curSection, i, replace]);
+                selectedNote = true;
+            }
+        }
+    }
+}

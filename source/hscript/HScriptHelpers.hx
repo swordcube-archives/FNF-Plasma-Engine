@@ -57,6 +57,7 @@ class HScriptHelpers {
             "fromRGBFloat": FlxColor.fromRGBFloat,
             "fromString": FlxColor.fromString,
             "interpolate": FlxColor.interpolate,
+            "to24Bit": function(color:Int) {return color & 0xffffff;},
         };
     }
 
@@ -147,21 +148,18 @@ class HScriptHelpers {
 
     /*
         you can use
-        "var Thing = importScript('scripts/balls');"
+        "var Thing = importScript('scripts.balls');"
         or some shit for using this
     */
     public static function importScript(source)
     {
-        var the = {};
         var balls = new HScript(StringTools.replace(source, '.', '/'));
-        for (i in Reflect.fields(balls.getAll())) {
-            Reflect.setField(the, i, balls.get(i));
-        }
-        try{
-            return the;
-        } catch(e) {
-            Main.print("error", "Could not get fields of the script " + source);
-            return null;
-        }
+        balls.start(false);
+        return balls.getAll();
+    }
+    
+    public static function updateClass(name, _script)
+    {
+        _script.set(name, Type.resolveClass(name));
     }
 }

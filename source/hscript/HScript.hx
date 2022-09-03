@@ -167,12 +167,16 @@ class HScript {
 
             // Game functions
             set("loadScript", function(scriptPath:String, ?args:Array<Any>)
-            {
-                var new_script = new HScript(scriptPath);
-                new_script.start(true, args);
-
-                otherScripts.push(new_script);
-                return new_script;
+                {
+                    var new_script = new HScript(scriptPath);
+                    new_script.start(true, args);
+    
+                    otherScripts.push(new_script);
+                    return new_script;
+                });
+            set("importScript", HScriptHelpers.importScript);
+            set("updateClass", function(name) {
+                HScriptHelpers.updateClass(name, this);
             });
 
             // Game classes
@@ -368,11 +372,14 @@ class HScript {
     }
     //the "locals" things are for the script's own variables!!
 
-    public function getAll():Map<String, Dynamic>
+    public function getAll()
     {
-        var balls:Map<String, Dynamic> = [];
-        for (i in Reflect.fields(locals)) {
-            balls.set(i, locals.get(i));
+        var balls = {};
+        for (i in locals.keys()) {
+            Reflect.setField(balls, i, get(i));
+        }
+        for (i in interp.variables.keys()) {
+            Reflect.setField(balls, i, get(i));
         }
         return balls;
     }

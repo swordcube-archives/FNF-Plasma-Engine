@@ -3,7 +3,7 @@
         {
             "name": "Tutorial",
             "icon": "gf",
-            "color": [146, 113, 253],
+            "color": [165, 0, 77],
             "difficulties": [
                 "easy",
                 "normal",

@@ -16,6 +16,8 @@ class ScriptedState extends MusicBeatState
     override public function new(state:String, ?_args:Array<Any>)
     {
         super();
+        if (FlxG.sound.music != null)
+            FlxG.sound.music.onComplete = null;
         name = state;
         if (_args != null) args = _args;
 
