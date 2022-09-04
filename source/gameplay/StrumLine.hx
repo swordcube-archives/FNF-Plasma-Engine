@@ -73,7 +73,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		noteSplashScript.set("remove", grpNoteSplashes.remove);
 		noteSplashScript.start();
 
-		if (PlayState.current.inReplay)
+		if (PlayState.current != null && PlayState.current.inReplay)
 		{
 			for (i in 0...keyCount)
 			{
