@@ -1,5 +1,6 @@
 package states;
 
+import systems.ScriptedSprite;
 import openfl.utils.Dictionary;
 import sys.io.File;
 import systems.Replay;
@@ -239,23 +240,23 @@ class PlayState extends MusicBeatState {
 
 			gf = new Character(stage.gfPosition.x, stage.gfPosition.y, gfVersion);
 			gf.scrollFactor.set(0.95, 0.95);
-			add(gf);
 			if(gf.trail != null)
 				add(gf.trail);
+			add(gf);
 			add(stage.inFrontOfGFSprites);
 
 			dad = new Character(stage.dadPosition.x, stage.dadPosition.y, SONG.player2);
 			dad.isPlayer = false;
-			add(dad);
 			if(dad.trail != null)
 				add(dad.trail);
+			add(dad);
 			add(stage.inFrontOfDadSprites);
 
 			bf = new Boyfriend(stage.bfPosition.x, stage.bfPosition.y, SONG.player1);
 			bf.flipX = !bf.flipX;
-			add(bf);
 			if(bf.trail != null)
 				add(bf.trail);
+			add(bf);
 			add(stage.foregroundSprites);
 
 			// raf istg if you change this shit back
@@ -668,7 +669,7 @@ class PlayState extends MusicBeatState {
 			persistentUpdate = false;
 			persistentDraw = true;
 
-			openSubState(new substates.PauseMenu());
+			openSubState(new substates.ScriptedSubState('PauseMenu'));
 		}
 
 		if(!inCutscene && !endingSong)
@@ -751,7 +752,7 @@ class PlayState extends MusicBeatState {
 		{
 			while (unspawnNotes.length > 0 && ((unspawnNotes[0].strumTime + Settings.get("Note Offset")) - Conductor.position) < 2500 / scrollSpeed)
 			{
-				var arrowSkin:String = currentSkin != "default" ? currentSkin : Settings.get("Arrow Skin").toLowerCase();
+				var arrowSkin:String = currentSkin.replace("default", Settings.get("Arrow Skin").toLowerCase());
 
 				var dunceNote:Note = new Note(-9999, -9999, unspawnNotes[0].noteData, false);
 				dunceNote.stepCrochet = Conductor.stepCrochet;

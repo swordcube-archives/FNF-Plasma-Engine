@@ -75,6 +75,9 @@ function create() {
     changeSelection(0);
 
     substate.cameras = [PlayState.camOther];
+
+    if(PlayState.countdownTimer != null)
+        PlayState.countdownTimer.active = false;
 }
 
 function spawnOptions() {
@@ -193,5 +196,7 @@ function changeSelection(change:Int) {
 }
 
 function destroy() {
+    if(PlayState.current.countdownTimer != null)
+        PlayState.current.countdownTimer.active = true;
     pauseMusic.destroy();
 }

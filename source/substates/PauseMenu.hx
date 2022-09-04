@@ -20,9 +20,6 @@ class PauseMenu extends MusicBeatSubState {
         script.set("add", this.add);
         script.set("remove", this.remove);
         script.set("substate", this);
-
-        if(PlayState.current.countdownTimer != null)
-            PlayState.current.countdownTimer.active = false;
     }
 
     override public function create()
@@ -51,8 +48,6 @@ class PauseMenu extends MusicBeatSubState {
 
     override function destroy()
     {
-        if(PlayState.current.countdownTimer != null)
-            PlayState.current.countdownTimer.active = true;
         script.call("destroy");
         super.destroy();
     }

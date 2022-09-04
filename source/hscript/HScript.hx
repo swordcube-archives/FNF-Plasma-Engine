@@ -258,7 +258,7 @@ class HScript {
             set("ScriptedState", states.ScriptedState);
             set("ScriptedSubState", substates.ScriptedSubState);
             set("ScriptedSprite", systems.ScriptedSprite);
-            set("CustomShader", shaders.CustomShader);
+            //set("CustomShader", shaders.CustomShader);
 
             // Game substates
             set("KeybindMenu", substates.KeybindMenu);

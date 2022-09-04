@@ -14,7 +14,7 @@ import openfl.text.TextFormat;
  * @author Kirill Poletaev
  */
 class PlasmaFPS extends TextField {
-	//                                      fps    mem    version
+	//                                      fps   mem   version
 	public var infoDisplayed:Array<Bool> = [true, true, false];
 
 	public var memPeak:Int = 0;

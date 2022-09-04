@@ -1,5 +1,6 @@
 package gameplay;
 
+import systems.ScriptedSprite;
 import flixel.ui.FlxBar;
 import flixel.FlxG;
 import flixel.FlxSprite;

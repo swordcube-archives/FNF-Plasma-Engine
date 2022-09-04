@@ -20,7 +20,7 @@ function createPost() {
     PlayState.countdownSet.antialiasing = false;
     PlayState.countdownGo.antialiasing = false;
     
-    PlayState.currentSkin = "arrows-pixel";
+    PlayState.currentSkin = PlayState.currentSkin + "-pixel";
     PlayState.UI.opponentStrums.reloadSkin();
     PlayState.UI.playerStrums.reloadSkin();
 }

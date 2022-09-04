@@ -34,41 +34,24 @@ function createPost() {
 }
 
 function beatHit(curBeat) {
+    Window.y += 50;
+    FlxTween.tween(Window, { y: Window.y - 50 }, Conductor.crochet/1000);
     switch(curBeat)
     {
         case 28:
-            var obj = PlayState.UI.healthBarBG;
+            for (obj in [
+                PlayState.UI.healthBarBG,
+                PlayState.UI.healthBar,
+                PlayState.UI.iconP2,
+                PlayState.UI.iconP1,
+                PlayState.UI.scoreTxt,
+                PlayState.UI.timeBarBG,
+                PlayState.UI.timeBar,
+                PlayState.UI.timeTxt
+            ]) {
             if(obj != null)
                 FlxTween.tween(obj, { y: obj.y - 500 }, 1.5, { ease: FlxEase.cubeInOut });
-
-            var obj = PlayState.UI.healthBar;
-            if(obj != null)
-                FlxTween.tween(obj, { y: obj.y - 500 }, 1.5, { ease: FlxEase.cubeInOut });
-
-            var obj = PlayState.UI.iconP2;
-            if(obj != null)
-                FlxTween.tween(obj, { y: obj.y - 500 }, 1.5, { ease: FlxEase.cubeInOut });
-
-            var obj = PlayState.UI.iconP1;
-            if(obj != null)
-                FlxTween.tween(obj, { y: obj.y - 500 }, 1.5, { ease: FlxEase.cubeInOut });
-
-            var obj = PlayState.UI.scoreTxt;
-            if(obj != null)
-                FlxTween.tween(obj, { y: obj.y - 500 }, 1.5, { ease: FlxEase.cubeInOut });
-
-            var obj = PlayState.UI.timeBarBG;
-            if(obj != null)
-                FlxTween.tween(obj, { y: obj.y + 500 }, 1.5, { ease: FlxEase.cubeInOut });
-
-            var obj = PlayState.UI.timeBar;
-            if(obj != null)
-                FlxTween.tween(obj, { y: obj.y + 500 }, 1.5, { ease: FlxEase.cubeInOut });
-
-            var obj = PlayState.UI.timeTxt;
-            if(obj != null)
-                FlxTween.tween(obj, { y: obj.y + 500 }, 1.5, { ease: FlxEase.cubeInOut });
-
+            }
             Notification.showInfo("Good Luck!", "lol");
     }
 }

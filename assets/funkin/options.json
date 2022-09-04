@@ -121,7 +121,7 @@
             "description": "Change the skin your arrows use.",
             "type": "Selector",
             "defaultValue": "Arrows",
-            "values": ["Arrows", "Quant", "Circles", "Quant Circles"]
+            "values": ["Arrows", "Quants", "Circles", "Quant Circles"]
         },
 
         {
