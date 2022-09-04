@@ -148,6 +148,8 @@ function beatHit(currentBeat:Int) {
     }
 }
 
+var skippedIntro = false;
+
 function skipIntro() {
     remove(ngSpr);
 
