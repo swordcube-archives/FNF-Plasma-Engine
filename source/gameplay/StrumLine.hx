@@ -100,8 +100,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 			var strum:StrumNote = new StrumNote((Note.swagWidth * ExtraKeys.arrowInfo[keyCount - 1][2]) * i, -10, i);
 			strum.parent = this;
 			strum.alpha = 0;
-			var arrowSkin:String = (PlayState.current != null
-				&& PlayState.current.currentSkin != "default") ? PlayState.current.currentSkin : cast(Settings.get("Arrow Skin"), String).toLowerCase();
+			var arrowSkin:String = PlayState.current != null ? PlayState.current.currentSkin.replace("default", Settings.get("Arrow Skin").toLowerCase()) : cast(Settings.get("Arrow Skin"), String).toLowerCase();
 			strum.loadSkin(arrowSkin);
 			strum.setColor();
 			add(strum);
@@ -112,8 +111,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 	public function reloadSkin()
 	{
-		var arrowSkin:String = PlayState.current.currentSkin != "default" ? PlayState.current.currentSkin : cast(Settings.get("Arrow Skin"), String)
-			.toLowerCase();
+		var arrowSkin:String = PlayState.current.currentSkin.replace("default", Settings.get("Arrow Skin").toLowerCase());
 		for (bemb in members)
 			bemb.loadSkin(arrowSkin);
 	}

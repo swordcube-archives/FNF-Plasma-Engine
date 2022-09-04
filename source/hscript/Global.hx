@@ -13,7 +13,7 @@ class Global
     public static function get(variable:String)
         return variables.get(variable);
 
-    public static function runFunction(func:String, args:Null<Array<Dynamic>> = null)
+    public static function call(func:String, args:Null<Array<Dynamic>> = null)
     {
 		if (variables.exists(func))
 		{

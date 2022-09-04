@@ -1,0 +1,15 @@
+{
+    "skin_type": "pixel",
+    "note_assets": "arrows/pixel/CIRCLENOTE_assets",
+
+    "splash_assets": "splashes/pixel/CIRCLENOTE_assets",
+
+    "framerate": 12,
+    
+    "strum_scale": 6,
+    "note_scale": 6,
+
+    "sustain_scale": 1.8,
+
+    "is_quant": false
+}
