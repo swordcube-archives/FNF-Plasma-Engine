@@ -15,7 +15,7 @@ import openfl.text.TextFormat;
  */
 class PlasmaFPS extends TextField {
 	//                                      fps   mem   version
-	public var infoDisplayed:Array<Bool> = [true, true, false];
+	public var infoDisplayed:Array<Bool> = [true, true, true];
 
 	public var memPeak:Int = 0;
 	public var currentFPS:Int = 0;
@@ -47,7 +47,7 @@ class PlasmaFPS extends TextField {
 		currentFPS = fpsCounter.currentFPS;
 		Main.deltaTime = currentFPS > 240 ? 1.0 / currentFPS : FlxG.elapsed;
 
-		infoDisplayed = [true, true, false];
+		infoDisplayed = [true, true, true];
 
 		if (visible)
 		{
@@ -61,12 +61,15 @@ class PlasmaFPS extends TextField {
 					{
 						case 0:
 							// FPS
+                            if (Init.trueSettings.get('Show FPS'))
 							fps_Function();
 						case 1:
 							// Memory
+                            if (Init.trueSettings.get('Show Memory'))
 							memory_Function();
 						case 2:
 							// Version
+                            if (Init.trueSettings.get('Show Version'))
 							version_Function();
 					}
 
@@ -80,7 +83,10 @@ class PlasmaFPS extends TextField {
 
 	function fps_Function()
 	{
+        if (!Init.trueSettings.get('Simplify Info'))
 		text += "FPS: " + currentFPS;
+        else
+        text += currentFPS + 'fps';
 	}
 
 	function memory_Function()
@@ -88,11 +94,17 @@ class PlasmaFPS extends TextField {
 		if (System.totalMemory > memPeak)
 			memPeak = System.totalMemory;
 
+        if (!Init.trueSettings.get('Simplify Info'))
 		text += "MEM: " + Main.getSizeLabel(System.totalMemory) + " / " + Main.getSizeLabel(memPeak);
+        else
+        text += Main.getSizeLabel(System.totalMemory);
 	}
 
 	function version_Function()
 	{
+        if (!Init.trueSettings.get('Simplify Info'))
 		text += "Version: " + Application.current.meta.get('version');
+        else
+		text += 'v'+Application.current.meta.get('version');
 	}
 }

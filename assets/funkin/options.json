@@ -72,6 +72,34 @@
             "valueMult": 0.1,
             "decimals": 1
         },
+        {
+            "page": "Preferences",
+            "name": "Show FPS",
+            "description": "Display the current Frames Per Second of the game.",
+            "type": "Checkbox",
+            "defaultValue": true
+        },
+        {
+            "page": "Preferences",
+            "name": "Show Memory",
+            "description": "Display the current memory usage of the game.",
+            "type": "Checkbox",
+            "defaultValue": true
+        },
+        {
+            "page": "Preferences",
+            "name": "Show Version",
+            "description": "Display the current version of the engine.",
+            "type": "Checkbox",
+            "defaultValue": false
+        },
+        {
+            "page": "Preferences",
+            "name": "Simplify Info",
+            "description": "Simplifies the FPS, Memory and Version display.",
+            "type": "Checkbox",
+            "defaultValue": false
+        },
 
         {
             "page": "Appearance",
