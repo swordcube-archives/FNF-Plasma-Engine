@@ -31,5 +31,5 @@ class Replay
         return Json.parse(File.getContent(AssetPaths.replay(path)));
 
     public static function saveReplay(path:String, data:ReplayData)
-        File.saveContent(AssetPaths.replay(path), Json.stringify(data));
+        File.saveContent(AssetPaths.replay(path), Json.stringify(data, "\t"));
 }
