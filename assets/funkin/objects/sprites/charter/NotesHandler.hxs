@@ -5,14 +5,14 @@ import openfl.geom.Rectangle;
 import openfl.display.Bitmap;
 import openfl.geom.ColorTransform;
 
+var chart = [];
+
 var dummy:FlxSprite;
-var noteArray = [];
-var selectedNoteArray = [];
+var selectednotes = [];
 var size = [];
 var gridSize = 40;
 var theNotes = [];
 
-var bpm = 150;
 var keyCount = 4;
 
 function new(w,h) {
@@ -31,7 +31,7 @@ function new(w,h) {
 }
 
 function addNote(section, noteData, strumTime, mustPress) {
-    noteArray[section].push({
+    chart.notes[section].sectionNotes.push({
         noteData: noteData,
         strumTime: strumTime,
         mustPress: mustPress
@@ -39,37 +39,41 @@ function addNote(section, noteData, strumTime, mustPress) {
     redrawNotes(section);
 }
 function removeNote(section, note) {
-    noteArray[section].remove(note);
-    selectedNoteArray.remove(note);
+    chart.notes[section].sectionNotes.remove(note);
+    selectednotes.remove(note);
     redrawNotes(section);
 }
 function selectNotes(section, note, clear) {
     if (!clear) {
-        selectedNoteArray = [note];
+        selectednotes = [note];
     } else {
-        if (!selectedNoteArray.contains(note)) {
-            selectedNoteArray.push(note);
+        if (!selectednotes.contains(note)) {
+            selectednotes.push(note);
         } else {
-            selectedNoteArray.remove(note);
+            selectednotes.remove(note);
         }
     }
     redrawNotes(section);
 }
 function addSection(section) {
-    if (noteArray[section] == null)
-        noteArray[section] = [];
+    if (chart.notes[section] == null)
+        chart.notes[section] = {
+            lengthInSteps: 16,
+            mustHitSection: false,
+            sectionNotes: []
+        };
 }
 function goToSection(section) {
-    selectedNoteArray = [];
+    selectednotes = [];
     addSection(section);
     redrawNotes(section);
 }
 function redrawNotes(section) {
     pixels = new BitmapData(size[0], size[1], true, 0);
-    for (note in noteArray[section]) {
+    for (note in chart.notes[section].sectionNotes) {
         var bitmapthingy = theNotes[note.noteData].framePixels;
         var colorTrans = null;
-        if (selectedNoteArray.contains(note)) {
+        if (selectednotes.contains(note)) {
             colorTrans = new ColorTransform(1,1,1,1,96,96,96);
         }
 
@@ -77,11 +81,11 @@ function redrawNotes(section) {
             bitmapthingy,
             new Matrix(
                 gridSize/bitmapthingy.width, 0, 0,
-                gridSize/bitmapthingy.height, note.noteData * gridSize + (Std.int(note.mustPress)*gridSize*keyCount), (note.strumTime) / ((60.0 / bpm) * 1000.0)
+                gridSize/bitmapthingy.height, note.noteData * gridSize + (Std.int(note.mustPress)*gridSize*keyCount), (note.strumTime) / ((60.0 / chart.bpm) * 1000.0)
             ),
             /*new Matrix(
                 gridSize/bitmapthingy.width, 0, 0,
-                gridSize/bitmapthingy.height, note.noteData * gridSize + (Std.int(note.mustPress)*gridSize*keyCount), (note.strumTime) / ((60.0 / bpm) * 1000.0)
+                gridSize/bitmapthingy.height, note.noteData * gridSize + (Std.int(note.mustPress)*gridSize*keyCount), (note.strumTime) / ((60.0 / chart.bpm) * 1000.0)
             ),*/
             colorTrans,
             null,null,
