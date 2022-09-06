@@ -127,7 +127,7 @@ class AssetPaths {
     }
     public static function frag(path:String, packOverride:Null<String> = null):String
     {
-        var goodPath:String = asset('$path.frag', packOverride);
+        var goodPath:String = asset('shaders/$path.frag', packOverride);
         if(!FileSystem.exists(goodPath))
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
@@ -136,7 +136,7 @@ class AssetPaths {
     }
     public static function vert(path:String, packOverride:Null<String> = null):String
     {
-        var goodPath:String = asset('$path.frag', packOverride);
+        var goodPath:String = asset('shaders/$path.vert', packOverride);
         if(!FileSystem.exists(goodPath))
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
