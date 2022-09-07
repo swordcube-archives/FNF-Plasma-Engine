@@ -12,6 +12,7 @@ var songs:Array<Dynamic> = [];
 var scoreBG:FlxSprite;
 var scoreText:FlxText;
 var diffText:FlxText;
+var speedText:FlxText;
 var lerpScore:Float = 0;
 var intendedScore:Int = 0;
 
@@ -24,6 +25,13 @@ var curPlaying:String = "";
 var loadingBox:FlxSprite = new FlxSprite().makeGraphic(400, 50, FlxColor.BLACK);
 var loadingIco:FlxSprite = new FlxSprite().loadGraphic(FNFAssets.getImage(AssetPaths.image("icons/bf")), 150, 150);
 var loadingTxt:FlxText = new FlxText(0, 0, 0, "Loading audio...");
+
+var curSpeed:Float = 1.0;
+var minSpeed:Float = 0.05; // If you set this to anything below 0 shit might break, but you can change it anyway
+var maxSpeed:Float = 10.0; // You can adjust this if you want but you're crazy if you play a song at anything above at 10x speed
+var speedMult:Float = 0.05;
+
+var speedTimer:Float = 0.0;
 
 function create() {
     scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
@@ -71,7 +79,7 @@ function create() {
     scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
     scoreText.setFormat(AssetPaths.font("vcr"), 32, FlxColor.WHITE, FlxTextAlign.RIGHT);
 
-    scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(1, 66, 0xFF000000);
+    scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(1, 99, 0xFF000000);
     scoreBG.antialiasing = false;
     scoreBG.alpha = 0.6;
     add(scoreBG);
@@ -79,6 +87,10 @@ function create() {
     diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
     diffText.font = scoreText.font;
     add(diffText);
+
+    speedText = new FlxText(scoreText.x, scoreText.y + 66, 0, "", 24);
+    speedText.font = scoreText.font;
+    add(speedText);
 
     add(scoreText);
 
@@ -123,6 +135,7 @@ function create() {
 
     changeSelection(0);
     changeDifficulty(0);
+    changeSpeed(0);
 }
 
 function updateScore() {
@@ -131,15 +144,21 @@ function updateScore() {
     lerpScore = FlxMath.lerp(lerpScore, intendedScore, Main.deltaTime * 9.0);
 
     scoreText.text = "PERSONAL BEST:" + Math.round(lerpScore);
+
+    speedText.text = "Speed: " + curSpeed;
     positionHighscore();
 }
 
 function positionHighscore() {
     scoreText.x = FlxG.width - scoreText.width - 6;
     scoreBG.scale.x = FlxG.width - scoreText.x + 6;
+
     scoreBG.x = FlxG.width - scoreBG.scale.x / 2;
     diffText.x = scoreBG.x + scoreBG.width / 2;
     diffText.x -= diffText.width / 2;
+
+    speedText.x = scoreBG.x + scoreBG.width / 2;
+    speedText.x -= speedText.width / 2;
 }
 
 var bgColor:Array<Float> = [
@@ -187,16 +206,24 @@ function update() {
     if(UIControls.justPressed("DOWN"))
         changeSelection(1);
 
-    if(UIControls.justPressed("LEFT"))
-        changeDifficulty(-1);
+    if(FlxG.keys.pressed.SHIFT) {
+        if(UIControls.pressed("LEFT") || UIControls.justPressed("RIGHT"))
+            changeSpeed(UIControls.pressed("LEFT") ? -speedMult : speedMult)
+        else
+            speedTimer = 0.0;
+    } else {
+        if(UIControls.justPressed("LEFT"))
+            changeDifficulty(-1);
 
-    if(UIControls.justPressed("RIGHT"))
-        changeDifficulty(1);
+        if(UIControls.justPressed("RIGHT"))
+            changeDifficulty(1);
+    }
 
     if(FlxG.keys.justPressed.SPACE && !loadingBox.visible && curPlaying != songs[curSelected].name) {
         playTheFuckingSong();
     } else if(UIControls.justPressed("ACCEPT"))
     {
+        PlayState_.songMultiplier = curSpeed;
         PlayState_.isStoryMode = false;
         PlayState_.actualSongName = songs[curSelected].name;
         PlayState_.SONG = SongLoader.getJSON(songs[curSelected].name, StringTools.trim(songs[curSelected].difficulties[curDifficulty]));
@@ -204,6 +231,18 @@ function update() {
         PlayState_.availableDifficulties = songs[curSelected].difficulties;
         
         Main.switchState(new PlayState_());
+    }
+}
+
+function changeSpeed(change:Float) {
+    speedTimer += Main.deltaTime;
+
+    if((UIControls.justPressed("LEFT") || UIControls.justPressed("RIGHT")) || (speedTimer > 0.5 && speedTimer > 1.5)) {
+        curSpeed += change;
+        curSpeed = FlxMath.roundDecimal(curSpeed, 2);
+        curSpeed = FlxMath.bound(curSpeed, minSpeed, maxSpeed);
+        FlxG.sound.music.pitch = curSpeed;
+        speedTimer = 1.0;
     }
 }
 
@@ -227,6 +266,8 @@ function playTheFuckingSong() {
         FlxG.sound.music.pause();
         FlxG.sound.music.time = 0;
         FlxG.sound.music.play();
+
+        FlxG.sound.music.pitch = curSpeed;
 
         FlxG.sound.music.fadeIn(1, 0, 1);
         Conductor.changeBPM(songs[curSelected].bpm);

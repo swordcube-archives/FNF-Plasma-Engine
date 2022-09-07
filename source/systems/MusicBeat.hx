@@ -16,7 +16,7 @@ class MusicBeatState extends FlxUIState {
 	// original variables extended from original game source
 	private var lastBeat:Float = 0;
 	private var lastStep:Float = 0;
-
+	
 	public var allowF5:Bool = true;
 
 	public var camNotif:FlxCamera;

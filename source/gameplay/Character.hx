@@ -1,5 +1,7 @@
 package gameplay;
 
+import states.PlayState;
+import flixel.FlxG;
 import flixel.addons.effects.FlxTrail;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
@@ -411,7 +413,7 @@ class Character extends FNFSprite
 		if (!isPlayer)
 		{
 			if (animation.curAnim != null && animation.curAnim.name.startsWith('sing'))
-				holdTimer += elapsed;
+				holdTimer += elapsed * (FlxG.state == PlayState.current ? PlayState.songMultiplier : 1.0);
 
 			if (holdTimer >= Conductor.stepCrochet * singDuration * 0.001)
 			{

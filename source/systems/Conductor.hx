@@ -1,5 +1,6 @@
 package systems;
 
+import states.PlayState;
 import flixel.system.FlxSound;
 import gameplay.Song;
 
@@ -101,6 +102,10 @@ class Conductor {
 		crochet = ((60 / bpm) * 1000);
 		stepCrochet = crochet / 4;
 	}
+
+    public static function recalculateShit() {
+        safeZoneOffset = ((safeFrames / 60.0) * 1000.0) * PlayState.songMultiplier;
+    }
 
     public static function isAudioSynced(sound:FlxSound)
     {

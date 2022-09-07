@@ -50,6 +50,8 @@ class PlayState extends MusicBeatState {
 	public static var SONG:Song = SongLoader.getJSON("m.i.l.f", "hard");
 	public static var actualSongName:String = "";
 
+	public static var songMultiplier:Float = 1.0;
+
 	public static var storyScore:Int = 0;
 
 	public static var actualWeekName:String = "";
@@ -199,10 +201,12 @@ class PlayState extends MusicBeatState {
 
 		Conductor.changeBPM(SONG.bpm);
 		Conductor.mapBPMChanges(SONG);
+		Conductor.recalculateShit();
 
 		Conductor.position = Conductor.crochet * -5.0;
 
 		scrollSpeed = (Settings.get("Scroll Speed") > 0) ? Settings.get("Scroll Speed") : SONG.speed;
+		scrollSpeed /= songMultiplier;
 
 		loadedSong.set("inst", FNFAssets.returnAsset(SOUND, AssetPaths.songInst(SONG.song)));
 		
@@ -272,7 +276,8 @@ class PlayState extends MusicBeatState {
 				gf.destroy();
 				gf = null;
 			}
-			stage.script.call('createPost');
+			if(stage.script != null)
+				stage.script.call('createPost');
 		}
 
 		// load the song script
@@ -570,7 +575,7 @@ class PlayState extends MusicBeatState {
 
 			var ret:Dynamic = callOnHScripts("endSong", [actualSongName], false);
 			
-			if(!inReplay && !usedPractice && songScore > Highscore.getScore(actualSongName+"-"+currentDifficulty))
+			if(songMultiplier >= 1.0 && !inReplay && !usedPractice && songScore > Highscore.getScore(actualSongName+"-"+currentDifficulty))
 				Highscore.setScore(actualSongName+"-"+currentDifficulty, songScore);
 
 			for(object in [UI.timeBarBG, UI.timeBar, UI.timeTxt]) {
@@ -674,7 +679,11 @@ class PlayState extends MusicBeatState {
 
 		if(!inCutscene && !endingSong)
 		{
-			Conductor.position += FlxG.elapsed * 1000.0;
+			if(!startedSong)
+				Conductor.position += FlxG.elapsed * 1000.0;
+			else
+				Conductor.position += (FlxG.elapsed * 1000.0) * songMultiplier;
+
 			if(Conductor.position >= 0.0 && !startedSong)
 				startSong();
 		}
@@ -795,8 +804,11 @@ class PlayState extends MusicBeatState {
 		startedSong = true;
 
 		FlxG.sound.playMusic(loadedSong.get("inst"), 1, false);
-		if(hasVocals)
+		FlxG.sound.music.pitch = songMultiplier;
+		if(hasVocals) {
+			vocals.pitch = songMultiplier;
 			vocals.play();
+		}
 
 		FlxG.sound.music.onComplete = finishSong.bind();
 

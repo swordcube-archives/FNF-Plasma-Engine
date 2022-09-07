@@ -51,7 +51,7 @@ function updateBar() {
 function update(elapsed) {
     if(ui.timeTxt != null)
     {
-        ui.timeTxt.text = FlxStringUtil.formatTime(FlxG.sound.music.time/1000.0) + " / " + FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0);
+        ui.timeTxt.text = FlxStringUtil.formatTime((FlxG.sound.music.time/1000.0)/PlayState_.songMultiplier) + " / " + FlxStringUtil.formatTime((FlxG.sound.music.length/1000.0)/PlayState_.songMultiplier);
         if(PlayState.botPlay)
             ui.timeTxt.text += " [BOT]";
         if(PlayState.inReplay)

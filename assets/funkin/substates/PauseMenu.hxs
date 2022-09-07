@@ -198,5 +198,7 @@ function changeSelection(change:Int) {
 function destroy() {
     if(PlayState.current.countdownTimer != null)
         PlayState.current.countdownTimer.active = true;
+    pauseMusic.stop();
+    pauseMusic.kill();
     pauseMusic.destroy();
 }

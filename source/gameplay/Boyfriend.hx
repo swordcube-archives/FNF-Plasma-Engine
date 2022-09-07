@@ -13,7 +13,7 @@ class Boyfriend extends Character {
 		if (!debugMode)
 		{
 			if (animation.curAnim != null && animation.curAnim.name.startsWith('sing'))
-				holdTimer += elapsed;
+				holdTimer += elapsed * (FlxG.state == PlayState.current ? PlayState.songMultiplier : 1.0);
 			else
 				holdTimer = 0;
 

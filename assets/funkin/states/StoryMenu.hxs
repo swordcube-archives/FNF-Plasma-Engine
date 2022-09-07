@@ -262,6 +262,7 @@ function selectWeek() {
 
     PlayState_.availableDifficulties = weeks[curSelected].difficulties;
 
+    PlayState_.songMultiplier = 1.0;
     PlayState_.storyPlaylist = weeks[curSelected].tracks;
     PlayState_.actualSongName = PlayState_.storyPlaylist[0];
     PlayState_.actualWeekName = weeks[curSelected].texture;
