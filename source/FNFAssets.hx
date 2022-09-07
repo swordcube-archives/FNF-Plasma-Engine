@@ -64,8 +64,9 @@ class FNFAssets {
                 {
                     if(fucker.endsWith(":IMAGE"))
                     {
-                        cast(cache[fucker], FlxGraphic).dump();
-                        cast(cache[fucker], FlxGraphic).destroy();
+                        var graphic:FlxGraphic = cast(cache[fucker], FlxGraphic);
+                        graphic.dump();
+                        graphic.destroy();
                         cache.remove(fucker);
                     }
                 }
@@ -80,6 +81,17 @@ class FNFAssets {
                 
             // Clear all cache if the type doesn't exist
             default:
+                for(fucker in cache.keys())
+                {
+                    if(fucker.endsWith(":IMAGE"))
+                    {
+                        var graphic:FlxGraphic = cast(cache[fucker], FlxGraphic);
+                        graphic.dump();
+                        graphic.destroy();
+                        cache.remove(fucker);
+                    }
+                }
+
                 cache.clear();
         }
     }
