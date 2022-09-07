@@ -207,11 +207,13 @@ function update() {
         changeSelection(1);
 
     if(FlxG.keys.pressed.SHIFT) {
-        if(UIControls.pressed("LEFT") || UIControls.justPressed("RIGHT"))
+        if(UIControls.pressed("LEFT") || UIControls.pressed("RIGHT"))
             changeSpeed(UIControls.pressed("LEFT") ? -speedMult : speedMult)
         else
             speedTimer = 0.0;
     } else {
+        holdTimer = 0;
+        
         if(UIControls.justPressed("LEFT"))
             changeDifficulty(-1);
 
@@ -237,12 +239,14 @@ function update() {
 function changeSpeed(change:Float) {
     speedTimer += Main.deltaTime;
 
-    if((UIControls.justPressed("LEFT") || UIControls.justPressed("RIGHT")) || (speedTimer > 0.5 && speedTimer > 1.5)) {
+    if((UIControls.justPressed("LEFT") || UIControls.justPressed("RIGHT")) || (speedTimer > 0.5)) {
         curSpeed += change;
         curSpeed = FlxMath.roundDecimal(curSpeed, 2);
         curSpeed = FlxMath.bound(curSpeed, minSpeed, maxSpeed);
         FlxG.sound.music.pitch = curSpeed;
-        speedTimer = 1.0;
+
+        if(speedTimer > 0.6)
+            speedTimer = 0.5;
     }
 }
 

@@ -150,6 +150,8 @@ function update() {
     }
     else
     {
+        holdTimer = 0;
+
         if(UIControls.justPressed("LEFT"))
             changePage(-1);
 
@@ -285,7 +287,7 @@ function changeValue(change:Float) {
             grpCheckbox.members[curSelected].status = Settings.get(saveDataShit);
             grpCheckbox.members[curSelected].refresh();
         case "Number":
-            if((UIControls.justPressed("LEFT") || UIControls.justPressed("RIGHT")) || (holdTimer > 0.5 && holdTimer > 1.5))
+            if((UIControls.justPressed("LEFT") || UIControls.justPressed("RIGHT")) || (holdTimer > 0.5))
             {
                 var dumb:Float = Settings.get(saveDataShit) + (setting.valueMult * change);
                 dumb = FlxMath.roundDecimal(dumb, setting.decimals);
@@ -307,8 +309,9 @@ function changeValue(change:Float) {
                         item.x += (FlxG.width * 0.23);
                     }
                 }
-
-                holdTimer = 1.0;
+                
+                if(holdTimer > 0.6)
+                    holdTimer = 0.5;
             }
         case "Selector":
             if(UIControls.justPressed("LEFT") || UIControls.justPressed("RIGHT"))
