@@ -116,20 +116,15 @@ class Init extends MusicBeatState {
         {
             if(!pack.contains("."))
             {
-                var path:String = '${Sys.getCwd()}assets/${pack}/optionsPages.txt';
-                if(FileSystem.exists(path))
-                {
-                    var txt:Array<String> = CoolUtil.listFromText(File.getContent(path));
-                    for(page in txt)
-                        settingPages.push(page);
-                }
-
                 var path:String = '${Sys.getCwd()}assets/${pack}/options.json';
                 if(FileSystem.exists(path))
                 {
                     var json:Array<OptionData> = Json.parse(File.getContent(path)).options;
                     for(setting in json)
                         settings.push(setting);
+                    var txt:Array<String> = Json.parse(File.getContent(path)).pages;
+                    for(page in txt)
+                        settingPages.push(page);
                 }
             }
         }

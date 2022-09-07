@@ -1,4 +1,10 @@
 {
+    "pages":  [
+        "Preferences",
+        "Appearance",
+        "Developers",
+        "Controls"
+    ],
     "options": [
         {
             "page": "Preferences",

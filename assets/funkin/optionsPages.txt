@@ -1,4 +1,0 @@
-Preferences
-Appearance
-Developers
-Controls
