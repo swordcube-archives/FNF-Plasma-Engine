@@ -1,5 +1,6 @@
 package systems;
 
+import lime.utils.Assets;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.addons.transition.FlxTransitionableState;
@@ -33,17 +34,21 @@ class MusicBeatState extends FlxUIState {
 		if (!FlxTransitionableState.skipNextTransOut)
 			openSubState(new Transition(0.45, true));
 
+		// clears sounds from memory
 		FlxG.sound.list.forEachAlive(function(sound:FlxSound)
-		{ // clears sounds from memory
+		{
 			FlxG.sound.list.remove(sound, true);
 			sound.stop();
 			sound.kill();
 			sound.destroy();
 		});
 
+		Assets.cache.audio.clear();
+
         // clears all bitmaps from memory
 		FlxG.bitmap.dumpCache();
 		FlxG.bitmap.clearCache();
+		Assets.cache.image.clear();
 
 		// clear all cache
 		FNFAssets.clearCache();
