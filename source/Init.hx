@@ -119,12 +119,17 @@ class Init extends MusicBeatState {
                 var path:String = '${Sys.getCwd()}assets/${pack}/options.json';
                 if(FileSystem.exists(path))
                 {
-                    var json:Array<OptionData> = Json.parse(File.getContent(path)).options;
+                    var rawJson:Dynamic = Json.parse(File.getContent(path));
+                    
+                    var json:Array<OptionData> = rawJson.options;
                     for(setting in json)
                         settings.push(setting);
-                    var txt:Array<String> = Json.parse(File.getContent(path)).pages;
-                    for(page in txt)
-                        settingPages.push(page);
+
+                    if(rawJson.pages != null) {
+                        var txt:Array<String> = rawJson.pages;
+                        for(page in txt)
+                            settingPages.push(page);
+                    }
                 }
             }
         }
