@@ -43,12 +43,9 @@ class MusicBeatState extends FlxUIState {
 			sound.destroy();
 		});
 
-		Assets.cache.audio.clear();
-
         // clears all bitmaps from memory
 		FlxG.bitmap.dumpCache();
 		FlxG.bitmap.clearCache();
-		Assets.cache.image.clear();
 
 		// clear all cache
 		FNFAssets.clearCache();

@@ -75,8 +75,6 @@ class FNFAssets {
                 for(fucker in cache.keys())
                 {
                     if(fucker.endsWith(":SOUND")) {
-                        var sound:Sound = cast(cache[fucker], Sound);
-                        sound.close();
                         cache.remove(fucker);
                     }
                 }
@@ -93,8 +91,6 @@ class FNFAssets {
                     }
 
                     if(fucker.endsWith(":SOUND")) {
-                        var sound:Sound = cast(cache[fucker], Sound);
-                        sound.close();
                         cache.remove(fucker);
                     }
                 }
