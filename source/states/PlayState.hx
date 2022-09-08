@@ -555,10 +555,10 @@ class PlayState extends MusicBeatState {
 		vocals.stop();
 
 		FlxG.sound.music.time = 0;
-		if(Settings.get("Note Offset") <= 0 || ignoreNoteOffset) {
+		if((Settings.get("Note Offset") * songMultiplier) <= 0 || ignoreNoteOffset) {
 			endSong();
 		} else {
-			new FlxTimer().start(Settings.get("Note Offset") / 1000, function(tmr:FlxTimer) {
+			new FlxTimer().start((Settings.get("Note Offset") * songMultiplier) / 1000, function(tmr:FlxTimer) {
 				endSong();
 			});
 		}
@@ -759,14 +759,14 @@ class PlayState extends MusicBeatState {
 	{
 		if(unspawnNotes[0] != null)
 		{
-			while (unspawnNotes.length > 0 && ((unspawnNotes[0].strumTime + Settings.get("Note Offset")) - Conductor.position) < 2500 / scrollSpeed)
+			while (unspawnNotes.length > 0 && ((unspawnNotes[0].strumTime + (Settings.get("Note Offset") * songMultiplier)) - Conductor.position) < 2500 / scrollSpeed)
 			{
 				var arrowSkin:String = currentSkin.replace("default", Settings.get("Arrow Skin").toLowerCase());
 
 				var dunceNote:Note = new Note(-9999, -9999, unspawnNotes[0].noteData, false);
 				dunceNote.stepCrochet = Conductor.stepCrochet;
 				dunceNote.rawStrumTime = unspawnNotes[0].strumTime;
-				dunceNote.strumTime = unspawnNotes[0].strumTime + Settings.get("Note Offset");
+				dunceNote.strumTime = unspawnNotes[0].strumTime + (Settings.get("Note Offset") * songMultiplier);
 				dunceNote.mustPress = unspawnNotes[0].mustPress;
 				dunceNote.altAnim = unspawnNotes[0].altAnim;
 				dunceNote.parent = unspawnNotes[0].mustPress ? UI.playerStrums : UI.opponentStrums;
