@@ -6,7 +6,8 @@ var defaultMenuItems:Array<String> = [
     'Resume', 
     'Restart Song', 
     'Change Difficulty', 
-    'Toggle Practice Mode', 
+    'Toggle Practice Mode',
+    'Configure Options',
     'Exit To Menu'
 ];
 
@@ -168,6 +169,10 @@ function update(elapsed) {
 
                     if(PlayState.practiceMode)
                         PlayState.usedPractice = true;
+
+                case "Configure Options":
+                    FlxG.sound.playMusic(freakyMenu);
+                    Main.switchState(new ScriptedState("OptionsMenu"));
 
                 case "Exit To Menu":
                     FlxG.sound.playMusic(freakyMenu);

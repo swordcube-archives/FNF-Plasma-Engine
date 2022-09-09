@@ -105,7 +105,7 @@ class Ranking {
 
 	public static function judgeNote(strumTime:Float)
 	{
-		var noteDiff:Float = Math.abs(Conductor.position - strumTime);
+		var noteDiff:Float = Math.abs(Conductor.position - strumTime) / PlayState.songMultiplier;
 		var lastJudge:String = "no";
 		
 		for(judge in judgements)

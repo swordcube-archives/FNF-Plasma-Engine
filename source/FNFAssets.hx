@@ -62,10 +62,10 @@ class FNFAssets {
             case "image":
                 for(fucker in cache.keys())
                 {
-                    if(fucker.endsWith(":IMAGE"))
-                    {
-                        cast(cache[fucker], FlxGraphic).dump();
-                        cast(cache[fucker], FlxGraphic).destroy();
+                    if(fucker.endsWith(":IMAGE")) {
+                        var graphic:FlxGraphic = cast(cache[fucker], FlxGraphic);
+                        graphic.dump();
+                        graphic.destroy();
                         cache.remove(fucker);
                     }
                 }
@@ -74,12 +74,27 @@ class FNFAssets {
             case "sound":
                 for(fucker in cache.keys())
                 {
-                    if(fucker.endsWith(":SOUND"))
+                    if(fucker.endsWith(":SOUND")) {
                         cache.remove(fucker);
+                    }
                 }
                 
             // Clear all cache if the type doesn't exist
             default:
+                for(fucker in cache.keys())
+                {
+                    if(fucker.endsWith(":IMAGE")) {
+                        var graphic:FlxGraphic = cast(cache[fucker], FlxGraphic);
+                        graphic.dump();
+                        graphic.destroy();
+                        cache.remove(fucker);
+                    }
+
+                    if(fucker.endsWith(":SOUND")) {
+                        cache.remove(fucker);
+                    }
+                }
+
                 cache.clear();
         }
     }

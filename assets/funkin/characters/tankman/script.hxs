@@ -11,7 +11,7 @@ function create() {
     character.animation.addByPrefix('singUP', 'Tankman UP note ', 24, false);
     character.animation.addByPrefix('singDOWN', 'Tankman DOWN note ', 24, false);
 
-    character.animation.addByPrefix('singDOWN-alt', 'PRETTY GOOD', 24, false);
+    character.animation.addByPrefix('singDOWN-alt', 'PRETTY GOOD', 24 * (PlayState != null ? PlayState_.songMultiplier : 1), false);
     character.animation.addByPrefix('singUP-alt', 'TANKMAN UGH', 24, false);
 
     character.setOffset('singUP', 48, 54);
