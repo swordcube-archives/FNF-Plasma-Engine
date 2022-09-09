@@ -156,20 +156,10 @@ class Note extends FNFSprite {
         json = Init.arrowSkins[skin];
 
         var noteThing:String = ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][0][noteData];
-        if(json.skin_type == "pixel")
-        {
-            loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image(json.note_assets)), true, 17, 17);
-            animation.add("normal", [noteData+4], 24, true);
-            animation.add("hold", [noteData+20], 24, true);
-            animation.add("tail", [noteData+24], 24, true);
-        }
-        else
-        {
-            frames = FNFAssets.returnAsset(SPARROW, json.note_assets);
-            animation.addByPrefix("normal", noteThing+"0", 24, true);
-            animation.addByPrefix("hold", noteThing+" hold0", 24, true);
-            animation.addByPrefix("tail", noteThing+" tail0", 24, true);
-        }
+        frames = FNFAssets.returnAsset(SPARROW, json.note_assets);
+        animation.addByPrefix("normal", noteThing+"0", 24, true);
+        animation.addByPrefix("hold", noteThing+" hold0", 24, true);
+        animation.addByPrefix("tail", noteThing+" tail0", 24, true);
 
         antialiasing = json.skin_type != "pixel" ? Settings.get("Antialiasing") : false;
 

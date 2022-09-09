@@ -72,20 +72,10 @@ class StrumNote extends FNFSprite {
             json = Init.arrowSkins[skin];
 
             var noteThing:String = ExtraKeys.arrowInfo[parent.keyCount-1][0][noteData];
-            if(json.skin_type == "pixel")
-            {
-                loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image(json.note_assets)), true, 17, 17);
-                animation.add("static", [noteData], json.framerate, true);
-                animation.add("press", [noteData+4, noteData+8], json.framerate, false);
-                animation.add("confirm", [noteData+12, noteData+16], json.framerate, false);
-            }
-            else
-            {
-                frames = FNFAssets.returnAsset(SPARROW, json.note_assets);
-                animation.addByPrefix("static", noteThing+" static0", json.framerate, true);
-                animation.addByPrefix("press", noteThing+" press0", json.framerate, false);
-                animation.addByPrefix("confirm", noteThing+" confirm0", json.framerate, false);
-            }
+            frames = FNFAssets.returnAsset(SPARROW, json.note_assets);
+            animation.addByPrefix("static", noteThing+" static0", json.framerate, true);
+            animation.addByPrefix("press", noteThing+" press0", json.framerate, false);
+            animation.addByPrefix("confirm", noteThing+" confirm0", json.framerate, false);
 
             antialiasing = json.skin_type != "pixel" ? Settings.get("Antialiasing") : false;
 
