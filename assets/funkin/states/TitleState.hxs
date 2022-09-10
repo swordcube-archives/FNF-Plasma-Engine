@@ -3,7 +3,6 @@ var logo, gfDance, ngSpr, titleText;
 var credGroup:FlxGroup;
 var curWacky:Array<String> = ["???", "???"];
 
-
 function getIntroTextShit() {
     var fullText:String = FNFAssets.getText(AssetPaths.txt('introText'));
     var firstArray:Array<String> = fullText.split('\n');
