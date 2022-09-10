@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TextureAtlas imagePath="notificationIcons.png">
-	<!-- Created with Adobe Animate version 22.0.3.179 -->
-	<!-- http://www.adobe.com/products/animate.html -->
-	<SubTexture name="error0000" x="10" y="10" width="79" height="79"/>
-	<SubTexture name="warn0000" x="10" y="99" width="79" height="79"/>
-	<SubTexture name="info0000" x="99" y="10" width="79" height="79"/>
-</TextureAtlas>
