@@ -1,10 +1,8 @@
 // Dialogue Code
 var dialogue;
 function create() {
-    if(PlayState_.isStoryMode) {
-        dialogue = new HScript('dialogue/scripts/default');
-        dialogue.start();
-    }
+    dialogue = new HScript('dialogue/scripts/default');
+    dialogue.start();
 }
 function update(elapsed) {
     if(dialogue != null)
@@ -35,7 +33,7 @@ function createPost() {
 
 function beatHit(curBeat) {
     Window.y += 50;
-    FlxTween.tween(Window, { y: Window.y - 50 }, Conductor.crochet/1000);
+    FlxTween.tween(Window, { y: Window.y - 50 }, (Conductor.crochet/1000)-0.05, { ease: FlxEase.cubeOut });
     switch(curBeat)
     {
         case 28:
@@ -44,14 +42,21 @@ function beatHit(curBeat) {
                 PlayState.UI.healthBar,
                 PlayState.UI.iconP2,
                 PlayState.UI.iconP1,
-                PlayState.UI.scoreTxt,
+                PlayState.UI.scoreTxt
+            ]) {
+            if(obj != null)
+                FlxTween.tween(obj, { y: obj.y - 500 }, 1.5, { ease: FlxEase.cubeInOut });
+            }
+
+            for (obj in [
                 PlayState.UI.timeBarBG,
                 PlayState.UI.timeBar,
                 PlayState.UI.timeTxt
             ]) {
             if(obj != null)
-                FlxTween.tween(obj, { y: obj.y - 500 }, 1.5, { ease: FlxEase.cubeInOut });
+                FlxTween.tween(obj, { y: obj.y + 500 }, 1.5, { ease: FlxEase.cubeInOut });
             }
+
             Notification.showInfo("Good Luck!", "lol");
     }
 }
