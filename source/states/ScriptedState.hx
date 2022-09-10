@@ -7,6 +7,9 @@ import systems.MusicBeat;
 
 class ScriptedState extends MusicBeatState
 {
+    /*
+    nice job sword -zxy
+    */
     public var script:HScript;
     public var name:String;
     public var args:Array<Any> = [];

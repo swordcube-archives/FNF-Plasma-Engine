@@ -17,6 +17,7 @@ var pages:Array<String> = [
     "Appearance",
     "Developers",
     "Controls"
+
 ];
 
 var optionTypes:Array<Dynamic> = [];

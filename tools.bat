@@ -7,10 +7,7 @@ echo \n
 if %1%==compile goto compile
 if %1%==test goto test
 
-:close
-echo press the red x now
-pause
-goto close
+
 
 :compile
 echo Compile
@@ -20,6 +17,12 @@ echo \n
 if %2%==y lime test windows -debug
 if %2%==n lime test windows
 
+
+goto close
+
+:close
+echo press the red x now
+pause
 goto close
 
 

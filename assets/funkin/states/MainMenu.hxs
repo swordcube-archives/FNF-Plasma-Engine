@@ -1,4 +1,6 @@
 import flixel.FlxObject;
+import flixel.ui.FlxButton;
+import AutoUpdater;
 
 // everythign else
 
@@ -104,6 +106,14 @@ function create() {
     changeSelection(0);
 
     FlxG.camera.follow(camFollowPos, null, 1);
+    checkupdates = new FlxButton(0, 0, "Check For Updates", update);
+    function updatGGe():Void
+        {
+            try:
+                AutoUpdater.Update();
+            catch:
+                trace("failure");
+        }
 }
 
 var accepted:Bool = false;
