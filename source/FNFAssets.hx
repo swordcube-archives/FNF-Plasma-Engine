@@ -116,10 +116,10 @@ class FNFAssets {
                 return returnGraphic(path);
 
             case SPARROW:
-                return FlxAtlasFrames.fromSparrow(returnGraphic(AssetPaths.image(path)), returnAsset(TEXT, AssetPaths.xml('images/$path')));
+                return FlxAtlasFrames.fromSparrow(returnGraphic(AssetPaths.image(path)), returnText(AssetPaths.xml('images/$path')));
 
             case PACKER:
-                return FlxAtlasFrames.fromSpriteSheetPacker(returnGraphic(AssetPaths.image(path)), returnAsset(TEXT, AssetPaths.txt('images/$path')));
+                return FlxAtlasFrames.fromSpriteSheetPacker(returnGraphic(AssetPaths.image(path)), returnText(AssetPaths.txt('images/$path')));
 
             case STORY_CHARACTER_SPARROW:
                 return FlxAtlasFrames.fromSparrow(returnGraphic(AssetPaths.storyCharacterSpriteSheet(path)), returnText(AssetPaths.xml('story_characters/$path/spritesheet')));
