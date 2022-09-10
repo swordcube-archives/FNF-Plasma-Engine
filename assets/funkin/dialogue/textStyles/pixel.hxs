@@ -1,14 +1,14 @@
 function create() {
-    text.x = 250;
+    text.x = 240;
     text.y = 500;
-    text.fieldWidth = 768;
+    text.fieldWidth = FlxG.width*0.6;
     text.size = 32;
     text.font = AssetPaths.font('pixel', '.otf');
-    text.antialiasing = true;
+    text.antialiasing = false;
     text.cameras = [PlayState.camOther];
-    text.color = 0xFFD89494;
+    text.color = 0xFF3F2021;
     text.borderStyle = FlxTextBorderStyle.SHADOW;
-    text.borderColor = FlxColor.BLACK;
+    text.borderColor = 0xFFD89494;
     text.borderSize = 2;
     add(text);
 }

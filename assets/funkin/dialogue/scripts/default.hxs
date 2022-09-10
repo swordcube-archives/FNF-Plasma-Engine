@@ -1,5 +1,4 @@
 var json = {};
-var curBox:String = "fraejlkarehfuoijrei98rrrrrrrhjucifsfhecirufehrcoiuejreiforewidawemalfekflds";
 
 var curLine = {};
 var curLineIndex:Int = 0;
@@ -83,7 +82,7 @@ function runDialogue(idx) {
         dialogue.add(bg);
     
     loadPortrait(json.lines[idx].char, json.lines[idx].emotion);
-    loadBox(json.lines[idx].box);
+    loadBox(json.lines[idx].box, idx);
     loadText(json.lines[idx].font);
     type(json.lines[idx].text, json.lines[idx].speed);
     var textTime = new FlxTimer().start(json.lines[idx].speed, function(){callTheTalk();}, json.lines[idx].text.length);
@@ -113,19 +112,16 @@ function loadPortrait(script, emotion) {
     portraitScript.set("emotion", emotion);
     portraitScript.start();
 }
-function loadBox(script) {
-    if(curBox != script) {
-        curBox = script;
-        boxScript = new HScript('dialogue/boxes/'+script);
-        boxScript.set("bg", bg);
-        boxScript.set("box", box);
-        boxScript.set("portrait", portrait);
-        boxScript.set("add", dialogue.add);
-        boxScript.set("insert", dialogue.insert);
-        boxScript.start();
-    } else {
-        dialogue.add(box);
-    }
+function loadBox(script, idx) {
+    boxScript = new HScript('dialogue/boxes/'+script);
+    boxScript.set("bg", bg);
+    boxScript.set("box", box);
+    boxScript.set("portrait", portrait);
+    boxScript.set("add", dialogue.add);
+    boxScript.set("insert", dialogue.insert);
+    boxScript.set("isOpen", (idx == 0 || json.lines[idx].box != json.lines[idx-1].box));
+    boxScript.start();
+    trace(boxScript);
 }
 function loadText(script) {
     textScript = new HScript('dialogue/textStyles/'+script);

@@ -12,7 +12,7 @@
             "box": "pixel/boxPixel", 
             "font": "pixel", 
             "speed": 0.04, 
-            "bg": "default"
+            "bg": "black"
         },
         {
             "char": "bf", 
@@ -21,7 +21,7 @@
             "box": "pixel/boxPixel", 
             "font": "pixel", 
             "speed": 0.04, 
-            "bg": "default"
+            "bg": "black"
         },
         {
             "char": "bf", 
@@ -30,7 +30,7 @@
             "box": "pixel/boxPixel", 
             "font": "pixel", 
             "speed": 0.04, 
-            "bg": "default"
+            "bg": "black"
         },
         {
             "char": "bf-pixel", 
@@ -39,7 +39,7 @@
             "box": "pixel/boxPixel", 
             "font": "pixel", 
             "speed": 0.04, 
-            "bg": "default"
+            "bg": "black"
         },
         {
             "char": "senpai", 
@@ -48,7 +48,7 @@
             "box": "pixel/boxPixel", 
             "font": "pixel", 
             "speed": 0.04, 
-            "bg": "default"
+            "bg": "black"
         }
     ]
 }

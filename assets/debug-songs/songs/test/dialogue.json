@@ -12,7 +12,7 @@
             "box": "boxRight", 
             "font": "funkin", 
             "speed": 0.04, 
-            "bg": "default"
+            "bg": "white"
         },
         {
             "char": "gf", 
@@ -21,7 +21,7 @@
             "box": "boxLeft", 
             "font": "funkin", 
             "speed": 0.04, 
-            "bg": "default"
+            "bg": "white"
         },
         {
             "char": "bf", 
@@ -30,7 +30,7 @@
             "box": "boxRight", 
             "font": "funkin", 
             "speed": 0.04, 
-            "bg": "default"
+            "bg": "white"
         }
     ]
 }
