@@ -1,6 +1,5 @@
 package gameplay;
 
-import systems.Replay;
 import hscript.HScript;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -72,17 +71,6 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		noteSplashScript.set("add", grpNoteSplashes.add);
 		noteSplashScript.set("remove", grpNoteSplashes.remove);
 		noteSplashScript.start();
-
-		if (PlayState.current != null && PlayState.current.inReplay)
-		{
-			for (i in 0...keyCount)
-			{
-				justPressed.push(false);
-				pressed.push(false);
-				justReleased.push(false);
-				noteDataTimes.push(-1);
-			}
-		}
 	}
 
 	public function generateArrows()
@@ -163,7 +151,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 				});
 			}
 
-			if (hasInput && !PlayState.current.inReplay)
+			if (hasInput)
 			{
 				justPressed = [];
 				pressed = [];
@@ -177,58 +165,6 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 					pressed.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount - 1][i], PRESSED)) : false);
 					justReleased.push(!inCutscene ? (botPlay ? false : FlxG.keys.checkStatus(Init.keyBinds[keyCount - 1][i], JUST_RELEASED)) : false);
 					noteDataTimes.push(-1);
-				}
-			}
-
-			if (hasInput && PlayState.current.inReplay)
-			{
-				for (i in PlayState.current.replayData.keyData)
-				{
-					if (Conductor.position >= i.time)
-					{
-						switch (i.status)
-						{
-							case 0:
-								justPressed[i.noteData] = true;
-								pressed[i.noteData] = true;
-							case 1:
-								justReleased[i.noteData] = true;
-								pressed[i.noteData] = false;
-						}
-						PlayState.current.replayData.keyData.remove(i);
-					}
-					else
-						break;
-				}
-			}
-
-			if (!PlayState.current.inReplay)
-			{
-				for (i in 0...justPressed.length)
-				{
-					if (justPressed[i])
-					{
-						PlayState.current.replayData.keyData.push({
-							noteData: i,
-							time: Conductor.position,
-							status: 0
-						});
-					}
-				}
-			}
-
-			if (!PlayState.current.inReplay)
-			{
-				for (i in 0...justReleased.length)
-				{
-					if (justReleased[i])
-					{
-						PlayState.current.replayData.keyData.push({
-							noteData: i,
-							time: Conductor.position,
-							status: 1
-						});
-					}
 				}
 			}
 
@@ -528,16 +464,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 		PlayState.current.totalNotes++;
 
-		var killme:ReplayNote = null;
-		for (n in PlayState.current.replayData.notes)
-		{
-			if (n.strumTime == note.strumTime)
-			{
-				killme = n;
-				break;
-			}
-		}
-		var judgement:String = PlayState.current.inReplay ? killme.rating : Ranking.judgeNote(note.strumTime);
+		var judgement:String = Ranking.judgeNote(note.strumTime);
 		var judgeData:Judgement = Ranking.getInfo(botPlay ? "marvelous" : judgement);
 
 		if (!botPlay)
@@ -588,13 +515,6 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 				}
 			}
 		}
-
-		if (!PlayState.current.inReplay)
-			PlayState.current.replayData.notes.push({
-				strumTime: note.strumTime,
-				noteData: note.noteData,
-				rating: judgement
-			});
 
 		PlayState.current.callOnHScripts("goodNoteHit", [note]);
 		PlayState.current.callOnHScripts("playerNoteHit", [note]);

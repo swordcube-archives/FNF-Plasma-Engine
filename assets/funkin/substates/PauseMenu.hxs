@@ -90,11 +90,6 @@ function spawnOptions() {
         grpMenuShit.remove(bemb, true);
     }
 
-    if(PlayState.inReplay) {
-        menuItems.remove("Toggle Practice Mode");
-        menuItems.remove("Restart Song");
-    }
-
     if(PlayState.availableDifficulties.length <= 1)
         menuItems.remove("Change Difficulty");
 

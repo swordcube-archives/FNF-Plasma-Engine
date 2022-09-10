@@ -54,8 +54,6 @@ function update(elapsed) {
         ui.timeTxt.text = FlxStringUtil.formatTime((FlxG.sound.music.time/1000.0)/PlayState_.songMultiplier) + " / " + FlxStringUtil.formatTime((FlxG.sound.music.length/1000.0)/PlayState_.songMultiplier);
         if(PlayState.botPlay)
             ui.timeTxt.text += " [BOT]";
-        if(PlayState.inReplay)
-            ui.timeTxt.text += " [REPLAY]";
         ui.timeTxt.screenCenter(FlxAxes.X);
     }
 }

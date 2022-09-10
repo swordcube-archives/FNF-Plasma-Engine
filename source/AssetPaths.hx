@@ -37,15 +37,6 @@ class AssetPaths {
     }
 
     /**
-        Turns `path` into `replays/path`
-
-        @param path                    The path to convert.
-        @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
-    **/
-    public static function replay(path:String):String
-        return '${cwd}replays/$path.json';
-
-    /**
         Turns `path` into `assets/somePack/fonts/path.ext` (.ext can be: .ttf or .otf)
         Change `imageExt` to TTF or OTF to change file extension.
 

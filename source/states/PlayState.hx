@@ -3,7 +3,6 @@ package states;
 import systems.ScriptedSprite;
 import openfl.utils.Dictionary;
 import sys.io.File;
-import systems.Replay;
 import flixel.util.FlxStringUtil;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -123,17 +122,6 @@ class PlayState extends MusicBeatState {
 	public var endingSong:Bool = false;
 
 	public var scrollSpeed:Float = 1.0;
-
-	public var inReplay:Bool = false;
-
-	public var replayData:ReplayData = {
-		packUsed: AssetPaths.currentPack,
-
-		keyData: [],
-		notes: [],
-
-		difficulty: currentDifficulty
-	};
 
 	public function calculateAccuracy()
 	{
@@ -450,9 +438,7 @@ class PlayState extends MusicBeatState {
 	public function getMenuToSwitchTo():Dynamic
 	{
 		if(isStoryMode)
-			return new states.ScriptedState('StoryMenu'); // i changed it!!!
-		else if(inReplay)
-			return new states.ScriptedState('ReplaysMenu');
+			return new states.ScriptedState('StoryMenu');
 		else
 			return new states.ScriptedState('FreeplayMenu');
 
@@ -575,7 +561,7 @@ class PlayState extends MusicBeatState {
 
 			var ret:Dynamic = callOnHScripts("endSong", [actualSongName], false);
 			
-			if(songMultiplier >= 1.0 && !inReplay && !usedPractice && songScore > Highscore.getScore(actualSongName+"-"+currentDifficulty))
+			if(songMultiplier >= 1.0 && !usedPractice && songScore > Highscore.getScore(actualSongName+"-"+currentDifficulty))
 				Highscore.setScore(actualSongName+"-"+currentDifficulty, songScore);
 
 			for(object in [UI.timeBarBG, UI.timeBar, UI.timeTxt]) {
@@ -588,39 +574,32 @@ class PlayState extends MusicBeatState {
 			}
 			UI.timeBarScript = null;
 			
-			if(ret != HScript.function_stop)
-			{
+			if(ret != HScript.function_stop) {
 				FlxG.sound.music.stop();
 				vocals.stop();
 	
 				FlxG.sound.music.time = 0;
 				FlxG.sound.playMusic(freakyMenu);
-				
-				if(!inReplay) {
-					Replay.saveReplay(actualSongName, replayData);
-					if(isStoryMode)
-					{
-						storyPlaylist.shift();
-						storyScore += songScore;
 
-						if(storyPlaylist.length > 0) {
-							SONG = SongLoader.getJSON(storyPlaylist[0], currentDifficulty);
-							Main.switchState(new states.PlayState());
-						} else {
-							FlxG.sound.playMusic(FNFAssets.returnAsset(SOUND, AssetPaths.music("freakyMenu")));
+				if(isStoryMode)
+				{
+					storyPlaylist.shift();
+					storyScore += songScore;
 
-							if(storyScore > Highscore.getScore(actualWeekName+"-"+currentDifficulty))
-								Highscore.setScore(actualWeekName+"-"+currentDifficulty, storyScore);
-							
-							Main.switchState(getMenuToSwitchTo());
-						}
-					}
-					else
+					if(storyPlaylist.length > 0) {
+						SONG = SongLoader.getJSON(storyPlaylist[0], currentDifficulty);
+						Main.switchState(new states.PlayState());
+					} else {
+						FlxG.sound.playMusic(FNFAssets.returnAsset(SOUND, AssetPaths.music("freakyMenu")));
+
+						if(storyScore > Highscore.getScore(actualWeekName+"-"+currentDifficulty))
+							Highscore.setScore(actualWeekName+"-"+currentDifficulty, storyScore);
+						
 						Main.switchState(getMenuToSwitchTo());
-				} else {
-					AssetPaths.currentPack = FlxG.save.data.currentPack;
-					Main.switchState(new ScriptedState("ReplaysMenu"));
+					}
 				}
+				else
+					Main.switchState(getMenuToSwitchTo());
 			}
 
 			callOnHScripts("endSongPost", [actualSongName]);
