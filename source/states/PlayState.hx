@@ -276,6 +276,19 @@ class PlayState extends MusicBeatState {
 		scripts.push(script);
 		script.start();
 
+		// load song scripts
+		if(SONG.scripts != null) {
+			for(item in SONG.scripts) {
+				if(FileSystem.exists(item)) {
+					var script = new HScript(item, "", true);
+					script.set("add", this.add);
+					script.set("remove", this.remove);
+					scripts.push(script);
+					script.start();
+				}
+			}
+		}
+
 		// load global scripts
 		if(FileSystem.exists(AssetPaths.asset('global_scripts')))
 		{

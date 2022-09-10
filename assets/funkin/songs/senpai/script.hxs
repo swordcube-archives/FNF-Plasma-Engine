@@ -1,5 +1,17 @@
 // my code is ass so createPost is for the notes and create is for everything else
+var dialogue;
+
+function update(elapsed) {
+    if(dialogue != null)
+        dialogue.update(elapsed);
+}
+
 function create() {
+    if(!PlayState_.isStoryMode) {
+        dialogue = new HScript('dialogue/scripts/default');
+        dialogue.start();
+    }
+
     PlayState.countdownImageLocation = "countdown/pixel";
     PlayState.countdownSoundLocation = "countdown/pixel";
     PlayState.countdownScale = 6;

@@ -1,0 +1,54 @@
+{
+    "info": {
+        "music": "Lunchbox",
+        "musicVolume": 1,
+        "proceedSound": "pixelProceed"
+    },
+    "lines": [
+        {
+            "char": "gf", 
+            "emotion": "default", 
+            "text": "so uh where's that pixelated bitch you've been on about all day?", 
+            "box": "pixel/boxPixel", 
+            "font": "pixel", 
+            "speed": 0.04, 
+            "bg": "default"
+        },
+        {
+            "char": "bf", 
+            "emotion": "default", 
+            "text": "i don't know", 
+            "box": "pixel/boxPixel", 
+            "font": "pixel", 
+            "speed": 0.04, 
+            "bg": "default"
+        },
+        {
+            "char": "bf", 
+            "emotion": "shock", 
+            "text": "oh shiiiiiiiiiiit", 
+            "box": "pixel/boxPixel", 
+            "font": "pixel", 
+            "speed": 0.04, 
+            "bg": "default"
+        },
+        {
+            "char": "bf-pixel", 
+            "emotion": "default", 
+            "text": "fuck i'm pixels now", 
+            "box": "pixel/boxPixel", 
+            "font": "pixel", 
+            "speed": 0.04, 
+            "bg": "default"
+        },
+        {
+            "char": "senpai", 
+            "emotion": "default", 
+            "text": "sup", 
+            "box": "pixel/boxPixel", 
+            "font": "pixel", 
+            "speed": 0.04, 
+            "bg": "default"
+        }
+    ]
+}

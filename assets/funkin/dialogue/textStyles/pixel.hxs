@@ -1,0 +1,19 @@
+function create() {
+    text.x = 250;
+    text.y = 500;
+    text.fieldWidth = 768;
+    text.size = 32;
+    text.font = AssetPaths.font('pixel', '.otf');
+    text.antialiasing = true;
+    text.cameras = [PlayState.camOther];
+    text.color = 0xFFD89494;
+    text.borderStyle = FlxTextBorderStyle.SHADOW;
+    text.borderColor = FlxColor.BLACK;
+    text.borderSize = 2;
+    add(text);
+}
+
+function type(textToType, speed) {
+    text.resetText(textToType + ' \n');
+    text.start(speed, true);
+}

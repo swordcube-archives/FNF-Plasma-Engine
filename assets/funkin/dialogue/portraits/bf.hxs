@@ -13,7 +13,7 @@ function create() {
     portrait.animation.addByPrefix('pissed_talk', 'BF PISSED LOOP0', 24, false);
     portrait.animation.addByPrefix('shock_open', 'BF SHOCK0', 24, false);
     portrait.animation.addByPrefix('shock_talk', 'BF SHOCK LOOP0', 24, false);
-    portrait.animation.play(emotion + '_open', true);
+    portrait.animation.play(emotion + '_open');
     portrait.antialiasing = true;
     portrait.cameras = [PlayState.camOther];
     portrait.x = 75;
@@ -21,6 +21,6 @@ function create() {
     add(portrait);
 }
 function talk() {
-    portrait.animation.play(emotion + '_talk', true);
+    portrait.animation.play(emotion + '_talk');
     FlxG.sound.play(talkSound);
 }

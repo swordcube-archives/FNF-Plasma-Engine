@@ -49,21 +49,23 @@ class HScript {
 
     public var usedExtension:String = ".hxs";
 
-    public function new(path:String, fileExt:String = ".hxs")
+    public function new(path:String, fileExt:String = ".hxs", useRawPath:Bool = false)
     {
-        var awesomeSwagPath:String = AssetPaths.asset(path+fileExt);
+        var awesomeSwagPath:String = useRawPath ? path : AssetPaths.asset(path+fileExt);
 
-        for(ext in hscriptExts)
-        {
-            if(FileSystem.exists(AssetPaths.asset(path+ext)))
+        if(!useRawPath) {
+            for(ext in hscriptExts)
             {
-                usedExtension = ext;
-                awesomeSwagPath = AssetPaths.asset(path+ext);
-            }
-            else if(FileSystem.exists(AssetPaths.asset(path+ext, 'funkin')))
-            {
-                usedExtension = ext;
-                awesomeSwagPath = AssetPaths.asset(path+ext, 'funkin');
+                if(FileSystem.exists(AssetPaths.asset(path+ext)))
+                {
+                    usedExtension = ext;
+                    awesomeSwagPath = AssetPaths.asset(path+ext);
+                }
+                else if(FileSystem.exists(AssetPaths.asset(path+ext, 'funkin')))
+                {
+                    usedExtension = ext;
+                    awesomeSwagPath = AssetPaths.asset(path+ext, 'funkin');
+                }
             }
         }
 
@@ -287,7 +289,10 @@ class HScript {
                 }
             };
 
-            //
+            // Set the script object to PlayState if we're in Playstate
+            if(PlayState.current != null)
+                setScriptObject(PlayState.current);
+
             // Execute the script
             interp.execute(program);
         }

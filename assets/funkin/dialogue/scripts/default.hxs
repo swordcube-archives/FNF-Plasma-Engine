@@ -1,4 +1,5 @@
 var json = {};
+var curBox:String = "fraejlkarehfuoijrei98rrrrrrrhjucifsfhecirufehrcoiuejreiforewidawemalfekflds";
 
 var curLine = {};
 var curLineIndex:Int = 0;
@@ -113,13 +114,18 @@ function loadPortrait(script, emotion) {
     portraitScript.start();
 }
 function loadBox(script) {
-    boxScript = new HScript('dialogue/boxes/'+script);
-    boxScript.set("bg", bg);
-    boxScript.set("box", box);
-    boxScript.set("portrait", portrait);
-    boxScript.set("add", dialogue.add);
-    boxScript.set("insert", dialogue.insert);
-    boxScript.start();
+    if(curBox != script) {
+        curBox = script;
+        boxScript = new HScript('dialogue/boxes/'+script);
+        boxScript.set("bg", bg);
+        boxScript.set("box", box);
+        boxScript.set("portrait", portrait);
+        boxScript.set("add", dialogue.add);
+        boxScript.set("insert", dialogue.insert);
+        boxScript.start();
+    } else {
+        dialogue.add(box);
+    }
 }
 function loadText(script) {
     textScript = new HScript('dialogue/textStyles/'+script);

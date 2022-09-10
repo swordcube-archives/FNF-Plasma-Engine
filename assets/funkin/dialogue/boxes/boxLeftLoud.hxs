@@ -6,7 +6,7 @@ function create() {
     box.x = 50;
     box.y = 375;
     box.flipX = true;
-    box.antialiasing = Settings("Antialiasing");
+    box.antialiasing = Settings.get("Antialiasing");
     box.cameras = [PlayState.camOther];
     add(box);
 }
