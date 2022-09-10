@@ -1,8 +1,8 @@
 @echo off
 
-echo tools
-echo made by zxy xdddd
-echo argrgrs are [%1%,Args To Toool:{%2%}]
+echo UTILITY
+echo MADE BY XZY
+echo \n
 
 if %1%==compile goto compile
 if %1%==test goto test
@@ -13,8 +13,10 @@ pause
 goto close
 
 :compile
-echo made so i can compile quicker without vscode (rip vscode)
-echo args are [debug=%2%,not needed]
+echo Compile
+echo \n
+echo Debug Is %2% (y= yes n= no)
+echo \n
 if %2%==y lime test windows -debug
 if %2%==n lime test windows
 
