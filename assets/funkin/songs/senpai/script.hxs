@@ -7,7 +7,7 @@ function update(elapsed) {
 }
 
 function create() {
-    if(!PlayState_.isStoryMode) {
+    if(PlayState_.isStoryMode) {
         dialogue = new HScript('dialogue/scripts/default');
         dialogue.start();
     }
