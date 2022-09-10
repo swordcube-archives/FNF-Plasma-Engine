@@ -661,12 +661,15 @@ class PlayState extends MusicBeatState {
 
 		if(!inCutscene && !endingSong && !UIControls.justPressed("BACK") && UIControls.justPressed("PAUSE"))
 		{
-			logsOpen = false;
-			
-			persistentUpdate = false;
-			persistentDraw = true;
+			var ret:Dynamic = callOnHScripts("pauseSong", [], false);
+			if(ret != HScript.function_stop) {
+				logsOpen = false;
+				
+				persistentUpdate = false;
+				persistentDraw = true;
 
-			openSubState(new substates.ScriptedSubState('PauseMenu'));
+				openSubState(new substates.ScriptedSubState('PauseMenu'));
+			}
 		}
 
 		if(!inCutscene && !endingSong)
