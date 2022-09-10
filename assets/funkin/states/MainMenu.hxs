@@ -109,8 +109,8 @@ function create() {
 var accepted:Bool = false;
 
 function update() {
-    if(isDebugBuild && FlxG.keys.justPressed.D)
-        Main.switchState(new states.CharacterEditor());
+    if(isDebugBuild && FlxG.keys.justPressed.C) //c for cum
+        Main.switchState(new states.ScriptedState('options/NoteColoringState'));
 
     if(FlxG.keys.justPressed.TAB)
         state.openSubState(new ModSelectionMenu());

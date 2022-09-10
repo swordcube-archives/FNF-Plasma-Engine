@@ -16,7 +16,7 @@ class ColorShader extends FlxFixedShader {
             }
         }
     ')
-    public function new(r:Int, g:Int, b:Int, motion_blur:Null<Bool> = null, passes:Int = 10) {
+    public function new(r:Int, g:Int, b:Int) {
         super();
         setColors(r, g, b);
         this.enabled.value = [true];

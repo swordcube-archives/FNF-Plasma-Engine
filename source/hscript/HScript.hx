@@ -129,6 +129,7 @@ class HScript {
             set("FlxTextBorderStyle", HScriptHelpers.getFlxTextBorderStyle());
             set("FlxTextAlign", HScriptHelpers.getFlxTextAlign());
 
+            set("FlxKey", HScriptHelpers.getFlxKey());
             // flxcolor is a stupid abstract class so i am doing this
             set("FlxColor", HScriptHelpers.getFlxColor());
 

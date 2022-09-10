@@ -1,0 +1,141 @@
+import flixel.util.FlxGradient;
+import openfl.geom.ColorTransform;
+import openfl.geom.Matrix;
+var BitmapHelper = importScript('helpers.BitmapHelper');
+
+var size = [10,10];
+var fullGradient;
+var hueChooser;
+
+var curColor = 0xFFFF0000;
+
+var hue = 0;
+var updateTimer = 0;
+
+var hue;
+var sat;
+var bri;
+
+var gradientSprite;
+var hueSprite;
+var hueSlider;
+var sbSlider;
+var colorDisplay;
+
+var slidingHue = false;
+var slidingSB = false;
+
+function new(w,h) {
+    doesDefaultDraw = false;
+    size = [w,h];
+    hueChooser = new BitmapData(360, 20, true, 0);
+    fullGradient = new BitmapData(w, h, true, 0);
+    hueSprite = new FlxSprite(x,y);
+    var singleStripe = FlxGradient.createGradientBitmapData(size[0], 1, [0xFFFFFFFF, 0xFFFF0000], 1, 0);
+    for (i in 0...size[1]-20) {
+        fullGradient.draw(
+            singleStripe,
+            new Matrix(
+                1, 0, 0,
+                1, 0, i
+            ),
+            new ColorTransform(
+                1-i/(size[1]-20),1-i/(size[1]-20),1-i/(size[1]-20)
+            )
+        );
+    }
+    for (i in 0...360) {
+        var coolPixel = new BitmapData(1, 21, false, FlxColor.fromHSB(i,1,1));
+        hueChooser.draw(
+            coolPixel,
+            new Matrix(
+                1, 0, 0,
+                1, i, 0
+            )
+        );
+    }
+    hueSprite.pixels = new BitmapData(w,h,true,0);
+    hueSprite.pixels.draw(
+        hueChooser,
+        new Matrix(
+            1, 0, 0,
+            1, 0, h-21
+        )
+    );
+    hueSprite.setGraphicSize(w, 21);
+    hueSprite.updateHitbox();
+    gradientSprite = new FNFSprite(x,y);
+    gradientSprite.loadGraphic(fullGradient);
+    gradientSprite.shader = new ColorShader(255,0,0);
+
+    hueSlider = new FNFSprite(x-10,y+h-20);
+    hueSlider.loadGraphic(BitmapHelper.newOutlinedCircle(8, 0x27FFFFFF, 2, 0x7FFFFFFF));
+    sbSlider = new FNFSprite(x-10,y-10);
+    sbSlider.loadGraphic(BitmapHelper.newOutlinedCircle(8, 0x27FFFFFF, 2, 0x7FFFFFFF));
+
+    colorDisplay = new FNFSprite(x+w,y).makeGraphic(w,h,0xFFFFFFFF);
+}
+
+function draw() {
+    colorDisplay.draw();
+    hueSprite.draw();
+    gradientSprite.draw();
+    hueSlider.draw();
+    sbSlider.draw();
+    textInput.draw();
+}
+
+function update(elapsed) {
+    updateTimer += elapsed*100;
+    if (FlxG.mouse.justPressed && 
+        FlxG.mouse.x-x > 0 &&
+        FlxG.mouse.x-x < size[0] &&
+        FlxG.mouse.y-y > size[1] - 20 &&
+        FlxG.mouse.y-y < size[1]
+    ) {
+        slidingHue = true;
+    } else if (FlxG.mouse.justPressed && 
+        FlxG.mouse.x-x > 0 &&
+        FlxG.mouse.x-x < size[0] &&
+        FlxG.mouse.y-y > 0 &&
+        FlxG.mouse.y-y < size[1] - 20
+    ) {
+        slidingSB = true;
+    }
+    if (FlxG.mouse.justReleased) {
+        slidingHue = false;
+        slidingSB = false;
+    }
+
+    if (slidingHue) {
+        hue = (FlxG.mouse.x-x)/size[0]*360;
+        if (hue < 0) hue = 0;
+        if (hue > 360) hue = 360;
+        hueSlider.x = x + hue/360*size[0]-9;
+        var thecolor = FlxColor.fromHSB(hue,1,1);
+        gradientSprite.shader.setColors(
+            (thecolor >> 16) & 0xff,
+            (thecolor >> 8) & 0xff,
+            thecolor & 0xff
+        );
+    } else if (slidingSB) {
+        sat = (FlxG.mouse.x-x)/size[0]*100;
+        if (sat < 0) sat = 0;
+        if (sat > 100) sat = 100;
+        bri = 100-((FlxG.mouse.y-y)/size[0]*100);
+        if (bri < 0) bri = 0;
+        if (bri > 100) bri = 100;
+
+        sbSlider.x = x + sat/100*size[0]-9;
+        sbSlider.y = size[1]-20 + (y - bri/100*(size[1]-20)-9);
+    }
+
+    if (slidingHue || slidingSB) {
+        color = FlxColor.fromHSB(hue, sat/100, bri/100);
+        colorDisplay.color = color;
+    }
+}
+
+// RED = (color >> 16) & 0xff;
+// GREEN = (color >> 8) & 0xff;
+// BLUE = color & 0xff;

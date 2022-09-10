@@ -1,0 +1,6 @@
+var name = 'Test';
+var objects;
+
+function new() {
+    objects = new FlxTypedGroup();
+}

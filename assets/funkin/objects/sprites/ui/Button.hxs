@@ -1,0 +1,8 @@
+var BitmapHelper = importScript('helpers.BitmapHelper');
+
+function new(w,h) {
+    bg = new FNFSprite(x,y).loadGraphic(BitmapHelper.newRoundRect(w, h, 36, 36, 0xFF666699));
+}
+function draw() {
+    bg.draw();
+}
