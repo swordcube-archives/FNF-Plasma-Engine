@@ -14,7 +14,7 @@ function create() {
     portrait.animation.addByPrefix('shock_open', 'BF SHOCK0', 24, false);
     portrait.animation.addByPrefix('shock_talk', 'BF SHOCK LOOP0', 24, false);
     portrait.animation.play(emotion + '_open');
-    portrait.antialiasing = true;
+    portrait.antialiasing = Settings.get("Antialiasing");
     portrait.cameras = [PlayState.camOther];
     portrait.x = 75;
     portrait.y = 150;

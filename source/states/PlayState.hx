@@ -393,14 +393,9 @@ class PlayState extends MusicBeatState {
 		add(camFollowPos);
 		
 		FlxG.camera.follow(camFollowPos, LOCKON, 1);
-
-		if(gf != null)
-		{
-			camFollow.set(gf.getMidpoint().x, gf.getMidpoint().y);
-			camFollowPos.setPosition(camFollow.x, camFollow.y);
-		}
-
+		
 		focusCamera(SONG.notes[0].mustHitSection ? "bf" : "dad");
+		camFollowPos.setPosition(camFollow.x, camFollow.y);
 
 		callOnHScripts("createPost");
 	}

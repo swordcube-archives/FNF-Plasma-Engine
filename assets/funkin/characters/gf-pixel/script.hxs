@@ -14,6 +14,9 @@ function create() {
     character.setGraphicSize(Std.int(character.width * 6));
     character.updateHitbox();
 
+    character.cameraPosition.x -= 150;
+    character.cameraPosition.y -= 160;
+
     character.antialiasing = false;
 
     character.playAnim('danceRight');

@@ -8,31 +8,48 @@ function update(elapsed) {
 
 function create() {
     if(PlayState_.isStoryMode) {
-        dialogue = new HScript('dialogue/scripts/default');
-        dialogue.start();
+        inCutscene = true;
+        
+        var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+        black.scrollFactor.set();
+        add(black);
+
+        FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music("Lunchbox")), 1);
+
+        camHUD.visible = false;
+        new FlxTimer().start(0.3, function(tmr:FlxTimer) {
+            black.alpha -= 0.15;
+
+            if (black.alpha > 0) {
+                tmr.reset(0.3);
+            } else {
+                dialogue = new HScript("dialogue/scripts/default");
+                dialogue.start();
+            }
+        });
     }
 
-    PlayState.countdownImageLocation = "countdown/pixel";
-    PlayState.countdownSoundLocation = "countdown/pixel";
-    PlayState.countdownScale = 6;
+    countdownImageLocation = "countdown/pixel";
+    countdownSoundLocation = "countdown/pixel";
+    countdownScale = 6;
 
-    PlayState.ratingAssetPath = "ratings/pixel";
-    PlayState.comboAssetPath = "combo/pixel";
+    ratingAssetPath = "ratings/pixel";
+    comboAssetPath = "combo/pixel";
 
-    PlayState.ratingScale = 4.1;
-    PlayState.comboScale = 5;
+    ratingScale = 4.1;
+    comboScale = 5;
 
-    PlayState.ratingAntialiasing = false;
-    PlayState.comboAntialiasing = false;
+    ratingAntialiasing = false;
+    comboAntialiasing = false;
 }
 
 function createPost() {
-    PlayState.countdownPreReady.antialiasing = false;
-    PlayState.countdownReady.antialiasing = false;
-    PlayState.countdownSet.antialiasing = false;
-    PlayState.countdownGo.antialiasing = false;
+    countdownPreReady.antialiasing = false;
+    countdownReady.antialiasing = false;
+    countdownSet.antialiasing = false;
+    countdownGo.antialiasing = false;
     
-    PlayState.currentSkin += "-pixel";
-    PlayState.UI.opponentStrums.reloadSkin();
-    PlayState.UI.playerStrums.reloadSkin();
+    currentSkin += "-pixel";
+    UI.opponentStrums.reloadSkin();
+    UI.playerStrums.reloadSkin();
 }

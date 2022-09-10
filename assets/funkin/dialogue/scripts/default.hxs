@@ -21,11 +21,13 @@ function create() {
     proceedSound = FNFAssets.getSound(AssetPaths.sound("dialogue/pixelProceed"));
 
     PlayState.inCutscene = true;
+    PlayState.camHUD.visible = false;
     dialogue = new FlxGroup();
     PlayState.add(dialogue);
     json = Json.parse(FNFAssets.getText(AssetPaths.json('songs/'+PlayState_.SONG.song+'/dialogue')));
     runDialogue(0);
-    FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music(json.info.music)), json.info.musicVolume);
+    if(json.info.music != null)
+        FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music(json.info.music)), json.info.musicVolume);
 }
 function update(elapsed) {
     if(PlayState.inCutscene && !ended)
@@ -48,6 +50,7 @@ function update(elapsed) {
         dialogue.remove(box);
         PlayState.startCountdown();
         PlayState.inCutscene = false;
+        PlayState.camHUD.visible = true;
     }
 }
 
@@ -72,14 +75,14 @@ function endDialogue() {
 }
 
 function runDialogue(idx) {
-    bg = new FlxSprite().makeGraphic(1,1,0);
     portrait = new FlxSprite();
-    box = new FlxSprite();
     text = new FlxTypeText(0,0,0,'');
-    if (json.lines[idx].bg != null)
-        loadBG(json.lines[idx].bg);
-    else
+    if (json.lines[idx].bg != null) {
+        loadBG(json.lines[idx].bg, idx);
+    } else {
+        bg = new FlxSprite().makeGraphic(1,1,0);
         dialogue.add(bg);
+    }
     
     loadPortrait(json.lines[idx].char, json.lines[idx].emotion);
     loadBox(json.lines[idx].box, idx);
@@ -95,13 +98,26 @@ function clearDialogue() {
     dialogue.remove(text);
 }
 
-function loadBG(script) {
-    bgScript = new HScript('dialogue/bgs/'+script);
-    bgScript.set("bg", bg);
-    bgScript.set("add", dialogue.add);
-    bgScript.set("insert", dialogue.insert);
-    bgScript.start();
+// why load the same background again
+// there is a 99% chance raf will change this back
+// but the reason i did this is because bg animations!!!!!
+// lmao!!!!!!!!!!
+var curBG:String = "";
+function loadBG(script, idx) {
+    if(curBG != script) {
+        curBG = script;
+        bg = new FlxSprite().makeGraphic(1,1,0);
+        bgScript = new HScript('dialogue/bgs/'+script);
+        bgScript.set("bg", bg);
+        bgScript.set("add", dialogue.add);
+        bgScript.set("insert", dialogue.insert);
+        bgScript.set("isOpen", (idx == 0 || json.lines[idx].box != json.lines[idx-1].box));
+        bgScript.start();
+    } else {
+        dialogue.add(bg);
+    }
 }
+
 function loadPortrait(script, emotion) {
     portraitScript = new HScript('dialogue/portraits/'+script);
     portraitScript.set("bg", bg);
@@ -112,16 +128,27 @@ function loadPortrait(script, emotion) {
     portraitScript.set("emotion", emotion);
     portraitScript.start();
 }
+
+// why load the same background again
+// there is a 99% chance raf will change this back
+// but the reason i did this is because bg animations!!!!!
+// lmao!!!!!!!!!!
+var curBox:String = "";
 function loadBox(script, idx) {
-    boxScript = new HScript('dialogue/boxes/'+script);
-    boxScript.set("bg", bg);
-    boxScript.set("box", box);
-    boxScript.set("portrait", portrait);
-    boxScript.set("add", dialogue.add);
-    boxScript.set("insert", dialogue.insert);
-    boxScript.set("isOpen", (idx == 0 || json.lines[idx].box != json.lines[idx-1].box));
-    boxScript.start();
-    trace(boxScript);
+    if(curBox != script) {
+        curBox = script;
+        box = new FlxSprite();
+        boxScript = new HScript('dialogue/boxes/'+script);
+        boxScript.set("bg", bg);
+        boxScript.set("box", box);
+        boxScript.set("portrait", portrait);
+        boxScript.set("add", dialogue.add);
+        boxScript.set("insert", dialogue.insert);
+        boxScript.set("isOpen", (idx == 0 || json.lines[idx].box != json.lines[idx-1].box));
+        boxScript.start();
+    } else {
+        dialogue.add(box);
+    }
 }
 function loadText(script) {
     textScript = new HScript('dialogue/textStyles/'+script);

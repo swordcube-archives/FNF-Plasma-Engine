@@ -7,5 +7,5 @@
 	<SubTexture name="Text Box Appear0002" x="0" y="154" width="249" height="144"/>
 	<SubTexture name="Text Box Appear0003" x="259" y="154" width="249" height="144"/>
 	<SubTexture name="Text Box Appear0004" x="259" y="154" width="249" height="144"/>
-	<SubTexture name="Text Box Idle0004" x="259" y="154" width="249" height="144"/>
+	<SubTexture name="Text Box Idle0000" x="259" y="154" width="249" height="144"/>
 </TextureAtlas>

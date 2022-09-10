@@ -4,18 +4,18 @@
     },
     "lines": [
         {
-            "char": "senpai", 
+            "char": "senpai-angry", 
             "emotion": "default", 
-            "text": "Ah, a new fair maiden has come in search of true love!", 
+            "text": "Not bad for an ugly worm.", 
             "box": "pixel/boxPixel", 
             "font": "pixel", 
             "speed": 0.04, 
             "bg": "week6"
         },
         {
-            "char": "senpai", 
+            "char": "senpai-angry", 
             "emotion": "default", 
-            "text": "A serenade between gentlemen shall decide where her beautiful heart shall reside.", 
+            "text": "But this time I'll rip your nuts off right after your girlfriend finishes gargling mine.", 
             "box": "pixel/boxPixel", 
             "font": "pixel", 
             "speed": 0.04, 
@@ -24,7 +24,7 @@
         {
             "char": "bf-pixel", 
             "emotion": "default", 
-            "text": "Beep bo bop", 
+            "text": "Bop beep be be skdoo bep", 
             "box": "pixel/boxPixel", 
             "font": "pixel", 
             "speed": 0.04, 
