@@ -37,12 +37,12 @@ class Notification extends FlxSpriteGroup
         super();
 
         box = new FlxSprite().loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image("notificationBox")));
-        box.scale.set(6, 6);
+        box.scale.set(4, 4);
         box.updateHitbox();
         box.x = FlxG.width - (box.width - 400);
         add(box);
 
-        icon = new FlxSprite(box.x + 23, box.y + 23);
+        icon = new FlxSprite(box.x + 13, box.y + 13);
         icon.loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image("notificationIcons")), true, 16, 16);
         icon.animation.add("warn", [0], 24);
         icon.animation.add("error", [1], 24);
@@ -56,16 +56,16 @@ class Notification extends FlxSpriteGroup
             case Info | Information:
                 icon.animation.play("info");
         }
-        icon.scale.set(6, 6);
+        icon.scale.set(4, 4);
         icon.updateHitbox();
         add(icon);
 
         this.title = new FlxText(icon.x + (icon.width + 20), icon.y, 0, title);
-        this.title.setFormat(AssetPaths.font("pixel", OTF), 24);
+        this.title.setFormat(AssetPaths.font("pixel", OTF), 17);
         add(this.title);
 
         this.description = new FlxText(this.title.x, this.title.y + 30, 0, description);
-        this.description.setFormat(AssetPaths.font("pixel", OTF), 17);
+        this.description.setFormat(AssetPaths.font("pixel", OTF), 12);
         add(this.description);
 
         x = box.width;
