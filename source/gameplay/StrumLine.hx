@@ -63,7 +63,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
-		var cacheSplash:NoteSplash = new NoteSplash(100, 100, [255, 0, 0], members[0].json.splash_assets);
+		var cacheSplash:NoteSplash = new NoteSplash(100, 100, [255, 0, 0], 1, members[0].json.splash_assets);
 		cacheSplash.alpha = 0.001;
 		grpNoteSplashes.add(cacheSplash);
 
@@ -85,7 +85,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 		for (i in 0...keyCount)
 		{
-			var strum:StrumNote = new StrumNote((Note.swagWidth * ExtraKeys.arrowInfo[keyCount - 1][2]) * i, -10, i);
+			var strum:StrumNote = new StrumNote(((Note.swagWidth * ExtraKeys.arrowInfo[keyCount - 1][2]) * ExtraKeys.arrowInfo[keyCount - 1][3]) * i, -10, i);
 			strum.parent = this;
 			strum.alpha = 0;
 			var arrowSkin:String = PlayState.current != null ? PlayState.current.currentSkin.replace("default", Settings.get("Arrow Skin").toLowerCase()) : cast(Settings.get("Arrow Skin"), String).toLowerCase();
@@ -491,6 +491,7 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 				members[note.noteData].x,
 				members[note.noteData].y,
 				note.theColor,
+				ExtraKeys.arrowInfo[keyCount-1][2],
 				members[note.noteData].json.splash_assets
 			]);
 

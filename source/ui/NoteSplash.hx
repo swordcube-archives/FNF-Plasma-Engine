@@ -14,7 +14,7 @@ class NoteSplash extends FNFSprite
 	public var parent:StrumLine;
 	public var colorSwap:ColorShader;
 
-	public function new(x:Float, y:Float, colors:Array<Int>, skin:String = "splashes/NOTE_splashes")
+	public function new(x:Float, y:Float, colors:Array<Int>, funny_scale:Float, skin:String = "splashes/NOTE_splashes")
 	{
 		super(x, y);
 		
@@ -22,7 +22,7 @@ class NoteSplash extends FNFSprite
 		animation.addByPrefix("splash1", "splash 1", 24, false);
 		animation.addByPrefix("splash2", "splash 2", 24, false);
 	
-		scale.set(0.7, 0.7);
+		scale.set(0.7 * funny_scale, 0.7 * funny_scale);
 		updateHitbox();
 	
 		offset.x = frameWidth / 2;

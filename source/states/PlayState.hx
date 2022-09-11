@@ -207,9 +207,56 @@ class PlayState extends MusicBeatState {
 			vocals.loadEmbedded(loadedSong.get("voices"), false);
 		}
 
+		FlxG.sound.playMusic(loadedSong.get("inst"), 0, false);
+		FlxG.sound.music.pitch = songMultiplier;
+		if(hasVocals) {
+			vocals.pitch = songMultiplier;
+			vocals.volume = 0;
+			vocals.play();
+		}
+
 		setupCameras();
 
+		// load the song script
+		var path:String = 'songs/${actualSongName.toLowerCase()}/script';
+		script = new HScript(path);
+		script.set("add", this.add);
+		script.set("remove", this.remove);
+		script.start();
+
 		callOnHScripts("create");
+		scripts.push(script);
+
+		// load song scripts
+		if(SONG.scripts != null) {
+			for(item in SONG.scripts) {
+				if(FileSystem.exists(item)) {
+					var script = new HScript(item, "", true);
+					script.set("add", this.add);
+					script.set("remove", this.remove);
+					scripts.push(script);
+					script.start();
+				}
+			}
+		}
+
+		// load global scripts
+		if(FileSystem.exists(AssetPaths.asset('global_scripts'))) {
+			for(item in FileSystem.readDirectory(AssetPaths.asset('global_scripts'))) {
+				if(item.contains(".")) {
+					var real = item;
+					for(ext in HScript.hscriptExts)
+						real = real.replace(ext, "");
+
+					var path:String = 'global_scripts/$real';
+					var script = new HScript(path);
+					script.set("add", this.add);
+					script.set("remove", this.remove);
+					scripts.push(script);
+					script.start();
+				}
+			}
+		}
 
 		if(!Settings.get("Ultra Performance")) {
 			var gfVersion:String = "gf";
@@ -271,48 +318,6 @@ class PlayState extends MusicBeatState {
 
 			if(stage.script != null)
 				stage.script.call('createPost');
-		}
-
-		// load the song script
-		var path:String = 'songs/${actualSongName.toLowerCase()}/script';
-		script = new HScript(path);
-		script.set("add", this.add);
-		script.set("remove", this.remove);
-		scripts.push(script);
-		script.start();
-
-		// load song scripts
-		if(SONG.scripts != null) {
-			for(item in SONG.scripts) {
-				if(FileSystem.exists(item)) {
-					var script = new HScript(item, "", true);
-					script.set("add", this.add);
-					script.set("remove", this.remove);
-					scripts.push(script);
-					script.start();
-				}
-			}
-		}
-
-		// load global scripts
-		if(FileSystem.exists(AssetPaths.asset('global_scripts')))
-		{
-			for(item in FileSystem.readDirectory(AssetPaths.asset('global_scripts')))
-			{
-				if(item.contains("."))
-				{
-					var real = item;
-					for(ext in HScript.hscriptExts)
-						real = real.replace(ext, "");
-
-					var path:String = 'global_scripts/$real';
-					var script = new HScript(path);
-					script.set("add", this.add);
-					script.set("remove", this.remove);
-					scripts.push(script);
-					script.start();
-				}
-			}
 		}
 
 		// precache the countdown bullshit
@@ -805,6 +810,7 @@ class PlayState extends MusicBeatState {
 		FlxG.sound.music.pitch = songMultiplier;
 		if(hasVocals) {
 			vocals.pitch = songMultiplier;
+			vocals.volume = 1;
 			vocals.play();
 		}
 
@@ -901,25 +907,46 @@ class PlayState extends MusicBeatState {
 		callOnHScripts("stepHit", [Conductor.currentStep]);
 
 		if(dad != null)
-			dad.script.call("stepHit", [Conductor.currentBeat]);
-		
+			dad.script.call("stepHit", [Conductor.currentStep]);
+
 		if(gf != null)
-			gf.script.call("stepHit", [Conductor.currentBeat]);
+			gf.script.call("stepHit", [Conductor.currentStep]);
 
 		if(bf != null)
-			bf.script.call("stepHit", [Conductor.currentBeat]);
+			bf.script.call("stepHit", [Conductor.currentStep]);
 
 		for(c in dads) {
 			if(c != null)
-				c.script.call("stepHit", [Conductor.currentBeat]);
+				c.script.call("stepHit", [Conductor.currentStep]);
 		}
 
 		for(c in bfs) {
 			if(c != null)
-				c.script.call("stepHit", [Conductor.currentBeat]);
+				c.script.call("stepHit", [Conductor.currentStep]);
 		}
 
 		callOnHScripts("stepHitPost", [Conductor.currentStep]);
+	}
+
+	public function clearNotesBefore(time:Float) {
+		var i:Int = unspawnNotes.length - 1;
+		while (i >= 0) {
+			var daNote:UnspawnNote = unspawnNotes[i];
+			if(daNote.strumTime - 350 < time)
+				unspawnNotes.remove(daNote);
+			--i;
+		}
+
+		i = UI.playerStrums.notes.length - 1;
+		while (i >= 0) {
+			var daNote:Note = UI.playerStrums.notes.members[i];
+			if(daNote.strumTime - 350 < time) {
+				daNote.kill();
+				UI.playerStrums.notes.remove(daNote, true);
+				daNote.destroy();
+			}
+			--i;
+		}
 	}
 
 	public function resyncSong()

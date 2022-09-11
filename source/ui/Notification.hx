@@ -39,7 +39,7 @@ class Notification extends FlxSpriteGroup
         box = new FlxSprite().loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image("notificationBox")));
         box.scale.set(4, 4);
         box.updateHitbox();
-        box.x = FlxG.width - (box.width - 400);
+        box.x = FlxG.width - (box.width - 200);
         add(box);
 
         icon = new FlxSprite(box.x + 13, box.y + 13);
