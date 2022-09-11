@@ -899,6 +899,26 @@ class PlayState extends MusicBeatState {
 		super.stepHit();
 
 		callOnHScripts("stepHit", [Conductor.currentStep]);
+
+		if(dad != null)
+			dad.script.call("stepHit", [Conductor.currentBeat]);
+		
+		if(gf != null)
+			gf.script.call("stepHit", [Conductor.currentBeat]);
+
+		if(bf != null)
+			bf.script.call("stepHit", [Conductor.currentBeat]);
+
+		for(c in dads) {
+			if(c != null)
+				c.script.call("stepHit", [Conductor.currentBeat]);
+		}
+
+		for(c in bfs) {
+			if(c != null)
+				c.script.call("stepHit", [Conductor.currentBeat]);
+		}
+
 		callOnHScripts("stepHitPost", [Conductor.currentStep]);
 	}
 
