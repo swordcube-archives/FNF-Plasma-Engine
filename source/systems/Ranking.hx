@@ -50,7 +50,7 @@ class Ranking {
 			name: "shit",
 			time: 150, 
 			score: 50, 
-			health: -0.3
+			health: -0.125
 		}
 	];
 
