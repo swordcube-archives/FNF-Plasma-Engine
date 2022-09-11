@@ -186,8 +186,10 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 					if (!botPlay && (Conductor.position - note.strumTime) > Conductor.safeZoneOffset)
 					{
 						PlayState.current.vocals.volume = 0;
-						PlayState.current.health -= PlayState.current.healthLoss;
-						boundHealth();
+						if(!PlayState.current.customHealth) {
+							PlayState.current.health -= PlayState.current.healthLoss;
+							boundHealth();
+						}
 
 						if (!note.isSustain)
 						{
@@ -285,7 +287,10 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 					{
 						if (!Settings.get("Ghost Tapping") && possibleNotes.length <= 0)
 						{
-							PlayState.current.health -= PlayState.current.healthLoss;
+							if(!PlayState.current.customHealth) {
+								PlayState.current.health -= PlayState.current.healthLoss;
+								boundHealth();
+							}
 
 							PlayState.current.combo = 0;
 							PlayState.current.songMisses++;
@@ -352,8 +357,10 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 						if ((pressed[note.noteData] || botPlay) && note.isSustain && (Conductor.position - note.strumTime) >= 0.0)
 						{
 							PlayState.current.vocals.volume = 1;
-							PlayState.current.health += PlayState.current.healthGain;
-							boundHealth();
+							if(!PlayState.current.customHealth) {
+								PlayState.current.health += PlayState.current.healthGain;
+								boundHealth();
+							}
 							members[note.noteData].alpha = 1;
 							members[note.noteData].colorSwap.setColors(note.theColor[0], note.theColor[1], note.theColor[2]);
 							members[note.noteData].colorSwap.enabled.value = [true];
@@ -471,11 +478,13 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 			PlayState.current.songScore += judgeData.score;
 
 		PlayState.current.totalHit += judgeData.mod;
-		if (judgement != "bad")
+		if (judgement != "bad" && !PlayState.current.customHealth)
 			PlayState.current.health += PlayState.current.healthGain;
 
-		PlayState.current.health += judgeData.health;
-		boundHealth();
+		if(!PlayState.current.customHealth) {
+			PlayState.current.health += judgeData.health;
+			boundHealth();
+		}
 
 		if (Settings.get("Note Splashes") && judgeData.noteSplash)
 			noteSplashScript.call("spawnSplash", [

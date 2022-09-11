@@ -105,6 +105,8 @@ class PlayState extends MusicBeatState {
 	public var minHealth:Float = 0.0;
 	public var maxHealth:Float = 2.0;
 
+	public var customHealth:Bool = false;
+
 	public var healthGain:Float = 0.023;
 	public var healthLoss:Float = 0.0475;
 
@@ -692,38 +694,10 @@ class PlayState extends MusicBeatState {
 			}
 		}
 
-		if(health <= minHealth)
+		if(!customHealth && health <= minHealth)
 		{
 			health = minHealth;
-
-			var ret:Dynamic = callOnHScripts("gameOver", [], false);
-
-			if(ret != HScript.function_stop) {
-				if(!practiceMode) {
-					persistentUpdate = false;
-					persistentDraw = false;
-
-					//openSubState(new GameOver(bf.x, bf.y, camFollowPos.x, camFollowPos.y, bf.deathCharacter));
-					var deathInfo = {
-						x: 700.0,
-						y: 360.0,
-						camX: camFollowPos.x,
-						camY: camFollowPos.y,
-						deathChar: "bf-dead"
-					};
-
-					if(bf != null)
-						deathInfo = {
-							x: bf.x,
-							y: bf.y,
-							camX: camFollowPos.x,
-							camY: camFollowPos.y,
-							deathChar: bf.deathCharacter
-						};
-					
-					openSubState(new ScriptedSubState('GameOver', [deathInfo.x, deathInfo.y, deathInfo.camX, deathInfo.camY, deathInfo.deathChar]));
-				}
-			}
+			gameOver();
 		}
 
 		spawnNotes();
@@ -735,6 +709,37 @@ class PlayState extends MusicBeatState {
 		}
 
 		callOnHScripts("updatePost", [elapsed]);
+	}
+
+	public function gameOver() {
+		var ret:Dynamic = callOnHScripts("gameOver", [], false);
+
+		if(ret != HScript.function_stop) {
+			if(!practiceMode) {
+				persistentUpdate = false;
+				persistentDraw = false;
+
+				//openSubState(new GameOver(bf.x, bf.y, camFollowPos.x, camFollowPos.y, bf.deathCharacter));
+				var deathInfo = {
+					x: 700.0,
+					y: 360.0,
+					camX: camFollowPos.x,
+					camY: camFollowPos.y,
+					deathChar: "bf-dead"
+				};
+
+				if(bf != null)
+					deathInfo = {
+						x: bf.x,
+						y: bf.y,
+						camX: camFollowPos.x,
+						camY: camFollowPos.y,
+						deathChar: bf.deathCharacter
+					};
+				
+				openSubState(new ScriptedSubState('GameOver', [deathInfo.x, deathInfo.y, deathInfo.camX, deathInfo.camY, deathInfo.deathChar]));
+			}
+		}
 	}
 
 	override function resetState()
