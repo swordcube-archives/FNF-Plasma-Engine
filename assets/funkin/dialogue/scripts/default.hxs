@@ -24,7 +24,7 @@ function create() {
     PlayState.camHUD.visible = false;
     dialogue = new FlxGroup();
     PlayState.add(dialogue);
-    json = Json.parse(FNFAssets.getText(AssetPaths.json('songs/'+PlayState_.SONG.song+'/dialogue')));
+    json = Json.parse(FNFAssets.getText(AssetPaths.json('songs/'+PlayState_.SONG.song.toLowerCase()+'/dialogue')));
     runDialogue(0);
     if(json.info.music != null)
         FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music(json.info.music)), json.info.musicVolume);
