@@ -246,17 +246,16 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 						if (PlayState.current.dad != null)
 						{
 							PlayState.current.dad.holdTimer = 0.0;
-							if (note.altAnim && PlayState.current.dad.animation.exists(getSingAnimation(note.noteData) + "-alt"))
-								PlayState.current.dad.playAnim(getSingAnimation(note.noteData) + "-alt", true);
-							else
-								PlayState.current.dad.playAnim(getSingAnimation(note.noteData), true);
-
+							
 							for (c in PlayState.current.dads)
 							{
 								if (PlayState.current.dad.animation.curAnim != null && c != null && c.animation.curAnim != null)
 								{
 									c.holdTimer = 0.0;
-									c.playAnim(PlayState.current.dad.animation.curAnim.name, true);
+									if (note.altAnim && c.animation.exists(getSingAnimation(note.noteData) + "-alt"))
+										c.playAnim(getSingAnimation(note.noteData) + "-alt", true);
+									else
+										c.playAnim(getSingAnimation(note.noteData), true);
 								}
 							}
 						}

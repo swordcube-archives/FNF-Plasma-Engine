@@ -217,46 +217,7 @@ class PlayState extends MusicBeatState {
 
 		setupCameras();
 
-		// load the song script
-		var path:String = 'songs/${actualSongName.toLowerCase()}/script';
-		script = new HScript(path);
-		script.set("add", this.add);
-		script.set("remove", this.remove);
-		script.start();
-
 		callOnHScripts("create");
-		scripts.push(script);
-
-		// load song scripts
-		if(SONG.scripts != null) {
-			for(item in SONG.scripts) {
-				if(FileSystem.exists(item)) {
-					var script = new HScript(item, "", true);
-					script.set("add", this.add);
-					script.set("remove", this.remove);
-					scripts.push(script);
-					script.start();
-				}
-			}
-		}
-
-		// load global scripts
-		if(FileSystem.exists(AssetPaths.asset('global_scripts'))) {
-			for(item in FileSystem.readDirectory(AssetPaths.asset('global_scripts'))) {
-				if(item.contains(".")) {
-					var real = item;
-					for(ext in HScript.hscriptExts)
-						real = real.replace(ext, "");
-
-					var path:String = 'global_scripts/$real';
-					var script = new HScript(path);
-					script.set("add", this.add);
-					script.set("remove", this.remove);
-					scripts.push(script);
-					script.start();
-				}
-			}
-		}
 
 		if(!Settings.get("Ultra Performance")) {
 			var gfVersion:String = "gf";
@@ -292,6 +253,7 @@ class PlayState extends MusicBeatState {
 				add(dad.trail);
 			add(dad);
 			add(stage.inFrontOfDadSprites);
+			dads.push(dad);
 
 			bf = new Boyfriend(stage.bfPosition.x, stage.bfPosition.y, SONG.player1);
 			bf.flipX = !bf.flipX;
@@ -299,6 +261,7 @@ class PlayState extends MusicBeatState {
 				add(bf.trail);
 			add(bf);
 			add(stage.foregroundSprites);
+			bfs.push(bf);
 
 			// raf istg if you change this shit back
 			
@@ -318,6 +281,45 @@ class PlayState extends MusicBeatState {
 
 			if(stage.script != null)
 				stage.script.call('createPost');
+		}
+
+		// load the song script
+		var path:String = 'songs/${actualSongName.toLowerCase()}/script';
+		script = new HScript(path);
+		script.set("add", this.add);
+		script.set("remove", this.remove);
+		script.start();
+		scripts.push(script);
+
+		// load song scripts
+		if(SONG.scripts != null) {
+			for(item in SONG.scripts) {
+				if(FileSystem.exists(item)) {
+					var script = new HScript(item, "", true);
+					script.set("add", this.add);
+					script.set("remove", this.remove);
+					scripts.push(script);
+					script.start();
+				}
+			}
+		}
+
+		// load global scripts
+		if(FileSystem.exists(AssetPaths.asset('global_scripts'))) {
+			for(item in FileSystem.readDirectory(AssetPaths.asset('global_scripts'))) {
+				if(item.contains(".")) {
+					var real = item;
+					for(ext in HScript.hscriptExts)
+						real = real.replace(ext, "");
+
+					var path:String = 'global_scripts/$real';
+					var script = new HScript(path);
+					script.set("add", this.add);
+					script.set("remove", this.remove);
+					scripts.push(script);
+					script.start();
+				}
+			}
 		}
 
 		// precache the countdown bullshit
