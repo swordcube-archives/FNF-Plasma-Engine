@@ -72,9 +72,9 @@ class Init extends MusicBeatState {
     public static var keyBinds:Array<Array<FlxKey>> = [
         [SPACE], // 1k
         [LEFT, RIGHT], // 2k
-        [LEFT, SPACE, RIGHT], // 3k
+        [D, SPACE, K], // 3k
         [LEFT, DOWN, UP, RIGHT], // 4k
-        [LEFT, DOWN, SPACE, UP, RIGHT], // 5k
+        [D, F, SPACE, J, K], // 5k
         [S, D, F, J, K, L], // 6k
         [S, D, F, SPACE, J, K, L], // 7k
         [A, S, D, F, H, J, K, L], // 8k
