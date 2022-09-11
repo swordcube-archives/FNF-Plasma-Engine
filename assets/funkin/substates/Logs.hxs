@@ -30,13 +30,6 @@ function create() {
         text.scrollFactor.set();
     add(text);
 
-    Main.print('error', 'test');
-    Main.print('warn', 'test');
-    Main.print('hscript', 'test');
-    Main.print('trace', 'test');
-    Main.print('debug', 'test');
-    Main.print('debug', 'test');
-
     reloadLogs();
 }
 function update(elapsed) {
