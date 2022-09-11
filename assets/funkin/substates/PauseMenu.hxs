@@ -26,9 +26,15 @@ var timeTxt:FlxText;
 
 var pauseMusic:FlxSound;
 
-var curTime:Float = 0.0;
+var curTime:Float = Conductor.position;
 
 function create() {
+    FlxG.sound.music.pause();
+    PlayState.vocals.pause();
+
+    if(curTime < 0)
+        curTime = 0;
+
     pauseMusic = new FlxSound();
     pauseMusic.loadEmbedded(FNFAssets.getSound(AssetPaths.music('breakfast')), true, true);
     pauseMusic.volume = 0;
@@ -86,7 +92,9 @@ function create() {
     timeTxt.setFormat(AssetPaths.font('vcr'), 64);
     timeTxt.updateHitbox();
     timeTxt.screenCenter();
-    timeTxt.x += 100;
+    timeTxt.x += 150;
+    timeTxt.y += 20;
+    timeTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 5);
     timeTxt.visible = false;
     add(timeTxt);
 
@@ -127,9 +135,6 @@ function spawnOptions() {
 var holdTimer:Float = 0.0;
 
 function update(elapsed) {
-    FlxG.sound.music.pause();
-    PlayState.vocals.pause();
-
     practiceMode.visible = PlayState.practiceMode;
 
     if(pauseMusic.volume < 0.5)
@@ -149,6 +154,7 @@ function update(elapsed) {
 
         if(UIControls.justPressed("LEFT") || UIControls.justPressed("RIGHT") || holdTimer > 0.5) {
             curTime += UIControls.pressed("LEFT") ? -500 : 500;
+            curTime = FlxMath.bound(curTime, 0, FlxG.sound.music.length);
             timeTxt.text = FlxStringUtil.formatTime(curTime/1000.0) + " / " + FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0);
 
             if(holdTimer > 0.6)
@@ -187,6 +193,9 @@ function update(elapsed) {
                         PlayState.resyncSong();
                     }
 
+                    if(PlayState.current.countdownTimer != null)
+                        PlayState.current.countdownTimer.active = true;
+
                     pauseMusic.stop();
                     pauseMusic.kill();
                     pauseMusic.destroy();
@@ -199,16 +208,21 @@ function update(elapsed) {
                 case "Skip Time":
                     if(curTime != Conductor.position) {
                         PlayState.clearNotesBefore(curTime);
-                        FlxG.sound.music.time = curTime;
-                        PlayState.vocals.time = curTime;
-                        Conductor.position = curTime;
 
-                        FlxG.sound.music.play();
-                        PlayState.vocals.play();
-                        PlayState.resyncSong();
+                        if(!PlayState.startedSong)
+                            PlayState.startSong();
 
                         if(PlayState.current.countdownTimer != null)
                             PlayState.current.countdownTimer.cancel();
+                
+                        FlxG.sound.music.time = curTime;
+                        FlxG.sound.music.play();
+                
+                        if (Conductor.position <= PlayState.vocals.length)
+                            PlayState.vocals.time = curTime;
+                        
+                        PlayState.vocals.play();
+                        Conductor.position = curTime;
                     }
 
                     pauseMusic.stop();
