@@ -1,16 +1,16 @@
 package;
 
-import lime.app.Application;
-import states.ScriptedState;
 import display.PlasmaFPS;
 import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxStringUtil;
+import lime.app.Application;
 import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
+import states.ScriptedState;
 import ui.Notification;
 
 using StringTools;
