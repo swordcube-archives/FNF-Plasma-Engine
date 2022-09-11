@@ -1,16 +1,16 @@
 package;
 
-import lime.app.Application;
-import states.ScriptedState;
 import display.PlasmaFPS;
 import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxStringUtil;
+import lime.app.Application;
 import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
+import states.ScriptedState;
 import ui.Notification;
 
 using StringTools;
@@ -82,23 +82,11 @@ class Main extends Sprite
 
 	public static function getOS()
 	{
-		#if windows
-		return "Windows";
-		#end
-		#if html5
-		return "HTML5";
-		#end
-		#if mac
-		return "Mac";
-		#end
-		#if linux
-		return "Linux";
-		#end
-		#if android
-		return "Android";
-		#end
+		#if sys return Sys.systemName(); #end
+		#if html5 return "HTML5"; #end
+		#if android return "Android"; #end
 
-		// Fallback if we can't find the OS the user is on
+		// Fallback if we can't find the OS the user is on (or is unsupported)
 		return "Unknown";
 	}
 
