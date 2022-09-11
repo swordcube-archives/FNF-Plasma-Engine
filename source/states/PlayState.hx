@@ -846,33 +846,38 @@ class PlayState extends MusicBeatState {
 		if (SONG.notes[curSection].changeBPM)
 			Conductor.changeBPM(SONG.notes[curSection].bpm);
 
-		if(dad != null && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith("sing")) {
+		if(dad != null && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith("sing"))
 			dad.dance();
 
-		dad.script.call("beatHit", [Conductor.currentBeat]);
+		if(dad != null)
+			dad.script.call("beatHit", [Conductor.currentBeat]);
 
 		if(gf != null && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing"))
 			gf.dance();
 
-		gf.script.call("beatHit", [Conductor.currentBeat]);
+		if(gf != null)
+			gf.script.call("beatHit", [Conductor.currentBeat]);
 
 		if(bf != null && bf.animation.curAnim != null && !bf.animation.curAnim.name.startsWith("sing"))
 			bf.dance();
 
-		bf.script.call("beatHit", [Conductor.currentBeat]);
+		if(bf != null)
+			bf.script.call("beatHit", [Conductor.currentBeat]);
 
 		for(c in dads) {
 			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))
 				c.dance();
 
-			c.script.call("beatHit", [Conductor.currentBeat]);
+			if(c != null)
+				c.script.call("beatHit", [Conductor.currentBeat]);
 		}
 
 		for(c in bfs) {
 			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))
 				c.dance();
 
-			c.script.call("beatHit", [Conductor.currentBeat]);
+			if(c != null)
+				c.script.call("beatHit", [Conductor.currentBeat]);
 		}
 
 		callOnHScripts("beatHit", [Conductor.currentBeat]);
