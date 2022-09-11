@@ -2,7 +2,7 @@ function create() {
     box.frames = FNFAssets.getSparrow("boxes/default");
     box.animation.addByPrefix('open', 'normal open', 24, false);
     box.animation.addByPrefix('idle', 'normal idle', 24, true);
-    box.animation.play('open');
+    box.animation.play(isOpen ? 'open' : 'idle');
     box.x = 50;
     box.y = 375;
     box.flipX = true;

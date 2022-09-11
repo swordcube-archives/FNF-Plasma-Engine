@@ -17,6 +17,9 @@ using StringTools;
 
 class Main extends Sprite
 {
+	/**
+		The version of the engine.
+	**/
 	public static var engineVersion:String = "0.1.0"; // The version of the engine
 
 	public static var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).

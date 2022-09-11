@@ -99,5 +99,5 @@ function reloadLogs() {
     var warnformat  = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.YELLOW, false), "<w>");
     var hxsformat   = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.MAGENTA, false), "<h>");
     var debugformat = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.CYAN, false), "<d>");
-    //text.applyMarkup(text.text, [errorformat, warnformat, hxsformat, debugformat]);
+    text.applyMarkup(text.text, [errorformat, warnformat, hxsformat, debugformat]);
 }

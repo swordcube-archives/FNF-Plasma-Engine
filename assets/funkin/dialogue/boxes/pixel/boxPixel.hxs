@@ -2,10 +2,7 @@ function create() {
     box.frames = FNFAssets.getSparrow("boxes/dialogueBox-pixel");
     box.animation.addByPrefix('open', 'Text Box Appear0', 24, false);
     box.animation.addByPrefix('idle', 'Text Box Idle0', 24, true);
-    if (isOpen)
-        box.animation.play('open');
-    else
-        box.animation.play('idle');
+    box.animation.play(isOpen ? 'open' : 'idle');
     box.antialiasing = false;
     box.scale.set(5.4, 5.4);
     box.updateHitbox();

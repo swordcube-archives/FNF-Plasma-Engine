@@ -264,6 +264,9 @@ class PlayState extends MusicBeatState {
 				gf.destroy();
 				gf = null;
 			}
+
+			callOnHScripts("createAfterChars");
+
 			if(stage.script != null)
 				stage.script.call('createPost');
 		}
