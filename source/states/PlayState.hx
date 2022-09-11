@@ -1,9 +1,5 @@
 package states;
 
-import systems.ScriptedSprite;
-import openfl.utils.Dictionary;
-import sys.io.File;
-import flixel.util.FlxStringUtil;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -15,6 +11,7 @@ import flixel.system.FlxSound;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxSort;
+import flixel.util.FlxStringUtil;
 import flixel.util.FlxTimer;
 import gameplay.Boyfriend;
 import gameplay.Character;
@@ -24,11 +21,14 @@ import gameplay.Song;
 import gameplay.Stage;
 import hscript.HScript;
 import openfl.media.Sound;
+import openfl.utils.Dictionary;
 import substates.ScriptedSubState;
 import sys.FileSystem;
+import sys.io.File;
 import systems.Conductor;
 import systems.Highscore;
 import systems.MusicBeat;
+import systems.ScriptedSprite;
 import systems.UIControls;
 
 using StringTools;
@@ -901,22 +901,22 @@ class PlayState extends MusicBeatState {
 		callOnHScripts("stepHit", [Conductor.currentStep]);
 
 		if(dad != null)
-			dad.script.call("stepHit", [Conductor.currentBeat]);
+			dad.script.call("stepHit", [Conductor.currentStep]);
 		
 		if(gf != null)
-			gf.script.call("stepHit", [Conductor.currentBeat]);
+			gf.script.call("stepHit", [Conductor.currentStep]);
 
 		if(bf != null)
-			bf.script.call("stepHit", [Conductor.currentBeat]);
+			bf.script.call("stepHit", [Conductor.currentStep]);
 
 		for(c in dads) {
 			if(c != null)
-				c.script.call("stepHit", [Conductor.currentBeat]);
+				c.script.call("stepHit", [Conductor.currentStep]);
 		}
 
 		for(c in bfs) {
 			if(c != null)
-				c.script.call("stepHit", [Conductor.currentBeat]);
+				c.script.call("stepHit", [Conductor.currentStep]);
 		}
 
 		callOnHScripts("stepHitPost", [Conductor.currentStep]);
