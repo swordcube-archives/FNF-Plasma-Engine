@@ -3,7 +3,7 @@ function beatHit(curBeat) {
     {
         if(PlayState.bf != null)
         {
-            PlayState.bf.heyTimer = 0.6;
+            PlayState.bf.animTimer = 0.6;
             PlayState.bf.playAnim('hey', true);
             PlayState.bf.specialAnim = true;
         }

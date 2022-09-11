@@ -131,7 +131,7 @@ class Character extends FNFSprite
 
 	public var singDuration:Float = 4;
 
-	public var heyTimer:Float = 0;
+	public var animTimer:Float = 0;
 	public var holdTimer:Float = 0.0;
 
 	public var specialAnim:Bool = false;
@@ -391,17 +391,17 @@ class Character extends FNFSprite
 
 		script.update(elapsed);
 
-		if (heyTimer > 0)
+		if (animTimer > 0)
 		{
-			heyTimer -= elapsed;
-			if (heyTimer <= 0)
+			animTimer -= elapsed;
+			if (animTimer <= 0)
 			{
 				if (specialAnim && animation.curAnim.name == 'hey' || animation.curAnim.name == 'cheer')
 				{
 					specialAnim = false;
 					dance();
 				}
-				heyTimer = 0;
+				animTimer = 0;
 			}
 		}
 		else if (specialAnim && animation.curAnim.finished)
