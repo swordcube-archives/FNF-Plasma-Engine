@@ -461,6 +461,8 @@ class Character extends FNFSprite
 			{
 				playAnim("idle");
 			}
+
+			script.call("dance");
 		}
 	}
 }
