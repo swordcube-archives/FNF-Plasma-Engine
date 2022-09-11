@@ -148,6 +148,11 @@ function update(elapsed) {
                         PlayState.vocals.play();
                         PlayState.resyncSong();
                     }
+
+                    pauseMusic.stop();
+                    pauseMusic.kill();
+                    pauseMusic.destroy();
+
                     substate.close();
 
                 case "Restart Song":
