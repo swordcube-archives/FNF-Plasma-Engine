@@ -25,6 +25,13 @@ class Notification extends FlxSpriteGroup
 
     public var shouldDie:Bool = false;
 
+    /**
+        Creates a new notification with a title of `title`, description of `description`, and type of `type`.
+
+        @param title             The title of this notification.
+        @param description       The description of this notification.
+        @param type              The type of this notification. (Can be `Error`, `Warn`, or `Info`.)
+    **/
     public function new(title:String, description:String, type:NotificationType = Info)
     {
         super();

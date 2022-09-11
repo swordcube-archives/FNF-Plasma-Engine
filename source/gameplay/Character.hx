@@ -379,7 +379,7 @@ class Character extends FNFSprite
 		this.y += positionOffset.y;
 	}
 
-	override function playAnim(anim:String, force:Bool = false, reversed:Bool = false, frame:Int = 0)
+	override public function playAnim(anim:String, force:Bool = false, reversed:Bool = false, frame:Int = 0)
 	{
 		super.playAnim(anim, force, reversed, frame);
 		specialAnim = false;

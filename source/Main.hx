@@ -17,26 +17,33 @@ using StringTools;
 
 class Main extends Sprite
 {
-	/**
-		The version of the engine.
-	**/
-	public static var engineVersion:String = "0.1.0"; // The version of the engine
+	public static var engineVersion:String = "0.1.0";
+	public static var gameWidth:Int = 1280;
+	public static var gameHeight:Int = 720;
 
-	public static var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
-	public static var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
-	public static var framerate:Int = 1000; // How many frames per second the game should run at.
-	public static var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
+	public static var framerate:Int = 1000;
+	
+	/**
+		Whether to skip the flixel splash screen that appears in release mode.
+	**/
+	public static var skipSplash:Bool = true;
 	public static var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
 
 	public static var fpsCounter:PlasmaFPS;
 
+	/**
+		A better version of FlxG.elapsed.
+	**/
 	public static var deltaTime:Float = 0.0;
 
 	static var startTime:Float = 0.0;
 
 	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
 
-	public static var currentState:Class<flixel.FlxState> = Init; // The FlxState the game starts with.
+	/**
+		The FlxState the game starts with.
+	**/
+	public static var currentState:Class<flixel.FlxState> = Init;
 
 	public static var ansiColors:Map<String,String> = new Map();
 
@@ -82,23 +89,11 @@ class Main extends Sprite
 
 	public static function getOS()
 	{
-		#if windows
-		return "Windows";
-		#end
-		#if html5
-		return "HTML5";
-		#end
-		#if mac
-		return "Mac";
-		#end
-		#if linux
-		return "Linux";
-		#end
-		#if android
-		return "Android";
-		#end
+		#if sys return Sys.systemName(); #end
+		#if html5 return "HTML5"; #end
+		#if android return "Android"; #end
 
-		// Fallback if we can't find the OS the user is on
+		// Fallback if we can't find the OS the user is on (or is unsupported)
 		return "Unknown";
 	}
 

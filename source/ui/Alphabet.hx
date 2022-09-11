@@ -48,6 +48,18 @@ class Alphabet extends FlxSpriteGroup {
 	public var typingSpeed:Float = 0.05;
 	public var textColor:FlxColor;
 
+	/**
+		Creates a new alphabet text at `x`, `y`
+
+		@param x              The x position of the text.
+		@param y              The y position of the text.
+		@param text           The text that the alphabet says.
+		@param bold           Choose whether or not the text has white text and a black outline or just white text.
+		@param color          Change what color the text is.
+		@param typed          Choose if the text is typed out over time.
+		@param typingSpeed    Choose the speed the text gets typed at (only used if `typed` is enabled.)
+		@param textSize       Change the size of the text.
+	**/
 	public function new(x:Float, y:Float, text:String = "", ?bold:Bool = false, color:FlxColor = FlxColor.BLACK, typed:Bool = false, ?typingSpeed:Float = 0.05, ?textSize:Float = 1)
 	{
 		super(x, y);

@@ -149,6 +149,8 @@ class ModSelectionIcon extends FlxSprite {
         loadGraphic(FNFAssets.returnAsset(IMAGE, '${AssetPaths.cwd}assets/$mod/pack.png'));
         setGraphicSize(100, 100);
         updateHitbox();
+
+        antialiasing = Settings.get("Antialiasing");
     }
 
     override function update(elapsed:Float)

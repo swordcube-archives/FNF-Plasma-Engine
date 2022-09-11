@@ -77,8 +77,9 @@ class CoolUtil
 	/**
 		I don't fuckin know what this does i'm not a math expert
 	**/
-	public static function camLerpShit(ratio:Float):Float
+	public static function camLerpShit(ratio:Float):Float {
 		return Main.deltaTime / (1 / 60) * ratio;
+	}
 
 	/**
 		Gets the position of `character` at `position` in a Leather Engine stage.
@@ -90,6 +91,7 @@ class CoolUtil
 
 		@author Leather128
 	**/
-    public static function getLeatherStagePos(character:Character, position:FlxPoint):Array<Float>
+    public static function getLeatherStagePos(character:Character, position:FlxPoint):Array<Float> {
         return [(position.x - (character.width / 2)), (position.y - character.height)];
+	}
 }
