@@ -250,7 +250,7 @@ function update(elapsed) {
 
                 case "Configure Options":
                     FlxG.sound.playMusic(freakyMenu);
-                    Main.switchState(new ScriptedState("OptionsMenu"));
+                    Main.switchState(new ScriptedState("OptionsMenu", [true]));
 
                 case "Exit To Menu":
                     FlxG.sound.playMusic(freakyMenu);

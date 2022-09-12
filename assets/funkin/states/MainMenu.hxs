@@ -182,7 +182,7 @@ function switchToOtherStateShit() {
         case 'toolbox':
             Main.switchState(new ToolboxMain());
         case 'options':
-            Main.switchState(new ScriptedState('OptionsMenu'));
+            Main.switchState(new ScriptedState('OptionsMenu', [false]));
     }
 }
 

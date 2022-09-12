@@ -45,7 +45,7 @@ function create() {
 
 function update(elapsed) {
     if(UIControls.justPressed("BACK")) {
-        Main.switchState(new ScriptedState('OptionsMenu'));
+        Main.switchState(new ScriptedState('OptionsMenu', [false]));
     }
     if(FlxG.mouse.justPressed) {
         for (i in 0...notes.members.length) {

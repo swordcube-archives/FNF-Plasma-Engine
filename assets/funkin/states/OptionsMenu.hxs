@@ -42,7 +42,11 @@ function getOptionsFromPage(page:String) {
     return options;
 }
 
-function create() {
+var goIntoPlayState:Bool = false;
+
+function create(?goIntoPlayStateDumberass) {
+    goIntoPlayState = goIntoPlayStateDumberass;
+
     Init.reloadSettings();
     Init.initializeSettings();
 
@@ -162,7 +166,11 @@ function update() {
     if(UIControls.justPressed("BACK"))
     {
         FlxG.sound.play(cancelMenu);
-        Main.switchState(new ScriptedState('MainMenu'));
+        if(goIntoPlayState)
+            Main.switchState(new PlayState_());
+        else
+            Main.switchState(new ScriptedState('MainMenu'));
+        
         Init.saveSettings();
     }
 }
