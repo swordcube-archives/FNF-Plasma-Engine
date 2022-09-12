@@ -207,14 +207,6 @@ class PlayState extends MusicBeatState {
 			vocals.loadEmbedded(loadedSong.get("voices"), false);
 		}
 
-		FlxG.sound.playMusic(loadedSong.get("inst"), 0, false);
-		FlxG.sound.music.pitch = songMultiplier;
-		if(hasVocals) {
-			vocals.pitch = songMultiplier;
-			vocals.volume = 0;
-			vocals.play();
-		}
-
 		setupCameras();
 
 		callOnHScripts("create");
@@ -479,6 +471,8 @@ class PlayState extends MusicBeatState {
 		var ret:Dynamic = callOnHScripts("startCountdown", [], false);
 		if(ret != HScript.function_stop) {
 			countdownTimer = new FlxTimer().start(Conductor.crochet / 1000.0, function(tmr:FlxTimer) {
+				gf.dance();
+
 				for(c in dads) {
 					if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))
 						c.dance();
@@ -844,6 +838,8 @@ class PlayState extends MusicBeatState {
 
 		if (SONG.notes[curSection].changeBPM)
 			Conductor.changeBPM(SONG.notes[curSection].bpm);
+
+		gf.dance();
 
 		for(c in dads) {
 			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))
