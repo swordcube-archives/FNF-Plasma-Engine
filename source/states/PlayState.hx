@@ -479,15 +479,6 @@ class PlayState extends MusicBeatState {
 		var ret:Dynamic = callOnHScripts("startCountdown", [], false);
 		if(ret != HScript.function_stop) {
 			countdownTimer = new FlxTimer().start(Conductor.crochet / 1000.0, function(tmr:FlxTimer) {
-				if(dad != null)
-					dad.dance();
-
-				if(gf != null)
-					gf.dance();
-
-				if(bf != null)
-					bf.dance();
-
 				for(c in dads) {
 					if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))
 						c.dance();
@@ -853,24 +844,6 @@ class PlayState extends MusicBeatState {
 
 		if (SONG.notes[curSection].changeBPM)
 			Conductor.changeBPM(SONG.notes[curSection].bpm);
-
-		if(dad != null && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith("sing"))
-			dad.dance();
-
-		if(dad != null)
-			dad.script.call("beatHit", [Conductor.currentBeat]);
-
-		if(gf != null && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("sing"))
-			gf.dance();
-
-		if(gf != null)
-			gf.script.call("beatHit", [Conductor.currentBeat]);
-
-		if(bf != null && bf.animation.curAnim != null && !bf.animation.curAnim.name.startsWith("sing"))
-			bf.dance();
-
-		if(bf != null)
-			bf.script.call("beatHit", [Conductor.currentBeat]);
 
 		for(c in dads) {
 			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))

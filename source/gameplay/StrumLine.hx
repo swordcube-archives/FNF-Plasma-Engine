@@ -207,16 +207,14 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 							PlayState.current.UI.healthBarScript.call("updateScoreText");
 						}
 
-						if (note.canBeHit && PlayState.current.bf != null)
+						if (note.canBeHit)
 						{
-							PlayState.current.bf.playAnim(getSingAnimation(note.noteData) + "miss", true);
-
 							for (c in PlayState.current.bfs)
 							{
-								if (PlayState.current.bf.animation.curAnim.name != null && c != null && c.animation.curAnim != null)
+								if (c != null && c.animation.curAnim != null)
 								{
 									c.holdTimer = 0.0;
-									c.playAnim(PlayState.current.bf.animation.curAnim.name, true);
+									c.playAnim(getSingAnimation(note.noteData) + "miss", true);
 								}
 							}
 						}
@@ -243,20 +241,15 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 				{
 					if ((Conductor.position - note.strumTime) >= 0.0)
 					{
-						if (PlayState.current.dad != null)
+						for (c in PlayState.current.dads)
 						{
-							PlayState.current.dad.holdTimer = 0.0;
-							
-							for (c in PlayState.current.dads)
+							if (c != null && c.animation.curAnim != null)
 							{
-								if (PlayState.current.dad.animation.curAnim != null && c != null && c.animation.curAnim != null)
-								{
-									c.holdTimer = 0.0;
-									if (note.altAnim && c.animation.exists(getSingAnimation(note.noteData) + "-alt"))
-										c.playAnim(getSingAnimation(note.noteData) + "-alt", true);
-									else
-										c.playAnim(getSingAnimation(note.noteData), true);
-								}
+								c.holdTimer = 0.0;
+								if (note.altAnim && c.animation.exists(getSingAnimation(note.noteData) + "-alt"))
+									c.playAnim(getSingAnimation(note.noteData) + "-alt", true);
+								else
+									c.playAnim(getSingAnimation(note.noteData), true);
 							}
 						}
 
@@ -367,48 +360,38 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 							note.kill();
 							note.destroy();
 							notes.remove(note, true);
-							if (PlayState.current.bf != null && !PlayState.current.bf.specialAnim)
-							{
-								PlayState.current.bf.holdTimer = 0.0;
-								if (note.altAnim && PlayState.current.bf.animation.exists(getSingAnimation(note.noteData) + "-alt"))
-									PlayState.current.bf.playAnim(getSingAnimation(note.noteData) + "-alt", true);
-								else
-									PlayState.current.bf.playAnim(getSingAnimation(note.noteData), true);
 
-								for (c in PlayState.current.bfs)
+							for (c in PlayState.current.bfs)
+							{
+								if (c != null && !c.specialAnim && c.animation.curAnim != null)
 								{
-									if (PlayState.current.bf.animation.curAnim != null && c != null && c.animation.curAnim != null)
-									{
-										c.holdTimer = 0.0;
-										c.playAnim(PlayState.current.bf.animation.curAnim.name, true);
-									}
+									c.holdTimer = 0.0;
+									if (note.altAnim && c.animation.exists(getSingAnimation(note.noteData) + "-alt"))
+										c.playAnim(getSingAnimation(note.noteData) + "-alt", true);
+									else
+										c.playAnim(getSingAnimation(note.noteData), true);
 								}
 							}
 						}
 					}
 				}
 
-				if (PlayState.current != null
-					&& PlayState.current.bf != null
-					&& PlayState.current.bf.animation.curAnim != null
-					&& PlayState.current.bf.holdTimer > Conductor.stepCrochet * PlayState.current.bf.singDuration * 0.001
-					&& !pressed.contains(true))
-				{
-					if (PlayState.current.bf.animation.curAnim.name.startsWith('sing')
-						&& !PlayState.current.bf.animation.curAnim.name.endsWith('miss'))
+				if(PlayState.current != null)
+					for (c in PlayState.current.bfs)
 					{
-						PlayState.current.bf.dance();
-
-						for (c in PlayState.current.bfs)
+						if (c != null
+							&& c.animation.curAnim != null
+							&& c.holdTimer > Conductor.stepCrochet * c.singDuration * 0.001
+							&& !pressed.contains(true))
 						{
-							if (PlayState.current.bf.animation.curAnim.name != null && c != null && c.animation.curAnim != null)
+							if (c.animation.curAnim.name.startsWith('sing')
+								&& !c.animation.curAnim.name.endsWith('miss'))
 							{
-								c.holdTimer = 0.0;
-								c.playAnim(PlayState.current.bf.animation.curAnim.name, true);
+								c.holdTimer = 0;
+								c.dance();
 							}
 						}
 					}
-				}
 			}
 
 			var botPlay:Bool = PlayState.current != null ? PlayState.current.botPlay : false;
@@ -507,21 +490,15 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 		PlayState.current.UI.healthBarScript.call("updateScoreText");
 
-		if (PlayState.current.bf != null && !PlayState.current.bf.specialAnim)
+		for (c in PlayState.current.bfs)
 		{
-			PlayState.current.bf.holdTimer = 0.0;
-			if (note.altAnim && PlayState.current.bf.animation.exists(getSingAnimation(note.noteData) + "-alt"))
-				PlayState.current.bf.playAnim(getSingAnimation(note.noteData) + "-alt", true);
-			else
-				PlayState.current.bf.playAnim(getSingAnimation(note.noteData), true);
-
-			for (c in PlayState.current.bfs)
+			if (c != null && !c.specialAnim && c.animation.curAnim != null)
 			{
-				if (PlayState.current.bf.animation.curAnim != null && c != null && c.animation.curAnim != null)
-				{
-					c.holdTimer = 0.0;
-					c.playAnim(PlayState.current.bf.animation.curAnim.name, true);
-				}
+				c.holdTimer = 0.0;
+				if (note.altAnim && c.animation.exists(getSingAnimation(note.noteData) + "-alt"))
+					c.playAnim(getSingAnimation(note.noteData) + "-alt", true);
+				else
+					c.playAnim(getSingAnimation(note.noteData), true);
 			}
 		}
 
