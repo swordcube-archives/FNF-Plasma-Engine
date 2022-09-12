@@ -804,6 +804,16 @@ class PlayState extends MusicBeatState {
 		FlxG.sound.music.onComplete = finishSong.bind();
 
 		Conductor.position = 0.0;
+
+		FlxG.sound.music.pause();
+		vocals.pause();
+
+		vocals.time = 0;
+		FlxG.sound.music.time = 0;
+
+		FlxG.sound.music.play();
+		vocals.play();
+
 		callOnHScripts("startSong", [SONG.song]);
 	}
 
