@@ -841,6 +841,9 @@ class PlayState extends MusicBeatState {
 
 		gf.dance();
 
+		if(gf != null)
+			gf.script.call("beatHit", [Conductor.currentBeat]);
+
 		for(c in dads) {
 			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))
 				c.dance();
@@ -877,14 +880,8 @@ class PlayState extends MusicBeatState {
 
 		callOnHScripts("stepHit", [Conductor.currentStep]);
 
-		if(dad != null)
-			dad.script.call("stepHit", [Conductor.currentStep]);
-		
 		if(gf != null)
 			gf.script.call("stepHit", [Conductor.currentStep]);
-
-		if(bf != null)
-			bf.script.call("stepHit", [Conductor.currentStep]);
 
 		for(c in dads) {
 			if(c != null)

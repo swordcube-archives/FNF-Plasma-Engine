@@ -223,6 +223,11 @@ function update(elapsed) {
                         
                         PlayState.vocals.play();
                         Conductor.position = curTime;
+
+                        Conductor.updateCurStep();
+                        Conductor.updateBeat();
+
+                        Conductor.oldStep = Conductor.currentStep;
                     }
 
                     pauseMusic.stop();

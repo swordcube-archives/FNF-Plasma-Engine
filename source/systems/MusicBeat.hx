@@ -133,7 +133,7 @@ class MusicBeatState extends FlxUIState {
 		oldStep = Conductor.currentStep;
 	}
 
-	var oldStep:Int = 0;
+	public var oldStep:Int = 0;
 	var storedSteps:Array<Int> = [];
 	var skippedSteps:Array<Int> = [];
 
