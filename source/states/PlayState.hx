@@ -207,6 +207,8 @@ class PlayState extends MusicBeatState {
 			vocals.loadEmbedded(loadedSong.get("voices"), false);
 		}
 
+		FlxG.sound.playMusic(loadedSong.get("inst"), 0, false);
+
 		setupCameras();
 
 		callOnHScripts("create");
