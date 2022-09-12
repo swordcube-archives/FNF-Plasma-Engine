@@ -147,6 +147,7 @@ function update(elapsed) {
         changeSelection(1);
 
     if(menuItems[curSelected] == "Skip Time") {
+        timeTxt.setPosition(grpMenuShit.members[curSelected].x + 500, grpMenuShit.members[curSelected].y);
         if(UIControls.pressed("LEFT") || UIControls.pressed("RIGHT"))
             holdTimer += elapsed;
         else

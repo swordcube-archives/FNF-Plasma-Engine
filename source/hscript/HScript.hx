@@ -212,6 +212,9 @@ class HScript {
             
             set("FNFAssets", HScriptHelpers.getFNFAssets());
             set("FNFAssets_", FNFAssets);
+
+            set("AssetUtil", HScriptHelpers.getAssetUtil());
+
             set("Main", Main);
             set("Init", Init);
             set("Settings", Settings);
@@ -267,39 +270,56 @@ class HScript {
             set("KeybindMenu", substates.KeybindMenu);
             set("ModSelectionMenu", substates.ModSelectionMenu);
 
+            // Set the script object to PlayState if we're in Playstate
+            if(PlayState.current != null)
+                setScriptObject(PlayState.current);
+
             program = parser.parseString(script);
 
             interp.errorHandler = function(e:hscript.Error) {
                 #if DEBUG_PRINTING
                 trace('$e');
                 #end
-                if(!flixel.FlxG.keys.pressed.SHIFT) {
-                    var posInfo = interp.posInfos();
+                var posInfo = interp.posInfos();
 
-                    var lineNumber = Std.string(posInfo.lineNumber);
-                    var methodName = posInfo.methodName;
-                    var className = posInfo.className;
+                var lineNumber = Std.string(posInfo.lineNumber);
+                var methodName = posInfo.methodName;
+                var className = posInfo.className;
 
-                    Main.print("error", 'Exception occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'}\n\n${e}\n\nHX File: $path.hxs');
+                Main.print("error", 'Exception occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'}\n\n${e}\n\nHX File: $path.hxs');
 
-                    cast(FlxG.state, MusicBeatState).notificationGroup.add(new Notification(
-                        '${e}',
-                        'Occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'} in $path.hxs',
-                        Error
-                    ));
-                }
+                cast(FlxG.state, MusicBeatState).notificationGroup.add(new Notification(
+                    '${e}',
+                    'Occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'} in $path.hxs',
+                    Error
+                ));
             };
-
-            // Set the script object to PlayState if we're in Playstate
-            if(PlayState.current != null)
-                setScriptObject(PlayState.current);
 
             // Execute the script
             interp.execute(program);
         }
         catch(e)
         {
-            log(e.message);
+            executedScript = false;
+
+            #if DEBUG_PRINTING
+            trace('$e');
+            #end
+            var posInfo = interp.posInfos();
+
+            var lineNumber = Std.string(posInfo.lineNumber);
+            var methodName = posInfo.methodName;
+            var className = posInfo.className;
+
+            Main.print("error", 'Exception occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'}\n\n${e}\n\nHX File: $path.hxs');
+
+            cast(FlxG.state, MusicBeatState).notificationGroup.add(new Notification(
+                '${e}',
+                'Occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'} in $path.hxs',
+                Error
+            ));
+
+            stop();
         }
     }
 
@@ -308,6 +328,13 @@ class HScript {
 		if (doTrace)
 			Main.print("hscript", text);
 	}
+
+    public function stop() {
+        executedScript = false;
+        parser = null;
+        program = null;
+        interp = null;
+    }
 
 	public function start(callFuncs:Bool = true, ?args:Array<Any>)
 	{

@@ -488,6 +488,11 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 			PlayState.current.comboScale
 		]);
 
+		PlayState.current.callOnHScripts("popUpScore", [
+			judgeData.name,
+			PlayState.current.combo
+		]);
+
 		PlayState.current.UI.healthBarScript.call("updateScoreText");
 
 		for (c in PlayState.current.bfs)
@@ -502,8 +507,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 			}
 		}
 
-		PlayState.current.callOnHScripts("goodNoteHit", [note]);
-		PlayState.current.callOnHScripts("playerNoteHit", [note]);
+		PlayState.current.callOnHScripts("goodNoteHit", [note, judgeData.name, PlayState.current.combo]);
+		PlayState.current.callOnHScripts("playerNoteHit", [note, judgeData.name, PlayState.current.combo]);
 
 		note.kill();
 		note.destroy();

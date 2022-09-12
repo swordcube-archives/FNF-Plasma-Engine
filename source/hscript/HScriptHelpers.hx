@@ -197,6 +197,26 @@ class HScriptHelpers {
         };
     }
 
+    public static function getAssetUtil() {
+        return {
+            "image": function(path:String):FlxGraphic {
+                return FNFAssets.returnAsset(IMAGE, AssetPaths.image(path));
+            },
+            "sound": function(path:String):Sound {
+                return FNFAssets.returnAsset(SOUND, AssetPaths.sound(path));
+            },
+            "music": function(path:String):Sound {
+                return FNFAssets.returnAsset(SOUND, AssetPaths.music(path));
+            },
+            "txt": function(path:String):String {
+                return FNFAssets.returnAsset(TEXT, AssetPaths.txt(path));
+            },
+            "json": function(path:String):String {
+                return FNFAssets.returnAsset(TEXT, AssetPaths.json(path));
+            }
+        };
+    }
+
     public static function getBlendMode()
     {
         return {
