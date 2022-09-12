@@ -507,8 +507,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 			}
 		}
 
-		PlayState.current.callOnHScripts("goodNoteHit", [note, judgeData.name, PlayState.current.combo]);
-		PlayState.current.callOnHScripts("playerNoteHit", [note, judgeData.name, PlayState.current.combo]);
+		PlayState.current.callOnHScripts("goodNoteHit", [note, judgeData.name, judgeData, PlayState.current.combo]);
+		PlayState.current.callOnHScripts("playerNoteHit", [note, judgeData.name, judgeData, PlayState.current.combo]);
 
 		note.kill();
 		note.destroy();
