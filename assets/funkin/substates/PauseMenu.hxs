@@ -224,8 +224,8 @@ function update(elapsed) {
                         PlayState.vocals.play();
                         Conductor.position = curTime;
 
-                        Conductor.updateCurStep();
-                        Conductor.updateBeat();
+                        PlayState.updateCurStep();
+                        PlayState.updateBeat();
 
                         Conductor.oldStep = Conductor.currentStep;
                     }
