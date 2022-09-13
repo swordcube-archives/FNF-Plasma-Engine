@@ -109,15 +109,6 @@
 
         {
             "page": "Appearance",
-            "name": "Note Colors",
-            "description": "Adjust the colors of your notes!",
-            "type": "Menu",
-            "menuToLoad": "options/NoteColoringState",
-            "menuArguments": [],
-            "defaultValue": null
-        },
-        {
-            "page": "Appearance",
             "name": "Ultra Performance",
             "description": "Removes the background and characters from gameplay and leaves you with just the UI. Gives much better performance on worse pcs.",
             "type": "Checkbox",
@@ -165,6 +156,15 @@
             "type": "Selector",
             "defaultValue": "Arrows",
             "values": ["Arrows", "Quants", "Circles", "Quant Circles"]
+        },
+        {
+            "page": "Appearance",
+            "name": "Adjust Note Colors",
+            "description": "Adjust the colors of your notes!",
+            "type": "Menu",
+            "menuToLoad": "options/NoteColoringState",
+            "menuArguments": [],
+            "defaultValue": null
         },
 
         {

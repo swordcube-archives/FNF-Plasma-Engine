@@ -85,7 +85,6 @@ function addMoreText(text:String) {
 }
 
 function update(elapsed:Float) {
-    if(FlxG.keys.justPressed.TAB) state.openSubState(new ModSelectionMenu());
     if(FlxG.sound.music != null) Conductor.position = FlxG.sound.music.time;
 
     if(FlxG.keys.justPressed.ENTER) {

@@ -188,7 +188,7 @@ class Note extends FNFSprite {
 			offset.x = frameWidth / 2;
 			offset.y = frameHeight / 2;
 
-			var scale = json.strum_scale;
+			var scale = json.note_scale * ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][2];
 
 			offset.x -= 156 * (scale / 2);
 			offset.y -= 156 * (scale / 2);
@@ -203,7 +203,7 @@ class Note extends FNFSprite {
         {
             offset.x = frameWidth / 2;
 
-            var scale = json.note_scale;
+            var scale = json.note_scale * ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][2];
 
             offset.x -= 156 * (scale / 2);
         }

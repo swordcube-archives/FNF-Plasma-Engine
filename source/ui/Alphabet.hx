@@ -22,6 +22,10 @@ class Alphabet extends FlxSpriteGroup {
 	public var forceX:Float = Math.NEGATIVE_INFINITY;
 	public var targetY:Float = 0;
 	public var yMult:Float = 120;
+
+	public var snapX:Bool = false;
+	public var snapY:Bool = false;
+
 	public var xAdd:Float = 0;
 	public var yAdd:Float = 0;
 	public var isMenuItem:Bool = false;
@@ -365,12 +369,16 @@ class Alphabet extends FlxSpriteGroup {
 			var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
 
 			var lerpVal:Float = FlxMath.bound(Main.deltaTime * 9.6, 0, 1);
-			y = FlxMath.lerp(y, (scaledY * yMult) + (FlxG.height * 0.48) + yAdd, lerpVal);
+			var finalY:Float = (scaledY * yMult) + (FlxG.height * 0.48) + yAdd;
+			y = snapY ? finalY : FlxMath.lerp(y, finalY, lerpVal);
 			if(forceX != Math.NEGATIVE_INFINITY) {
 				x = forceX;
 			} else {
-				x = FlxMath.lerp(x, (targetY * 20) + 90 + xAdd, lerpVal);
+				var finalX:Float = (targetY * 20) + 90 + xAdd;
+				x = snapX ? finalX : FlxMath.lerp(x, finalX, lerpVal);
 			}
+			snapX = false;
+			snapY = false;
 		}
 
 		super.update(elapsed);

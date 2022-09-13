@@ -32,8 +32,6 @@ function startSong() {
     FlxTween.tween(ui.timeTxt, { alpha: 1 }, 0.5, { ease: FlxEase.cubeInOut });
 }
 
-var oldMustHit:Bool = false;
-
 function beatHit(curBeat) {
     updateBar();
 }
@@ -42,15 +40,12 @@ function updateBar() {
     var SONG = PlayState_.SONG;
     var currentStep = Std.int(FlxMath.bound(Conductor.currentStep / 16, 0, SONG.notes.length - 1));
 
-    if(ui.timeBar != null && oldMustHit != SONG.notes[currentStep].mustHitSection)
+    if(ui.timeBar != null)
         ui.timeBar.color = SONG.notes[currentStep].mustHitSection ? ui.healthColors[1] : ui.healthColors[0];
-
-    oldMustHit = SONG.notes[currentStep].mustHitSection;
 }
 
 function update(elapsed) {
-    if(ui.timeTxt != null)
-    {
+    if(ui.timeTxt != null) {
         ui.timeTxt.text = FlxStringUtil.formatTime((FlxG.sound.music.time/1000.0)/PlayState_.songMultiplier) + " / " + FlxStringUtil.formatTime((FlxG.sound.music.length/1000.0)/PlayState_.songMultiplier);
         if(PlayState.botPlay)
             ui.timeTxt.text += " [BOT]";

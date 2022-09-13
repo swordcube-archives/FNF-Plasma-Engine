@@ -1,5 +1,6 @@
 package gameplay;
 
+import systems.ExtraKeys;
 import systems.ScriptedSprite;
 import flixel.ui.FlxBar;
 import flixel.FlxG;
@@ -58,7 +59,7 @@ class GameplayUI extends FlxGroup {
         add(opponentStrums.grpNoteSplashes);
         opponentStrums.screenCenter(X);
         opponentStrums.x -= arrowSpacing;
-
+        
         playerStrums = new StrumLine(0, strumY, PlayState.SONG.keyCount);
         playerStrums.hasInput = true;
         add(playerStrums);

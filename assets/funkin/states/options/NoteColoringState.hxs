@@ -19,6 +19,7 @@ var colorPicker:ScriptedSprite;
 var selected:Int = 0;
 
 function create() {
+    state.canSwitchMods = false;
     FlxG.mouse.visible = true;
     bg = new FlxSprite();
     bg.loadGraphic(FNFAssets.getImage(AssetPaths.image("menuBGGradient")));

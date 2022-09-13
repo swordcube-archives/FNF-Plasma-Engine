@@ -190,9 +190,6 @@ var bgColor:Array<Float> = [
 ];
 
 function update(elapsed) {
-    if(FlxG.keys.justPressed.TAB)
-        state.openSubState(new ModSelectionMenu());
-
     var time:Float = Main.deltaTime * 9;
 
     var color = weeks[curSelected].color != null ? weeks[curSelected].color : [249, 207, 81];

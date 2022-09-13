@@ -100,7 +100,7 @@ class StrumNote extends FNFSprite {
 			offset.x = frameWidth / 2;
 			offset.y = frameHeight / 2;
 
-			var scale = json.strum_scale;
+			var scale = json.strum_scale * ExtraKeys.arrowInfo[parent.keyCount-1][2];
 
 			offset.x -= 156 * (scale / 2);
 			offset.y -= 156 * (scale / 2);

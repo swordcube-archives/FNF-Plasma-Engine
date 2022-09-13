@@ -21,6 +21,7 @@ var curSection = 0;
 var chart;
 
 function new() {
+    state.canSwitchMods = false;
     DiscordRPC.changePresence(
         "In the Chart Editor",
         null

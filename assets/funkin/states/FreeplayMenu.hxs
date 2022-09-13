@@ -167,10 +167,7 @@ var bgColor:Array<Float> = [
     255
 ];
 
-function update() {
-    if(FlxG.keys.justPressed.TAB)
-        state.openSubState(new ModSelectionMenu());
-    
+function update() {    
     var time:Float = Main.deltaTime * 9;
 
     var color = songs[curSelected].color;

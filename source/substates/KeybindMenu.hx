@@ -39,8 +39,7 @@ class KeybindMenu extends MusicBeatSubState {
 
         if(showBG)
         {
-            bg = new FlxSprite().loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image("menuBGDesat")));
-            bg.color = 0xFFea71fd;
+            bg = new FlxSprite().loadGraphic(FNFAssets.returnAsset(IMAGE, AssetPaths.image("menuBGGradient")));
             bg.scrollFactor.set();
             add(bg);
         }

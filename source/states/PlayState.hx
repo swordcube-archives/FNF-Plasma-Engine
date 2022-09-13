@@ -46,7 +46,7 @@ class PlayState extends MusicBeatState {
 
 	// Song
 	public static var isStoryMode:Bool = false;
-	public static var SONG:Song = SongLoader.getJSON("m.i.l.f", "hard");
+	public static var SONG:Song = SongLoader.getJSON("tutorial");
 	public static var actualSongName:String = "";
 
 	public static var songMultiplier:Float = 1.0;
@@ -967,8 +967,8 @@ class PlayState extends MusicBeatState {
 	}
 
 	public function refreshHealthBar() {
-		UI.healthBar.setRange(minHealth, maxHealth);
 		UI.healthBar.createFilledBar(UI.healthColors[0], UI.healthColors[1]);
+		UI.healthBar.setRange(minHealth, maxHealth);
 	}
 	
 	public function callOnHScripts(func:String, ?args:Null<Array<Dynamic>>, ignoreStops = true):Dynamic

@@ -7,6 +7,8 @@ import systems.MusicBeat;
 
 class ScriptedState extends MusicBeatState
 {
+    public var canSwitchMods:Bool = true;
+
     public var script:HScript;
     public var name:String;
     public var args:Array<Any> = [];
@@ -46,6 +48,9 @@ class ScriptedState extends MusicBeatState
 			logsOpen = true;
 			openSubState(new substates.ScriptedSubState('Logs'));
 		}
+
+        if(canSwitchMods && FlxG.keys.justPressed.TAB)
+            openSubState(new substates.ModSelectionMenu());
     }
 
     override public function beatHit()

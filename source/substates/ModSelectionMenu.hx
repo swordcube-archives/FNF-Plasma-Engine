@@ -95,6 +95,8 @@ class ModSelectionMenu extends MusicBeatSubState {
 
         if(UIControls.justPressed("ACCEPT"))
         {
+            FlxG.sound.music.stop();
+            
             AssetPaths.currentPack = grpIcons.members[curSelected].mod;
 
             FlxG.save.data.currentPack = AssetPaths.currentPack;

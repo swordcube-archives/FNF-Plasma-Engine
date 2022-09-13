@@ -14,6 +14,8 @@ var descText:FlxText;
 var descriptions:Array<String> = [];
 
 function create(?goIntoPlayStateDumberass) {
+    state.canSwitchMods = false;
+    
     Main.fpsCounter.visible = false;
     goIntoPlayState = goIntoPlayStateDumberass;
 
