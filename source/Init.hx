@@ -55,7 +55,7 @@ class Init extends MusicBeatState {
         Use Settings.get("Option Name") to use your options.
     **/
     public static var settings:Array<OptionData> = [];
-    public static var settingPages:Array<String> = [];
+    public static var settingPages:Array<Array<String>> = [];
 
     public static var trueSettings:Map<String, Dynamic> = [];
 
@@ -126,7 +126,7 @@ class Init extends MusicBeatState {
                         settings.push(setting);
 
                     if(rawJson.pages != null) {
-                        var txt:Array<String> = rawJson.pages;
+                        var txt:Array<Array<String>> = rawJson.pages;
                         for(page in txt)
                             settingPages.push(page);
                     }

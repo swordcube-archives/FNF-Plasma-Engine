@@ -36,7 +36,8 @@ class FNFCheckbox extends FNFSprite {
         if(sprTracker != null)
         {
             alpha = sprTracker.alpha;
-            y = sprTracker.y - 100;
+            x = sprTracker.x - 270;
+            y = sprTracker.y - 170;
         }
     }
 }

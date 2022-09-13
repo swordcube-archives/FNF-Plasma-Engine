@@ -21,8 +21,7 @@ var selected:Int = 0;
 function create() {
     FlxG.mouse.visible = true;
     bg = new FlxSprite();
-    bg.loadGraphic(FNFAssets.getImage(AssetPaths.image("menuBGDesat")));
-    bg.color = 0xFFea71fd;
+    bg.loadGraphic(FNFAssets.getImage(AssetPaths.image("menuBGGradient")));
     bg.scrollFactor.set();
     add(bg);
     notes = new FlxTypedGroup();

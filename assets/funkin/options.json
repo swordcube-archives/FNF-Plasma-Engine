@@ -1,55 +1,55 @@
 {
     "pages":  [
-        "Preferences",
-        "Appearance",
-        "Developers",
-        "Controls"
+        ["Gameplay",    "Adjust aspects of gameplay to your liking."],
+        ["Appearance",  "Adjust the appearance of certain things such as Flashing Lights or Arrow Skins."],
+        ["Developers",  "Turn on developer mode or adjust how many logs can be shown."],
+        ["Controls",    "Adjust your controls for 1k up to 9k."]
     ],
     "options": [
         {
-            "page": "Preferences",
+            "page": "Gameplay",
             "name": "Downscroll",
             "description": "Makes your notes scroll downwards instead of upwards.",
             "type": "Checkbox",
             "defaultValue": false
         },
         {
-            "page": "Preferences",
+            "page": "Gameplay",
             "name": "Centered Notes",
             "description": "Makes your notes centered and hides the opponent's notes.",
             "type": "Checkbox",
             "defaultValue": false
         },
         {
-            "page": "Preferences",
+            "page": "Gameplay",
             "name": "Ghost Tapping",
             "description": "Allows you to hit notes that don't exist.",
             "type": "Checkbox",
             "defaultValue": true
         },
         {
-            "page": "Preferences",
+            "page": "Gameplay",
             "name": "Botplay",
             "description": "Makes the game play itself for you.",
             "type": "Checkbox",
             "defaultValue": false
         },
         {
-            "page": "Preferences",
+            "page": "Gameplay",
             "name": "Auto Pause",
             "description": "Choose whether or not the game pauses while not focused on the window.",
             "type": "Checkbox",
             "defaultValue": true
         },
         {
-            "page": "Preferences",
+            "page": "Gameplay",
             "name": "Preload Assets",
             "description": "Preloads assets like images, music, and sounds when the game starts to load into songs faster. (Enabling this option uses more memory, A restart is needed for this to take effect)",
             "type": "Checkbox",
             "defaultValue": false
         },
         {
-            "page": "Preferences",
+            "page": "Gameplay",
             "name": "Note Offset",
             "description": "Change how early or late your notes spawn. (Negative = Earlier, Positive = Later)",
             "type": "Number",
@@ -59,7 +59,7 @@
             "decimals": 1
         },
         {
-            "page": "Preferences",
+            "page": "Gameplay",
             "name": "Scroll Speed",
             "description": "Change how fast the notes go on screen. (In seconds)",
             "type": "Number",
@@ -69,7 +69,7 @@
             "decimals": 1
         },
         {
-            "page": "Preferences",
+            "page": "Gameplay",
             "name": "Lane Underlay",
             "description": "Shows a black rectangle behind your notes with an alpha from 0 to 1. 0 = Invisible, 1 = Completely Visible, Anything in-between = Slightly/Half Visible",
             "type": "Number",
@@ -79,34 +79,43 @@
             "decimals": 1
         },
         {
-            "page": "Preferences",
+            "page": "Gameplay",
             "name": "Show FPS",
             "description": "Display the current Frames Per Second of the game.",
             "type": "Checkbox",
             "defaultValue": true
         },
         {
-            "page": "Preferences",
+            "page": "Gameplay",
             "name": "Show Memory",
             "description": "Display the current memory usage of the game.",
             "type": "Checkbox",
             "defaultValue": true
         },
         {
-            "page": "Preferences",
+            "page": "Gameplay",
             "name": "Show Version",
             "description": "Display the current version of the engine.",
             "type": "Checkbox",
             "defaultValue": false
         },
         {
-            "page": "Preferences",
+            "page": "Gameplay",
             "name": "Simplify Info",
             "description": "Simplifies the FPS, Memory and Version display.",
             "type": "Checkbox",
             "defaultValue": false
         },
 
+        {
+            "page": "Appearance",
+            "name": "Note Colors",
+            "description": "Adjust the colors of your notes!",
+            "type": "Menu",
+            "menuToLoad": "options/NoteColoringState",
+            "menuArguments": [],
+            "defaultValue": null
+        },
         {
             "page": "Appearance",
             "name": "Ultra Performance",
