@@ -693,14 +693,19 @@ class PlayState extends MusicBeatState {
 				startSong();
 		}
 
+		discordRPCTimer += elapsed;
+
 		if(startedSong && !endingSong)
 		{
-			var ret:Dynamic = callOnHScripts("discordRPCUpdate", [], false);
-			if(ret != HScript.function_stop) {
-				DiscordRPC.changePresence(
-					'Playing ${SONG.song} on ${CoolUtil.firstLetterUppercase(currentDifficulty)}',
-					'Time remaining: ${FlxStringUtil.formatTime((FlxG.sound.music.length-FlxG.sound.music.time)/1000.0)} / ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)}'
-				);
+			if(discordRPCTimer > 1.0) {
+				var ret:Dynamic = callOnHScripts("discordRPCUpdate", [], false);
+				if(ret != HScript.function_stop) {
+					DiscordRPC.changePresence(
+						'Playing ${SONG.song} on ${CoolUtil.firstLetterUppercase(currentDifficulty)}',
+						'Time remaining: ${FlxStringUtil.formatTime((FlxG.sound.music.length-FlxG.sound.music.time)/1000.0)} / ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)}'
+					);
+				}
+				discordRPCTimer = 0.0;
 			}
 		}
 

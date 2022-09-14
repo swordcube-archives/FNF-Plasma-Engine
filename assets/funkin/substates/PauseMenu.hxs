@@ -225,6 +225,9 @@ function update(elapsed) {
                         PlayState.vocals.play();
                         Conductor.position = curTime;
 
+                        if(curTime >= FlxG.sound.music.length)
+                            PlayState.endSong();
+
                         PlayState.updateCurStep();
                         PlayState.updateBeat();
 
