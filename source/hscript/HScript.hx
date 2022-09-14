@@ -270,6 +270,8 @@ class HScript {
             set("KeybindMenu", substates.KeybindMenu);
             set("ModSelectionMenu", substates.ModSelectionMenu);
 
+            set("setScriptObject", setScriptObject);
+
             // Set the script object to PlayState if we're in Playstate
             if(PlayState.current != null)
                 setScriptObject(PlayState.current);
