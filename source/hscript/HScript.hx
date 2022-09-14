@@ -277,6 +277,8 @@ class HScript {
             program = parser.parseString(script);
 
             interp.errorHandler = function(e:hscript.Error) {
+                executedScript = false;
+
                 #if DEBUG_PRINTING
                 trace('$e');
                 #end

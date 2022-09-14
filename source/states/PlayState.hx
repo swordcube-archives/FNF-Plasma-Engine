@@ -304,8 +304,8 @@ class PlayState extends MusicBeatState {
 		// load song scripts
 		if(SONG.scripts != null) {
 			for(item in SONG.scripts) {
-				if(FileSystem.exists(item)) {
-					var script = new HScript(item, "", true);
+				if(FileSystem.exists(AssetPaths.asset(item))) {
+					var script = new HScript(AssetPaths.asset(item), "", true);
 					script.set("add", this.add);
 					script.set("remove", this.remove);
 					scripts.push(script);
