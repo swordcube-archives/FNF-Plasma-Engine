@@ -1,3 +1,5 @@
+var goIntoPlayState:Bool = false;
+
 var grpAlphabet = ["HScript" => "Ignores typed vars so i do this shit lol"];
 var grpAlphabet2 = ["HScript" => "Ignores typed vars so i do this shit lol"];
 var grpAlphabet3 = ["HScript" => "Ignores typed vars so i do this shit lol"];
@@ -16,9 +18,11 @@ var descText:FlxText;
 var scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
 var cancelMenu = FNFAssets.getSound(AssetPaths.sound("menus/cancelMenu"));
 
-function create(?pageTitle, ?settings) {
+function create(?goIntoPlayStateDumberass, ?pageTitle, ?settings) {
     state.canSwitchMods = false;
-    
+
+    goIntoPlayState = goIntoPlayStateDumberass;
+
     var bg:FlxSprite = new FlxSprite().loadGraphic(AssetUtil.image("menuBGGradient"));
     add(bg);
 
@@ -216,6 +220,6 @@ function update(elapsed) {
     if(UIControls.justPressed("BACK")) {
         FlxG.sound.play(cancelMenu);
         Init.saveSettings();
-        Main.switchState(new ScriptedState('OptionsMenu'));
+        Main.switchState(new ScriptedState('OptionsMenu', [goIntoPlayState]));
     }
 }

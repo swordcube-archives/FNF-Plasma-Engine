@@ -184,6 +184,22 @@ class PlayState extends MusicBeatState {
 		if(SONG.keyCount == null)
 			SONG.keyCount = 4;
 
+		if(SONG.keyNumber != null)
+			SONG.keyCount = SONG.keyNumber;
+
+		if(SONG.mania != null) {
+			switch(SONG.mania) {
+				case 1:
+					SONG.keyCount = 6;
+				case 2:
+					SONG.keyCount = 7;
+				case 3:
+					SONG.keyCount = 9;
+				default:
+					SONG.keyCount = 4;
+			}
+		}
+
 		DiscordRPC.changePresence(
 			'Playing ${SONG.song}',
 			'Starting song...'

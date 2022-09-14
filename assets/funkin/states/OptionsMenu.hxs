@@ -15,7 +15,7 @@ var descriptions:Array<String> = [];
 
 function create(?goIntoPlayStateDumberass) {
     state.canSwitchMods = false;
-    
+
     Main.fpsCounter.visible = false;
     goIntoPlayState = goIntoPlayStateDumberass;
 
@@ -92,6 +92,7 @@ function update() {
         switch(grpPages.members[curSelected].text) {
             default:
                 Main.switchState(new ScriptedState("options/OptionsPageState", [
+                    goIntoPlayState,
                     grpPages.members[curSelected].text,
                     getSettingsFromPage(grpPages.members[curSelected].text)
                 ]));

@@ -13,6 +13,8 @@ typedef Song = {
     
     var speed:Float;
     var keyCount:Null<Int>;
+    var keyNumber:Null<Int>; // Used in Yoshi Engine Charts, This is keyCount but under a different name.
+    var mania:Null<Int>; // Used for Shaggy Charts
 
     // Art
     var player1:String;

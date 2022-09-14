@@ -136,7 +136,7 @@ class Note extends FNFSprite {
 		stepHeight = ((0.45 * stepCrochet) * PlayState.current.scrollSpeed);
 
         if(isSustain && animation.curAnim != null && animation.curAnim.name != "tail")
-            scale.y = (json.sustain_scale * ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][2]) * ((stepCrochet / 100 * 1.5) * PlayState.current.scrollSpeed);
+            scale.y = json.sustain_scale * ((stepCrochet / 100 * 1.5) * PlayState.current.scrollSpeed);
 
         if(isSustain)
         {
