@@ -202,6 +202,9 @@ class HScriptHelpers {
             "image": function(path:String):FlxGraphic {
                 return FNFAssets.returnAsset(IMAGE, AssetPaths.image(path));
             },
+            "sparrow": function(path:String):FlxAtlasFrames {
+                return FNFAssets.returnAsset(SPARROW, path);
+            },
             "sound": function(path:String):Sound {
                 return FNFAssets.returnAsset(SOUND, AssetPaths.sound(path));
             },
