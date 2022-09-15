@@ -1,17 +1,14 @@
 package;
 
+import systems.ZipUtils;
 import display.PlasmaFPS;
 import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.addons.transition.FlxTransitionableState;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.util.FlxStringUtil;
 import lime.app.Application;
 import openfl.Lib;
-import openfl.display.FPS;
 import openfl.display.Sprite;
 import states.ScriptedState;
-import ui.Notification;
 
 using StringTools;
 
@@ -67,6 +64,28 @@ class Main extends Sprite
 			DiscordRPC.shutdown();
 			#end
 			Init.saveSettings();
+		});
+
+		Application.current.window.onDropFile.add(function(file) {
+			#if DEBUG_PRINTING
+			trace("FILE DRAGGED ON WINDOW: " + file);
+			#end
+			if(file.endsWith(".plasmod")) {
+				var outputPath:String = '${AssetPaths.cwd}assets';
+
+				sys.thread.Thread.create(function() {
+					#if DEBUG_PRINTING
+					trace("EXTRACTING "+file+" TO "+outputPath);
+					#end
+
+					// actually uncompress the thing
+					ZipUtils.uncompressZip(ZipUtils.openZip(file), outputPath);
+
+					#if DEBUG_PRINTING
+					trace("YO WE'RE DONE EXTRACTING DUMBASS");
+					#end
+				});
+			}
 		});
 	}
 
