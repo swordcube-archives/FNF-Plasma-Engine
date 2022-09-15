@@ -20,10 +20,12 @@ using StringTools;
 // HOW TO USE THIS SHIT:
 //
 // -- making the zip --
-// var e = ZipUtils.createZipFile("test.plasmod");
-// ZipUtils.writeFolderToZip(e, '${AssetPaths.cwd}assets/funkin', "testing is cool/");
-// e.flush();
-// e.close();
+// sys.thread.Thread.create(function() {
+//     var e = ZipUtils.createZipFile("test.plasmod");
+//     ZipUtils.writeFolderToZip(e, '${AssetPaths.cwd}assets/funkin', "testing is cool/");
+//     e.flush();
+//     e.close();
+// }
 //
 // -- extracting the zip --
 // Application.current.window.onDropFile.add(function(file) {
