@@ -37,10 +37,13 @@ class MusicBeatState extends FlxUIState {
 		// clears sounds from memory
 		FlxG.sound.list.forEachAlive(function(sound:FlxSound)
 		{
-			FlxG.sound.list.remove(sound, true);
-			sound.stop();
-			sound.kill();
-			sound.destroy();
+			if(sound != null) {
+				FlxG.sound.list.remove(sound, true);
+				sound.stop();
+				sound.kill();
+				sound.destroy();
+			}
+			FlxG.sound.list.clear();
 		});
 
         // clears all bitmaps from memory

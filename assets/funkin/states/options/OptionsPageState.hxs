@@ -128,6 +128,11 @@ function changeSelection(change:Int) {
     descText.text += "\n     ";
 
     FlxG.sound.play(scrollMenu);
+
+    DiscordRPC.changePresence(
+        "In the Options Menu",
+        "Chnaging "+pageTitleShit+" > "+publicSettings[curSelected].name
+    );
 }
 
 var holdTimer:Float = 0.0;

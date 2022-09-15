@@ -560,10 +560,15 @@ class PlayState extends MusicBeatState {
 
 	public function finishSong(?ignoreNoteOffset:Bool = false)
 	{
-		FlxG.sound.music.stop();
-		vocals.stop();
+		if(FlxG.sound.music != null)
+			FlxG.sound.music.stop();
 
-		FlxG.sound.music.time = 0;
+		if(vocals != null)
+			vocals.stop();
+
+		if(FlxG.sound.music != null)
+			FlxG.sound.music.time = 0;
+
 		if((Settings.get("Note Offset") * songMultiplier) <= 0 || ignoreNoteOffset) {
 			endSong();
 		} else {
@@ -598,11 +603,14 @@ class PlayState extends MusicBeatState {
 			UI.timeBarScript = null;
 			
 			if(ret != HScript.function_stop) {
-				FlxG.sound.music.stop();
-				vocals.stop();
-	
-				FlxG.sound.music.time = 0;
+				if(FlxG.sound.music != null)
+					FlxG.sound.music.stop();
+
+				if(vocals != null)
+					vocals.stop();
+
 				FlxG.sound.playMusic(freakyMenu);
+				FlxG.sound.music.time = 0;
 
 				if(isStoryMode)
 				{
@@ -613,7 +621,7 @@ class PlayState extends MusicBeatState {
 						SONG = SongLoader.getJSON(storyPlaylist[0], currentDifficulty);
 						Main.switchState(new states.PlayState());
 					} else {
-						FlxG.sound.playMusic(FNFAssets.returnAsset(SOUND, AssetPaths.music("freakyMenu")));
+						FlxG.sound.playMusic(freakyMenu);
 
 						if(storyScore > Highscore.getScore(actualWeekName+"-"+currentDifficulty))
 							Highscore.setScore(actualWeekName+"-"+currentDifficulty, storyScore);
@@ -1012,7 +1020,10 @@ class PlayState extends MusicBeatState {
 
 	override function destroy()
 	{
-		super.destroy();
+		for(script in scripts) {
+			script.stop();
+		}
 		current = null;
+		super.destroy();
 	}
 }

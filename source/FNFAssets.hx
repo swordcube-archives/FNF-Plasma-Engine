@@ -62,7 +62,7 @@ class FNFAssets {
             case "image":
                 for(fucker in cache.keys())
                 {
-                    if(fucker.endsWith(":IMAGE")) {
+                    if(fucker != null && fucker.endsWith(":IMAGE")) {
                         var graphic:FlxGraphic = cast(cache[fucker], FlxGraphic);
                         graphic.dump();
                         graphic.destroy();
@@ -74,7 +74,7 @@ class FNFAssets {
             case "sound":
                 for(fucker in cache.keys())
                 {
-                    if(fucker.endsWith(":SOUND")) {
+                    if(fucker != null && fucker.endsWith(":SOUND")) {
                         cache.remove(fucker);
                     }
                 }
@@ -83,14 +83,14 @@ class FNFAssets {
             default:
                 for(fucker in cache.keys())
                 {
-                    if(fucker.endsWith(":IMAGE")) {
+                    if(fucker != null && fucker.endsWith(":IMAGE")) {
                         var graphic:FlxGraphic = cast(cache[fucker], FlxGraphic);
                         graphic.dump();
                         graphic.destroy();
                         cache.remove(fucker);
                     }
 
-                    if(fucker.endsWith(":SOUND")) {
+                    if(fucker != null && fucker.endsWith(":SOUND")) {
                         cache.remove(fucker);
                     }
                 }

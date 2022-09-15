@@ -298,9 +298,6 @@ class HScript {
                     Error
                 ));
             };
-
-            // Execute the script
-            interp.execute(program);
         }
         catch(e)
         {
@@ -338,6 +335,9 @@ class HScript {
         parser = null;
         program = null;
         interp = null;
+
+        for (otherScript in otherScripts)
+            otherScript.stop();
     }
 
 	public function start(callFuncs:Bool = true, ?args:Array<Any>)

@@ -79,6 +79,11 @@ function changeSelection(change:Int) {
     descText.text += "\n     ";
 
     FlxG.sound.play(scrollMenu);
+
+    DiscordRPC.changePresence(
+        "In the Options Menu",
+        "Selecting "+grpPages.members[curSelected].text
+    );
 }
 
 function update() {
