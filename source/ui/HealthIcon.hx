@@ -48,7 +48,7 @@ class HealthIcon extends FlxSprite {
 			// check if the icon exists, otherwise use default face
 			var image = FNFAssets.returnAsset(IMAGE, AssetPaths.characterIcon('face'));
 
-			if(FileSystem.exists(AssetPaths.image('icons/$char')))
+			if(FileSystem.exists(AssetPaths.characterIcon('$char')))
 				image = FNFAssets.returnAsset(IMAGE, AssetPaths.characterIcon('$char'));
 
 			loadGraphic(image);

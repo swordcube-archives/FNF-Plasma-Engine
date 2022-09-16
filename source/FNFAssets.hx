@@ -136,6 +136,9 @@ class FNFAssets {
                     // Try to get the asset from funkin (default pack) if it doesn't exist in current
                     goodPath = path.replace('assets/${AssetPaths.packToUse}', 'assets/funkin');
 
+                if(!FileSystem.exists(goodPath))
+                    return null;
+
                 // if it exists in perm cache then get that instead
                 if(permCache.exists(goodPath+":SOUND"))
                     return permCache.get(goodPath+":SOUND");
@@ -168,6 +171,10 @@ class FNFAssets {
         if(!FileSystem.exists(goodPath))
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = path.replace('assets/${AssetPaths.packToUse}', 'assets/funkin');
+
+        // if it still doesn't exist give up and return null
+         if(!FileSystem.exists(goodPath))
+            return null;
 
         // if it exists in perm cache then get that instead
         if(permCache.exists(goodPath+":IMAGE"))
