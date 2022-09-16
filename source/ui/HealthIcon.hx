@@ -51,6 +51,9 @@ class HealthIcon extends FlxSprite {
 			if(FileSystem.exists(AssetPaths.characterIcon('$char')))
 				image = FNFAssets.returnAsset(IMAGE, AssetPaths.characterIcon('$char'));
 
+			if(FileSystem.exists(AssetPaths.image('icons/$char')))
+				image = FNFAssets.returnAsset(IMAGE, AssetPaths.image('icons/$char'));
+
 			loadGraphic(image);
 
 			// detect how many icons there are automatically
