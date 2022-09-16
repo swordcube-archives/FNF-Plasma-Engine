@@ -298,7 +298,9 @@ class PlayState extends MusicBeatState {
 		script = new HScript(path);
 		script.set("add", this.add);
 		script.set("remove", this.remove);
+		script.setScriptObject(this);
 		script.start();
+		
 		scripts.push(script);
 
 		// load song scripts
@@ -308,8 +310,9 @@ class PlayState extends MusicBeatState {
 					var script = new HScript(AssetPaths.asset(item), "", true);
 					script.set("add", this.add);
 					script.set("remove", this.remove);
-					scripts.push(script);
+					script.setScriptObject(this);
 					script.start();
+					scripts.push(script);
 				}
 			}
 		}
@@ -326,8 +329,9 @@ class PlayState extends MusicBeatState {
 					var script = new HScript(path);
 					script.set("add", this.add);
 					script.set("remove", this.remove);
-					scripts.push(script);
+					script.setScriptObject(this);
 					script.start();
+					scripts.push(script);
 				}
 			}
 		}
