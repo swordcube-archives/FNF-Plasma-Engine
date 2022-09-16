@@ -32,8 +32,8 @@
 
 	<!-- ____________________________ Engine Settings ___________________________ -->
 
-	<haxedef name="DEBUG_PRINTING" if="debug" /> <!-- Allows debug traces to be shown. Used for...debugging what did you expect -->
-	<haxedef name="VIDEOS_ALLOWED" if="desktop || android" /> <!-- Allows video cutscenes to play. -->
+	<define name="DEBUG_PRINTING" if="debug" /> <!-- Allows debug traces to be shown. Used for...debugging what did you expect -->
+	<define name="VIDEOS_ALLOWED" if="desktop || android" unless="32bits" /> <!-- Allows video cutscenes to play. -->
 
 	<!-- Show debug traces for hxCodec -->
 	<haxedef name="HXC_DEBUG_TRACE" if="debug" />
@@ -45,7 +45,7 @@
 	<haxelib name="flixel-ui" />
 
 	<!-- libraries for the engine -->
-	<haxelib name="hxCodec" if="desktop || android" /> <!-- INSTALL: haxelib git hxCodec https://github.com/polybiusproxy/hxCodec -->
+	<haxelib name="hxCodec" if="VIDEOS_ALLOWED" /> <!-- INSTALL: haxelib git hxCodec https://github.com/swordcube/hxCodec-testing -->
 	<haxelib name="discord_rpc" if="desktop" />
 	<haxelib name="hscript-improved" /> <!-- INSTALL: haxelib git hscript-improved https://github.com/YoshiCrafter29/hscript-improved -->
 	<haxedef name="hscriptPos" />
