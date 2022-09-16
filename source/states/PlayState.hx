@@ -1015,6 +1015,8 @@ class PlayState extends MusicBeatState {
 		var returnVal:Dynamic = HScript.function_continue;
 
 		for(script in scripts) {
+			if(script == null) continue;
+
 			var ret:Dynamic = script.call(func, args);
 
 			if(ret == HScript.function_stop_script && !ignoreStops)
