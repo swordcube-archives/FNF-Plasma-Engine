@@ -611,20 +611,17 @@ class PlayState extends MusicBeatState {
 					object = null;
 				}
 			}
+			UI.timeBarScript.stop();
 			UI.timeBarScript = null;
 			
 			if(ret != HScript.function_stop) {
-				if(FlxG.sound.music != null)
-					FlxG.sound.music.stop();
-
 				if(vocals != null)
 					vocals.stop();
 
 				FlxG.sound.playMusic(freakyMenu);
 				FlxG.sound.music.time = 0;
 
-				if(isStoryMode)
-				{
+				if(isStoryMode) {
 					storyPlaylist.shift();
 					storyScore += songScore;
 
@@ -632,8 +629,6 @@ class PlayState extends MusicBeatState {
 						SONG = SongLoader.getJSON(storyPlaylist[0], currentDifficulty);
 						Main.switchState(new states.PlayState());
 					} else {
-						FlxG.sound.playMusic(freakyMenu);
-
 						if(storyScore > Highscore.getScore(actualWeekName+"-"+currentDifficulty))
 							Highscore.setScore(actualWeekName+"-"+currentDifficulty, storyScore);
 						
