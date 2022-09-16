@@ -754,7 +754,8 @@ class FlxSound extends FlxBasic
 		FlxG.log.error("Pitch is not supported on Flash!!!");
 		v = 1;
 		#elseif (html5 && lime_howlerjs)
-		_channel.__source.buffer.__srcHowl.rate(v);
+		if (_channel != null)
+			_channel.__source.buffer.__srcHowl.rate(v);
 		#else
         if(_channel != null && _channel.__source != null) {
             var backend = _channel.__source.__backend;
