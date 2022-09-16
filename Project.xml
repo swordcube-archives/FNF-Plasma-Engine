@@ -30,6 +30,14 @@
 	<source path="source" />
 	<assets path="assets" />
 
+	<!-- ____________________________ Engine Settings ___________________________ -->
+
+	<haxedef name="DEBUG_PRINTING" if="debug" /> <!-- Allows debug traces to be shown. Used for...debugging what did you expect -->
+	<haxedef name="VIDEOS_ALLOWED" if="desktop || android" /> <!-- Allows video cutscenes to play. -->
+
+	<!-- Show debug traces for hxCodec -->
+	<haxedef name="HXC_DEBUG_TRACE" if="debug" />
+
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />
@@ -37,14 +45,10 @@
 	<haxelib name="flixel-ui" />
 
 	<!-- libraries for the engine -->
+	<haxelib name="hxCodec" if="desktop || android" /> <!-- INSTALL: haxelib git hxCodec https://github.com/polybiusproxy/hxCodec -->
 	<haxelib name="discord_rpc" if="desktop" />
 	<haxelib name="hscript-improved" /> <!-- INSTALL: haxelib git hscript-improved https://github.com/YoshiCrafter29/hscript-improved -->
 	<haxedef name="hscriptPos" />
-
-	<!-- ____________________________ Engine Settings ___________________________ -->
-
-	<haxedef name="DEBUG_PRINTING" if="debug" /> <!-- Allows debug traces to be shown. Used for...debugging what did you expect -->
-	<haxedef name="VIDEOS_ALLOWED" /> <!-- Allows video cutscenes to play. -->
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 

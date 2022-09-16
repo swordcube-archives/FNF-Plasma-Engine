@@ -70,6 +70,16 @@ class AssetPaths {
     }
 
     /**
+        Turns `path` into `assets/somePack/videos/path`
+
+        @param path                    The path to convert.
+        @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
+    **/
+    public static function video(path:String, packOverride:Null<String> = null):String {
+        return 'assets/$currentPack/videos/$path';
+    }
+
+    /**
         Turns `path` into `assets/somePack/path.json`
         
         @param path                    The path to convert.
@@ -145,6 +155,23 @@ class AssetPaths {
     public static function image(path:String, imageExt:ImageExt = PNG, packOverride:Null<String> = null):String
     {
         var goodPath:String = asset('images/$path$imageExt', packOverride);
+        if(!FileSystem.exists(goodPath))
+            // Try to get the asset from funkin (default pack) if it doesn't exist in current
+            goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
+            
+        return goodPath;
+    }
+
+    /**
+        Turns `path` into `assets/somePack/characters/path/icons.ext` (.ext can be: .png, .jpg, & .bmp)
+        Change `imageExt` to PNG, JPG, or BMP to change file extension.
+
+        @param path                    The path to convert.
+        @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
+    **/
+    public static function characterIcon(path:String, imageExt:ImageExt = PNG, packOverride:Null<String> = null):String
+    {
+        var goodPath:String = asset('characters/$path/icons$imageExt', packOverride);
         if(!FileSystem.exists(goodPath))
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');

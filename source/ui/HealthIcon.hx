@@ -46,10 +46,10 @@ class HealthIcon extends FlxSprite {
 			var pixelIcons:Array<String> = CoolUtil.listFromText(FNFAssets.returnAsset(TEXT, AssetPaths.txt("pixelIcons")));
 
 			// check if the icon exists, otherwise use default face
-			var image = FNFAssets.returnAsset(IMAGE, AssetPaths.image('icons/face'));
+			var image = FNFAssets.returnAsset(IMAGE, AssetPaths.characterIcon('face'));
 
 			if(FileSystem.exists(AssetPaths.image('icons/$char')))
-				image = FNFAssets.returnAsset(IMAGE, AssetPaths.image('icons/$char'));
+				image = FNFAssets.returnAsset(IMAGE, AssetPaths.characterIcon('$char'));
 
 			loadGraphic(image);
 
