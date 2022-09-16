@@ -126,9 +126,12 @@ class Stage extends FlxGroup {
                     script.set("remove", this.removeSprite);
                     script.set("removeStage", this.removeDefaultStage);
                     script.set("removeDefaultStage", this.removeDefaultStage);
+                    if(PlayState.current != null)
+                        script.setScriptObject(PlayState.current);
 					script.start();
 
-					PlayState.current.scripts.push(script);
+                    if(PlayState.current != null)
+					    PlayState.current.scripts.push(script);
 				}
 				#if DEBUG_PRINTING
 				else
