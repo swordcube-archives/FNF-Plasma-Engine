@@ -121,13 +121,13 @@ class Stage extends FlxGroup {
 					Main.print('debug', 'Trying to run "stages/$curStage"');
 					#end
 					script = new HScript('stages/$curStage');
+                    if(PlayState.current != null)
+                        script.setScriptObject(PlayState.current);
                     script.set("stage", this);
 					script.set("add", this.addSprite);
                     script.set("remove", this.removeSprite);
                     script.set("removeStage", this.removeDefaultStage);
                     script.set("removeDefaultStage", this.removeDefaultStage);
-                    if(PlayState.current != null)
-                        script.setScriptObject(PlayState.current);
 					script.start();
 
                     if(PlayState.current != null)
