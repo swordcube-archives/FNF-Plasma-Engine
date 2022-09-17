@@ -35,7 +35,7 @@ function create() {
 function update(elapsed) {
     updateClass('Init');
     if (Init.logs.length > Settings.get('Max Logs')) {
-        for (i in 0...Init.logs.length-500) {
+        for (i in 0...Init.logs.length-(Settings.get('Max Logs'))) {
             Init.logs.remove(Init.logs[0]);
         }
     }
@@ -74,6 +74,11 @@ function update(elapsed) {
 
 function reloadLogs() {
     text.text = '';
+    if (Init.logs.length > Settings.get('Max Logs')) {
+        for (i in 0...Init.logs.length-(Settings.get('Max Logs'))) {
+            Init.logs.remove(Init.logs[0]);
+        }
+    }
     for (i in Init.logs) {
         switch(i[0][0]) {
             case 'debug':
