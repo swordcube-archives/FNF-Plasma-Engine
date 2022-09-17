@@ -575,6 +575,8 @@ class PlayState extends MusicBeatState {
 
 	public function finishSong(?ignoreNoteOffset:Bool = false)
 	{
+		endingSong = true;
+
 		if(FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
@@ -620,7 +622,7 @@ class PlayState extends MusicBeatState {
 				UI.healthBarScript.stop();
 				UI.healthBarScript = null;
 			}
-
+			
 			if(UI.timeBarScript != null) {
 				UI.timeBarScript.stop();
 				UI.timeBarScript = null;
