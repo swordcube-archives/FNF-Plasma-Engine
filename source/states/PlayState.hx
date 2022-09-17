@@ -615,15 +615,41 @@ class PlayState extends MusicBeatState {
 					object = null;
 				}
 			}
-			UI.timeBarScript.stop();
-			UI.timeBarScript = null;
+
+			if(UI.healthBarScript != null) {
+				UI.healthBarScript.stop();
+				UI.healthBarScript = null;
+			}
+
+			if(UI.timeBarScript != null) {
+				UI.timeBarScript.stop();
+				UI.timeBarScript = null;
+			}
 			
 			if(ret != HScript.function_stop) {
+				for(script in scripts) {
+					script.stop();
+				}
+				scripts = [];
+
 				if(vocals != null)
 					vocals.stop();
 
 				FlxG.sound.playMusic(freakyMenu);
 				FlxG.sound.music.time = 0;
+
+				unspawnNotes = [];
+				for(note in UI.opponentStrums.notes) {
+					UI.opponentStrums.notes.remove(note, true);
+					note.destroy();
+					note = null;
+				}
+
+				for(note in UI.playerStrums.notes) {
+					UI.playerStrums.notes.remove(note, true);
+					note.destroy();
+					note = null;
+				}
 
 				if(isStoryMode) {
 					storyPlaylist.shift();
@@ -956,6 +982,17 @@ class PlayState extends MusicBeatState {
 			--i;
 		}
 
+		i = UI.opponentStrums.notes.length - 1;
+		while (i >= 0) {
+			var daNote:Note = UI.opponentStrums.notes.members[i];
+			if(daNote.strumTime - 350 < time) {
+				daNote.kill();
+				UI.opponentStrums.notes.remove(daNote, true);
+				daNote.destroy();
+			}
+			--i;
+		}
+
 		i = UI.playerStrums.notes.length - 1;
 		while (i >= 0) {
 			var daNote:Note = UI.playerStrums.notes.members[i];
@@ -1035,6 +1072,7 @@ class PlayState extends MusicBeatState {
 		for(script in scripts) {
 			script.stop();
 		}
+		scripts = [];
 		current = null;
 		super.destroy();
 	}
