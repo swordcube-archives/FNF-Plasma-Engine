@@ -1,6 +1,7 @@
 package hscript;
 
 import flixel.FlxG;
+import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 import haxe.Exception;
 import hscript.Expr.Error;
 import hscript.Interp;
@@ -14,7 +15,7 @@ import ui.Notification;
 
 using StringTools;
 
-class HScript {
+class HScript implements IFlxDestroyable {
     public var locals(get, set):Map<String, {r:Dynamic, depth:Int}>;
     function get_locals():Map<String, {r:Dynamic, depth:Int}> {
         @:privateAccess
@@ -46,6 +47,8 @@ class HScript {
         ".hsc",
         ".hscript"
     ];
+
+    public function destroy() {}
 
     public var usedExtension:String = ".hxs";
 
@@ -291,6 +294,9 @@ class HScript {
                     'Occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'} in $path.hxs',
                     Error
                 ));
+
+                stop();
+                destroy();
             };
         }
         catch(e)
@@ -315,6 +321,7 @@ class HScript {
             ));
 
             stop();
+            destroy();
         }
     }
 
@@ -346,6 +353,8 @@ class HScript {
 		{
 			executedScript = false;
 			log(e.details(), true);
+            stop();
+            destroy();
 		}
 
 		if (executedScript && callFuncs) {
