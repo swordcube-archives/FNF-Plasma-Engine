@@ -378,12 +378,9 @@ class PlayState extends MusicBeatState {
 
 		UI = new GameplayUI();
 		
-		for(section in SONG.notes)
-		{
-			if(section != null)
-			{
-				for(note in section.sectionNotes)
-				{
+		for(section in SONG.notes) {
+			if(section != null) {
+				for(note in section.sectionNotes) {
 					var strumTime:Float = note[0];
 					var gottaHitNote:Bool = section.mustHitSection;
 					if (note[1] > (SONG.keyCount - 1))

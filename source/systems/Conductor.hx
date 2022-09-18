@@ -10,6 +10,12 @@ typedef BPMChangeEvent = {
 	var bpm:Float;
 }
 
+typedef TimeScaleChangeEvent = {
+	var stepTime:Int;
+	var songTime:Float;
+	var timeScale:Array<Int>;
+}
+
 class Conductor {
     /**
         The beats per minute of the song.
@@ -64,14 +70,17 @@ class Conductor {
     public static var timeScale:Array<Int> = [4, 4];
 
 	public static var bpmChangeMap:Array<BPMChangeEvent> = [];
+    public static var timeScaleChangeMap:Array<TimeScaleChangeEvent> = [];
 
 	public static function mapBPMChanges(song:Song)
 	{
 		bpmChangeMap = [];
 
 		var curBPM:Float = song.bpm;
+        var curTimeScale:Array<Int> = timeScale;
 		var totalSteps:Int = 0;
 		var totalPos:Float = 0;
+        
 		for (i in 0...song.notes.length)
 		{
             // YCE charts have like 9273829 nulls in them so yknow balls
@@ -88,9 +97,25 @@ class Conductor {
                     bpmChangeMap.push(event);
                 }
 
-                var deltaSteps:Int = song.notes[i].lengthInSteps;
+                if (song.notes[i].changeTimeScale
+                    && song.notes[i].timeScale[0] != curTimeScale[0]
+                    && song.notes[i].timeScale[1] != curTimeScale[1])
+                {
+                    curTimeScale = song.notes[i].timeScale;
+    
+                    var event:TimeScaleChangeEvent = {
+                        stepTime: totalSteps,
+                        songTime: totalPos,
+                        timeScale: curTimeScale
+                    };
+    
+                    timeScaleChangeMap.push(event);
+                }
+
+                var deltaSteps:Int = Math.floor((16 / curTimeScale[1]) * curTimeScale[0]);
                 totalSteps += deltaSteps;
-                totalPos += ((60 / curBPM) * 1000 / 4) * deltaSteps;
+    
+                totalPos += ((60 / curBPM) * 1000 / curTimeScale[0]) * deltaSteps;
             }
 		}
 	}
