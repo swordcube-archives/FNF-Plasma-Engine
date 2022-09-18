@@ -23,12 +23,11 @@ typedef Song = {
     var gf:Null<String>;
     var gfVersion:Null<String>;
 
+    // please don't use this use gf or gfVersion instead
+    var player3:Null<String>;
+
     // An array of paths to scripts
     var scripts:Array<String>;
-
-    //@:deprecated("`player3` is deprecated. Use `gf` or `gfVersion` instead.")
-    // you should still not use this, but compatibility + raf hates deprecated messages like i do
-    var player3:Null<String>;
 
     var stage:Null<String>;
     // var uiSkin:Null<String>;

@@ -43,10 +43,10 @@ class AssetPaths {
         @param path                    The path to convert.
         @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
     **/
-    public static function font(path:String, fontExt:FontExt = TTF, packOverride:Null<String> = null):String
+    public static function font(path:String, fontExt:FontExt = TTF, packOverride:Null<String> = null, useFallback:Bool = true):String
     {
         var goodPath:String = asset('fonts/$path$fontExt', packOverride);
-        if(!FileSystem.exists(goodPath))
+        if(!FileSystem.exists(goodPath) && useFallback)
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
 
@@ -59,10 +59,10 @@ class AssetPaths {
         @param path                    The path to convert.
         @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
     **/
-    public static function txt(path:String, packOverride:Null<String> = null):String
+    public static function txt(path:String, packOverride:Null<String> = null, useFallback:Bool = true):String
     {
         var goodPath:String = asset('$path.txt', packOverride);
-        if(!FileSystem.exists(goodPath))
+        if(!FileSystem.exists(goodPath) && useFallback)
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
 
@@ -75,7 +75,7 @@ class AssetPaths {
         @param path                    The path to convert.
         @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
     **/
-    public static function video(path:String, packOverride:Null<String> = null):String {
+    public static function video(path:String, packOverride:Null<String> = null, useFallback:Bool = true):String {
         return 'assets/$currentPack/videos/$path';
     }
 
@@ -85,10 +85,10 @@ class AssetPaths {
         @param path                    The path to convert.
         @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
     **/
-    public static function json(path:String, packOverride:Null<String> = null):String
+    public static function json(path:String, packOverride:Null<String> = null, useFallback:Bool = true):String
     {
         var goodPath:String = asset('$path.json', packOverride);
-        if(!FileSystem.exists(goodPath))
+        if(!FileSystem.exists(goodPath) && useFallback)
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
 
@@ -101,10 +101,10 @@ class AssetPaths {
         @param path                    The path to convert.
         @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
     **/
-    public static function xml(path:String, packOverride:Null<String> = null):String
+    public static function xml(path:String, packOverride:Null<String> = null, useFallback:Bool = true):String
     {
         var goodPath:String = asset('$path.xml', packOverride);
-        if(!FileSystem.exists(goodPath))
+        if(!FileSystem.exists(goodPath) && useFallback)
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
 
@@ -117,28 +117,28 @@ class AssetPaths {
         @param path                    The path to convert.
         @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
     **/
-    public static function hxs(path:String, packOverride:Null<String> = null):String
+    public static function hxs(path:String, packOverride:Null<String> = null, useFallback:Bool = true):String
     {
         var goodPath:String = asset('$path.hxs', packOverride);
-        if(!FileSystem.exists(goodPath))
+        if(!FileSystem.exists(goodPath) && useFallback)
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
 
         return goodPath;
     }
-    public static function frag(path:String, packOverride:Null<String> = null):String
+    public static function frag(path:String, packOverride:Null<String> = null, useFallback:Bool = true):String
     {
         var goodPath:String = asset('shaders/$path.frag', packOverride);
-        if(!FileSystem.exists(goodPath))
+        if(!FileSystem.exists(goodPath) && useFallback)
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
 
         return goodPath;
     }
-    public static function vert(path:String, packOverride:Null<String> = null):String
+    public static function vert(path:String, packOverride:Null<String> = null, useFallback:Bool = true):String
     {
         var goodPath:String = asset('shaders/$path.vert', packOverride);
-        if(!FileSystem.exists(goodPath))
+        if(!FileSystem.exists(goodPath) && useFallback)
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
 
@@ -152,10 +152,10 @@ class AssetPaths {
         @param path                    The path to convert.
         @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
     **/
-    public static function image(path:String, imageExt:ImageExt = PNG, packOverride:Null<String> = null):String
+    public static function image(path:String, imageExt:ImageExt = PNG, packOverride:Null<String> = null, useFallback:Bool = true):String
     {
         var goodPath:String = asset('images/$path$imageExt', packOverride);
-        if(!FileSystem.exists(goodPath))
+        if(!FileSystem.exists(goodPath) && useFallback)
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
             
@@ -169,10 +169,10 @@ class AssetPaths {
         @param path                    The path to convert.
         @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
     **/
-    public static function characterIcon(path:String, imageExt:ImageExt = PNG, packOverride:Null<String> = null):String
+    public static function characterIcon(path:String, imageExt:ImageExt = PNG, packOverride:Null<String> = null, useFallback:Bool = true):String
     {
         var goodPath:String = asset('characters/$path/icons$imageExt', packOverride);
-        if(!FileSystem.exists(goodPath))
+        if(!FileSystem.exists(goodPath) && useFallback)
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
             
@@ -186,10 +186,10 @@ class AssetPaths {
         @param char                    The character to get the spritesheet path for.
         @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
     **/
-    public static function storyCharacterSpriteSheet(char:String, imageExt:ImageExt = PNG, packOverride:Null<String> = null):String
+    public static function storyCharacterSpriteSheet(char:String, imageExt:ImageExt = PNG, packOverride:Null<String> = null, useFallback:Bool = true):String
     {
         var goodPath:String = asset('story_characters/$char/spritesheet$imageExt', packOverride);
-        if(!FileSystem.exists(goodPath))
+        if(!FileSystem.exists(goodPath) && useFallback)
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
 
@@ -203,10 +203,10 @@ class AssetPaths {
         @param char                    The character to get the spritesheet path for.
         @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
     **/
-    public static function characterSpriteSheet(char:String, imageExt:ImageExt = PNG, packOverride:Null<String> = null):String
+    public static function characterSpriteSheet(char:String, imageExt:ImageExt = PNG, packOverride:Null<String> = null, useFallback:Bool = true):String
     {
         var goodPath:String = asset('characters/$char/spritesheet$imageExt', packOverride);
-        if(!FileSystem.exists(goodPath))
+        if(!FileSystem.exists(goodPath) && useFallback)
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
 
@@ -220,10 +220,10 @@ class AssetPaths {
         @param path                    The path to convert.
         @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
     **/
-    public static function sound(path:String, soundExt:SoundExt = OGG, packOverride:Null<String> = null):String
+    public static function sound(path:String, soundExt:SoundExt = OGG, packOverride:Null<String> = null, useFallback:Bool = true):String
     {
         var goodPath:String = asset('sounds/$path$soundExt', packOverride);
-        if(!FileSystem.exists(goodPath))
+        if(!FileSystem.exists(goodPath) && useFallback)
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
 
@@ -236,7 +236,7 @@ class AssetPaths {
         @param min                    The minimum number for the random number.
         @param max                    The maximum number for the random number.
     **/
-    public static function soundRandom(path:String, min:Int, max:Int, soundExt:SoundExt = OGG, packOverride:Null<String> = null)
+    public static function soundRandom(path:String, min:Int, max:Int, soundExt:SoundExt = OGG, packOverride:Null<String> = null, useFallback:Bool = true)
 	{
 		return sound(path + FlxG.random.int(min, max), soundExt, packOverride);
 	}
@@ -248,10 +248,10 @@ class AssetPaths {
         @param path                    The path to convert.
         @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
     **/
-    public static function music(path:String, soundExt:SoundExt = OGG, packOverride:Null<String> = null):String
+    public static function music(path:String, soundExt:SoundExt = OGG, packOverride:Null<String> = null, useFallback:Bool = true):String
     {
         var goodPath:String = asset('music/$path$soundExt', packOverride);
-        if(!FileSystem.exists(goodPath))
+        if(!FileSystem.exists(goodPath) && useFallback)
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
 
@@ -265,10 +265,10 @@ class AssetPaths {
         @param path                    The path to convert.
         @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
     **/
-    public static function songInst(song:String, soundExt:SoundExt = OGG, packOverride:Null<String> = null):String
+    public static function songInst(song:String, soundExt:SoundExt = OGG, packOverride:Null<String> = null, useFallback:Bool = true):String
     {
         var goodPath:String = asset('songs/${song.toLowerCase()}/Inst$soundExt', packOverride);
-        if(!FileSystem.exists(goodPath))
+        if(!FileSystem.exists(goodPath) && useFallback)
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
 
@@ -282,10 +282,10 @@ class AssetPaths {
         @param path                    The path to convert.
         @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
     **/
-    public static function songVoices(song:String, soundExt:SoundExt = OGG, packOverride:Null<String> = null):String
+    public static function songVoices(song:String, soundExt:SoundExt = OGG, packOverride:Null<String> = null, useFallback:Bool = true):String
     {
         var goodPath:String = asset('songs/${song.toLowerCase()}/Voices$soundExt', packOverride);
-        if(!FileSystem.exists(goodPath))
+        if(!FileSystem.exists(goodPath) && useFallback)
             // Try to get the asset from funkin (default pack) if it doesn't exist in current
             goodPath = goodPath.replace('assets/${packToUse}', 'assets/funkin');
 

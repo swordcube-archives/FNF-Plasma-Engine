@@ -71,7 +71,7 @@ function create() {
     curWacky = introArray[FlxG.random.int(0, introArray.length-1)];
 }
 
-var lean, danceLeft = false;
+var accepted, danceLeft = false;
 
 function createCoolText(textArray:Array<String>) {
     for (i in 0...textArray.length) addMoreText(textArray[i]);
@@ -90,8 +90,8 @@ function update(elapsed:Float) {
     if(FlxG.keys.justPressed.ENTER) {
         if(!skippedIntro)
             skipIntro();
-        else if(!lean) {
-            lean = true;
+        else if(!accepted) {
+            accepted = true;
             FlxG.sound.play(confirmMenu);
             FlxG.camera.flash(0xFFFFFFFF, 2);
             titleText.animation.play("confirm", true);
@@ -143,7 +143,8 @@ function beatHit(currentBeat:Int) {
         case 15:
             addMoreText('Funkin');
         case 16:
-            skipIntro();
+            if(!skippedIntro)
+                skipIntro();
     }
 }
 

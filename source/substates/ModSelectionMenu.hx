@@ -55,22 +55,25 @@ class ModSelectionMenu extends MusicBeatSubState {
         {
             if(!folder.contains("."))
             {
-                var json:PackJSON = Json.parse(FNFAssets.returnAsset(TEXT, AssetPaths.json("pack", folder)));
+                var text:String = FNFAssets.returnAsset(TEXT, AssetPaths.json("pack", folder, false));
+                if(text != "") {
+                    var json:PackJSON = Json.parse(text);
 
-                var alphabet:Alphabet = new Alphabet(0, (70 * i) + 30, json.name, false, FlxColor.WHITE);
-                alphabet.x += 100;
-                alphabet.xAdd += 150;
-                alphabet.isMenuItem = true;
-                alphabet.targetY = i;
-                alphabet.scrollFactor.set();
-                alphabet.offset.add(20, 20);
-                grpAlphabet.add(alphabet);
+                    var alphabet:Alphabet = new Alphabet(0, (70 * i) + 30, json.name, false, FlxColor.WHITE);
+                    alphabet.x += 100;
+                    alphabet.xAdd += 150;
+                    alphabet.isMenuItem = true;
+                    alphabet.targetY = i;
+                    alphabet.scrollFactor.set();
+                    alphabet.offset.add(20, 20);
+                    grpAlphabet.add(alphabet);
 
-                var icon:ModSelectionIcon = new ModSelectionIcon(alphabet, folder);
-                icon.scrollFactor.set();
-                grpIcons.add(icon);
+                    var icon:ModSelectionIcon = new ModSelectionIcon(alphabet, folder);
+                    icon.scrollFactor.set();
+                    grpIcons.add(icon);
 
-                i++;
+                    i++;
+                }
             }
         }
 

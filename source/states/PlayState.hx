@@ -629,11 +629,6 @@ class PlayState extends MusicBeatState {
 			}
 			
 			if(ret != HScript.function_stop) {
-				for(script in scripts) {
-					script.stop();
-				}
-				scripts = [];
-
 				if(vocals != null)
 					vocals.stop();
 
@@ -1073,6 +1068,7 @@ class PlayState extends MusicBeatState {
 	{
 		for(script in scripts) {
 			script.stop();
+			script.destroy();
 		}
 		scripts = [];
 		current = null;

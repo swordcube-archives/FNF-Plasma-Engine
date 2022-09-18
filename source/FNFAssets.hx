@@ -131,23 +131,18 @@ class FNFAssets {
                 return FlxAtlasFrames.fromSpriteSheetPacker(returnGraphic(AssetPaths.characterSpriteSheet(path)), returnText(AssetPaths.txt('characters/$path/spritesheet')));
 
             case SOUND:
-                var goodPath:String = path;
-                if(!FileSystem.exists(goodPath))
-                    // Try to get the asset from funkin (default pack) if it doesn't exist in current
-                    goodPath = path.replace('assets/${AssetPaths.packToUse}', 'assets/funkin');
-
-                if(!FileSystem.exists(goodPath))
+                if(!FileSystem.exists(path))
                     return null;
 
                 // if it exists in perm cache then get that instead
-                if(permCache.exists(goodPath+":SOUND"))
-                    return permCache.get(goodPath+":SOUND");
+                if(permCache.exists(path+":SOUND"))
+                    return permCache.get(path+":SOUND");
 
                 // otherwise actually manage the cache and shit
-                if(!cache.exists(goodPath+":SOUND"))
-                    cache.set(goodPath+":SOUND", Sound.fromFile(goodPath));
+                if(!cache.exists(path+":SOUND"))
+                    cache.set(path+":SOUND", Sound.fromFile(path));
         
-                return cache.get(goodPath+":SOUND");
+                return cache.get(path+":SOUND");
 
             case TEXT:
                 return returnText(path);
@@ -166,34 +161,28 @@ class FNFAssets {
     **/
     public static function returnGraphic(path:String):FlxGraphic
     {
-        var goodPath:String = path;
-
-        if(!FileSystem.exists(goodPath))
-            // Try to get the asset from funkin (default pack) if it doesn't exist in current
-            goodPath = path.replace('assets/${AssetPaths.packToUse}', 'assets/funkin');
-
-        // if it still doesn't exist give up and return null
-         if(!FileSystem.exists(goodPath))
+        // if it doesn't exist give up and return null
+         if(!FileSystem.exists(path))
             return null;
 
         // if it exists in perm cache then get that instead
-        if(permCache.exists(goodPath+":IMAGE"))
-            return permCache.get(goodPath+":IMAGE");
+        if(permCache.exists(path+":IMAGE"))
+            return permCache.get(path+":IMAGE");
 
         // otherwise actually manage the cache and shit
-        if(!cache.exists(goodPath + ":IMAGE"))
+        if(!cache.exists(path + ":IMAGE"))
         {
-            var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(BitmapData.fromFile(goodPath), false, goodPath + ":IMAGE", false);
+            var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(BitmapData.fromFile(path), false, path + ":IMAGE", false);
 
             newGraphic.destroyOnNoUse = false;
             newGraphic.persist = true;
 
-            cache.set(goodPath + ":IMAGE", newGraphic);
+            cache.set(path + ":IMAGE", newGraphic);
 
             return newGraphic;
         }
 
-        return cache.get(goodPath + ":IMAGE");
+        return cache.get(path + ":IMAGE");
     }
 
     /**
@@ -203,15 +192,9 @@ class FNFAssets {
     **/
     public static function returnText(path:String):String
     {
-        var goodPath:String = path;
-        if(!FileSystem.exists(goodPath))
-            // Try to get the asset from funkin (default pack) if it doesn't exist in current
-            goodPath = path.replace('assets/${AssetPaths.packToUse}', 'assets/funkin');
+        if(FileSystem.exists(path))
+            return File.getContent(path);
 
-        var text:String = "";
-        if(FileSystem.exists(goodPath))
-            text = File.getContent(goodPath);
-
-        return text;
+        return "";
     }
 }
