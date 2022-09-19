@@ -75,7 +75,7 @@ class AssetPaths {
         @param path                    The path to convert.
         @param packOverride            A pack to get this asset from (null = current pack, anything else will forcefully try to load it from that pack if it exists there)
     **/
-    public static function video(path:String, packOverride:Null<String> = null, useFallback:Bool = true):String {
+    public static function video(path:String, packOverride:Null<String> = null):String {
         return 'assets/$currentPack/videos/$path';
     }
 

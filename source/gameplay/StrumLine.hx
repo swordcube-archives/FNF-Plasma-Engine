@@ -59,7 +59,9 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		generateArrows();
 
 		judgementScript = new HScript('scripts/Judgement');
+		judgementScript.setScriptObject(PlayState.current);
 		judgementScript.start();
+		PlayState.current.scripts.push(judgementScript);
 
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
@@ -481,16 +483,11 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 		PlayState.current.combo++;
 
-		judgementScript.call("popUpScore", [
+		PlayState.current.callOnHScripts("popUpScore", [
 			judgeData.name,
 			PlayState.current.combo,
 			PlayState.current.ratingScale,
 			PlayState.current.comboScale
-		]);
-
-		PlayState.current.callOnHScripts("popUpScore", [
-			judgeData.name,
-			PlayState.current.combo
 		]);
 
 		PlayState.current.UI.healthBarScript.call("updateScoreText");

@@ -1063,7 +1063,6 @@ class PlayState extends MusicBeatState {
 	{
 		for(script in scripts) {
 			script.stop();
-			script.destroy();
 		}
 		scripts = [];
 		current = null;

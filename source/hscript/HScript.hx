@@ -2,7 +2,6 @@ package hscript;
 
 import states.ScriptedState;
 import flixel.FlxG;
-import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 import haxe.Exception;
 import hscript.Expr.Error;
 import hscript.Interp;
@@ -16,7 +15,7 @@ import ui.Notification;
 
 using StringTools;
 
-class HScript implements IFlxDestroyable {
+class HScript {
     public var locals(get, set):Map<String, {r:Dynamic, depth:Int}>;
     function get_locals():Map<String, {r:Dynamic, depth:Int}> {
         @:privateAccess
@@ -48,8 +47,6 @@ class HScript implements IFlxDestroyable {
         ".hsc",
         ".hscript"
     ];
-
-    public function destroy() {}
 
     public var usedExtension:String = ".hxs";
 
@@ -312,7 +309,6 @@ class HScript implements IFlxDestroyable {
                 }
 
                 stop();
-                destroy();
             };
         }
         catch(e)
