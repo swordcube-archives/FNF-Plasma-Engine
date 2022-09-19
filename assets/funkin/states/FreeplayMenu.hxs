@@ -32,6 +32,7 @@ var maxSpeed:Float = 10.0; // You can adjust this if you want but you're crazy i
 var speedMult:Float = 0.05;
 
 var speedTimer:Float = 0.0;
+var freeplayEasterEggScript = loadScript("scripts/FreeplayEasterEgg");
 
 function create() {
     scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
@@ -167,8 +168,12 @@ var bgColor:Array<Float> = [
     255
 ];
 
-function update() {
+function update(elapsed) {
     if(!loadingBox.visible) {
+        if(freeplayEasterEggScript != null) {
+            freeplayEasterEggScript.update(elapsed);
+        }
+
         var time:Float = Main.deltaTime * 9;
 
         var color = songs[curSelected].color;

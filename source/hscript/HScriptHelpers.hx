@@ -163,7 +163,7 @@ class HScriptHelpers {
             'fromStringMap': FlxKey.fromStringMap,
             'toStringMap': FlxKey.toStringMap,
             'fromString': FlxKey.fromString,
-            'toString': function (key:Int) {FlxKey.toStringMap.get(key);},
+            'toString': function (key:Int) {return FlxKey.toStringMap.get(key);}, // lmao someone forgor to put a return here
         };
     }
 

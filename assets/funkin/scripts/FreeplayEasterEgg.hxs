@@ -1,0 +1,35 @@
+if(AssetPaths.currentPack == "funkin") {
+    var easterEggKeys:Array<String> = [
+        'ELECTROMAN'
+    ];
+    var allowedKeys:String = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var easterEggKeysBuffer:String = '';
+
+    function update() {
+        if (FlxG.keys.firstJustPressed() != FlxKey.NONE) {
+            var keyPressed:FlxKey = FlxG.keys.firstJustPressed();
+            var keyName:String = FlxKey.toString(keyPressed);
+            if(StringTools.contains(allowedKeys, keyName)) {
+                easterEggKeysBuffer += keyName;
+                if(easterEggKeysBuffer.length >= 32) easterEggKeysBuffer = easterEggKeysBuffer.substring(1);
+
+                for (wordRaw in easterEggKeys) {
+                    var word:String = wordRaw.toUpperCase(); //just for being sure you're doing it right
+                    if (StringTools.contains(easterEggKeysBuffer, word)) {
+                        switch(word) {
+                            case "ELECTROMAN":
+                                PlayState_.songMultiplier = 1;
+                                PlayState_.isStoryMode = false;
+                                PlayState_.actualSongName = "Electroman";
+                                PlayState_.SONG = SongLoader.getJSON("electroman", "hard");
+                                PlayState_.currentDifficulty = "hard";
+                                PlayState_.availableDifficulties = ["hard"];
+                                
+                                Main.switchState(new PlayState_());
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
