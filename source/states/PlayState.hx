@@ -687,9 +687,7 @@ class PlayState extends MusicBeatState {
 		callOnHScripts("update", [elapsed]);
 
 		if(FlxG.keys.justPressed.SEVEN)
-		{
 			Main.switchState(new ScriptedState('ChartingState'));
-		}
 
 		if(FlxG.keys.justPressed.F6 && !logsOpen)
 		{

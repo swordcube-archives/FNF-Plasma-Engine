@@ -1,5 +1,6 @@
 package hscript;
 
+import states.ScriptedState;
 import flixel.FlxG;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 import haxe.Exception;
@@ -285,15 +286,30 @@ class HScript implements IFlxDestroyable {
 
                 var lineNumber = Std.string(posInfo.lineNumber);
                 var methodName = posInfo.methodName;
-                var className = posInfo.className;
 
                 Main.print("error", 'Exception occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'}\n\n${e}\n\nHX File: $path.hxs');
 
-                cast(FlxG.state, MusicBeatState).notificationGroup.add(new Notification(
-                    '${e}',
-                    'Occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'} in $path.hxs',
-                    Error
-                ));
+                var info = {
+                    title: '${e}',
+                    desc: 'Occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'} in $path.hxs',
+                    type: Error
+                };
+
+                if(Std.isOfType(FlxG.state, MusicBeatState)) {
+                    cast(FlxG.state, MusicBeatState).notificationGroup.add(new Notification(
+                        info.title,
+                        info.desc,
+                        info.type
+                    ));
+                }
+
+                if(Std.isOfType(FlxG.state, ScriptedState)) {
+                    cast(FlxG.state, ScriptedState).notificationGroup.add(new Notification(
+                        info.title,
+                        info.desc,
+                        info.type
+                    ));
+                }
 
                 stop();
                 destroy();
@@ -314,14 +330,27 @@ class HScript implements IFlxDestroyable {
 
             Main.print("error", 'Exception occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'}\n\n${e}\n\nHX File: $path.hxs');
 
-            cast(FlxG.state, MusicBeatState).notificationGroup.add(new Notification(
-                '${e}',
-                'Occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'} in $path.hxs',
-                Error
-            ));
+            var info = {
+                title: '${e}',
+                desc: 'Occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'} in $path.hxs',
+                type: Error
+            };
 
-            stop();
-            destroy();
+            if(Std.isOfType(FlxG.state, MusicBeatState)) {
+                cast(FlxG.state, MusicBeatState).notificationGroup.add(new Notification(
+                    info.title,
+                    info.desc,
+                    info.type
+                ));
+            }
+
+            if(Std.isOfType(FlxG.state, ScriptedState)) {
+                cast(FlxG.state, ScriptedState).notificationGroup.add(new Notification(
+                    info.title,
+                    info.desc,
+                    info.type
+                ));
+            }
         }
     }
 
@@ -354,7 +383,6 @@ class HScript implements IFlxDestroyable {
 			executedScript = false;
 			log(e.details(), true);
             stop();
-            destroy();
 		}
 
 		if (executedScript && callFuncs) {
