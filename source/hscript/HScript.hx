@@ -322,7 +322,6 @@ class HScript {
 
             var lineNumber = Std.string(posInfo.lineNumber);
             var methodName = posInfo.methodName;
-            var className = posInfo.className;
 
             Main.print("error", 'Exception occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'}\n\n${e}\n\nHX File: $path.hxs');
 
