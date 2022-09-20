@@ -560,6 +560,19 @@ class PlayState extends MusicBeatState {
 		#end
 	}
 
+	public function playVideoSprite(name:String, ?callback:Void->Void = null):VideoSprite {
+		#if VIDEOS_ALLOWED
+		var video:VideoSprite = new VideoSprite();
+		video.finishCallback = callback;
+		video.playVideo(AssetPaths.video(name));
+		return video;
+		#else
+		trace("Failed to play video at path: "+AssetPaths.video(name)+" - Your platform doesn't support video playback!");
+		callback();
+		#end
+		return null;
+	}
+
 	public function kindaEndSong()
 	{
 		FlxG.sound.music.stop();
