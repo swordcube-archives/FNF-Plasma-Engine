@@ -23,7 +23,7 @@ var musicSelected:Int = -1;
 var curPlaying:String = "";
 
 var loadingBox:FlxSprite = new FlxSprite().makeGraphic(400, 50, FlxColor.BLACK);
-var loadingIco:FlxSprite = new FlxSprite().loadGraphic(FNFAssets.getImage(AssetPaths.image("icons/bf")), 150, 150);
+var loadingIco:FlxSprite = new FlxSprite().loadGraphic(FNFAssets.getImage(AssetPaths.characterIcon("bf")), 150, 150);
 var loadingTxt:FlxText = new FlxText(0, 0, 0, "Loading audio...");
 
 var curSpeed:Float = 1.0;
