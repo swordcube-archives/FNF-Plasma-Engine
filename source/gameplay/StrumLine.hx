@@ -207,16 +207,13 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 							PlayState.current.callOnHScripts("noteMiss", [note]);
 							PlayState.current.UI.healthBarScript.call("updateScoreText");
-						}
 
-						if (note.canBeHit)
-						{
-							for (c in PlayState.current.bfs)
-							{
-								if (c != null && c.animation.curAnim != null)
-								{
-									c.holdTimer = 0.0;
-									c.playAnim(getSingAnimation(note.noteData) + "miss", true);
+							if (note.canBeHit) {
+								for (c in PlayState.current.bfs) {
+									if (c != null && c.animation.curAnim != null) {
+										c.holdTimer = 0.0;
+										c.playAnim(getSingAnimation(note.noteData) + "miss", true);
+									}
 								}
 							}
 						}
