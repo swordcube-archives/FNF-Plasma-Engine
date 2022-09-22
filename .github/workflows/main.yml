@@ -34,7 +34,7 @@ jobs:
           sudo apt update -y
           sudo apt upgrade -y
           sudo apt install libldap2-dev -y
-          sudo apt install libidn11-dev -y
+          sudo apt install libidn12 -y
         # I've seen that in the Linux actions libidn gives a warning then shits itself
         # I can only hope this fixes it
         
