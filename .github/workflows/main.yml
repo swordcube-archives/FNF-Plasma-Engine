@@ -33,7 +33,7 @@ jobs:
         run: |
           sudo apt update -y
           sudo apt upgrade -y
-          sudo apt install libidn -y
+          sudo apt install libidn12 -y
         # I've seen that in the Linux actions libidn gives a warning then shits itself
         # I can only hope this fixes it
         
