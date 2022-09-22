@@ -1,10 +1,10 @@
-if(AssetPaths.currentPack == "funkin") {
-    var easterEggKeys:Array<String> = [
-        'ELECTROMAN'
-    ];
-    var allowedKeys:String = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    var easterEggKeysBuffer:String = '';
+var easterEggKeys:Array<String> = [
+    'ELECTROMAN'
+];
+var allowedKeys:String = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var easterEggKeysBuffer:String = '';
 
+if(AssetPaths.currentPack == "funkin") {
     function update() {
         if (FlxG.keys.firstJustPressed() != FlxKey.NONE) {
             var keyPressed:FlxKey = FlxG.keys.firstJustPressed();
