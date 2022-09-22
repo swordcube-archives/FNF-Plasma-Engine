@@ -31,7 +31,13 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Make compiling actually function
         run: |
-          
+          sudo apt update -y
+          sudo apt upgrade -y
+          sudo apt install libidn -y
+        # I've seen that in the Linux actions libidn gives a warning then shits itself
+        # I can only hope this fixes it
+        
+        # anyways here's the rest of everything
       - name: Install Haxelib
         run: |
           haxelib setup ~/haxelib
