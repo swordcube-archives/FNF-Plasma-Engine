@@ -490,7 +490,8 @@ class PlayState extends MusicBeatState {
 		var ret:Dynamic = callOnHScripts("startCountdown", [], false);
 		if(ret != HScript.function_stop) {
 			countdownTimer = new FlxTimer().start(Conductor.crochet / 1000.0, function(tmr:FlxTimer) {
-				gf.dance();
+				if(gf != null)
+					gf.dance();
 
 				for(c in dads) {
 					if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing"))
@@ -921,7 +922,8 @@ class PlayState extends MusicBeatState {
 		if (SONG.notes[curSection].changeBPM)
 			Conductor.changeBPM(SONG.notes[curSection].bpm);
 
-		gf.dance();
+		if(gf != null)
+			gf.dance();
 
 		if(gf != null)
 			gf.script.call("beatHit", [Conductor.currentBeat]);

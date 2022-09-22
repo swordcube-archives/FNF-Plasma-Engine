@@ -278,7 +278,13 @@ function playTheFuckingSong() {
         FlxG.sound.music.pitch = curSpeed;
 
         FlxG.sound.music.fadeIn(1, 0, 1);
-        Conductor.changeBPM(songs[curSelected].bpm);
+        if(songs[curSelected].bpm != null)
+            Conductor.changeBPM(songs[curSelected].bpm);
+        else {
+            var json = SongLoader.getJSON(songs[curSelected].name, StringTools.trim(songs[curSelected].difficulties[curDifficulty]));
+            if(json != null)
+                Conductor.changeBPM(json.bpm);
+        }
 
         loadingBox.visible = false;
         loadingIco.visible = false;
