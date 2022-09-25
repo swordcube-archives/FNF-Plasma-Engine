@@ -1,0 +1,15 @@
+{
+    "pages": [
+        ["Template",   "Template page."]
+    ],
+    "options": [
+        {
+            "page": "Template",
+            "name": "Template Option",
+            "saveData": "TemplateMod-template-option",
+            "description": "An option to base new ones off of.",
+            "type": "Checkbox",
+            "defaultValue": false
+        }
+    ]
+}

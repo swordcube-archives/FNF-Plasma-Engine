@@ -1,0 +1,31 @@
+function create() {
+    removeStage();
+
+	stage.dadPosition.set(100, 100);
+	stage.gfPosition.set(400, 130);
+	stage.bfPosition.set(770, 100);
+
+    defaultCamZoom = 0.9;
+
+    var bg = new FlxSprite(-600, -200);
+    bg.loadGraphic(AssetUtil.image('stages/stage/stageback'));
+    bg.scrollFactor.set(0.9, 0.9);
+    bg.antialiasing = Settings.get("Antialiasing");
+    add(bg);
+
+    var stageFront = new FlxSprite(-650, 600);
+    stageFront.loadGraphic(AssetUtil.image('stages/stage/stagefront'));
+    stageFront.scrollFactor.set(0.9, 0.9);
+    stageFront.scale.set(1.1, 1.1);
+    stageFront.updateHitbox();
+    stageFront.antialiasing = Settings.get("Antialiasing");
+    add(stageFront);
+
+    var stageCurtains = new FlxSprite(-500, -300);
+    stageCurtains.loadGraphic(AssetUtil.image('stages/stage/stagecurtains'));
+    stageCurtains.scrollFactor.set(1.3, 1.3);
+    stageCurtains.scale.set(0.9, 0.9);
+    stageCurtains.updateHitbox();
+    stageCurtains.antialiasing = Settings.get("Antialiasing");
+    add(stageCurtains);
+}
