@@ -138,6 +138,13 @@ class HScript {
                 "parse": haxe.Json.parse,
                 "stringify": haxe.Json.stringify
             });
+		
+	    set("Array", Array);
+            set("String", String);
+            set("Float", Float);
+            set("Int", Int);
+            set("Bool", Bool);
+            set("Dynamic", Dynamic);
             
             set("FNFSprite", systems.FNFSprite);
             set("FlxSprite", flixel.FlxSprite);
