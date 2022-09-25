@@ -20,7 +20,6 @@ var gradientSprite;
 var hueSprite;
 var hueSlider;
 var sbSlider;
-var colorDisplay;
 
 var slidingHue = false;
 var slidingSB = false;
@@ -30,7 +29,7 @@ function new(w,h) {
     size = [w,h];
     hueChooser = new BitmapData(360, 20, true, 0);
     fullGradient = new BitmapData(w, h, true, 0);
-    hueSprite = new FlxSprite(x,y+w);
+    hueSprite = new FlxSprite(x,y+h);
     var singleStripe = FlxGradient.createGradientBitmapData(size[0], 1, [0xFFFFFFFF, 0xFFFF0000], 1, 0);
     for (i in 0...size[1]) {
         fullGradient.draw(
@@ -65,12 +64,9 @@ function new(w,h) {
     hueSlider.loadGraphic(BitmapHelper.newOutlinedCircle(8, 0x27FFFFFF, 2, 0x7FFFFFFF));
     sbSlider = new FNFSprite(x-10,y-10);
     sbSlider.loadGraphic(BitmapHelper.newOutlinedCircle(8, 0x27FFFFFF, 2, 0x7FFFFFFF));
-
-    colorDisplay = new FNFSprite(x+w,y).makeGraphic(w,h,0xFFFFFFFF);
 }
 
 function draw() {
-    colorDisplay.draw();
     hueSprite.draw();
     gradientSprite.draw();
     hueSlider.draw();
@@ -115,7 +111,6 @@ function update(elapsed) {
 
     if (slidingHue || slidingSB) {
         color = FlxColor.fromHSB(hue, sat/100, bri/100);
-        colorDisplay.color = color;
     }
 }
 
