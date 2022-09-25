@@ -1,0 +1,19 @@
+{
+    "weeks": [
+        {
+            "texture": "tutorial",
+            "characters": [
+                "",
+                "bf",
+                ""
+            ],
+            "tracks": [
+                "Template"
+            ],
+            "difficulties": [
+                "hard"
+            ],
+            "name": "template week, epic win"
+        }
+    ]
+}

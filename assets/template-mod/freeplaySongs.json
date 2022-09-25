@@ -1,0 +1,13 @@
+{
+    "songs": [
+        {
+            "name": "Template",
+            "difficulties": [
+                "hard"
+            ],
+            "icon": "dad",
+            "color": [104, 177, 232],
+            "bpm": 100
+        }
+    ]
+}

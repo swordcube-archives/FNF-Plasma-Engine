@@ -1,6 +1,5 @@
 {
     "name": "Debug Songs",
     "desc": "A pack containing songs for debugging.",
-    "locked": true,
-    "debugonly": true
+    "locked": true
 }
