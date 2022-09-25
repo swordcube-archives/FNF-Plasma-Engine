@@ -151,6 +151,7 @@ class HScript {
             set("Window", Application.current.window);
             set("Application", Application.current);
             set("Application_", Application);
+            set("Clipboard", openfl.desktop.Clipboard);
             #if discord_rpc
             set("DiscordRPC", DiscordRPC);
             #end

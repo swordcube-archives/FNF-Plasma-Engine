@@ -108,13 +108,7 @@ function create() {
 
 var accepted:Bool = false;
 
-function update() {
-    if(isDebugBuild && FlxG.keys.justPressed.C) //c for cum
-        Main.switchState(new states.ScriptedState('options/NoteColoringState'));
-
-    // hey raf go to options > appearance and go to the bottom
-    // adjust note colors is there now :3333333
-        
+function update() {        
     camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, Main.deltaTime * 9), FlxMath.lerp(camFollowPos.y, camFollow.y, Main.deltaTime * 9));
 
     if(!accepted)
