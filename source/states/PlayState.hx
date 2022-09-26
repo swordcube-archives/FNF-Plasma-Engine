@@ -289,8 +289,8 @@ class PlayState extends MusicBeatState {
 
 			callOnHScripts("createAfterChars");
 
-			if(stage.script != null)
-				stage.script.call('createPost');
+			//if(stage.script != null)
+			//	stage.script.call('createPost');
 		}
 
 		// load the song script
