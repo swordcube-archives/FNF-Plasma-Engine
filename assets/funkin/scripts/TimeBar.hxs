@@ -3,7 +3,7 @@ import flixel.ui.FlxBarFillDirection;
 import flixel.ui.FlxBar;
 
 function create() {
-    ui.timeBarBG = new FlxSprite(0, Settings.get("Downscroll") ? FlxG.height - 40 : 20);
+    ui.timeBarBG = new FlxSprite(0, Settings.get("Downscroll") ? FlxG.height - 30 : 20);
     ui.timeBarBG.loadGraphic(FNFAssets.getImage(AssetPaths.image("timeBar")));
     ui.timeBarBG.screenCenter(FlxAxes.X);
     ui.timeBarBG.alpha = 0;

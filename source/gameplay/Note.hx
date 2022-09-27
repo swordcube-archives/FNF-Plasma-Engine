@@ -167,6 +167,11 @@ class Note extends FNFSprite {
         scale.set(funnyScale, funnyScale);
         updateHitbox();
 
+        if(!json.use_color_shader)
+            shader = null;
+        else
+            shader = colorSwap;
+
         playAnim("normal");
         if(isSustain)
         {

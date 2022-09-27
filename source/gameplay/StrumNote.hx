@@ -18,6 +18,7 @@ typedef ArrowSkin = {
     var note_scale:Float;
 
     var sustain_scale:Float;
+    var use_color_shader:Bool;
 
     var is_quant:Bool;
 };
@@ -38,7 +39,7 @@ class StrumNote extends FNFSprite {
 
         this.noteData = noteData;
 
-        colorSwap = new ColorShader(255, 255, 255);
+        colorSwap = new ColorShader(255, 0, 0);
 
         shader = colorSwap;
         colorSwap.enabled.value = [false];
@@ -51,8 +52,7 @@ class StrumNote extends FNFSprite {
             colorSwap.setColors(colorArray[0], colorArray[1], colorArray[2]);
     }
 
-    public function resetColor()
-    {
+    public function resetColor() {
         colorSwap.setColors(255, 255, 255);
     }
 
@@ -78,6 +78,11 @@ class StrumNote extends FNFSprite {
             animation.addByPrefix("confirm", noteThing+" confirm0", json.framerate, false);
 
             antialiasing = json.skin_type != "pixel" ? Settings.get("Antialiasing") : false;
+
+            if(!json.use_color_shader)
+                shader = null;
+            else
+                shader = colorSwap;
 
             var funnyScale:Float = json.strum_scale * ExtraKeys.arrowInfo[parent.keyCount-1][2];
             scale.set(funnyScale, funnyScale);

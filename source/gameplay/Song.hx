@@ -30,6 +30,7 @@ typedef Song = {
     var scripts:Array<String>;
 
     var stage:Null<String>;
+    var events:Array<Array<Dynamic>>;
     // var uiSkin:Null<String>;
 }
 

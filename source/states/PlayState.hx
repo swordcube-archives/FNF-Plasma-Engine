@@ -1,5 +1,7 @@
 package states;
 
+import compat.psych.PsychEventHandler;
+import gameplay.Events;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -70,7 +72,15 @@ class PlayState extends MusicBeatState {
 	public var bfs:Array<Character> = [];
 
 	// Camera
+	/**
+		Controls if the camera is allowed to lerp back to it's default zoom.
+	**/
 	public var camZooming:Bool = true;
+	/**
+		Controls if the camera is allowed to zoom in every few beats.
+	**/
+	public var camBumping:Bool = true;
+
 	public var defaultCamZoom:Float = 1.0;
 
 	public var camGame:FlxCamera;
@@ -133,6 +143,8 @@ class PlayState extends MusicBeatState {
 			songAccuracy = 0;
 	}
 
+	public var events:Array<Dynamic> = [];
+
 	public var currentSkin:String = "default";
 
 	public var ratingAssetPath:String = "ratings/default";
@@ -169,6 +181,8 @@ class PlayState extends MusicBeatState {
 		super.create();
 		current = this;
 
+		setupCameras();
+
 		// cache "breakfast" from music folder because pause menu!
 		FNFAssets.returnAsset(SOUND, AssetPaths.music("breakfast"));
 
@@ -200,6 +214,33 @@ class PlayState extends MusicBeatState {
 			}
 		}
 
+		events = [];
+
+		if (SONG.events != null && SONG.events.length > 0) {
+			for (event in SONG.events) {
+				if(Std.isOfType(event[0], String)) {
+					var e:FunkinEvent = {
+						scriptToUse: event[0],
+						time: event[1],
+						parameters: event[2]
+					};
+					events.push(e);
+				} else if(!Std.isOfType(event[0], String)) {
+					var time:Float = event[0];
+					var array:Array<Array<Dynamic>> = event[1];
+					for(item in array) {
+						var e:PsychEvent = {
+							name: item[0],
+							time: time,
+							value1: item[1],
+							value2: item[2]
+						};
+						events.push(e);
+					}
+				}
+			}
+		}
+
 		DiscordRPC.changePresence(
 			'Playing ${SONG.song}',
 			'Starting song...'
@@ -224,8 +265,6 @@ class PlayState extends MusicBeatState {
 		}
 
 		FlxG.sound.playMusic(loadedSong.get("inst"), 0, false);
-
-		setupCameras();
 
 		callOnHScripts("create");
 
@@ -331,6 +370,25 @@ class PlayState extends MusicBeatState {
 					script.set("remove", this.remove);
 					script.setScriptObject(this);
 					script.start();
+					scripts.push(script);
+				}
+			}
+		}
+
+		// event loading!!! lmao!!!
+		if(FileSystem.exists(AssetPaths.asset('psych_events'))) {
+			for(item in FileSystem.readDirectory(AssetPaths.asset('psych_events'))) {
+				if(item.contains(".")) {
+					var real = item;
+					for(ext in HScript.hscriptExts)
+						real = real.replace(ext, "");
+
+					var path:String = 'psych_events/$real';
+					var script = new HScript(path);
+					script.set("add", this.add);
+					script.set("remove", this.remove);
+					script.setScriptObject(this);
+					script.start(false);
 					scripts.push(script);
 				}
 			}
@@ -465,6 +523,8 @@ class PlayState extends MusicBeatState {
 			],
 		];
 	}
+
+	public var scrollSpeedTween:FlxTween;
 
 	public function getMenuToSwitchTo():Dynamic
 	{
@@ -765,12 +825,22 @@ class PlayState extends MusicBeatState {
 			gameOver();
 		}
 
+		for (event in events) {
+			// psych event
+			if(event.name != null) {
+				if (event.time <= Conductor.position) {
+					PsychEventHandler.processEvent(event);
+					callOnHScripts("onEvent", [event.name, event.value1, event.value2]);
+					events.remove(event);
+				}
+			}
+		}
+
 		spawnNotes();
 
-		if(camZooming)
-		{
-			FlxG.camera.zoom = FlxMath.lerp(FlxG.camera.zoom, defaultCamZoom, Main.deltaTime * 9);
-			camHUD.zoom = FlxMath.lerp(camHUD.zoom, 1, Main.deltaTime * 9);
+		if(camZooming) {
+			FlxG.camera.zoom = FlxMath.lerp(FlxG.camera.zoom, defaultCamZoom, 0.05 * 60 * Main.deltaTime);
+			camHUD.zoom = FlxMath.lerp(camHUD.zoom, 1, 0.05 * 60 * Main.deltaTime);
 		}
 
 		callOnHScripts("updatePost", [elapsed]);
@@ -946,7 +1016,7 @@ class PlayState extends MusicBeatState {
 
 		callOnHScripts("beatHit", [Conductor.currentBeat]);
 
-		if(camZooming && Conductor.currentBeat % 4 == 0)
+		if(camZooming && camBumping && Conductor.currentBeat % 4 == 0)
 		{
 			FlxG.camera.zoom += 0.015;
 			camHUD.zoom += 0.04;

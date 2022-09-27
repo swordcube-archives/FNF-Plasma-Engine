@@ -50,7 +50,7 @@ class GameplayUI extends FlxGroup {
     
         // Arrows
         var arrowSpacing:Float = FlxG.width / 4;
-        var strumY:Float = Settings.get("Downscroll") ? FlxG.height - 165 : 50.0;
+        var strumY:Float = Settings.get("Downscroll") ? FlxG.height - 155 : 50.0;
 
         opponentStrums = new StrumLine(0, strumY, PlayState.SONG.keyCount);
         opponentStrums.hasInput = false;

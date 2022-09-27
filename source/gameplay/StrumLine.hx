@@ -240,29 +240,30 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 				{
 					if ((Conductor.position - note.strumTime) >= 0.0)
 					{
-						for (c in PlayState.current.dads)
-						{
-							if (c != null && c.animation.curAnim != null)
+						var ret:Dynamic = PlayState.current.callOnHScripts("opponentNoteHit", [note]);
+						if(ret != HScript.function_stop) {
+							for (c in PlayState.current.dads)
 							{
-								c.holdTimer = 0.0;
-								if (note.altAnim && c.animation.exists(getSingAnimation(note.noteData) + "-alt"))
-									c.playAnim(getSingAnimation(note.noteData) + "-alt", true);
-								else
-									c.playAnim(getSingAnimation(note.noteData), true);
+								if (c != null && c.animation.curAnim != null)
+								{
+									c.holdTimer = 0.0;
+									if (note.altAnim && c.animation.exists(getSingAnimation(note.noteData) + "-alt"))
+										c.playAnim(getSingAnimation(note.noteData) + "-alt", true);
+									else
+										c.playAnim(getSingAnimation(note.noteData), true);
+								}
 							}
+
+							PlayState.current.vocals.volume = 1;
+							members[note.noteData].alpha = 1;
+							members[note.noteData].colorSwap.setColors(note.theColor[0], note.theColor[1], note.theColor[2]);
+							members[note.noteData].colorSwap.enabled.value = [true];
+							members[note.noteData].playAnim("confirm", true);
+
+							note.kill();
+							note.destroy();
+							notes.remove(note, true);
 						}
-
-						PlayState.current.vocals.volume = 1;
-						members[note.noteData].alpha = 1;
-						members[note.noteData].colorSwap.setColors(note.theColor[0], note.theColor[1], note.theColor[2]);
-						members[note.noteData].colorSwap.enabled.value = [true];
-						members[note.noteData].playAnim("confirm", true);
-
-						PlayState.current.callOnHScripts("opponentNoteHit", [note]);
-
-						note.kill();
-						note.destroy();
-						notes.remove(note, true);
 					}
 				}
 			});
@@ -455,58 +456,62 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		var judgement:String = Ranking.judgeNote(note.strumTime);
 		var judgeData:Judgement = Ranking.getInfo(botPlay ? "marvelous" : judgement);
 
-		if (!botPlay)
-			PlayState.current.songScore += judgeData.score;
+		var ret:Dynamic = PlayState.current.callOnHScripts("goodNoteHit", [note, judgeData.name, judgeData, PlayState.current.combo]);
+		var ret2:Dynamic = PlayState.current.callOnHScripts("playerNoteHit", [note, judgeData.name, judgeData, PlayState.current.combo]);
 
-		PlayState.current.totalHit += judgeData.mod;
-		if (judgement != "bad" && !PlayState.current.customHealth)
-			PlayState.current.health += PlayState.current.healthGain;
+		if(ret != HScript.function_stop && ret2 != HScript.function_stop) {
+			if (!botPlay)
+				PlayState.current.songScore += judgeData.score;
 
-		if(!PlayState.current.customHealth) {
-			PlayState.current.health += judgeData.health;
-			boundHealth();
-		}
+			PlayState.current.totalHit += judgeData.mod;
+			if (judgement != "bad" && !PlayState.current.customHealth)
+				PlayState.current.health += PlayState.current.healthGain;
 
-		if (Settings.get("Note Splashes") && judgeData.noteSplash)
-			noteSplashScript.call("spawnSplash", [
-				members[note.noteData].x,
-				members[note.noteData].y,
-				note.theColor,
-				ExtraKeys.arrowInfo[keyCount-1][2],
-				members[note.noteData].json.splash_assets
+			if(!PlayState.current.customHealth) {
+				PlayState.current.health += judgeData.health;
+				boundHealth();
+			}
+
+			if (Settings.get("Note Splashes") && judgeData.noteSplash)
+				noteSplashScript.call("spawnSplash", [
+					members[note.noteData].x,
+					members[note.noteData].y,
+					note.theColor,
+					ExtraKeys.arrowInfo[keyCount-1][0][note.noteData],
+					ExtraKeys.arrowInfo[keyCount-1][2],
+					members[note.noteData].json.splash_assets,
+					note.json.use_color_shader
+				]);
+
+			PlayState.current.calculateAccuracy();
+
+			PlayState.current.combo++;
+
+			PlayState.current.callOnHScripts("popUpScore", [
+				judgeData.name,
+				PlayState.current.combo,
+				PlayState.current.ratingScale,
+				PlayState.current.comboScale
 			]);
 
-		PlayState.current.calculateAccuracy();
+			PlayState.current.UI.healthBarScript.call("updateScoreText");
 
-		PlayState.current.combo++;
-
-		PlayState.current.callOnHScripts("popUpScore", [
-			judgeData.name,
-			PlayState.current.combo,
-			PlayState.current.ratingScale,
-			PlayState.current.comboScale
-		]);
-
-		PlayState.current.UI.healthBarScript.call("updateScoreText");
-
-		for (c in PlayState.current.bfs)
-		{
-			if (c != null && !c.specialAnim && c.animation.curAnim != null)
+			for (c in PlayState.current.bfs)
 			{
-				c.holdTimer = 0.0;
-				if (note.altAnim && c.animation.exists(getSingAnimation(note.noteData) + "-alt"))
-					c.playAnim(getSingAnimation(note.noteData) + "-alt", true);
-				else
-					c.playAnim(getSingAnimation(note.noteData), true);
+				if (c != null && !c.specialAnim && c.animation.curAnim != null)
+				{
+					c.holdTimer = 0.0;
+					if (note.altAnim && c.animation.exists(getSingAnimation(note.noteData) + "-alt"))
+						c.playAnim(getSingAnimation(note.noteData) + "-alt", true);
+					else
+						c.playAnim(getSingAnimation(note.noteData), true);
+				}
 			}
+
+			note.kill();
+			note.destroy();
+			notes.remove(note, true);
 		}
-
-		PlayState.current.callOnHScripts("goodNoteHit", [note, judgeData.name, judgeData, PlayState.current.combo]);
-		PlayState.current.callOnHScripts("playerNoteHit", [note, judgeData.name, judgeData, PlayState.current.combo]);
-
-		note.kill();
-		note.destroy();
-		notes.remove(note, true);
 	}
 
 	function boundHealth()

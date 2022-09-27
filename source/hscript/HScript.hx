@@ -324,36 +324,8 @@ class HScript {
             executedScript = false;
 
             #if DEBUG_PRINTING
-            trace('$e');
+            trace(e.details());
             #end
-            var posInfo = interp.posInfos();
-
-            var lineNumber = Std.string(posInfo.lineNumber);
-            var methodName = posInfo.methodName;
-
-            Main.print("error", 'Exception occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'}\n\n${e}\n\nHX File: $path.hxs');
-
-            var info = {
-                title: '${e}',
-                desc: 'Occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'} in $path.hxs',
-                type: Error
-            };
-
-            if(Std.isOfType(FlxG.state, MusicBeatState)) {
-                cast(FlxG.state, MusicBeatState).notificationGroup.add(new Notification(
-                    info.title,
-                    info.desc,
-                    info.type
-                ));
-            }
-
-            if(Std.isOfType(FlxG.state, ScriptedState)) {
-                cast(FlxG.state, ScriptedState).notificationGroup.add(new Notification(
-                    info.title,
-                    info.desc,
-                    info.type
-                ));
-            }
         }
     }
 
@@ -384,8 +356,9 @@ class HScript {
 		catch (e)
 		{
 			executedScript = false;
-			log(e.details(), true);
-            stop();
+            #if DEBUG_PRINTING
+            trace(e.details());
+            #end
 		}
 
 		if (executedScript && callFuncs) {
