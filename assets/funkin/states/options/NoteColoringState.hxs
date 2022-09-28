@@ -43,7 +43,18 @@ function create() {
         notes.add(theNote);
     }
     add(notes);
-    colorPicker = new ScriptedSprite('ui/ColorPicker', [350,320], FlxG.width/2-175, 300);
+    colorPicker = new ScriptedSprite('ui/ColorPicker', [350,320,function() {
+        noteColors = ExtraKeys.arrowInfo[keyCount-1][1].copy();
+        for(i in 0...keyCount) {
+            notes.members[i].shader.setColors(noteColors[i][0], noteColors[i][1], noteColors[i][2]);
+        }
+        colorPicker.call('setColor', [{
+            'r': noteColors[selected][0],
+            'g': noteColors[selected][1],
+            'b': noteColors[selected][2]
+        }, false]);
+        saveColors();
+    }], FlxG.width/2-175, 300);
     colorPicker.set('onChange', function(h,s,b) {
         var thecolor = FlxColor.fromHSB(h,s,b);
         notes.members[selected].shader.setColors(
