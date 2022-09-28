@@ -148,38 +148,42 @@ class Note extends FNFSprite {
 
         if(!canBeHit)
             alpha = 0.35;
+
+        if(!json.use_color_shader)
+            colorSwap.enabled.value = [false];
     }
 
     public function loadSkin(skin:String)
     {
-        this.skin = skin;
-        json = Init.arrowSkins[skin];
-
-        var noteThing:String = ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][0][noteData];
-        frames = FNFAssets.returnAsset(SPARROW, json.note_assets);
-        animation.addByPrefix("normal", noteThing+"0", 24, true);
-        animation.addByPrefix("hold", noteThing+" hold0", 24, true);
-        animation.addByPrefix("tail", noteThing+" tail0", 24, true);
-
-        antialiasing = json.skin_type != "pixel" ? Settings.get("Antialiasing") : false;
-
-        var funnyScale:Float = json.note_scale * ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][2];
-        scale.set(funnyScale, funnyScale);
-        updateHitbox();
-
-        if(!json.use_color_shader)
-            shader = null;
-        else
-            shader = colorSwap;
-
-        playAnim("normal");
-        if(isSustain)
+        if(Init.arrowSkins.exists(skin))
         {
-            alpha = Settings.get("Opaque Sustains") ? 1 : 0.6;
-            playAnim("hold");
-        }
+            this.skin = skin;
+            json = Init.arrowSkins[skin];
+            
+            var noteThing:String = ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][0][noteData];
+            frames = FNFAssets.returnAsset(SPARROW, json.note_assets);
+            animation.addByPrefix("normal", noteThing+"0", 24, true);
+            animation.addByPrefix("hold", noteThing+" hold0", 24, true);
+            animation.addByPrefix("tail", noteThing+" tail0", 24, true);
 
-        setColor();
+            antialiasing = json.skin_type != "pixel" ? Settings.get("Antialiasing") : false;
+
+            var funnyScale:Float = json.note_scale * ExtraKeys.arrowInfo[parent != null ? parent.keyCount-1 : keyCount-1][2];
+            scale.set(funnyScale, funnyScale);
+            updateHitbox();
+
+            if(!json.use_color_shader)
+                colorSwap.enabled.value = [false];
+
+            playAnim("normal");
+            if(isSustain)
+            {
+                alpha = Settings.get("Opaque Sustains") ? 1 : 0.6;
+                playAnim("hold");
+            }
+
+            setColor();
+        }
     }
 
     override public function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame:Int = 0)
@@ -200,6 +204,9 @@ class Note extends FNFSprite {
 		}
 		else
 			centerOffsets();
+
+        if(!json.use_color_shader)
+            colorSwap.enabled.value = [false];
     }
 
     function offsetX()

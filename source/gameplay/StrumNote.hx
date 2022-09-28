@@ -59,15 +59,7 @@ class StrumNote extends FNFSprite {
     public function loadSkin(skinToLoad:String)
     {
         var skin:String = skinToLoad;
-        
-        var path:String = AssetPaths.json('images/skins/$skin');
-        if(!FileSystem.exists(path))
-        {
-            skin = "arrows";
-            path = AssetPaths.json('images/skins/$skin');
-        }
-
-        if(FileSystem.exists(path))
+        if(Init.arrowSkins.exists(skin))
         {
             json = Init.arrowSkins[skin];
 
@@ -80,9 +72,7 @@ class StrumNote extends FNFSprite {
             antialiasing = json.skin_type != "pixel" ? Settings.get("Antialiasing") : false;
 
             if(!json.use_color_shader)
-                shader = null;
-            else
-                shader = colorSwap;
+                colorSwap.enabled.value = [false];
 
             var funnyScale:Float = json.strum_scale * ExtraKeys.arrowInfo[parent.keyCount-1][2];
             scale.set(funnyScale, funnyScale);
@@ -92,6 +82,12 @@ class StrumNote extends FNFSprite {
         }
         else
             Main.print("error", "Skin JSON file at "+path+" doesn't exist!");
+    }
+
+    override function update(elapsed:Float) {
+        super.update(elapsed);
+        if(!json.use_color_shader)
+            colorSwap.enabled.value = [false];
     }
 
     override public function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame:Int = 0)
@@ -112,5 +108,8 @@ class StrumNote extends FNFSprite {
 		}
 		else
 			centerOffsets();
+
+        if(!json.use_color_shader)
+            colorSwap.enabled.value = [false];
     }
 }

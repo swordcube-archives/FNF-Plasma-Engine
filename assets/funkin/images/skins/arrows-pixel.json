@@ -10,6 +10,7 @@
     "note_scale": 6,
 
     "sustain_scale": 1.8,
+    "use_color_shader": true,
 
     "is_quant": false
 }
