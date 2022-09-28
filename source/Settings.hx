@@ -1,5 +1,7 @@
 package;
 
+import states.PlayState;
+
 /**
     A class for accessing `Init.trueSettings` in an easier way.
 **/
@@ -23,7 +25,9 @@ class Settings
     public static function set(option:String, value:Dynamic, flush:Bool = true)
     {
         Init.trueSettings.set(option, value);
-        if(flush)
+        if(flush) {
+            PlayState.current.currentSettings.set(option, value);
             Init.saveSettings();
+        }
     }
 }

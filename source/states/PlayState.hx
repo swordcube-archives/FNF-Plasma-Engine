@@ -171,6 +171,8 @@ class PlayState extends MusicBeatState {
 
 	public var logsOpen:Bool = false;
 
+	public var currentSettings = Init.trueSettings.copy();
+
 	public function new() {
 		super();
 		current = this;
