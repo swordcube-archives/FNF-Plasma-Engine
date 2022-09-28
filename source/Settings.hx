@@ -26,7 +26,8 @@ class Settings
     {
         Init.trueSettings.set(option, value);
         if(flush) {
-            PlayState.current.currentSettings.set(option, value);
+            if(PlayState.current != null)
+                PlayState.current.currentSettings.set(option, value);
             Init.saveSettings();
         }
     }

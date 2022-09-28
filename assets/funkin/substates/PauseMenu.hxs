@@ -253,7 +253,7 @@ function update(elapsed) {
                         PlayState.usedPractice = true;
 
                 case "Configure Options":
-                    Init.trueSettings = PlayState.currentSettings;
+                    Init.trueSettings = PlayState.currentSettings.copy();
                     FlxG.sound.playMusic(freakyMenu);
                     Main.switchState(new ScriptedState("OptionsMenu", [true]));
 
