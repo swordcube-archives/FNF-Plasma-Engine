@@ -102,6 +102,9 @@ class ModSelectionMenu extends MusicBeatSubState {
             
             AssetPaths.currentPack = grpIcons.members[curSelected].mod;
 
+            var fpsFont = AssetPaths.font('vcr', TTF); // default font is usually _sans, but vcr looks nicer
+            Main.fpsCounter.defaultTextFormat = new openfl.text.TextFormat(fpsFont, Main.fpsCounter.defaultTextFormat.size, Main.fpsCounter.defaultTextFormat.color);
+
             FlxG.save.data.currentPack = AssetPaths.currentPack;
             FlxG.save.flush();
 

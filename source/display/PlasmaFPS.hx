@@ -22,7 +22,7 @@ class PlasmaFPS extends TextField {
 
 	var fpsCounter:FPS;
 
-	public function new(inX:Float = 10.0, inY:Float = 10.0, inCol:Int = 0x000000, ?font:String)
+	public function new(inX:Float = 10.0, inY:Float = 10.0, inCol:Int = 0xFFFFFF, ?font:String)
 	{
 		super();
 
