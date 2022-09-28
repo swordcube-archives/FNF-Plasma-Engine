@@ -1021,7 +1021,7 @@ class PlayState extends MusicBeatState {
 		if(camZooming && camBumping && Conductor.currentBeat % 4 == 0)
 		{
 			FlxG.camera.zoom += 0.015;
-			camHUD.zoom += 0.04;
+			camHUD.zoom += 0.03;
 		}
 
 		if(startedSong && !endingSong)
