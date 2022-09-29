@@ -59,9 +59,13 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		generateArrows();
 
 		judgementScript = new HScript('scripts/Judgement');
-		judgementScript.setScriptObject(PlayState.current);
+		if(PlayState.current != null) {
+			judgementScript.setScriptObject(PlayState.current);
+			PlayState.current.scripts.push(judgementScript);
+		}
+		else
+			judgementScript.setScriptObject(FlxG.state);
 		judgementScript.start();
-		PlayState.current.scripts.push(judgementScript);
 
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 

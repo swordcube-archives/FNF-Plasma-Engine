@@ -142,7 +142,7 @@ function create() {
 function updateScore() {
     intendedScore = Highscore.getScore(songs[curSelected].name+"-"+StringTools.trim(songs[curSelected].difficulties[curDifficulty]));
 
-    lerpScore = FlxMath.lerp(lerpScore, intendedScore, Main.deltaTime * 9.0);
+    lerpScore = FlxMath.lerp(lerpScore, intendedScore, FlxG.elapsed * 9.0);
 
     scoreText.text = "PERSONAL BEST:" + Math.round(lerpScore);
 
@@ -173,7 +173,7 @@ function update(elapsed) {
         freeplayEasterEggScript.update(elapsed);
     }
 
-    var time:Float = Main.deltaTime * 9;
+    var time:Float = FlxG.elapsed * 9;
 
     var color = songs[curSelected].color;
 
@@ -239,7 +239,7 @@ function update(elapsed) {
 }
 
 function changeSpeed(change:Float) {
-    speedTimer += Main.deltaTime;
+    speedTimer += FlxG.elapsed;
 
     if((UIControls.justPressed("LEFT") || UIControls.justPressed("RIGHT")) || (speedTimer > 0.5)) {
         curSpeed += change;

@@ -756,14 +756,15 @@ class PlayState extends MusicBeatState {
 
 		if(!inCutscene)
 		{
-			var lerpVal:Float = FlxMath.bound(Main.deltaTime * 2.4 * cameraSpeed, 0, 1);
+			var lerpVal:Float = FlxMath.bound(FlxG.elapsed * 2.4 * cameraSpeed, 0, 1);
 			camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
 		}
 
 		callOnHScripts("update", [elapsed]);
 
-		if(FlxG.keys.justPressed.SEVEN)
-			Main.switchState(new ScriptedState('ChartingState'));
+		// gonna be re-enabled once i make the charter
+		// if(FlxG.keys.justPressed.SEVEN)
+		// 	Main.switchState(new ScriptedState('ChartingState'));
 
 		if(FlxG.keys.justPressed.F6 && !logsOpen)
 		{
@@ -841,8 +842,8 @@ class PlayState extends MusicBeatState {
 		spawnNotes();
 
 		if(camZooming) {
-			FlxG.camera.zoom = FlxMath.lerp(FlxG.camera.zoom, defaultCamZoom, 0.05 * 60 * Main.deltaTime);
-			camHUD.zoom = FlxMath.lerp(camHUD.zoom, 1, 0.05 * 60 * Main.deltaTime);
+			FlxG.camera.zoom = FlxMath.lerp(FlxG.camera.zoom, defaultCamZoom, 0.05 * 60 * FlxG.elapsed);
+			camHUD.zoom = FlxMath.lerp(camHUD.zoom, 1, 0.05 * 60 * FlxG.elapsed);
 		}
 
 		callOnHScripts("updatePost", [elapsed]);

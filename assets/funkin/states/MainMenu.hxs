@@ -109,7 +109,7 @@ function create() {
 var accepted:Bool = false;
 
 function update() {        
-    camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, Main.deltaTime * 9), FlxMath.lerp(camFollowPos.y, camFollow.y, Main.deltaTime * 9));
+    camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, FlxG.elapsed * 9), FlxMath.lerp(camFollowPos.y, camFollow.y, FlxG.elapsed * 9));
 
     if(!accepted)
     {

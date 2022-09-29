@@ -368,7 +368,7 @@ class Alphabet extends FlxSpriteGroup {
 		{
 			var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
 
-			var lerpVal:Float = FlxMath.bound(Main.deltaTime * 9.6, 0, 1);
+			var lerpVal:Float = FlxMath.bound(FlxG.elapsed * 9.6, 0, 1);
 			var finalY:Float = (scaledY * yMult) + (FlxG.height * 0.48) + yAdd;
 			y = snapY ? finalY : FlxMath.lerp(y, finalY, lerpVal);
 			if(forceX != Math.NEGATIVE_INFINITY) {
