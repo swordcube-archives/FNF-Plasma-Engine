@@ -40,9 +40,9 @@
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
-	<haxelib name="flixel" />
-	<haxelib name="flixel-addons" />
-	<haxelib name="flixel-ui" />
+	<!-- yoshicrafter29 flixel comes bundled in with addons and ui as well -->
+	<!-- yoshicrafter is literally god, only using this library because it's more performance -->
+	<haxelib name="flixel" /> <!-- INSTALL: https://github.com/YoshiCrafter29/flixel -->
 
 	<!-- libraries for the engine -->
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED" /> <!-- INSTALL: haxelib git hxCodec https://github.com/swordcube/hxCodec-testing -->
