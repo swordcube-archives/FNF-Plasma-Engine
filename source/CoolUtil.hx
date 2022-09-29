@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.math.FlxPoint;
 import gameplay.Character;
 
@@ -78,7 +79,7 @@ class CoolUtil
 		I don't fuckin know what this does i'm not a math expert
 	**/
 	public static function camLerpShit(ratio:Float):Float {
-		return Main.deltaTime / (1 / 60) * ratio;
+		return FlxG.elapsed / (1 / 60) * ratio;
 	}
 
 	/**

@@ -41,7 +41,7 @@ var isEnding:Bool = false;
 function update() {
     if(updateCamera)
     {
-        var lerpVal:Float = FlxMath.bound(Main.deltaTime * 0.6, 0, 1);
+        var lerpVal:Float = FlxMath.bound(FlxG.elapsed * 0.6, 0, 1);
         camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, lerpVal), FlxMath.lerp(camFollowPos.y, camFollow.y, lerpVal));
     }
 

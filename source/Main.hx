@@ -18,7 +18,9 @@ class Main extends Sprite
 	public static var gameWidth:Int = 1280;
 	public static var gameHeight:Int = 720;
 
-	public static var framerate:Int = 1000;
+	// Shit gets weird with lerping above 300fps with the 1/currentFPS calculation shit
+	// So we're capping at 300fps fuck you :DDD
+	public static var framerate:Int = 300;
 	
 	/**
 		Whether to skip the flixel splash screen that appears in release mode.
@@ -27,11 +29,6 @@ class Main extends Sprite
 	public static var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
 
 	public static var fpsCounter:PlasmaFPS;
-
-	/**
-		A better version of FlxG.elapsed.
-	**/
-	public static var deltaTime:Float = 0.0;
 
 	static var startTime:Float = 0.0;
 

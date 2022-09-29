@@ -16,7 +16,7 @@ function startFlashing():Void {
     isFlashing = true;
 }
 
-var fakeFramerate:Int = Math.round((1 / Main.deltaTime) / 10);
+var fakeFramerate:Int = Math.round((1 / FlxG.elapsed) / 10);
 
 function update(elapsed:Float)
 {
