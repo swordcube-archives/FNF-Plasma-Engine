@@ -1,0 +1,16 @@
+function create() {
+    text.x = 250;
+    text.y = 500;
+    text.fieldWidth = 768;
+    text.size = 48;
+    text.font = AssetPaths.font('funkin');
+    text.antialiasing = true;
+    text.cameras = [PlayState.camOther];
+    text.color = 0;
+    add(text);
+}
+
+function type(textToType, speed) {
+    text.resetText(textToType + ' \n');
+    text.start(speed, true);
+}

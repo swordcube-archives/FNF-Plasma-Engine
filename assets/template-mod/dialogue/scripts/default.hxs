@@ -1,0 +1,171 @@
+var json = {};
+
+var curLine = {};
+var curLineIndex:Int = 0;
+
+var bg:FlxSprite;
+var box:FlxSprite;
+var portrait:FlxSprite;
+var text:FlxTypeText;
+    
+var bgScript:HScript;
+var boxScript:HScript;
+var portraitScript:HScript;
+var textScript:HScript;
+
+var dialogue:FlxGroup;
+
+var proceedSound:Sound;
+
+function create() {
+    proceedSound = FNFAssets.getSound(AssetPaths.sound("dialogue/pixelProceed"));
+
+    PlayState.inCutscene = true;
+    PlayState.camHUD.visible = false;
+    dialogue = new FlxGroup();
+    PlayState.add(dialogue);
+    json = Json.parse(FNFAssets.getText(AssetPaths.json('songs/'+PlayState_.SONG.song.toLowerCase()+'/dialogue')));
+    runDialogue(0);
+    if(json.info.music != null)
+        FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music(json.info.music)), json.info.musicVolume);
+}
+function update(elapsed) {
+    if(PlayState.inCutscene && !ended)
+    {
+        if(FlxG.keys.justPressed.ENTER) {
+            if (curLineIndex < json.lines.length-1) {
+                curLineIndex ++;
+                clearDialogue();
+                runDialogue(curLineIndex);
+                FlxG.sound.play(proceedSound);
+            } else {
+                endDialogue();
+            }
+        } else if(FlxG.keys.justPressed.SHIFT)
+            endDialogue();
+    }
+
+    if(PlayState.inCutscene && ended && box != null && box.animation.curAnim != null && box.animation.curAnim.curFrame == 0)
+    {
+        dialogue.remove(box);
+        PlayState.startCountdown();
+        PlayState.inCutscene = false;
+        PlayState.camHUD.visible = true;
+    }
+}
+
+var ended:Bool = false;
+
+function endDialogue() {
+    if(!ended)
+    {
+        FlxG.sound.music.fadeOut(0.5, 0);
+        ended = true;
+
+        box.animation.play("open");
+        box.animation.curAnim.curFrame = box.animation.curAnim.frames.length - 1;
+        box.animation.curAnim.reverse();
+
+        dialogue.remove(portrait);
+        dialogue.remove(text);
+        FlxTween.tween(bg, { alpha: 0 }, 0.5, { ease: FlxEase.cubeInOut, onComplete: function(twn:FlxTween) {
+            dialogue.remove(bg);
+        }});
+    }
+}
+
+function runDialogue(idx) {
+    portrait = new FlxSprite();
+    text = new FlxTypeText(0,0,0,'');
+    if (json.lines[idx].bg != null) {
+        loadBG(json.lines[idx].bg, idx);
+    } else {
+        bg = new FlxSprite().makeGraphic(1,1,0);
+        dialogue.add(bg);
+    }
+    
+    loadPortrait(json.lines[idx].char, json.lines[idx].emotion);
+    loadBox(json.lines[idx].box, idx);
+    loadText(json.lines[idx].font);
+    type(json.lines[idx].text, json.lines[idx].speed);
+    var textTime = new FlxTimer().start(json.lines[idx].speed, function(){callTheTalk();}, json.lines[idx].text.length);
+}
+
+function clearDialogue() {
+    dialogue.remove(bg);
+    dialogue.remove(box);
+    dialogue.remove(portrait);
+    dialogue.remove(text);
+}
+
+// why load the same background again
+// there is a 99% chance raf will change this back
+// but the reason i did this is because bg animations!!!!!
+// lmao!!!!!!!!!!
+var curBG:String = "";
+function loadBG(script, idx) {
+    if(curBG != script) {
+        curBG = script;
+        bg = new FlxSprite().makeGraphic(1,1,0);
+        bgScript = new HScript('dialogue/bgs/'+script);
+        bgScript.set("bg", bg);
+        bgScript.set("add", dialogue.add);
+        bgScript.set("insert", dialogue.insert);
+        bgScript.set("isOpen", (idx == 0 || json.lines[idx].box != json.lines[idx-1].box));
+        bgScript.start();
+    } else {
+        dialogue.add(bg);
+    }
+}
+
+function loadPortrait(script, emotion) {
+    portraitScript = new HScript('dialogue/portraits/'+script);
+    portraitScript.set("bg", bg);
+    portraitScript.set("box", box);
+    portraitScript.set("portrait", portrait);
+    portraitScript.set("add", dialogue.add);
+    portraitScript.set("insert", dialogue.insert);
+    portraitScript.set("emotion", emotion);
+    portraitScript.start();
+}
+
+// why load the same background again
+// there is a 99% chance raf will change this back
+// but the reason i did this is because bg animations!!!!!
+// lmao!!!!!!!!!!
+var curBox:String = "";
+function loadBox(script, idx) {
+    if(curBox != script) {
+        curBox = script;
+        box = new FlxSprite();
+        boxScript = new HScript('dialogue/boxes/'+script);
+        boxScript.set("bg", bg);
+        boxScript.set("box", box);
+        boxScript.set("portrait", portrait);
+        boxScript.set("add", dialogue.add);
+        boxScript.set("insert", dialogue.insert);
+        boxScript.set("isOpen", (idx == 0 || json.lines[idx].box != json.lines[idx-1].box));
+        boxScript.start();
+    } else {
+        dialogue.add(box);
+    }
+}
+function loadText(script) {
+    textScript = new HScript('dialogue/textStyles/'+script);
+    textScript.set("bg", bg);
+    textScript.set("box", box);
+    textScript.set("portrait", portrait);
+    textScript.set("text", text);
+    textScript.set("add", dialogue.add);
+    textScript.set("insert", dialogue.insert);
+    textScript.start();
+}
+
+function type(text, speed) {
+    textScript.call('type', [text, speed]);
+}
+function callTheTalk() {
+    boxScript.call('talk');
+    portraitScript.call('talk');
+    textScript.call('talk');
+}

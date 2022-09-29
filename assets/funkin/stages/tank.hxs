@@ -1,0 +1,120 @@
+var tankWatchtower:ScriptedSprite;
+var tankGround:ScriptedSprite;
+var tankmanRun:FlxGroup;
+
+var tanks:Array<ScriptedSprite> = [];
+
+function create() {
+    removeStage();
+    PlayState.defaultCamZoom = 0.9;
+
+    stage.dadPosition.set(20, 100);
+    stage.gfPosition.set(200, 65);
+    stage.bfPosition.set(810, 100);
+
+    var sky:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tankSky', 0, 0, null, false], -400, -400);
+    add(sky);
+    
+    var clouds:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tankClouds', 0.1, 0.1, null, false], FlxG.random.int(-700, -100), FlxG.random.int(-20, 20));
+    clouds.active = true;
+    clouds.velocity.x = FlxG.random.float(5, 15);
+    add(clouds);
+    
+    var mountains:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tankMountains', 0.2, 0.2, null, false], -300, -20);
+    mountains.setGraphicSize(Std.int(mountains.width * 1.2));
+    mountains.updateHitbox();
+    add(mountains);
+    
+    var buildings:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tankBuildings', 0.3, 0.3, null, false], -200, 0);
+    buildings.setGraphicSize(Std.int(buildings.width * 1.1));
+    buildings.updateHitbox();
+    add(buildings);
+    
+    var ruins:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tankRuins', 0.35, 0.35, null, false], -200, 0);
+    ruins.setGraphicSize(Std.int(ruins.width * 1.1));
+    ruins.updateHitbox();
+    add(ruins);
+    
+    var smokeL:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/smokeLeft', 0.4, 0.4, ['SmokeBlurLeft'], true], -200, -100);
+    add(smokeL);
+    
+    var smokeR:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/smokeRight', 0.4, 0.4, ['SmokeRight'], true], 1100, -100);
+    add(smokeR);
+
+    tankWatchtower = new ScriptedSprite('BGSprite', ['stages/tank/tankWatchtower', 0.5, 0.5, ['watchtower gradient color'], false], 100, 50);
+    add(tankWatchtower);
+    
+    tankGround = new ScriptedSprite('BGSprite', ['stages/tank/tankRolling', 0.5, 0.5, ['BG tank w lighting'], true], 300, 300);
+    add(tankGround);
+    
+    tankmanRun = new FlxGroup();
+    add(tankmanRun);
+    
+    var ground:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tankGround', 1, 1, null, false], -420, -150);
+    ground.setGraphicSize(Std.int(ground.width * 1.15));
+    ground.updateHitbox();
+    add(ground);
+
+    // foreground
+    var tankdude0:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank0', 1.7, 1.5, ['fg'], false], -500, 650);
+    tanks.push(tankdude0);
+    add(tankdude0, "front");
+    
+    var tankdude1:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank1', 2, 0.2, ['fg'], false], -300, 750);
+    tanks.push(tankdude1);
+    add(tankdude1, "front");
+    
+    var tankdude2:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank2', 1.5, 1.5, ['foreground'], false], 450, 940);
+    tanks.push(tankdude2);
+    add(tankdude2, "front");
+    
+    var tankdude4:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank4', 1.5, 1.5, ['fg'], false], 1300, 900);
+    tanks.push(tankdude4);
+    add(tankdude4, "front");
+    
+    var tankdude5:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank5', 1.5, 1.5, ['fg'], false], 1620, 700);
+    tanks.push(tankdude5);
+    add(tankdude5, "front");
+    
+    var tankdude3:ScriptedSprite = new ScriptedSprite('BGSprite', ['stages/tank/tank3', 3.5, 2.5, ['fg'], false], 1300, 1200);
+    tanks.push(tankdude3);
+    add(tankdude3, "front");
+
+    moveTank();
+
+    Global.set("tankGround", tankGround);
+    Global.set("tankmanRun", tankmanRun);
+}
+
+function update() {
+    moveTank();
+}
+function countdownTick() {
+    beatHit(Conductor.currentBeat);
+}
+
+function beatHit() {
+    tankWatchtower.call("dance");
+
+    tanks[0].call("dance");
+    tanks[1].call("dance");
+    tanks[2].call("dance");
+    tanks[3].call("dance");
+    tanks[4].call("dance");
+    tanks[5].call("dance");
+}
+
+var tankAngle:Float = FlxG.random.int(-90, 45);
+var tankSpeed:Float = FlxG.random.float(5, 7);
+var tankX:Float = 400;
+
+function moveTank()
+{
+    if(!PlayState.inCutscene)
+    {
+        tankAngle += tankSpeed * FlxG.elapsed;
+        tankGround.angle = (tankAngle - 90 + 15);
+        tankGround.x = tankX + 1500 * Math.cos(Math.PI / 180 * (1 * tankAngle + 180));
+        tankGround.y = 1300 + 1100 * Math.sin(Math.PI / 180 * (1 * tankAngle + 180));
+    }
+}

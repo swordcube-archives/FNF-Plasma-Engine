@@ -1,0 +1,32 @@
+// Basically just MenuItem.hx from base FNF but hscript
+
+var targetY:Float = 0;
+var flashingInt:Int = 0;
+var isFlashing:Bool = false;
+
+function create(texture:String) {
+    loadGraphic(FNFAssets.getImage(AssetPaths.image("weeks/" + texture)));
+}
+
+function setTargetY(tg:Float) {
+    targetY = tg;
+}
+
+function startFlashing():Void {
+    isFlashing = true;
+}
+
+var fakeFramerate:Int = Math.round((1 / Main.deltaTime) / 10);
+
+function update(elapsed:Float)
+{
+    y = CoolUtil.coolLerp(y, (targetY * 120) + 480, 0.17);
+
+    if (isFlashing)
+        flashingInt += 1;
+
+    if (flashingInt % fakeFramerate >= Math.floor(fakeFramerate / 2))
+        color = 0xFF33ffff;
+    else
+        color = FlxColor.WHITE;
+}

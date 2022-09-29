@@ -1,0 +1,38 @@
+var idleAnim:String = null;
+
+function new(image:String, scrollX:Float, scrollY:Float, animations:Array<String>, loopAnims:Bool)
+{		
+    if(scrollX == null)
+        scrollX = 1;
+
+    if(scrollY == null)
+        scrollY = 1;
+
+    if(loopAnims == null)
+        loopAnims = false;
+
+    if (animations != null)
+    {
+        frames = FNFAssets.getSparrow(image);
+        for (anim in animations)
+        {
+            animation.addByPrefix(anim, anim, 24, loopAnims);
+            animation.play(anim);
+            if (idleAnim == null)
+                idleAnim = anim;
+        }
+    }
+    else
+    {
+        loadGraphic(FNFAssets.getImage(AssetPaths.image(image)));
+        active = false;
+    }
+    scrollFactor.set(scrollX, scrollY);
+    antialiasing = Settings.get("Antialiasing");
+}
+
+function dance()
+{
+    if (idleAnim != null)
+        animation.play(idleAnim);
+}

@@ -1,0 +1,55 @@
+// my code is ass so createPost is for the notes and create is for everything else
+var dialogue;
+
+function update(elapsed) {
+    if(dialogue != null)
+        dialogue.update(elapsed);
+}
+
+function create() {
+    if(PlayState_.isStoryMode) {
+        inCutscene = true;
+        
+        var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+        black.scrollFactor.set();
+        add(black);
+
+        FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music("Lunchbox")), 1);
+
+        camHUD.visible = false;
+        new FlxTimer().start(0.3, function(tmr:FlxTimer) {
+            black.alpha -= 0.15;
+
+            if (black.alpha > 0) {
+                tmr.reset(0.3);
+            } else {
+                dialogue = new HScript("dialogue/scripts/default");
+                dialogue.start();
+            }
+        });
+    }
+
+    countdownImageLocation = "countdown/pixel";
+    countdownSoundLocation = "countdown/pixel";
+    countdownScale = 6;
+
+    ratingAssetPath = "ratings/pixel";
+    comboAssetPath = "combo/pixel";
+
+    ratingScale = 4.1;
+    comboScale = 5;
+
+    ratingAntialiasing = false;
+    comboAntialiasing = false;
+}
+
+function createPost() {
+    countdownPreReady.antialiasing = false;
+    countdownReady.antialiasing = false;
+    countdownSet.antialiasing = false;
+    countdownGo.antialiasing = false;
+    
+    currentSkin += "-pixel";
+    UI.opponentStrums.reloadSkin();
+    UI.playerStrums.reloadSkin();
+}

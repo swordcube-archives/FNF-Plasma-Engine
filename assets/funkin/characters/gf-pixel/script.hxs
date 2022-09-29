@@ -1,0 +1,23 @@
+function create() {
+    character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
+    character.isLikeGF = true;
+
+    character.healthIcon = "gf";
+    character.healthBarColor = FlxColor.fromString("#A5004D");
+    
+    character.animation.addByIndices('danceLeft', 'GF IDLE', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
+    character.animation.addByIndices('danceRight', 'GF IDLE', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
+
+    character.setOffset('danceLeft', 0);
+    character.setOffset('danceRight', 0);
+
+    character.setGraphicSize(Std.int(character.width * 6));
+    character.updateHitbox();
+
+    character.cameraPosition.x -= 150;
+    character.cameraPosition.y -= 160;
+
+    character.antialiasing = false;
+
+    character.playAnim('danceRight');
+}

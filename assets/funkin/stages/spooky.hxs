@@ -1,0 +1,44 @@
+var halloweenBG:FNFSprite;
+var thunder1:Sound;
+var thunder2:Sound;
+
+var lightningStrikeBeat:Int = 0;
+var lightningOffset:Int = 8;
+
+function create() {
+    removeStage();
+    PlayState.defaultCamZoom = 1.05;
+
+    thunder1 = FNFAssets.getSound(AssetPaths.sound('thunder_1'));
+    thunder2 = FNFAssets.getSound(AssetPaths.sound('thunder_2'));
+
+    halloweenBG = new FNFSprite(-200, -100);
+    halloweenBG.frames = FNFAssets.getSparrow('stages/spooky/halloween_bg');
+    halloweenBG.animation.addByPrefix('static', 'halloweem bg0', 24, true);
+    halloweenBG.animation.addByPrefix('lightning', 'halloweem bg lightning strike', 24, false);
+    halloweenBG.antialiasing = Settings.get("Antialiasing");
+    halloweenBG.animation.play('static');
+    add(halloweenBG);
+}
+
+function beatHit(curBeat:Int) {
+    if(FlxG.random.bool(10) && curBeat > lightningStrikeBeat + lightningOffset)
+        lightningStrikeShit(curBeat);
+}
+
+function lightningStrikeShit(curBeat:Int) {
+    if(FlxG.random.int(1, 2) == 2)
+        FlxG.sound.play(thunder2);
+    else
+        FlxG.sound.play(thunder1);
+
+    halloweenBG.animation.play('lightning');
+
+    lightningStrikeBeat = curBeat;
+    lightningOffset = FlxG.random.int(8, 24);
+
+    if(PlayState.gf != null)
+        PlayState.gf.playAnim('scared', true);
+    if(PlayState.bf != null)
+        PlayState.bf.playAnim('scared', true);
+}

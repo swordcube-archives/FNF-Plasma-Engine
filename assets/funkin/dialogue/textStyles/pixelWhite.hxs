@@ -1,0 +1,16 @@
+function create() {
+    text.x = 240;
+    text.y = 500;
+    text.fieldWidth = FlxG.width*0.6;
+    text.size = 32;
+    text.font = AssetPaths.font('pixel', '.otf');
+    text.antialiasing = false;
+    text.cameras = [PlayState.camOther];
+    text.color = 0xFFFFFFFF;
+    add(text);
+}
+
+function type(textToType, speed) {
+    text.resetText(textToType + ' \n');
+    text.start(speed, true);
+}

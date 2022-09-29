@@ -1,13 +1,13 @@
 package ui;
 
 import flixel.FlxSprite;
+import sys.FileSystem;
 
 using StringTools;
 
-class HealthIcon extends FlxSprite
-{
+class HealthIcon extends FlxSprite {
 	public var sprTracker:FlxSprite;
-	public var char:String = 'face';
+	public var char:String = '???';
 
 	public var isPlayer:Bool = false;
 
@@ -43,12 +43,16 @@ class HealthIcon extends FlxSprite
 
 			icons = 0;
 
-			// check if the icon exists, otherwise use default face
-			var image = GenesisAssets.getAsset('characters/icons/face', IMAGE);
+			var pixelIcons:Array<String> = CoolUtil.listFromText(FNFAssets.returnAsset(TEXT, AssetPaths.txt("pixelIcons")));
 
-			var iconExists = GenesisAssets.getPath('characters/icons/$char', IMAGE);
-			if (iconExists != null)
-				image = GenesisAssets.getAsset('characters/icons/$char', IMAGE);
+			// check if the icon exists, otherwise use default face
+			var image = FNFAssets.returnAsset(IMAGE, AssetPaths.characterIcon('face'));
+
+			if(FileSystem.exists(AssetPaths.characterIcon('$char')))
+				image = FNFAssets.returnAsset(IMAGE, AssetPaths.characterIcon('$char'));
+
+			if(FileSystem.exists(AssetPaths.image('icons/$char')))
+				image = FNFAssets.returnAsset(IMAGE, AssetPaths.image('icons/$char'));
 
 			loadGraphic(image);
 
@@ -60,7 +64,6 @@ class HealthIcon extends FlxSprite
 				if (width == height * i)
 				{
 					icons = i;
-					// trace("detected " + icons + " icons");
 					break;
 				}
 				i++;
@@ -69,7 +72,6 @@ class HealthIcon extends FlxSprite
 				if (i > 100)
 				{
 					icons = 2;
-					// trace("failed to detect icon count, icon count is now " + icons);
 					break;
 				}
 			}
@@ -83,10 +85,10 @@ class HealthIcon extends FlxSprite
 
 			animation.play("normal");
 
-			if (char.endsWith('-pixel'))
+			if(pixelIcons.contains(char))
 				antialiasing = false;
 			else
-				antialiasing = Init.getOption('anti-aliasing');
+				antialiasing = Settings.get('Antialiasing');
 		}
 	}
 }

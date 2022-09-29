@@ -1,0 +1,22 @@
+function create() {
+    character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
+    character.isPlayer = true;
+
+    character.healthIcon = "bf-pixel";
+    character.healthBarColor = FlxColor.fromString("#7BD6F6");
+
+    character.animation.addByPrefix('firstDeath', "BF Dies pixel", 24, false);
+    character.animation.addByPrefix('deathLoop', "Retry Loop", 24, true);
+    character.animation.addByPrefix('deathConfirm', "RETRY CONFIRM", 24, false);
+
+    character.setOffset('firstDeath');
+    character.setOffset('deathLoop', -30, -12);
+    character.setOffset('deathConfirm', -26, -12);
+
+    character.setGraphicSize(Std.int(character.width * 6));
+    character.updateHitbox();
+
+    character.antialiasing = false;
+    
+    character.playAnim('firstDeath');
+}

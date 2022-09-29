@@ -1,0 +1,127 @@
+var goIntoPlayState:Bool = false;
+
+var curSelected:Int = 0;
+
+var grpPages:FlxGroup;
+var pageTitle:String = "Options";
+
+var scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
+var cancelMenu = FNFAssets.getSound(AssetPaths.sound("menus/cancelMenu"));
+
+var descBox:FlxSprite;
+var descText:FlxText;
+
+var descriptions:Array<String> = [];
+
+function create(?goIntoPlayStateDumberass) {
+    state.canSwitchMods = false;
+
+    Main.fpsCounter.visible = false;
+    goIntoPlayState = goIntoPlayStateDumberass;
+
+    Init.reloadSettings();
+    Init.initializeSettings();
+
+    var bg:FlxSprite = new FlxSprite().loadGraphic(AssetUtil.image("menuBGGradient"));
+    add(bg);
+
+    grpPages = new FlxGroup();
+    add(grpPages);
+
+    for(i in 0...Init.settingPages.length) {
+        var page = Init.settingPages[i];
+        var pageText:Alphabet = new Alphabet(0, (70 * i) + 30, page[0], true, FlxColor.BLACK, false);
+        pageText.isMenuItem = true;
+        pageText.targetY = i;
+        grpPages.add(pageText);
+
+        descriptions.push(page[1]);
+    }
+
+    var strip:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, 40, FlxColor.BLACK);
+    strip.alpha = 0.6;
+    add(strip);
+
+    var pageText:FlxText = new FlxText(10, 5, 0, pageTitle+"\n   ");
+    pageText.setFormat(AssetPaths.font("funkin"), 25);
+    add(pageText);
+
+    descBox = new FlxSprite(30, FlxG.height - 65).makeGraphic(FlxG.width - 60, 1, FlxColor.BLACK);
+    descBox.alpha = 0.8;
+    add(descBox);
+
+    descText = new FlxText(descBox.x + 5, descBox.y + 5, descBox.width - 10, "Description goes here lim foaw\nsdfhusufdhhAWslkjfhjsdlkjsfdhjlkjlk");
+    descText.setFormat(AssetPaths.font("funkin"), 25, FlxColor.WHITE, FlxTextAlign.CENTER);
+    add(descText);
+
+    changeSelection(0);
+}
+
+function changeSelection(change:Int) {
+    curSelected += change;
+    if(curSelected < 0)
+        curSelected = grpPages.length-1;
+
+    if(curSelected > grpPages.length-1)
+        curSelected = 0;
+
+    for(i in 0...grpPages.length) {
+        var sex = grpPages.members[i];
+        sex.targetY = i - curSelected;
+        sex.alpha = curSelected == i ? 1 : 0.6;
+    }
+
+    descText.text = descriptions[curSelected];
+    descBox.scale.y = descText.height + 10;
+    descBox.updateHitbox();
+    descBox.y = FlxG.height - (descBox.height + 15);
+    descText.y = descBox.y + 3;
+    descText.text += "\n     ";
+
+    FlxG.sound.play(scrollMenu);
+
+    DiscordRPC.changePresence(
+        "In the Options Menu",
+        "Selecting "+grpPages.members[curSelected].text
+    );
+}
+
+function update() {
+    if(UIControls.justPressed("UP"))
+        changeSelection(-1);
+
+    if(UIControls.justPressed("DOWN"))
+        changeSelection(1);
+
+    if(UIControls.justPressed("ACCEPT")) {
+        switch(grpPages.members[curSelected].text) {
+            default:
+                Main.switchState(new ScriptedState("options/OptionsPageState", [
+                    goIntoPlayState,
+                    grpPages.members[curSelected].text,
+                    getSettingsFromPage(grpPages.members[curSelected].text)
+                ]));
+        }
+    }
+
+    if(UIControls.justPressed("BACK")) {
+        Main.fpsCounter.visible = true;
+        FlxG.sound.play(cancelMenu);
+        Init.saveSettings();
+        
+        if(goIntoPlayState)
+            Main.switchState(new PlayState_());
+        else
+            Main.switchState(new ScriptedState('MainMenu'));
+    }
+}
+
+function getSettingsFromPage(page:String) {
+    var settings:Array<Dynamic> = [];
+    for(setting in Init.settings) {
+        if(setting.page == page) {
+            settings.push(setting);
+        }
+    }
+    return settings;
+}

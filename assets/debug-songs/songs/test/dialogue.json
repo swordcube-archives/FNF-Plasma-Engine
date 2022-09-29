@@ -1,0 +1,36 @@
+{
+    "info": {
+        "music": "breakfast",
+        "musicVolume": 0.5,
+        "proceedSound": "pixelProceed"
+    },
+    "lines": [
+        {
+            "char": "bf", 
+            "emotion": "default", 
+            "text": "beep", 
+            "box": "boxRight", 
+            "font": "funkin", 
+            "speed": 0.04, 
+            "bg": "black"
+        },
+        {
+            "char": "gf", 
+            "emotion": "demon", 
+            "text": "shut the fuck up", 
+            "box": "boxLeft", 
+            "font": "funkin", 
+            "speed": 0.04, 
+            "bg": "black"
+        },
+        {
+            "char": "bf", 
+            "emotion": "shock", 
+            "text": "beep", 
+            "box": "boxRight", 
+            "font": "funkin", 
+            "speed": 0.04, 
+            "bg": "black"
+        }
+    ]
+}

@@ -1,0 +1,27 @@
+function create() {
+    character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
+    character.isLikeGF = true;
+    character.singDuration = 4;
+
+    character.healthIcon = "spooky";
+    character.healthBarColor = FlxColor.fromString("#D57E00"); 
+    
+    character.animation.addByPrefix('singUP', 'spooky UP NOTE', 24, false);
+    character.animation.addByPrefix('singDOWN', 'spooky DOWN note', 24, false);
+    character.animation.addByPrefix('singLEFT', 'note sing left', 24, false);
+    character.animation.addByPrefix('singRIGHT', 'spooky sing right', 24, false);
+    character.animation.addByIndices('danceLeft', 'spooky dance idle', [0, 2, 6], "", 12, false);
+    character.animation.addByIndices('danceRight', 'spooky dance idle', [8, 10, 12, 14], "", 12, false);
+
+    character.setOffset('danceLeft');
+    character.setOffset('danceRight');
+
+    character.setOffset("singUP", -20, 26);
+    character.setOffset("singRIGHT", -130, -14);
+    character.setOffset("singLEFT", 130, -10);
+    character.setOffset("singDOWN", -50, -130);
+
+    character.positionOffset.y += 200;
+
+    character.playAnim('danceRight');
+}

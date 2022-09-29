@@ -1,0 +1,56 @@
+function popUpScore(judgement, combo, rScale, cScale) {
+    var coolText:FlxText = new FlxText(0, 0, 0, judgement, 32);
+    coolText.screenCenter();
+    coolText.x = FlxG.width * 0.55;
+
+    var rating:FlxSprite = new FlxSprite();
+    rating.loadGraphic(PlayState.cachedRatings[judgement]);
+    rating.screenCenter();
+    rating.x = coolText.x - 40;
+    rating.y -= 60;
+    rating.acceleration.y = 550;
+    rating.velocity.y -= FlxG.random.int(140, 175);
+    rating.velocity.x -= FlxG.random.int(0, 10);
+    rating.antialiasing = PlayState.ratingAntialiasing ? Settings.get("Antialiasing") : false;
+    rating.scale.set(rScale, rScale);
+    rating.updateHitbox();
+    PlayState.insert(PlayState.members.length+1, rating);
+
+    var seperatedScore:Array<String> = Std.string(combo).split("");
+    while(seperatedScore.length < 3) seperatedScore.insert(0, "0");
+
+    var daLoop:Int = 0;
+    for (i in seperatedScore)
+    {
+        var numScore:FlxSprite = new FlxSprite();
+        numScore.loadGraphic(PlayState.cachedCombo[judgement == "marvelous" ? "marvelous" : "default"]["num"+i]);
+        numScore.screenCenter();
+        numScore.x = coolText.x + (43 * daLoop) - 90;
+        numScore.y += 80;
+
+        numScore.scale.set(cScale, cScale);
+        numScore.updateHitbox();
+
+        numScore.acceleration.y = FlxG.random.int(200, 300);
+        numScore.velocity.y -= FlxG.random.int(140, 160);
+        numScore.velocity.x = FlxG.random.float(-5, 5);
+        numScore.antialiasing = PlayState.comboAntialiasing ? Settings.get("Antialiasing") : false;
+        PlayState.insert(PlayState.members.length+1, numScore);
+
+        FlxTween.tween(numScore, {alpha: 0}, 0.2, {
+            onComplete: function(tween:FlxTween) {
+                numScore.destroy();
+            },
+            startDelay: Conductor.crochet * 0.002
+        });
+
+        daLoop++;
+    }
+
+    FlxTween.tween(rating, {alpha: 0}, 0.2, {
+        onComplete: function(tween:FlxTween) {
+            rating.destroy();
+        },
+        startDelay: Conductor.crochet * 0.001
+    });
+}

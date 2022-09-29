@@ -1,0 +1,11 @@
+function create() {
+    frames = FNFAssets.getStoryCharacterSparrow("senpai");
+    animation.addByPrefix("idle", "SENPAI idle Black Lines", 24, false);
+
+    setOffset("idle");
+
+    dance();
+
+    x -= 10;
+    y += 60;
+}

@@ -1,0 +1,163 @@
+var freakyMenu, confirmMenu;
+var logo, gfDance, ngSpr, titleText;
+var credGroup:FlxGroup;
+var curWacky:Array<String> = ["???", "???"];
+
+function getIntroTextShit() {
+    var fullText:String = FNFAssets.getText(AssetPaths.txt('introText'));
+    var firstArray:Array<String> = fullText.split('\n');
+    var swagGoodArray:Array<Array<String>> = [];
+    for (i in firstArray) swagGoodArray.push(i.split('--'));
+    return swagGoodArray;
+}
+
+function startIntro() {
+    if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing)) {
+        FlxG.sound.playMusic(freakyMenu, 0);
+        FlxG.sound.music.fadeIn(4, 0, 0.7);
+    }
+}
+
+function create() {
+    freakyMenu = FNFAssets.getSound(AssetPaths.music('freakyMenu'));
+    confirmMenu = FNFAssets.getSound(AssetPaths.sound('menus/confirmMenu'));
+
+    if(FlxG.sound.music != null) FlxG.sound.music.stop();
+    
+    Conductor.changeBPM(102);
+    Conductor.position = 0;
+
+    logo = new FlxSprite(-20, 0);
+    logo.frames = FNFAssets.getSparrow("title/fnfLogo");
+    logo.antialiasing = Settings.get("Antialiasing");
+    logo.animation.addByPrefix("bump", "bump", 24, false);
+    logo.animation.play("bump", true);
+    logo.visible = false;
+
+    gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
+    gfDance.frames = FNFAssets.getSparrow("title/gfTitle");
+    gfDance.antialiasing = Settings.get("Antialiasing");
+    gfDance.animation.addByPrefix("danceLeft", "danceLeft0", 24, false);
+    gfDance.animation.addByPrefix("danceRight", "danceRight0", 24, false);
+    gfDance.animation.play("danceRight", true);
+    gfDance.visible = false;
+    add(gfDance);
+    add(logo);
+
+    titleText = new FlxSprite(100, FlxG.height * 0.8);
+    titleText.frames = FNFAssets.getSparrow("title/titleEnter");
+    titleText.antialiasing = Settings.get("Antialiasing");
+    titleText.animation.addByPrefix("idle", "Press Enter to Begin", 24, true);
+    titleText.animation.addByPrefix("confirm", "ENTER PRESSED", 24, true);
+    titleText.animation.play("idle", true);
+    titleText.visible = false;
+    add(titleText);
+
+    ngSpr = new FlxSprite(0, FlxG.height * 0.52);
+    ngSpr.loadGraphic(FNFAssets.getImage(AssetPaths.image("title/newgrounds")));
+    ngSpr.antialiasing = Settings.get("Antialiasing");
+    ngSpr.visible = false;
+    ngSpr.scale.set(0.8, 0.8);
+    ngSpr.updateHitbox();
+    ngSpr.screenCenter(FlxAxes.X);
+    add(ngSpr);
+
+    credGroup = new FlxGroup();
+    add(credGroup);
+
+    new FlxTimer().start(1, function(tmr:FlxTimer) { startIntro(); });
+
+    var introArray:Array<String> = getIntroTextShit();
+    curWacky = introArray[FlxG.random.int(0, introArray.length-1)];
+}
+
+var accepted, danceLeft = false;
+
+function createCoolText(textArray:Array<String>) {
+    for (i in 0...textArray.length) addMoreText(textArray[i]);
+}
+
+function addMoreText(text:String) {
+    var coolText:Alphabet = new Alphabet(0, 0, text, true, FlxColor.BLACK, false);
+    coolText.screenCenter(FlxAxes.X);
+    coolText.y += (credGroup.length * 60) + 200;
+    credGroup.add(coolText);
+}
+
+function update(elapsed:Float) {
+    if(FlxG.sound.music != null) Conductor.position = FlxG.sound.music.time;
+
+    if(FlxG.keys.justPressed.ENTER) {
+        if(!skippedIntro)
+            skipIntro();
+        else if(!accepted) {
+            accepted = true;
+            FlxG.sound.play(confirmMenu);
+            FlxG.camera.flash(0xFFFFFFFF, 2);
+            titleText.animation.play("confirm", true);
+
+            new FlxTimer().start(1, function(tmr:FlxTimer) {
+                state.persistentUpdate = true;
+                state.persistentDraw = true;
+                Main.switchState(new ScriptedState('MainMenu'));
+            });
+        }
+    }
+}
+
+function beatHit(currentBeat:Int) {
+    logo.animation.play("bump", true);
+
+    danceLeft = !danceLeft;
+
+    if (danceLeft)
+        gfDance.animation.play('danceRight');
+    else
+        gfDance.animation.play('danceLeft');
+
+    switch(currentBeat) {
+        case 1:
+            createCoolText(["swordcube", "Leather128", "Stilic", "Raf"]);
+        case 3:
+            addMoreText('present');
+        case 4:
+            credGroup.clear();
+        case 5:
+            createCoolText(['In association', 'with']);
+        case 7:
+            addMoreText('newgrounds');
+            ngSpr.visible = true;
+        case 8:
+            credGroup.clear();
+            ngSpr.visible = false;
+        case 9:
+            createCoolText([curWacky[0]]);
+        case 11:
+            addMoreText(curWacky[1]);
+        case 12:
+            credGroup.clear();
+        case 13:
+            addMoreText('Friday');
+        case 14:
+            addMoreText('Night');
+        case 15:
+            addMoreText('Funkin');
+        case 16:
+            if(!skippedIntro)
+                skipIntro();
+    }
+}
+
+var skippedIntro = false;
+
+function skipIntro() {
+    remove(ngSpr);
+
+    FlxG.camera.flash(0xFFFFFFFF, 4);
+    remove(credGroup);
+    skippedIntro = true;
+
+    logo.visible = true;
+    gfDance.visible = true;
+    titleText.visible = true;
+}

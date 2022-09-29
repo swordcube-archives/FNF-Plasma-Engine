@@ -1,28 +1,32 @@
 package hscript;
 
-import base.Conductor;
-import base.CoolUtil;
-import base.MusicBeat.MusicBeatState;
-import base.SongLoader;
+import states.ScriptedState;
 import flixel.FlxG;
+import haxe.Exception;
+import hscript.Expr.Error;
 import hscript.Interp;
 import hscript.Parser;
-import states.FreeplayMenu;
-import states.MainMenu;
-import states.ModState;
-import states.ModsMenu;
-import states.OptionsMenu;
+import lime.app.Application;
 import states.PlayState;
-import states.TitleState;
-import ui.Alphabet;
-import ui.HealthIcon;
-import ui.NotificationToast;
-import ui.playState.NoteSplash;
+import sys.FileSystem;
+import sys.thread.Thread;
+import systems.MusicBeat.MusicBeatState;
+import ui.Notification;
 
 using StringTools;
 
-class HScript
-{
+class HScript {
+    public var locals(get, set):Map<String, {r:Dynamic, depth:Int}>;
+    function get_locals():Map<String, {r:Dynamic, depth:Int}> {
+        @:privateAccess
+        return interp.locals;
+    }
+    function set_locals(local:Map<String, {r:Dynamic, depth:Int}>) {
+        @:privateAccess
+        return interp.locals = local;
+    }
+
+	public var _path:String;
 	public var script:String;
 
 	public var parser:Parser = new Parser();
@@ -33,184 +37,398 @@ class HScript
 
 	public var executedScript:Bool = false;
 
-	public var state:Dynamic;
+    public static var function_continue:String = "FUNCTION_CONTINUE";
+    public static var function_stop:String = "FUNCTION_STOP";
+    public static var function_stop_script:String = "FUNCTION_STOP_SCRIPT";
 
-	public function new(hscriptPath:String)
-	{
-		program = parser.parseString(GenesisAssets.getAsset(hscriptPath, HSCRIPT));
+    public static var hscriptExts:Array<String> = [
+        ".hxs",
+        ".hx",
+        ".hsc",
+        ".hscript"
+    ];
 
-		// parser settings
-		parser.allowJSON = true;
-		parser.allowTypes = true;
-		parser.allowMetadata = true;
+    public var usedExtension:String = ".hxs";
 
-		// global class shit
+    public function new(path:String, fileExt:String = ".hxs", useRawPath:Bool = false)
+    {
+        var awesomeSwagPath:String = useRawPath ? path : AssetPaths.asset(path+fileExt);
 
-		// haxeflixel classes
-		interp.variables.set("FlxG", flixel.FlxG);
-		interp.variables.set("OpenFLAssets", openfl.utils.Assets);
-		interp.variables.set("Assets", lime.utils.Assets);
-		interp.variables.set("GenesisAssets", HScriptGenesisAssets);
-		interp.variables.set("FlxSprite", flixel.FlxSprite);
-		interp.variables.set("FNFSprite", funkin.FNFSprite);
-		interp.variables.set("FlxSound", flixel.system.FlxSound);
-		interp.variables.set("FlxMath", flixel.math.FlxMath);
-		interp.variables.set("FlxText", flixel.text.FlxText);
-		interp.variables.set("FlxAxes", flixel.util.FlxAxes);
-		interp.variables.set("Math", Math);
-		interp.variables.set("Std", Std);
+        if(!useRawPath) {
+            for(ext in hscriptExts)
+            {
+                if(FileSystem.exists(AssetPaths.asset(path+ext)))
+                {
+                    usedExtension = ext;
+                    awesomeSwagPath = AssetPaths.asset(path+ext);
+                }
+                else if(FileSystem.exists(AssetPaths.asset(path+ext, 'funkin')))
+                {
+                    usedExtension = ext;
+                    awesomeSwagPath = AssetPaths.asset(path+ext, 'funkin');
+                }
+            }
+        }
 
-		// game classes
-		interp.variables.set("NotificationToast", NotificationToast);
-		interp.variables.set("SongLoader", SongLoader);
-		interp.variables.set("Alphabet", Alphabet);
-		interp.variables.set("NoteSplash", NoteSplash);
-		interp.variables.set("HealthIcon", HealthIcon);
-		interp.variables.set("Init", Init);
-		interp.variables.set("Conductor", Conductor);
-		interp.variables.set("CoolUtil", CoolUtil);
-		interp.variables.set("Stage", null);
-		// use stage.addSprite(sprite, "layerTypeHere") to add shit to the stage
+        try
+        {
+            _path = path;
+            script = FNFAssets.returnAsset(TEXT, awesomeSwagPath);
 
-		// states
-		interp.variables.set("TitleState", TitleState);
-		interp.variables.set("MainMenu", MainMenu);
-		//interp.variables.set("StoryMenu", StoryMenu);
-		interp.variables.set("FreeplayMenu", FreeplayMenu);
-		interp.variables.set("PlayState", PlayState);
-		interp.variables.set("ModsMenu", ModsMenu);
-		interp.variables.set("ModState", ModState);
-		interp.variables.set("OptionsMenu", OptionsMenu);
-		interp.variables.set("States", States);
+            parser = new Parser();
 
-		// function shits
+            // Parser Settings
+            parser.allowJSON = true;
+            parser.allowTypes = true;
+            parser.allowMetadata = true;
 
-		interp.variables.set("trace", function(text:String)
-		{
-			log(text, true);
-		});
+            interp = new Interp();
 
-		interp.variables.set("loadScript", function(scriptPath:String)
-		{
-			var new_script = new HScript(GenesisAssets.getAsset(scriptPath, HSCRIPT));
-			new_script.start();
-			new_script.callFunction("createPost");
+            // Set all of the classes/variables/functions
+            //
 
-			otherScripts.push(new_script);
-		});
+            // Haxe/HaxeFlixel classes
+            set("trace", function(text:String) {
+                Main.print("hscript", text);
+            });
+            set("traceDebug", function(text:String) {
+                Main.print("debug", text);
+            });
+            set("traceError", function(text:String) {
+                Main.print("error", text);
+            });
+            set("traceWarning", function(text:String) {
+                Main.print("warn", text);
+            });
+            set("traceWarn", function(text:String) {
+                Main.print("warn", text);
+            });
 
-		interp.variables.set("otherScripts", otherScripts);
+            set("Thread", {
+                "readMessage": Thread.readMessage,
+                "create": Thread.create,
+                "createWithEventLoop": Thread.createWithEventLoop
+            });
+            
+            set("StringTools", StringTools);
+            set("FlxG", flixel.FlxG);
+            set("OpenFLAssets", openfl.utils.Assets);
+            set("LimeAssets", lime.utils.Assets);
 
-		// playstate local shit
-		interp.variables.set("bf", PlayState.instance.bf);
-		interp.variables.set("gf", PlayState.instance.gf);
-		interp.variables.set("dad", PlayState.instance.dad);
+            set("FlxFlicker", flixel.effects.FlxFlicker);
 
-		interp.variables.set("removeDefaultStage", null);
-		interp.variables.set("startCountdown", PlayState.instance.startCountdown);
+            set("FlxTween", flixel.tweens.FlxTween);
+            set("FlxEase", flixel.tweens.FlxEase);
 
-		interp.variables.set("import", function(className:String)
-		{
-			var splitClassName = [for (e in className.split(".")) e.trim()];
-			var realClassName = splitClassName.join(".");
-			var cl = Type.resolveClass(realClassName);
-			var en = Type.resolveEnum(realClassName);
-			if (cl == null && en == null)
-			{
-				log('Class / Enum at $realClassName does not exist.', true);
-			}
-			else
-			{
-				if (en != null)
-				{
-					// ENUM!!!!
-					var enumThingy = {};
-					for (c in en.getConstructors())
-					{
-						Reflect.setField(enumThingy, c, en.createByName(c));
-					}
-					interp.variables.set(splitClassName[splitClassName.length - 1], enumThingy);
-				}
-				else
-				{
-					// CLASS!!!!
-					interp.variables.set(splitClassName[splitClassName.length - 1], cl);
-				}
-			}
-		});
-	}
+            set("Reflect", Reflect);
 
-	public function log(text, ?doTrace:Bool = false)
+            set("FlxGroup", flixel.group.FlxGroup);
+            set("FlxTypedGroup", flixel.group.FlxGroup.FlxTypedGroup);
+            set("FlxSpriteGroup", flixel.group.FlxSpriteGroup);
+            set("FlxTypedSpriteGroup", flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup);
+
+            set("FlxTextBorderStyle", HScriptHelpers.getFlxTextBorderStyle());
+            set("FlxTextAlign", HScriptHelpers.getFlxTextAlign());
+
+            set("FlxKey", HScriptHelpers.getFlxKey());
+            // flxcolor is a stupid abstract class so i am doing this
+            set("FlxColor", HScriptHelpers.getFlxColor());
+
+            set("Json", {
+                "parse": haxe.Json.parse,
+                "stringify": haxe.Json.stringify
+            });
+		
+	    set("Array", Array);
+            set("String", String);
+            set("Float", Float);
+            set("Int", Int);
+            set("Bool", Bool);
+            set("Dynamic", Dynamic);
+            
+            set("FNFSprite", systems.FNFSprite);
+            set("FlxSprite", flixel.FlxSprite);
+            set("FlxTimer", flixel.util.FlxTimer);
+            set("FlxSound", flixel.system.FlxSound);
+            set("FlxMath", flixel.math.FlxMath);
+            set("FlxTypeText", flixel.addons.text.FlxTypeText);
+            set("FlxText", flixel.text.FlxText);
+            set("FlxAxes", flixel.util.FlxAxes);
+            set("FlxTrail", flixel.addons.effects.FlxTrail);
+            set("Window", Application.current.window);
+            set("Application", Application.current);
+            set("Application_", Application);
+            set("Clipboard", openfl.desktop.Clipboard);
+            #if discord_rpc
+            set("DiscordRPC", DiscordRPC);
+            #end
+
+            set("BitmapData", openfl.display.BitmapData);
+            set("FlxGraphic", flixel.graphics.FlxGraphic);
+            
+            set("Math", Math);
+            set("Std", Std);
+
+            set("Type", Type);
+
+            set("FlxCameraFollowStyle", HScriptHelpers.getFlxCameraFollowStyle());
+
+            set("BlendMode", HScriptHelpers.getBlendMode());
+            set("isDebugBuild", #if debug true #else false #end);
+            set("currentOS", Main.getOS());
+
+            // Game functions
+            set("loadScript", function(scriptPath:String, ?args:Array<Any>)
+                {
+                    var new_script = new HScript(scriptPath);
+                    new_script.start(true, args);
+    
+                    otherScripts.push(new_script);
+                    return new_script;
+                });
+            set("importScript", HScriptHelpers.importScript);
+            set("updateClass", function(name) {
+                HScriptHelpers.updateClass(name, this);
+            });
+
+            // Game classes
+            set("function_continue", function_continue);
+            set("function_stop", function_stop);
+            set("function_stop_script", function_stop_script);
+
+            set("Global", Global);
+            set("CoolUtil", CoolUtil);
+            set("UIControls", systems.UIControls);
+            
+            set("ColorShader", shaders.ColorShader);
+
+            set("Conductor", systems.Conductor);
+            set("AssetPaths", AssetPaths);
+
+            set("Stage", gameplay.Stage);
+            set("Ranking", systems.Ranking);
+            
+            set("HScript", HScript);
+
+            set("StrumLine", gameplay.StrumLine);
+            set("StrumNote", gameplay.StrumNote);
+            set("Note", gameplay.Note);
+
+            set("Character", gameplay.Character);
+            set("Boyfriend", gameplay.Boyfriend);
+
+            set("NoteSplash", ui.NoteSplash);
+            
+            set("FNFAssets", HScriptHelpers.getFNFAssets());
+            set("FNFAssets_", FNFAssets);
+
+            set("AssetUtil", HScriptHelpers.getAssetUtil());
+
+            set("Main", Main);
+            set("Init", Init);
+            set("Settings", Settings);
+            set("Transition", Transition);
+
+            set("Alphabet", ui.Alphabet);
+
+            set("SongLoader", gameplay.Song.SongLoader);
+
+            set("Highscore", systems.Highscore);
+            set("HealthIcon", ui.HealthIcon);
+            set("FNFCheckbox", ui.FNFCheckbox);
+
+            set("Notification", {
+                "showError": function(title:String, description:String) {
+                    var notif:Notification = new Notification(title, description, Error);
+                    cast(FlxG.state, MusicBeatState).notificationGroup.add(notif);
+                    return notif;
+                },
+                "showWarning": function(title:String, description:String) {
+                    var notif:Notification = new Notification(title, description, Warn);
+                    cast(FlxG.state, MusicBeatState).notificationGroup.add(notif);
+                    return notif;
+                },
+                "showInfo": function(title:String, description:String) {
+                    var notif:Notification = new Notification(title, description, Info);
+                    cast(FlxG.state, MusicBeatState).notificationGroup.add(notif);
+                    return notif;
+                }
+            });
+
+            // Gameplay Characters
+            if(PlayState.current != null)
+            {
+                set("dad", PlayState.current.dad);
+                set("gf", PlayState.current.gf);
+                set("bf", PlayState.current.bf);
+                set("boyfriend", PlayState.current.bf);
+            }
+
+            // Game states
+            set("ToolboxMain", toolbox.ToolboxMain);
+
+            set("PlayState", PlayState.current);
+            set("PlayState_", PlayState);
+
+            set("ScriptedState", states.ScriptedState);
+            set("ScriptedSubState", substates.ScriptedSubState);
+            set("ScriptedSprite", systems.ScriptedSprite);
+            set("CustomShader", shaders.CustomShader);
+
+            // Game substates
+            set("KeybindMenu", substates.KeybindMenu);
+            set("ModSelectionMenu", substates.ModSelectionMenu);
+
+            program = parser.parseString(script);
+
+            interp.errorHandler = function(e:hscript.Error) {
+                executedScript = false;
+
+                #if DEBUG_PRINTING
+                trace('$e');
+                #end
+                var posInfo = interp.posInfos();
+
+                var lineNumber = Std.string(posInfo.lineNumber);
+                var methodName = posInfo.methodName;
+
+                Main.print("error", 'Exception occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'}\n\n${e}\n\nHX File: $path.hxs');
+
+                var info = {
+                    title: '${e}',
+                    desc: 'Occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'} in $path.hxs',
+                    type: Error
+                };
+
+                if(Std.isOfType(FlxG.state, MusicBeatState)) {
+                    cast(FlxG.state, MusicBeatState).notificationGroup.add(new Notification(
+                        info.title,
+                        info.desc,
+                        info.type
+                    ));
+                }
+
+                if(Std.isOfType(FlxG.state, ScriptedState)) {
+                    cast(FlxG.state, ScriptedState).notificationGroup.add(new Notification(
+                        info.title,
+                        info.desc,
+                        info.type
+                    ));
+                }
+
+                stop();
+            };
+        }
+        catch(e)
+        {
+            executedScript = false;
+
+            #if DEBUG_PRINTING
+            trace(e.details());
+            #end
+        }
+    }
+
+	public function log(text, ?doTrace:Bool = true)
 	{
 		if (doTrace)
-			trace(text);
-
-		PlayState.logs.push(text);
+			Main.print("hscript", text);
 	}
 
-	public function start()
+    public function stop() {
+        executedScript = false;
+        parser = null;
+        program = null;
+        interp = null;
+
+        for (otherScript in otherScripts)
+            otherScript.stop();
+    }
+
+	public function start(callFuncs:Bool = true, ?args:Array<Any>)
 	{
 		executedScript = true;
 		try
 		{
-			interp.variables.set("curState", state);
+			interp.variables.set("state", flixel.FlxG.state);
 			interp.execute(program);
 		}
 		catch (e)
 		{
 			executedScript = false;
-			log(e.details(), true);
-
-			if (state != null)
-			{
-				state.toasts.add(new NotificationToast("HScript Error",
-					"An error happened in one of your scripts! Check the logs by pausing and choosing logs.", NotificationToast.presetColors["ERROR"], ERROR));
-			}
+            #if DEBUG_PRINTING
+            trace(e.details());
+            #end
 		}
 
-		if (executedScript)
-			callFunction("create");
+		if (executedScript && callFuncs) {
+			call("create", args);
+            call("new", args);
+        }
 	}
 
 	public function update(elapsed:Float)
 	{
 		if (executedScript)
-			callFunction("update", [elapsed]);
+			call("update", [elapsed]);
 	}
 
-	public function callFunction(func:String, ?args:Array<Dynamic>)
+	public function call(func:String, ?args:Array<Dynamic>):Dynamic
 	{
 		if (!executedScript)
-			return;
+			return function_continue;
 
 		if (interp.variables.exists(func))
 		{
 			var real_func = interp.variables.get(func);
-
 			try
 			{
 				if (args == null)
-					real_func();
+					return real_func();
 				else
-					Reflect.callMethod(null, real_func, args);
+					return Reflect.callMethod(null, real_func, args);
 			}
 			catch (e)
 			{
 				log(e.details(), true);
-				log("ERROR Caused in " + func + " with " + Std.string(args) + " args", true);
-
-				if (state != null)
-				{
-					state.toasts.add(new NotificationToast("HScript Error",
-						"An error happened in one of your scripts! Check the logs by pausing and choosing logs.", NotificationToast.presetColors["ERROR"],
-						ERROR));
-				}
+				log(_path + usedExtension + ": ERROR Caused in " + func + " with " + Std.string(args) + " args", true);
 			}
 		}
 
 		for (otherScript in otherScripts)
-		{
-			otherScript.callFunction(func, args);
-		}
+			otherScript.call(func, args);
+
+        return function_continue;
 	}
+
+    public function set(variable:String, value:Dynamic) {
+        interp.variables.set(variable, value);
+        locals.set(variable, {r: value, depth: 0});
+    }
+    
+    public function get(variable:String):Dynamic
+    {
+        if (locals.exists(variable) && locals[variable] != null) {
+            return locals.get(variable).r;
+        } else if (interp.variables.exists(variable))
+            return interp.variables.get(variable);
+        return null;
+    }
+    //the "locals" things are for the script's own variables!!
+
+    public function getAll()
+    {
+        var balls = {};
+        for (i in locals.keys()) {
+            Reflect.setField(balls, i, get(i));
+        }
+        for (i in interp.variables.keys()) {
+            Reflect.setField(balls, i, get(i));
+        }
+        return balls;
+    }
+    
+    public function setScriptObject(obj:Dynamic) {
+        interp.scriptObject = obj;
+    }
 }

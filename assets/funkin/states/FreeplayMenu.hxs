@@ -1,0 +1,342 @@
+import sys.FileSystem;
+
+var scrollMenu:Sound;
+var cancelMenu:Sound;
+
+var bg:FlxSprite;
+var grpSongs:FlxGroup;
+var grpIcons:FlxGroup;
+
+var songs:Array<Dynamic> = [];
+
+var scoreBG:FlxSprite;
+var scoreText:FlxText;
+var diffText:FlxText;
+var speedText:FlxText;
+var lerpScore:Float = 0;
+var intendedScore:Int = 0;
+
+var curSelected:Int = 0;
+var curDifficulty:Int = 1;
+var musicSelected:Int = -1;
+
+var curPlaying:String = "";
+
+var loadingBox:FlxSprite = new FlxSprite().makeGraphic(400, 50, FlxColor.BLACK);
+var loadingIco:FlxSprite = new FlxSprite().loadGraphic(FNFAssets.getImage(AssetPaths.characterIcon("bf")), 150, 150);
+var loadingTxt:FlxText = new FlxText(0, 0, 0, "Loading audio...");
+
+var curSpeed:Float = 1.0;
+var minSpeed:Float = 0.05; // If you set this to anything below 0 shit might break, but you can change it anyway
+var maxSpeed:Float = 10.0; // You can adjust this if you want but you're crazy if you play a song at anything above at 10x speed
+var speedMult:Float = 0.05;
+
+var speedTimer:Float = 0.0;
+var freeplayEasterEggScript = loadScript("scripts/FreeplayEasterEgg");
+
+function create() {
+    scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
+    cancelMenu = FNFAssets.getSound(AssetPaths.sound("menus/cancelMenu"));
+
+    DiscordRPC.changePresence(
+        "In the Freeplay Menu",
+        null
+    );
+
+    if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
+        FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music("freakyMenu")));
+
+    bg = new FlxSprite();
+    bg.loadGraphic(FNFAssets.getImage(AssetPaths.image('menuBGDesat')));
+    bg.antialiasing = Settings.get("Antialiasing");
+    add(bg);
+
+    songs = Json.parse(FNFAssets.getText(AssetPaths.json("freeplaySongs"))).songs;
+
+    grpSongs = new FlxGroup();
+    add(grpSongs);
+
+    grpIcons = new FlxGroup();
+    add(grpIcons);
+
+    var i:Int = 0;
+
+    for(song in songs)
+    {
+        var displayName:String = song.displayname != null ? song.displayname : song.name;
+
+        var songText:Alphabet = new Alphabet(0, (70 * i) + 30, displayName, true, FlxColor.BLACK, false);
+        songText.isMenuItem = true;
+        songText.targetY = i;
+        grpSongs.add(songText);
+
+        var icon:HealthIcon = new HealthIcon(song.icon);
+        icon.sprTracker = songText;
+        grpIcons.add(icon);
+
+        i += 1;
+    }
+
+    scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
+    scoreText.setFormat(AssetPaths.font("vcr"), 32, FlxColor.WHITE, FlxTextAlign.RIGHT);
+
+    scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(1, 99, 0xFF000000);
+    scoreBG.antialiasing = false;
+    scoreBG.alpha = 0.6;
+    add(scoreBG);
+
+    diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
+    diffText.font = scoreText.font;
+    add(diffText);
+
+    speedText = new FlxText(scoreText.x, scoreText.y + 66, 0, "", 24);
+    speedText.font = scoreText.font;
+    add(speedText);
+
+    add(scoreText);
+
+    var dumbStripThing = new FlxSprite(0, FlxG.height - 30);
+    dumbStripThing.makeGraphic(FlxG.width, 30, FlxColor.BLACK);
+    dumbStripThing.alpha = 0.6;
+    add(dumbStripThing);
+
+    var dumbText = new FlxText(0, dumbStripThing.y + 5, 0, "Press SPACE to listen to the selected song.", 16);
+    dumbText.setFormat(AssetPaths.font("vcr"), 16, FlxColor.WHITE, FlxTextAlign.RIGHT);
+    dumbText.x = FlxG.width - (dumbText.width + 5);
+    add(dumbText);
+
+    var modPackJSON = Json.parse(FNFAssets.getText(AssetPaths.json("pack")));
+
+    var dumbText = new FlxText(5, dumbStripThing.y + 5, 0, "Current Mod: "+modPackJSON.name+" - Press TAB to switch", 16);
+    dumbText.setFormat(AssetPaths.font("vcr"), 16, FlxColor.WHITE, FlxTextAlign.LEFT);
+    add(dumbText);
+
+    loadingBox.alpha = 0.6;
+    loadingBox.setPosition(FlxG.width - loadingBox.width, FlxG.height - (loadingBox.height + 40));
+    add(loadingBox);
+
+    loadingIco.animation.add("cum", [0]);
+    loadingIco.animation.play("cum");
+    loadingIco.setGraphicSize(loadingBox.height + 15, loadingBox.height + 15);
+    loadingIco.updateHitbox();
+    loadingIco.setPosition(loadingBox.x + 10, loadingBox.y - 5);
+    loadingIco.antialiasing = Settings.get("Antialiasing");
+    add(loadingIco);
+
+    loadingTxt.setFormat(AssetPaths.font("vcr"), 24);
+    loadingTxt.x = loadingIco.x + (loadingIco.width + 10);
+    loadingTxt.y = (loadingBox.y + (loadingBox.height / 2)) - loadingTxt.height / 1.7;
+    add(loadingTxt);
+
+    loadingBox.visible = false;
+    loadingIco.visible = false;
+    loadingTxt.visible = false;
+
+    positionHighscore();
+
+    changeSelection(0);
+    changeDifficulty(0);
+    changeSpeed(0);
+}
+
+function updateScore() {
+    intendedScore = Highscore.getScore(songs[curSelected].name+"-"+StringTools.trim(songs[curSelected].difficulties[curDifficulty]));
+
+    lerpScore = FlxMath.lerp(lerpScore, intendedScore, Main.deltaTime * 9.0);
+
+    scoreText.text = "PERSONAL BEST:" + Math.round(lerpScore);
+
+    speedText.text = "Speed: " + curSpeed;
+    positionHighscore();
+}
+
+function positionHighscore() {
+    scoreText.x = FlxG.width - scoreText.width - 6;
+    scoreBG.scale.x = FlxG.width - scoreText.x + 6;
+
+    scoreBG.x = FlxG.width - scoreBG.scale.x / 2;
+    diffText.x = scoreBG.x + scoreBG.width / 2;
+    diffText.x -= diffText.width / 2;
+
+    speedText.x = scoreBG.x + scoreBG.width / 2;
+    speedText.x -= speedText.width / 2;
+}
+
+var bgColor:Array<Float> = [
+    255,
+    255,
+    255
+];
+
+function update(elapsed) {
+    if(freeplayEasterEggScript != null) {
+        freeplayEasterEggScript.update(elapsed);
+    }
+
+    var time:Float = Main.deltaTime * 9;
+
+    var color = songs[curSelected].color;
+
+    if(color != null) {
+        bgColor[0] = FlxMath.lerp(bgColor[0], color[0], time);
+        bgColor[1] = FlxMath.lerp(bgColor[1], color[1], time);
+        bgColor[2] = FlxMath.lerp(bgColor[2], color[2], time);
+    }
+
+    if(FlxG.sound.music != null)
+        Conductor.position = FlxG.sound.music.time;
+
+    bg.color = FlxColor.fromRGB(Std.int(bgColor[0]), Std.int(bgColor[1]), Std.int(bgColor[2]));
+
+    if (musicSelected != -1)
+    {
+        var lerp = FlxMath.lerp(1.15, 1, FlxEase.cubeOut(Conductor.currentBeatFloat % 1));
+        grpIcons.members[musicSelected].scale.set(lerp, lerp);
+    }
+
+    updateScore();
+
+    if(UIControls.justPressed("BACK"))
+    {
+        FlxG.sound.play(cancelMenu);
+        Main.switchState(new ScriptedState('MainMenu'));
+    }
+
+    if(UIControls.justPressed("UP"))
+        changeSelection(-1);
+
+    if(UIControls.justPressed("DOWN"))
+        changeSelection(1);
+
+    if(FlxG.keys.pressed.SHIFT) {
+        if(UIControls.pressed("LEFT") || UIControls.pressed("RIGHT"))
+            changeSpeed(UIControls.pressed("LEFT") ? -speedMult : speedMult)
+        else
+            speedTimer = 0.0;
+    } else {
+        holdTimer = 0;
+        
+        if(UIControls.justPressed("LEFT"))
+            changeDifficulty(-1);
+
+        if(UIControls.justPressed("RIGHT"))
+            changeDifficulty(1);
+    }
+
+    if(FlxG.keys.justPressed.SPACE && !loadingBox.visible && curPlaying != songs[curSelected].name) {
+        playTheFuckingSong();
+    } else if(UIControls.justPressed("ACCEPT"))
+    {
+        PlayState_.songMultiplier = curSpeed;
+        PlayState_.isStoryMode = false;
+        PlayState_.actualSongName = songs[curSelected].name;
+        PlayState_.SONG = SongLoader.getJSON(songs[curSelected].name, StringTools.trim(songs[curSelected].difficulties[curDifficulty]));
+        PlayState_.currentDifficulty = StringTools.trim(songs[curSelected].difficulties[curDifficulty]);
+        PlayState_.availableDifficulties = songs[curSelected].difficulties;
+        
+        Main.switchState(new PlayState_());
+    }
+}
+
+function changeSpeed(change:Float) {
+    speedTimer += Main.deltaTime;
+
+    if((UIControls.justPressed("LEFT") || UIControls.justPressed("RIGHT")) || (speedTimer > 0.5)) {
+        curSpeed += change;
+        curSpeed = FlxMath.roundDecimal(curSpeed, 2);
+        curSpeed = FlxMath.bound(curSpeed, minSpeed, maxSpeed);
+        if(!loadingBox.visible)
+            FlxG.sound.music.pitch = curSpeed;
+
+        if(speedTimer > 0.6)
+            speedTimer = 0.5;
+    }
+}
+
+function playTheFuckingSong() {
+    loadingBox.visible = true;
+    loadingIco.visible = true;
+    loadingTxt.visible = true;
+
+    if (musicSelected != -1)
+    {
+        grpIcons.members[musicSelected].scale.set(1, 1);
+        musicSelected = -1;
+    }
+
+    Thread.create(function() {
+        if(FlxG.sound.music != null)
+            FlxG.sound.music.stop();
+        
+        FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.songInst(songs[curSelected].name)), 0, true);
+
+        FlxG.sound.music.pause();
+        FlxG.sound.music.time = 0;
+        FlxG.sound.music.play();
+
+        FlxG.sound.music.pitch = curSpeed;
+
+        FlxG.sound.music.fadeIn(1, 0, 1);
+        if(songs[curSelected].bpm != null)
+            Conductor.changeBPM(songs[curSelected].bpm);
+        else {
+            var json = SongLoader.getJSON(songs[curSelected].name, StringTools.trim(songs[curSelected].difficulties[curDifficulty]));
+            if(json != null)
+                Conductor.changeBPM(json.bpm);
+        }
+
+        loadingBox.visible = false;
+        loadingIco.visible = false;
+        loadingTxt.visible = false;
+
+        curPlaying = songs[curSelected].name;
+        musicSelected = curSelected;
+    });
+} 
+
+function changeDifficulty(change:Int) {
+    curDifficulty += change;
+
+    if(curDifficulty < 0)
+        curDifficulty = songs[curSelected].difficulties.length - 1;
+
+    if(curDifficulty > songs[curSelected].difficulties.length - 1)
+        curDifficulty = 0;
+
+    diffText.text = "< " + songs[curSelected].difficulties[curDifficulty].toUpperCase() + " >";
+
+    var display:String = songs[curSelected].displayName != null ? songs[curSelected].displayName : songs[curSelected].name;
+
+    DiscordRPC.changePresence(
+        "In the Freeplay Menu",
+        "Selecting " + CoolUtil.firstLetterUppercase(display) + " on " + CoolUtil.firstLetterUppercase(songs[curSelected].difficulties[curDifficulty])
+    );
+
+    updateScore();
+}
+
+function changeSelection(change:Int) {
+    grpIcons.members[curSelected].scale.set(1, 1);
+
+    curSelected += change;
+
+    if(curSelected < 0)
+        curSelected = grpSongs.length - 1;
+
+    if(curSelected > grpSongs.length - 1)
+        curSelected = 0;
+
+    var i:Int = 0;
+
+    for(song in grpSongs.members)
+    {
+        song.targetY = i - curSelected;
+        song.alpha = curSelected == i ? 1 : 0.6;
+
+        i += 1;
+    }
+
+    changeDifficulty(0);
+
+    FlxG.sound.play(scrollMenu);
+}

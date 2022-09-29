@@ -1,0 +1,33 @@
+var BitmapHelper = importScript('helpers.BitmapHelper');
+
+var bg;
+var text;
+var callback;
+
+function new(w, h, text, textScale, thecallback) {
+    doesDefaultDraw = false;
+    callback = thecallback;
+    bg = new FNFSprite(x,y).loadGraphic(BitmapHelper.newRoundRect(w, h, 16, 16, 0xFFFFFFFF));
+    bg.color = 0xFF666699;
+    text = new FlxText(x,y,0,text,textScale);
+    text.font = AssetPaths.font('funkin');
+    text.antialiasing = true;
+    text.x = x+(bg.width - text.width)/2;
+    text.y = y+(bg.height - text.height)/2;
+}
+function draw() {
+    bg.draw();
+    text.draw();
+}
+function update(elapsed) {
+    if (FlxG.mouse.overlaps(bg)) {
+        if (FlxG.mouse.justReleased)
+            callback();
+        if (FlxG.mouse.pressed)
+            bg.color = 0xFF333366;
+        else
+            bg.color = 0xFF9999CC;
+    } else {
+        bg.color = 0xFF666699;
+    }
+}

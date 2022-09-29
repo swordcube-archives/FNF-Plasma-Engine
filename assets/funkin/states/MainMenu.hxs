@@ -1,0 +1,214 @@
+import flixel.FlxObject;
+
+// everythign else
+
+var scrollMenu:Sound;
+var cancelMenu:Sound;
+var confirmMenu:Sound;
+
+var bg:FlxSprite;
+var magenta:FlxSprite;
+
+var menuButtons:FlxGroup;
+
+var menuOptions:Array<String> = [
+    "story-mode",
+    "freeplay",
+    "toolbox",
+    "options"
+];
+
+var camFollow:FlxObject;
+var camFollowPos:FlxObject;
+
+var curSelected:Int = 0;
+
+var engineVersion:String = "Plasma Engine v"+Main.engineVersion;
+
+function create() {
+    state.persistentUpdate = true;
+    state.persistentDraw = true;
+
+    DiscordRPC.changePresence(
+        "In the Main Menu",
+        null
+    );
+
+    if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
+        FlxG.sound.playMusic(FNFAssets.getSound(AssetPaths.music("freakyMenu")));
+
+    if(!Settings.get("Developer Mode"))
+        menuOptions.remove("toolbox");
+
+    scrollMenu = FNFAssets.getSound(AssetPaths.sound('menus/scrollMenu'));
+    cancelMenu = FNFAssets.getSound(AssetPaths.sound('menus/cancelMenu'));
+    confirmMenu = FNFAssets.getSound(AssetPaths.sound('menus/confirmMenu'));
+
+    bg = new FlxSprite();
+    bg.loadGraphic(FNFAssets.getImage(AssetPaths.image('menuBG')));
+    bg.scale.set(1.2, 1.2);
+    bg.updateHitbox();
+    bg.screenCenter();
+    bg.scrollFactor.set(0.17, 0.17);
+    bg.antialiasing = Settings.get("Antialiasing");
+    add(bg);
+
+    magenta = new FlxSprite();
+    magenta.loadGraphic(FNFAssets.getImage(AssetPaths.image('menuBGDesat')));
+    magenta.scale.set(1.2, 1.2);
+    magenta.updateHitbox();
+    magenta.screenCenter();
+    magenta.scrollFactor.set(0.17, 0.17);
+    magenta.antialiasing = Settings.get("Antialiasing");
+    magenta.color = 0xFFfd719b;
+    magenta.visible = false;
+    add(magenta);
+
+    menuButtons = new FlxGroup();
+    add(menuButtons);
+
+    for(i in 0...menuOptions.length)
+    {
+        var button:FlxSprite = new FlxSprite(0, 60 + (160 * i));
+        button.frames = FNFAssets.getSparrow('mainmenu/'+menuOptions[i]);
+        button.animation.addByPrefix("idle", "basic", 24, true);
+        button.animation.addByPrefix("selected", "white", 24, true);
+        button.animation.play("idle");
+        button.antialiasing = Settings.get("Antialiasing");
+        button.screenCenter(FlxAxes.X);
+        button.scrollFactor.set();
+        button.ID = i;
+        menuButtons.add(button);
+    }
+
+    var modPackJSON = Json.parse(FNFAssets.getText(AssetPaths.json("pack")));
+
+    var modTxt:FlxText = new FlxText(5, FlxG.height - 25, 0, "Current Mod: "+modPackJSON.name+" - Press TAB to switch");
+    modTxt.setFormat(AssetPaths.font("vcr"), 16, FlxColor.WHITE, FlxTextAlign.LEFT);
+    modTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
+    modTxt.scrollFactor.set();
+    add(modTxt);
+
+    var engineTxt:FlxText = new FlxText(0, FlxG.height - 25, 0, engineVersion);
+    engineTxt.setFormat(AssetPaths.font("vcr"), 16, FlxColor.WHITE, FlxTextAlign.RIGHT);
+    engineTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1);
+    engineTxt.scrollFactor.set();
+    engineTxt.x = FlxG.width - (engineTxt.width + 5);
+    add(engineTxt);
+
+    camFollow = new FlxObject(menuButtons.members[0].x, menuButtons.members[0].y, 1, 1);
+    camFollowPos = new FlxObject(menuButtons.members[0].x, menuButtons.members[0].y, 1, 1);
+    add(camFollow);
+    add(camFollowPos);
+
+    changeSelection(0);
+
+    FlxG.camera.follow(camFollowPos, null, 1);
+}
+
+var accepted:Bool = false;
+
+function update() {        
+    camFollowPos.setPosition(FlxMath.lerp(camFollowPos.x, camFollow.x, Main.deltaTime * 9), FlxMath.lerp(camFollowPos.y, camFollow.y, Main.deltaTime * 9));
+
+    if(!accepted)
+    {
+        if(UIControls.justPressed("BACK"))
+        {
+            FlxG.sound.play(cancelMenu);
+            Main.switchState(new ScriptedState('TitleState'));
+        }
+
+        if(UIControls.justPressed("UP"))
+            changeSelection(-1);
+
+        if(UIControls.justPressed("DOWN"))
+            changeSelection(1);
+
+        if(UIControls.justPressed("ACCEPT"))
+        {
+            accepted = true;
+            FlxG.sound.play(confirmMenu);
+
+            // Toggle flashing for magenta bg sprite
+            if(!Settings.get("Photosensitive Mode")) FlxFlicker.flicker(magenta, 1.1, 0.15, false);
+
+            for(spr in menuButtons)
+            {
+                if (curSelected != spr.ID)
+                {
+                    FlxTween.tween(spr, {alpha: 0}, 0.4, {
+                        ease: FlxEase.quadOut,
+                        onComplete: function(twn:FlxTween) {
+                            spr.kill();
+                        }
+                    });
+                }
+                else
+                {
+                    // Toggle flashing for the currently selected button
+                    if(!Settings.get("Photosensitive Mode"))
+                    {
+                        FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
+                        {
+                            switchToOtherStateShit();
+                        });
+                    }
+                    else
+                    {
+                        new FlxTimer().start(1, function(tmr:FlxTimer) {
+                            switchToOtherStateShit();
+                        });
+                    }
+                }
+            };
+        }
+    }
+}
+
+function switchToOtherStateShit() {
+    switch(menuOptions[curSelected])
+    {
+        case 'story-mode':
+            Main.switchState(new ScriptedState('StoryMenu'));
+        case 'freeplay':
+            Main.switchState(new ScriptedState('FreeplayMenu'));
+        case 'toolbox':
+            Main.switchState(new ToolboxMain());
+        case 'options':
+            Main.switchState(new ScriptedState('OptionsMenu', [false]));
+    }
+}
+
+function changeSelection(change:Int) {
+    curSelected += change;
+    if(curSelected < 0)
+        curSelected = menuOptions.length-1;
+
+    if(curSelected > menuOptions.length-1)
+        curSelected = 0;
+
+    var i:Int = 0;
+    for(spr in menuButtons.members)
+    {
+        if(curSelected == i)
+            spr.animation.play("selected");
+        else
+            spr.animation.play("idle");
+
+        spr.updateHitbox();
+        spr.screenCenter(FlxAxes.X);
+
+        i += 1;
+    };
+
+    camFollow.y = menuButtons.members[curSelected].y;
+
+    DiscordRPC.changePresence(
+        "In the Main Menu",
+        "Selecting " + CoolUtil.firstLetterUppercase(StringTools.replace(menuOptions[curSelected], "-", " "))
+    );
+
+    FlxG.sound.play(scrollMenu);
+}
+

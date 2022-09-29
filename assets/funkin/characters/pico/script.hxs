@@ -1,0 +1,25 @@
+function create() {
+    character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
+    character.singDuration = 4;
+
+    character.healthIcon = "pico";
+    character.healthBarColor = FlxColor.fromString("#B7D855");
+    
+    character.animation.addByPrefix('idle', "Pico Idle Dance", 24, false);
+    character.animation.addByPrefix('singUP', 'pico Up note0', 24, false);
+    character.animation.addByPrefix('singDOWN', 'Pico Down Note0', 24, false);
+    character.animation.addByPrefix('singLEFT', 'Pico Note Right0', 24, false);
+    character.animation.addByPrefix('singRIGHT', 'Pico NOTE LEFT0', 24, false);
+
+    character.setOffset('idle');
+    character.setOffset("singUP", -29, 27);
+    character.setOffset("singRIGHT", -68, -7);
+    character.setOffset("singLEFT", 65, 9);
+    character.setOffset("singDOWN", -50, -70);
+
+    character.cameraPosition.x += 120;
+    character.positionOffset.y += 300;
+    character.flipX = true;
+
+    character.dance();
+}

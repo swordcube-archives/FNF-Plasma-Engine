@@ -1,0 +1,7 @@
+function create() {
+    bg.makeGraphic(1280,720,FlxColor.BLACK);
+    bg.screenCenter();
+    bg.cameras = [PlayState.camOther];
+    bg.alpha = 0.7;
+    add(bg);
+}

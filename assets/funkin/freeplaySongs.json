@@ -1,0 +1,246 @@
+{
+    "songs": [
+        {
+            "name": "Tutorial",
+            "icon": "gf",
+            "color": [165, 0, 77],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 100.0
+        },
+        {
+            "name": "Bopeebo",
+            "icon": "dad",
+            "color": [146, 113, 253],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 100.0
+        },
+        {
+            "name": "Fresh",
+            "icon": "dad",
+            "color": [146, 113, 253],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 120.0
+        },
+        {
+            "name": "Dad Battle",
+            "icon": "dad",
+            "color": [146, 113, 253],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 180.0
+        },
+        {
+            "name": "Spookeez",
+            "icon": "spooky",
+            "color": [34, 51, 68],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 150.0
+        },
+        {
+            "name": "South",
+            "icon": "spooky",
+            "color": [34, 51, 68],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 165.0
+        },
+        {
+            "name": "Monster",
+            "icon": "monster",
+            "color": [34, 51, 68],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 99.0
+        },
+        {
+            "name": "Pico",
+            "icon": "pico",
+            "color": [148, 22, 83],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 150.0
+        },
+        {
+            "name": "Philly Nice",
+            "icon": "pico",
+            "color": [148, 22, 83],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 175.0
+        },
+        {
+            "name": "Blammed",
+            "icon": "pico",
+            "color": [148, 22, 83],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 165.0
+        },
+        {
+            "name": "Satin Panties",
+            "icon": "mom",
+            "color": [252, 150, 215],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 110.0
+        },
+        {
+            "name": "High",
+            "icon": "mom",
+            "color": [252, 150, 215],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 125.0
+        },
+        {
+            "name": "M.I.L.F",
+            "icon": "mom",
+            "color": [252, 150, 215],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 180.0
+        },
+        {
+            "name": "Cocoa",
+            "icon": "parents-christmas",
+            "color": [160, 209, 255],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 100.0
+        },
+        {
+            "name": "Eggnog",
+            "icon": "parents-christmas",
+            "color": [160, 209, 255],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 150.0
+        },
+        {
+            "name": "Winter Horrorland",
+            "icon": "monster",
+            "color": [160, 209, 255],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 79.0
+        },
+        {
+            "name": "Senpai",
+            "icon": "senpai",
+            "color": [255, 120, 191],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 144.0
+        },
+        {
+            "name": "Roses",
+            "icon": "senpai-angry",
+            "color": [255, 120, 191],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 120.0
+        },
+        {
+            "name": "Thorns",
+            "icon": "spirit",
+            "color": [255, 120, 191],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 190.0
+        },
+        {
+            "name": "Ugh",
+            "icon": "tankman",
+            "color": [246, 182, 4],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 160.0
+        },
+        {
+            "name": "Guns",
+            "icon": "tankman",
+            "color": [246, 182, 4],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 185.0
+        },
+        {
+            "name": "Stress",
+            "icon": "tankman",
+            "color": [246, 182, 4],
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ],
+            "bpm": 178.0
+        }
+    ]
+}

@@ -1,0 +1,52 @@
+function create() {
+    character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
+    character.isPlayer = true;
+
+    character.healthIcon = "bf";
+    character.healthBarColor = FlxColor.fromString("#31B0D1");
+
+    character.animation.addByPrefix('idle', 'BF idle dance', 24, false);
+    character.animation.addByIndices('idle-loop', 'BF idle dance', [10,11,12,13], "", 24, true);
+
+    character.animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
+    character.animation.addByIndices('singUP-loop', 'BF NOTE UP0', [10,11,12,13], "", 24, true);
+
+    character.animation.addByPrefix('singLEFT', 'BF NOTE LEFT0', 24, false);
+    character.animation.addByIndices('singLEFT-loop', 'BF NOTE LEFT0', [12,13,14,15], "", 24, true);
+
+    character.animation.addByPrefix('singRIGHT', 'BF NOTE RIGHT0', 24, false);
+    character.animation.addByIndices('singRIGHT-loop', 'BF NOTE RIGHT0', [58,59,60,61], "", 24, true);
+
+    character.animation.addByPrefix('singDOWN', 'BF NOTE DOWN0', 24, false);
+    character.animation.addByIndices('singDOWN-loop', 'BF NOTE DOWN0', [26,27,28,29], "", 24, true);
+
+    character.animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, false);
+    character.animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, false);
+    character.animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, false);
+    character.animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, false);
+
+    character.setOffset('idle', -5);
+    character.setOffset('idle-loop', -5);
+
+    character.setOffset("singUP", -29, 27);
+    character.setOffset("singUP-loop", -29, 27);
+
+    character.setOffset("singRIGHT", -38, -7);
+    character.setOffset("singRIGHT-loop", -38, -7);
+
+    character.setOffset("singLEFT", 12, -6);
+    character.setOffset("singLEFT-loop", 12, -6);
+
+    character.setOffset("singDOWN", -10, -50);
+    character.setOffset("singDOWN-loop", -10, -50);
+
+    character.setOffset("singUPmiss", -29, 27);
+    character.setOffset("singRIGHTmiss", -30, 21);
+    character.setOffset("singLEFTmiss", 12, 24);
+    character.setOffset("singDOWNmiss", -11, -19);
+
+    character.positionOffset.y += 350;
+    character.flipX = true;
+
+    character.dance();
+}

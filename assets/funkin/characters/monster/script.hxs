@@ -1,0 +1,21 @@
+function create() {
+    character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
+    character.singDuration = 4;
+
+    character.healthIcon = "monster";
+    character.healthBarColor = FlxColor.fromString("#F3FF6E");
+    
+    character.animation.addByPrefix('idle', 'monster idle', 24, false);
+    character.animation.addByPrefix('singUP', 'monster up note', 24, false);
+    character.animation.addByPrefix('singDOWN', 'monster down', 24, false);
+    character.animation.addByPrefix('singRIGHT', 'Monster left note', 24, false);
+    character.animation.addByPrefix('singLEFT', 'Monster Right note', 24, false);
+
+    character.setOffset('idle', 3);
+    character.setOffset("singUP", -20, 94);
+    character.setOffset("singLEFT", -51, 30);
+    character.setOffset("singRIGHT", -30, 20);
+    character.setOffset("singDOWN", -50, -80);
+
+    character.dance();
+}

@@ -1,0 +1,13 @@
+function create() {
+    box.frames = FNFAssets.getSparrow("boxes/dialogueBox-evil");
+    box.animation.addByPrefix('open', 'Spirit Textbox spawn0', 24, false);
+    box.animation.addByPrefix('idle', 'Spirit Textbox idle0', 24, true);
+    box.animation.play(isOpen ? 'open' : 'idle');
+    box.antialiasing = false;
+    box.scale.set(5.4, 5.4);
+    box.updateHitbox();
+    box.y = 45;
+    box.screenCenter(FlxAxes.X);
+    box.cameras = [PlayState.camOther];
+    add(box);
+}

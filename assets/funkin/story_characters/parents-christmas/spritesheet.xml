@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="assets.png">
+	<!-- Created with Adobe Animate version 21.0.6.41649 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Parent Christmas Idle Black Lines0000" x="2" y="2" width="884" height="782"/>
+	<SubTexture name="Parent Christmas Idle Black Lines0001" x="2" y="2" width="884" height="782"/>
+	<SubTexture name="Parent Christmas Idle Black Lines0002" x="888" y="2" width="884" height="782"/>
+	<SubTexture name="Parent Christmas Idle Black Lines0003" x="888" y="2" width="884" height="782"/>
+	<SubTexture name="Parent Christmas Idle Black Lines0004" x="1774" y="2" width="884" height="782"/>
+	<SubTexture name="Parent Christmas Idle Black Lines0005" x="1774" y="2" width="884" height="782"/>
+	<SubTexture name="Parent Christmas Idle Black Lines0006" x="2660" y="2" width="884" height="782"/>
+	<SubTexture name="Parent Christmas Idle Black Lines0007" x="2660" y="2" width="884" height="782"/>
+	<SubTexture name="Parent Christmas Idle Black Lines0008" x="2" y="786" width="884" height="782"/>
+	<SubTexture name="Parent Christmas Idle Black Lines0009" x="2" y="786" width="884" height="782"/>
+	<SubTexture name="Parent Christmas Idle Black Lines0010" x="888" y="786" width="884" height="782"/>
+	<SubTexture name="Parent Christmas Idle Black Lines0011" x="888" y="786" width="884" height="782"/>
+	<SubTexture name="Parent Christmas Idle Black Lines0012" x="888" y="786" width="884" height="782"/>
+	<SubTexture name="Parent Christmas Idle Black Lines0013" x="888" y="786" width="884" height="782"/>
+</TextureAtlas>

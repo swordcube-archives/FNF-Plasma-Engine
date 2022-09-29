@@ -1,0 +1,108 @@
+// PLEASE HELP
+//  THEY ARE TORTURING ME
+//   PLEASE HELP I'M IN THE BASEMENT
+/*  neverv gonnac five yuou up
+nedver gunns LET YU
+DO9WFN
+NEVDER GONNA rujn ariund
+and dessert you
+nevert gonnsa maje y0u crty
+nfer3rfgbhnjm,kjhytre3ertyuiok
+iuy65456yuio g  */
+import systems.ExtraKeys;
+
+var bg:FlxSprite;
+var notes:FlxTypedGroup;
+var noteColors:Array<Array<Int>> = [];
+var keyCount:Int = 4;
+var colorPicker:ScriptedSprite;
+
+var selected:Int = 0;
+
+function create() {
+    state.canSwitchMods = false;
+    FlxG.mouse.visible = true;
+    bg = new FlxSprite();
+    bg.loadGraphic(FNFAssets.getImage(AssetPaths.image("menuBGGradient")));
+    bg.scrollFactor.set();
+    add(bg);
+    notes = new FlxTypedGroup();
+    var noteAssetsPath = Init.arrowSkins[Settings.get("Arrow Skin").toLowerCase()].note_assets;
+    for (i in 0...keyCount) {
+        var theNote = new FNFSprite((FlxG.width-keyCount*120)/2+i*120, 50);
+        theNote.frames = FNFAssets.getSparrow(noteAssetsPath);
+        theNote.animation.addByPrefix('idle', ExtraKeys.arrowInfo[keyCount-1][0][i] + '0', 24, true);
+        theNote.animation.play('idle');
+        var color = Init.arrowColors[keyCount-1][i];
+        noteColors.push(color);
+        theNote.shader = new ColorShader(color[0], color[1], color[2]);
+        if (selected == i)
+            theNote.scale.set(0.7,0.7);
+        else
+            theNote.scale.set(0.6,0.6);
+        notes.add(theNote);
+    }
+    add(notes);
+    colorPicker = new ScriptedSprite('ui/ColorPicker', [350,320,function() {
+        noteColors = ExtraKeys.arrowInfo[keyCount-1][1].copy();
+        for(i in 0...keyCount) {
+            notes.members[i].shader.setColors(noteColors[i][0], noteColors[i][1], noteColors[i][2]);
+        }
+        colorPicker.call('setColor', [{
+            'r': noteColors[selected][0],
+            'g': noteColors[selected][1],
+            'b': noteColors[selected][2]
+        }, false]);
+        saveColors();
+    }], FlxG.width/2-175, 300);
+    colorPicker.set('onChange', function(h,s,b) {
+        var thecolor = FlxColor.fromHSB(h,s,b);
+        notes.members[selected].shader.setColors(
+            (thecolor >> 16) & 0xff,
+            (thecolor >> 8) & 0xff,
+            thecolor & 0xff
+        );
+        noteColors[selected] = [
+            (thecolor >> 16) & 0xff,
+            (thecolor >> 8) & 0xff,
+            thecolor & 0xff
+        ];
+    });
+    add(colorPicker);
+    colorPicker.call('setColor', [{
+        'r': noteColors[selected][0],
+        'g': noteColors[selected][1],
+        'b': noteColors[selected][2]
+    }, false]);
+}
+
+function update(elapsed) {
+    if(UIControls.justPressed("BACK")) {
+        saveColors();
+        Main.switchState(new ScriptedState('OptionsMenu', [false]));
+    }
+    if(FlxG.mouse.justPressed) {
+        for (i in 0...notes.members.length) {
+            if (FlxG.mouse.overlaps(notes.members[i])) {
+                selected = i;
+                colorPicker.call('setColor', [{
+                    'r': noteColors[selected][0],
+                    'g': noteColors[selected][1],
+                    'b': noteColors[selected][2]
+                }, false]);
+            }
+        }
+        for (i in 0...notes.members.length) {
+            if (selected == i){
+                notes.members[i].scale.set(0.7,0.7);
+            } else {
+                notes.members[i].scale.set(0.6,0.6);
+            }
+        }
+    }
+}
+
+function saveColors() {
+    Init.arrowColors[keyCount-1] = noteColors;
+    Init.saveSettings();
+}
