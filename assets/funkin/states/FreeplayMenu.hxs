@@ -169,74 +169,72 @@ var bgColor:Array<Float> = [
 ];
 
 function update(elapsed) {
-    if(!loadingBox.visible) {
-        if(freeplayEasterEggScript != null) {
-            freeplayEasterEggScript.update(elapsed);
-        }
+    if(freeplayEasterEggScript != null) {
+        freeplayEasterEggScript.update(elapsed);
+    }
 
-        var time:Float = Main.deltaTime * 9;
+    var time:Float = Main.deltaTime * 9;
 
-        var color = songs[curSelected].color;
+    var color = songs[curSelected].color;
 
-        if(color != null) {
-            bgColor[0] = FlxMath.lerp(bgColor[0], color[0], time);
-            bgColor[1] = FlxMath.lerp(bgColor[1], color[1], time);
-            bgColor[2] = FlxMath.lerp(bgColor[2], color[2], time);
-        }
+    if(color != null) {
+        bgColor[0] = FlxMath.lerp(bgColor[0], color[0], time);
+        bgColor[1] = FlxMath.lerp(bgColor[1], color[1], time);
+        bgColor[2] = FlxMath.lerp(bgColor[2], color[2], time);
+    }
 
-        if(FlxG.sound.music != null)
-            Conductor.position = FlxG.sound.music.time;
+    if(FlxG.sound.music != null)
+        Conductor.position = FlxG.sound.music.time;
 
-        bg.color = FlxColor.fromRGB(Std.int(bgColor[0]), Std.int(bgColor[1]), Std.int(bgColor[2]));
+    bg.color = FlxColor.fromRGB(Std.int(bgColor[0]), Std.int(bgColor[1]), Std.int(bgColor[2]));
 
-        if (musicSelected != -1)
-        {
-            var lerp = FlxMath.lerp(1.15, 1, FlxEase.cubeOut(Conductor.currentBeatFloat % 1));
-            grpIcons.members[musicSelected].scale.set(lerp, lerp);
-        }
+    if (musicSelected != -1)
+    {
+        var lerp = FlxMath.lerp(1.15, 1, FlxEase.cubeOut(Conductor.currentBeatFloat % 1));
+        grpIcons.members[musicSelected].scale.set(lerp, lerp);
+    }
 
-        updateScore();
+    updateScore();
 
-        if(UIControls.justPressed("BACK"))
-        {
-            FlxG.sound.play(cancelMenu);
-            Main.switchState(new ScriptedState('MainMenu'));
-        }
+    if(UIControls.justPressed("BACK"))
+    {
+        FlxG.sound.play(cancelMenu);
+        Main.switchState(new ScriptedState('MainMenu'));
+    }
 
-        if(UIControls.justPressed("UP"))
-            changeSelection(-1);
+    if(UIControls.justPressed("UP"))
+        changeSelection(-1);
 
-        if(UIControls.justPressed("DOWN"))
-            changeSelection(1);
+    if(UIControls.justPressed("DOWN"))
+        changeSelection(1);
 
-        if(FlxG.keys.pressed.SHIFT) {
-            if(UIControls.pressed("LEFT") || UIControls.pressed("RIGHT"))
-                changeSpeed(UIControls.pressed("LEFT") ? -speedMult : speedMult)
-            else
-                speedTimer = 0.0;
-        } else {
-            holdTimer = 0;
-            
-            if(UIControls.justPressed("LEFT"))
-                changeDifficulty(-1);
+    if(FlxG.keys.pressed.SHIFT) {
+        if(UIControls.pressed("LEFT") || UIControls.pressed("RIGHT"))
+            changeSpeed(UIControls.pressed("LEFT") ? -speedMult : speedMult)
+        else
+            speedTimer = 0.0;
+    } else {
+        holdTimer = 0;
+        
+        if(UIControls.justPressed("LEFT"))
+            changeDifficulty(-1);
 
-            if(UIControls.justPressed("RIGHT"))
-                changeDifficulty(1);
-        }
+        if(UIControls.justPressed("RIGHT"))
+            changeDifficulty(1);
+    }
 
-        if(FlxG.keys.justPressed.SPACE && !loadingBox.visible && curPlaying != songs[curSelected].name) {
-            playTheFuckingSong();
-        } else if(UIControls.justPressed("ACCEPT"))
-        {
-            PlayState_.songMultiplier = curSpeed;
-            PlayState_.isStoryMode = false;
-            PlayState_.actualSongName = songs[curSelected].name;
-            PlayState_.SONG = SongLoader.getJSON(songs[curSelected].name, StringTools.trim(songs[curSelected].difficulties[curDifficulty]));
-            PlayState_.currentDifficulty = StringTools.trim(songs[curSelected].difficulties[curDifficulty]);
-            PlayState_.availableDifficulties = songs[curSelected].difficulties;
-            
-            Main.switchState(new PlayState_());
-        }
+    if(FlxG.keys.justPressed.SPACE && !loadingBox.visible && curPlaying != songs[curSelected].name) {
+        playTheFuckingSong();
+    } else if(UIControls.justPressed("ACCEPT"))
+    {
+        PlayState_.songMultiplier = curSpeed;
+        PlayState_.isStoryMode = false;
+        PlayState_.actualSongName = songs[curSelected].name;
+        PlayState_.SONG = SongLoader.getJSON(songs[curSelected].name, StringTools.trim(songs[curSelected].difficulties[curDifficulty]));
+        PlayState_.currentDifficulty = StringTools.trim(songs[curSelected].difficulties[curDifficulty]);
+        PlayState_.availableDifficulties = songs[curSelected].difficulties;
+        
+        Main.switchState(new PlayState_());
     }
 }
 
@@ -247,7 +245,8 @@ function changeSpeed(change:Float) {
         curSpeed += change;
         curSpeed = FlxMath.roundDecimal(curSpeed, 2);
         curSpeed = FlxMath.bound(curSpeed, minSpeed, maxSpeed);
-        FlxG.sound.music.pitch = curSpeed;
+        if(!loadingBox.visible)
+            FlxG.sound.music.pitch = curSpeed;
 
         if(speedTimer > 0.6)
             speedTimer = 0.5;
