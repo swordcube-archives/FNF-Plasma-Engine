@@ -20,7 +20,7 @@ class Main extends Sprite
 
 	// Shit gets weird with lerping above 300fps with the 1/currentFPS calculation shit
 	// So we're capping at 300fps fuck you :DDD
-	public static var framerate:Int = 300;
+	public static var framerate:Int = 1000;
 	
 	/**
 		Whether to skip the flixel splash screen that appears in release mode.
@@ -40,6 +40,14 @@ class Main extends Sprite
 	public static var currentState:Class<flixel.FlxState> = Init;
 
 	public static var ansiColors:Map<String,String> = new Map();
+
+	public static function fixWorkingDirectory() {
+		var curDir = Sys.getCwd();
+		var execPath = Sys.programPath();
+		var p = execPath.replace("\\", "/").split("/");
+		var execName = p.pop(); // interesting
+		Sys.setCwd(p.join("\\") + "\\");
+	}
 
 	public function new()
 	{
