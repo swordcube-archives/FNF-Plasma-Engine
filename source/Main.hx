@@ -14,7 +14,7 @@ using StringTools;
 
 class Main extends Sprite
 {
-	public static var engineVersion:String = "0.1.0";
+	public static var engineVersion:String = "0.1.2";
 	public static var gameWidth:Int = 1280;
 	public static var gameHeight:Int = 720;
 

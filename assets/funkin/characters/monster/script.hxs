@@ -17,5 +17,7 @@ function create() {
     character.setOffset("singRIGHT", -30, 20);
     character.setOffset("singDOWN", -50, -80);
 
+    character.positionOffset.y += 100;
+
     character.dance();
 }
