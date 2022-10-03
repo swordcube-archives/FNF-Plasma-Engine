@@ -34,6 +34,8 @@ var speedMult:Float = 0.05;
 var speedTimer:Float = 0.0;
 var freeplayEasterEggScript = loadScript("scripts/FreeplayEasterEgg");
 
+var bpms:Array<Float> = [];
+
 function create() {
     scrollMenu = FNFAssets.getSound(AssetPaths.sound("menus/scrollMenu"));
     cancelMenu = FNFAssets.getSound(AssetPaths.sound("menus/cancelMenu"));
@@ -64,6 +66,14 @@ function create() {
     for(song in songs)
     {
         var displayName:String = song.displayname != null ? song.displayname : song.name;
+        
+        if(song.bpm != null)
+            bpms.push(song.bpm);
+        else {
+            var json = SongLoader.getJSON(song.name, song.difficulties[0]);
+            if(json != null)
+                bpms.push(json.bpm);
+        }
 
         var songText:Alphabet = new Alphabet(0, (70 * i) + 30, displayName, true, FlxColor.BLACK, false);
         songText.isMenuItem = true;
@@ -277,13 +287,7 @@ function playTheFuckingSong() {
         FlxG.sound.music.pitch = curSpeed;
 
         FlxG.sound.music.fadeIn(1, 0, 1);
-        if(songs[curSelected].bpm != null)
-            Conductor.changeBPM(songs[curSelected].bpm);
-        else {
-            var json = SongLoader.getJSON(songs[curSelected].name, StringTools.trim(songs[curSelected].difficulties[curDifficulty]));
-            if(json != null)
-                Conductor.changeBPM(json.bpm);
-        }
+        Conductor.changeBPM(bpms[curSelected]);
 
         loadingBox.visible = false;
         loadingIco.visible = false;

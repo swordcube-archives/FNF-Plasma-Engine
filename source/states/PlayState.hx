@@ -705,9 +705,6 @@ class PlayState extends MusicBeatState {
 				if(vocals != null)
 					vocals.stop();
 
-				FlxG.sound.playMusic(freakyMenu);
-				FlxG.sound.music.time = 0;
-
 				unspawnNotes = [];
 				for(note in UI.opponentStrums.notes) {
 					UI.opponentStrums.notes.remove(note, true);
@@ -726,17 +723,24 @@ class PlayState extends MusicBeatState {
 					storyScore += songScore;
 
 					if(storyPlaylist.length > 0) {
+						actualSongName = storyPlaylist[0];
 						SONG = SongLoader.getJSON(storyPlaylist[0], currentDifficulty);
 						Main.switchState(new states.PlayState());
 					} else {
 						if(storyScore > Highscore.getScore(actualWeekName+"-"+currentDifficulty))
 							Highscore.setScore(actualWeekName+"-"+currentDifficulty, storyScore);
+
+						FlxG.sound.playMusic(freakyMenu);
+						FlxG.sound.music.time = 0;
 						
 						Main.switchState(getMenuToSwitchTo());
 					}
 				}
-				else
+				else {
+					FlxG.sound.playMusic(freakyMenu);
+					FlxG.sound.music.time = 0;
 					Main.switchState(getMenuToSwitchTo());
+				}
 			}
 
 			callOnHScripts("endSongPost", [actualSongName]);
