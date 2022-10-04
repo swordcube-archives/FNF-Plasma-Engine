@@ -118,6 +118,9 @@ class Note extends FNFSprite {
             if(colorSwap != null && colorArray != null) // haxeflixel
                 colorSwap.setColors(colorArray[0], colorArray[1], colorArray[2]);
         }
+
+        if(!json.use_color_shader && colorSwap != null)
+            colorSwap.setColors(255, 0, 0);
     }
 
     public function resetColor()
@@ -172,9 +175,6 @@ class Note extends FNFSprite {
             scale.set(funnyScale, funnyScale);
             updateHitbox();
 
-            if(!json.use_color_shader)
-                colorSwap.enabled.value = [false];
-
             playAnim("normal");
             if(isSustain)
             {
@@ -183,6 +183,9 @@ class Note extends FNFSprite {
             }
 
             setColor();
+
+            if(!json.use_color_shader)
+                colorSwap.enabled.value = [false];
         }
     }
 

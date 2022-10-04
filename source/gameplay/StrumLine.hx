@@ -59,10 +59,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 		generateArrows();
 
 		judgementScript = new HScript('scripts/Judgement');
-		if(PlayState.current != null) {
+		if(PlayState.current != null)
 			judgementScript.setScriptObject(PlayState.current);
-			PlayState.current.scripts.push(judgementScript);
-		}
 		else
 			judgementScript.setScriptObject(FlxG.state);
 		judgementScript.start();
@@ -260,8 +258,12 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 							PlayState.current.vocals.volume = 1;
 							members[note.noteData].alpha = 1;
-							members[note.noteData].colorSwap.setColors(note.theColor[0], note.theColor[1], note.theColor[2]);
-							members[note.noteData].colorSwap.enabled.value = [true];
+							if(members[note.noteData].json.use_color_shader) {
+								members[note.noteData].colorSwap.setColors(note.theColor[0], note.theColor[1], note.theColor[2]);
+								members[note.noteData].colorSwap.enabled.value = [true];
+							} else {
+								members[note.noteData].colorSwap.enabled.value = [false];
+							}
 							members[note.noteData].playAnim("confirm", true);
 
 							note.kill();
@@ -299,7 +301,8 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 							PlayState.current.UI.healthBarScript.call("updateScoreText");
 						}
 
-						strum.colorSwap.enabled.value = [true];
+						if(strum.json.use_color_shader)
+							strum.colorSwap.enabled.value = [true];
 						strum.playAnim("press", true);
 						strum.alpha = 1;
 					}
@@ -336,8 +339,12 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 							noteDataTimes[note.noteData] = note.strumTime;
 
 							members[note.noteData].alpha = 1;
-							members[note.noteData].colorSwap.setColors(note.theColor[0], note.theColor[1], note.theColor[2]);
-							members[note.noteData].colorSwap.enabled.value = [true];
+							if(members[note.noteData].json.use_color_shader) {
+								members[note.noteData].colorSwap.setColors(note.theColor[0], note.theColor[1], note.theColor[2]);
+								members[note.noteData].colorSwap.enabled.value = [true];
+							} else {
+								members[note.noteData].colorSwap.enabled.value = [false];
+							}
 							members[note.noteData].playAnim("confirm", true);
 							goodNoteHit(note);
 						}
@@ -358,8 +365,12 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 								boundHealth();
 							}
 							members[note.noteData].alpha = 1;
-							members[note.noteData].colorSwap.setColors(note.theColor[0], note.theColor[1], note.theColor[2]);
-							members[note.noteData].colorSwap.enabled.value = [true];
+							if(members[note.noteData].json.use_color_shader) {
+								members[note.noteData].colorSwap.setColors(note.theColor[0], note.theColor[1], note.theColor[2]);
+								members[note.noteData].colorSwap.enabled.value = [true];
+							} else {
+								members[note.noteData].colorSwap.enabled.value = [false];
+							}
 							members[note.noteData].playAnim("confirm", true);
 							note.kill();
 							note.destroy();
@@ -491,6 +502,12 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote>
 
 			PlayState.current.combo++;
 
+			judgementScript.call("popUpScore", [
+				judgeData.name,
+				PlayState.current.combo,
+				PlayState.current.ratingScale,
+				PlayState.current.comboScale
+			]);
 			PlayState.current.callOnHScripts("popUpScore", [
 				judgeData.name,
 				PlayState.current.combo,

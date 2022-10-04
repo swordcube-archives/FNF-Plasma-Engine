@@ -1,5 +1,6 @@
 package;
 
+import sys.FileSystem;
 import flixel.FlxG;
 import flixel.math.FlxPoint;
 import gameplay.Character;
@@ -26,6 +27,20 @@ class CoolUtil
 			a.push(i);
 
 		return a;
+	}
+
+	public static function readDirectory(dir:String) {
+		var arrayToReturn:Array<String> = [];
+		var basePath:String = '${Sys.getCwd()}assets/';
+		for(folder in FileSystem.readDirectory(basePath)) {
+			if(FileSystem.isDirectory(basePath+folder) && FileSystem.exists(basePath+folder+"/"+dir)) {
+				for(item in FileSystem.readDirectory(basePath+folder+"/"+dir)) {
+					if(!arrayToReturn.contains(item))
+						arrayToReturn.push(item);
+				}
+			}
+		}
+		return arrayToReturn;
 	}
 
 	/**

@@ -50,10 +50,13 @@ class StrumNote extends FNFSprite {
         var colorArray = Init.arrowColors[parent != null ? parent.keyCount-1 : keyCount-1][noteData];
         if(colorSwap != null && colorArray != null) // haxeflixel
             colorSwap.setColors(colorArray[0], colorArray[1], colorArray[2]);
+
+        if(!json.use_color_shader && colorSwap != null)
+            colorSwap.setColors(255, 0, 0);
     }
 
     public function resetColor() {
-        colorSwap.setColors(255, 255, 255);
+        colorSwap.setColors(255, 0, 0);
     }
 
     public function loadSkin(skinToLoad:String)
