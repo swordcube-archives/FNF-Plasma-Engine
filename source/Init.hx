@@ -89,12 +89,22 @@ class Init extends MusicBeatState {
     public static function getArrowSkins():Map<String, ArrowSkin>
     {
         var a:Map<String, ArrowSkin> = [];
+        // funkin
+        var p:String = '${AssetPaths.cwd}assets/funkin/images/skins';
+        if(FileSystem.exists(p))
+        {
+            for(item in FileSystem.readDirectory(p))
+            {
+                if(item.endsWith(".json"))
+                    a.set(item.split(".json")[0], Json.parse(FNFAssets.returnAsset(TEXT, '$p/$item')));
+            }
+        }
+        // mods
         var p:String = '${AssetPaths.cwd}assets/${AssetPaths.currentPack}/images/skins';
-        if(!FileSystem.exists(p))
-            p = '${AssetPaths.cwd}assets/funkin/images/skins';
-
-        if(FileSystem.exists(p)) {
-            for(item in FileSystem.readDirectory(p)) {
+        if(FileSystem.exists(p))
+        {
+            for(item in FileSystem.readDirectory(p))
+            {
                 if(item.endsWith(".json"))
                     a.set(item.split(".json")[0], Json.parse(FNFAssets.returnAsset(TEXT, '$p/$item')));
             }
