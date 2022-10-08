@@ -6,9 +6,8 @@ A Friday Night Funkin' engine designed to be lightweight and easy to mod. Use `.
 - Step 3. [Install HaxeFlixel](https://haxeflixel.com/documentation/install-haxeflixel/)
 - Step 4. Run these commands to install required libraries:
 ```
+haxelib git flixel https://github.com/YoshiCrafter29/flixel
 haxelib git hscript-improved https://github.com/YoshiCrafter29/hscript-improved
-haxelib git flixel-addons https://github.com/HaxeFlixel/flixel-addons
-haxelib git flixel-ui https://github.com/HaxeFlixel/flixel-ui
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
 haxelib git openfl https://github.com/openfl/openfl
 ```
