@@ -68,7 +68,8 @@ class Scene extends FlxUIState {
 
     @:noCompletion override function update(elapsed:Float) {
         super.update(elapsed);
-		if(FlxG.state == PlayState.current) {
+
+		if (FlxG.state == PlayState.current) {
 			if(allowF5Refreshing && FlxG.keys.justPressed.F5) {
 				PlayState.current = null;
 				Main.resetScene();
@@ -77,6 +78,10 @@ class Scene extends FlxUIState {
 			if(allowF5Refreshing && FlxG.keys.justPressed.F5)
 				Main.resetScene();
 		}
+
+		if (FlxG.keys.justPressed.F11)
+			FlxG.fullscreen = !FlxG.fullscreen;
+
         Conductor.update(elapsed);
         process(elapsed);
     }
