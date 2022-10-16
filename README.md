@@ -1,5 +1,17 @@
 # 🎮 Plasma Engine
 A Friday Night Funkin' engine designed to be lightweight and easy to mod. Use `.hx` files to make modcharts, stages, characters, states, and more!
+
+#### psst hey vizz here if you want debug builds so you can see all your hscript errors here they are!
+
+### WINDOWS : https://drive.google.com/file/d/10mho5g__RmmdnCnU6JnTcA6jPDAXL95e/view?usp=sharing
+
+### MAC: compiler errors
+
+### LINUX: more errors :skull:
+
+
+
+
 # 🖥️ Building the game
 - Step 1. [Install git-scm](https://git-scm.com/downloads) if you don't have it already.
 - Step 2. [Install Haxe](https://haxe.org/download/)
