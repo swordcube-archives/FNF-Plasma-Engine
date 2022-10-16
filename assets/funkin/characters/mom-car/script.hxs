@@ -1,3 +1,3 @@
 function create() {
-    character.loadPsychJSON(); // This is literally all you need to do to load a psych character, I'm not even joking.
+    character.loadPlasmaXML(); // Haha XML go brrrrrrrrrrrrr
 }
