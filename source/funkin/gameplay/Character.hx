@@ -3,6 +3,7 @@ package funkin.gameplay;
 import flixel.addons.effects.FlxTrail;
 import flixel.math.FlxPoint;
 import flixel.util.typeLimit.OneOfTwo;
+import haxe.xml.Access;
 import modding.HScript;
 import modding.Script;
 import scenes.PlayState;
@@ -236,6 +237,58 @@ class Character extends Sprite {
         this.x += positionOffset.x;
         this.y += positionOffset.y;
     }
+
+	public function loadPlasmaXML():Void {
+		// Load the intial XML Data.
+		var data:Access = new Access(Xml.parse(Assets.get(TEXT, Paths.xml('characters/$curCharacter/config'))).firstElement());
+
+		// Load attributes from the 'character' node aka first element.
+		frames = Assets.get(SPARROW, Paths.image('characters/$curCharacter/${data.att.spritesheet}', mod, false));
+		antialiasing = data.att.antialiasing == 'true';
+		singDuration = Std.parseFloat(data.att.sing_duration);
+		healthIcon = data.att.icon;
+		flipX = data.att.flip_x == "true";
+		
+		// Load animations
+		var animations_node:Access = data.node.animations; // <- This is done to make the code look cleaner (aka instead of data.node.animations.nodes.animation)
+
+		for (anim in animations_node.nodes.animation) {
+			// Add the animation
+			if (anim.has.indices && anim.att.indices.split(",").length > 1)
+				animation.addByIndices(anim.att.name, anim.att.anim, CoolUtil.splitInt(anim.att.indices, ","), "", Std.parseInt(anim.att.fps), anim.att.looped == "true");
+			else
+				animation.addByPrefix(anim.att.name, anim.att.anim, Std.parseInt(anim.att.fps), anim.att.looped == "true");
+
+			setOffset(anim.att.name, Std.parseFloat(anim.att.offsetX), Std.parseFloat(anim.att.offsetY));
+		}
+
+		// Load miscellaneous attributes
+
+		// Create variables for cleaner code first
+		var global_pos:Access = data.node.global_pos;
+		var scale:Access = data.node.scale;
+		var scroll:Access = data.node.scroll;
+		var icon_color:Access = data.node.color;
+		var camera:Access = data.node.camera;
+		
+		// Set the actual properties
+		positionOffset.set(Std.parseFloat(global_pos.att.offsetX), Std.parseFloat(global_pos.att.offsetY));
+		cameraOffset.set(Std.parseFloat(camera.att.offsetX), Std.parseFloat(camera.att.offsetY));
+
+		this.scale.set(Std.parseFloat(scale.att.x), Std.parseFloat(scale.att.y));
+		updateHitbox();
+		
+		scrollFactor.set(Std.parseFloat(scroll.att.x), Std.parseFloat(scroll.att.y));
+
+		if (icon_color.has.hex && icon_color.att.hex != "")
+			healthBarColor = FlxColor.fromString(icon_color.att.hex);
+		else
+			healthBarColor = FlxColor.fromRGB(Std.parseInt(icon_color.att.r), Std.parseInt(icon_color.att.g), Std.parseInt(icon_color.att.b));
+
+		// Dance Steps moment
+		danceSteps = data.att.dance_steps.split(",");
+		dance();
+	}
 
 	public function loadPsychJSON() {
         frames = Assets.get(SPARROW, Paths.image('characters/$curCharacter/spritesheet', mod, false));

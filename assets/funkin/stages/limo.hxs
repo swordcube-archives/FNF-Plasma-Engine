@@ -3,6 +3,8 @@ import flixel.addons.display.FlxRuntimeShader;
 var grpLimoDancers:FlxGroup;
 
 function create() {
+    defaultCamZoom = 0.9;
+
     stage.dadPosition.set(100, 100);
     stage.gfPosition.set(400, 130);
     stage.bfPosition.set(1030, -120);

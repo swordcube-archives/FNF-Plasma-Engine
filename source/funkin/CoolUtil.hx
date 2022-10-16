@@ -80,14 +80,31 @@ class CoolUtil
 		return FlxG.elapsed / (1 / 60) * ratio;
 	}
 
-	// /**
-	// 	Gets the position of `character` at `position` in a Leather Engine stage.
-	// 	@param character The character to get the position of.
-	// 	@param position `FlxPoint` representing the position in the stage.
-	// 	@return `Array<Float>` that represents the position of the character.
-	// 	@author Leather128
-	// **/
-    // public static function getLeatherStagePos(character:Character, position:FlxPoint):Array<Float> {
-    //     return [(position.x - (character.width / 2)), (position.y - character.height)];
-	// }
+	/**
+	 * Splits `string` using `delimeter` and then converts all items in the array into an `Int` and returns it.
+	 * @param string 
+	 * @param delimeter 
+	 * @return Array<Int>
+	 * @author Leather128
+	 */
+	public static function splitInt(string:String, delimeter:String):Array<Int> {
+		var splitString:Array<String> = string.split(delimeter);
+		var splitReturn:Array<Int> = [];
+
+		for (string in splitString)
+			splitReturn.push(Std.parseInt(string));
+
+		return splitReturn;
+	}
+
+	/**
+		Gets the position of `character` at `position` in a Leather Engine stage.
+		@param character The character to get the position of.
+		@param position `FlxPoint` representing the position in the stage.
+		@return `Array<Float>` that represents the position of the character.
+		@author Leather128
+	**/
+    public static function getLeatherStagePos(character:funkin.gameplay.Character, position:FlxPoint):Array<Float> {
+        return [(position.x - (character.width / 2)), (position.y - character.height)];
+	}
 }
