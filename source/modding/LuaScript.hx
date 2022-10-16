@@ -619,32 +619,39 @@ class LuaScript extends Script {
 	}
 
     override public function call(func:String, ?args:Array<Any>):Dynamic {
-        if(args == null) args = [];
-		if(lua == null) return true;
-		try {
-			Lua.getglobal(lua, func);
-			var type:Int = Lua.type(lua, -1);
-			if (type != Lua.LUA_TFUNCTION) return true;
-			
-			for(arg in args) Convert.toLua(lua, arg);
+		if (lua == null) return true;
+		if (args == null) args = [];
 
-			var result:Null<Int> = Lua.pcall(lua, args.length, 1, 0);
-			var error:Dynamic = getErrorMessage();
-			if(!resultIsAllowed(lua, result)) {
-				Lua.pop(lua, 1);
-				if(error != null) Main.print("error", "ERROR (" + func + "): " + error);
-			} else {
+		try {
+			// basically a transplant from leather engine that doesn't crash the game on linux lmfao!!!
+			var result:Any = null;
+
+			Lua.getglobal(lua, func);
+
+			for (arg in args)
+				Convert.toLua(lua, arg);
+
+			result = Lua.pcall(lua, args.length, 1, 0);
+
+			var p = Lua.tostring(lua, result);
+			var e = getErrorMessage();
+
+			if (result == null)
+				return null;
+			else
+			{
+				// the one part of the engine that remained
 				var conv:Dynamic = cast getResult(lua, result);
 				Lua.pop(lua, 1);
 				if(conv == null) conv = true;
 				return conv;
 			}
-			return true;
 		}
 		catch (e) {
 			Main.print('error', e.details());
 		}
-		return null;
+
+		return true;
     }
 
 	function getErrorMessage() {
