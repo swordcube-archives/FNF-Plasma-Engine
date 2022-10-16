@@ -343,12 +343,14 @@ class PlayState extends Scene {
 				gf = new Character(pos.x, pos.y);
 				gf.loadCharacter(gfVersion);
 				add(gf);
-			}
-			else
+				add(stage.layeredSprites[1]);
+				add(dad);
+			} else {
 				dad.setPosition(pos.x, pos.y);
-			add(stage.layeredSprites[1]);
-			add(dad);
-
+				add(dad);
+				add(stage.layeredSprites[1]);
+			}
+			
 			var pos:FlxPoint = stage.bfPosition;
 			bf = new Boyfriend(pos.x, pos.y);
 			bf.loadCharacter(SONG.player1);

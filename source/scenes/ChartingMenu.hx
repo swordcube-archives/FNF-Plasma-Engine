@@ -597,7 +597,11 @@ class ChartingMenu extends Scene
 			+ " / "
 			+ FlxStringUtil.formatTime(FlxG.sound.music.length / 1000)
 			+ "\nSection: "
-			+ curSection;
+			+ curSection
+			+ "\nBeat: "
+			+ Conductor.curBeat
+			+ "\nStep: "
+			+ Conductor.curStep;
 
         var playedSound:Array<Bool> = [for(i in 0...SONG.keyCount) false]; // hit sound bull shit
         for(note in curRenderedNotes.members) {
