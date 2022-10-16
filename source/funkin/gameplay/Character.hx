@@ -287,6 +287,7 @@ class Character extends Sprite {
 
 		// Dance Steps moment
 		danceSteps = data.att.dance_steps.split(",");
+		for(i in 0...danceSteps.length) danceSteps[i] = danceSteps[i].trim();
 		dance();
 	}
 

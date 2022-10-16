@@ -625,11 +625,8 @@ class LuaScript extends Script {
 		try {
 			// basically a transplant from leather engine that doesn't crash the game on linux lmfao!!!
 			var result:Any = null;
-
 			Lua.getglobal(lua, func);
-
-			for (arg in args)
-				Convert.toLua(lua, arg);
+			for (arg in args) Convert.toLua(lua, arg);
 
 			result = Lua.pcall(lua, args.length, 1, 0);
 
@@ -638,8 +635,7 @@ class LuaScript extends Script {
 
 			if (result == null)
 				return null;
-			else
-			{
+			else {
 				// the one part of the engine that remained
 				var conv:Dynamic = cast getResult(lua, result);
 				Lua.pop(lua, 1);
@@ -650,7 +646,6 @@ class LuaScript extends Script {
 		catch (e) {
 			Main.print('error', e.details());
 		}
-
 		return true;
     }
 
