@@ -39,6 +39,7 @@ jobs:
 #           haxelib install tjson
 #           haxelib install lime
 #           haxelib install openfl
+#           haxelib git linc_luajit https://github.com/nebulazorua/linc_luajit
 #           haxelib --never git flixel https://github.com/YoshiCrafter29/flixel
 #           haxelib run lime setup flixel
 #           haxelib run lime setup
@@ -73,6 +74,7 @@ jobs:
           haxelib setup C:/haxelib
           haxelib install hxcpp > nul
           haxelib install tjson
+          haxelib git linc_luajit https://github.com/nebulazorua/linc_luajit
           haxelib install lime
           haxelib install openfl
           haxelib --never git flixel https://github.com/YoshiCrafter29/flixel
@@ -110,6 +112,7 @@ jobs:
           haxelib setup ~/haxelib
           haxelib install hxcpp > /dev/null
           haxelib install tjson
+          haxelib git linc_luajit https://github.com/nebulazorua/linc_luajit
           haxelib install lime
           haxelib install openfl
           haxelib --never git flixel https://github.com/YoshiCrafter29/flixel
