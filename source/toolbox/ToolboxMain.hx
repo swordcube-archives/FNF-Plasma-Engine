@@ -10,24 +10,32 @@ import systems.UIControls;
 class ToolboxMain extends MusicBeatState
 {
     var bg:FlxSprite;
+    var curMod:String;
+    
 
     override function create() {
         super.create();
-
+        if(curMod == null){
+            curMod = "Test Mod lmao!";
+        }
         DiscordRPC.changePresence(
             "In the Toolbox",
-            "Selecting a mod"
+            "Selecting: " + curMod
         );
 
         FlxG.mouse.visible = true;
         
         // gonna atleast try to make an original ui for this menu
         // i might need some assistance
-
-        var trolled:FlxText = new FlxText(0, 0, 0, "get trolled");
-        trolled.setFormat(AssetPaths.font("vcr"), 24);
-        trolled.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
-        add(trolled);
+        bg = new FlxSprite();
+        bg.loadGraphic(FNFAssets.returnAsset(IMAGE ,AssetPaths.image('menuBG')));
+        bg.scale.set(1.2, 1.2);
+        bg.updateHitbox();
+        bg.screenCenter();
+        bg.scrollFactor.set(0.17, 0.17);
+        bg.antialiasing = Settings.get("Antialiasing");
+        add(bg);
+        FlxG.sound.playMusic(FNFAssets.returnAsset(SOUND, AssetPaths.music("freakyMenu")));
     }
 
     override function update(elapsed:Float) {

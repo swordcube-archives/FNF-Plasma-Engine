@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin': Plasma Engine" file="Plasma-Engine" packageName="com.swordcube.plasmaengine" package="com.swordcube.plasmaengine" main="Main" version="0.1.0" company="swordcube" />
+	<app title="Friday Night Funkin': Plasma Engine" file="Plasma-Engine" packageName="com.swordcube.plasmaengine" package="com.swordcube.plasmaengine" main="Main" version="0.1.2" company="swordcube" />
 
 	<app preloader="flixel.system.FlxPreloader" />
 
