@@ -1,0 +1,79 @@
+import flixel.math.FlxPoint;
+import flixel.FlxObject;
+import funkin.gameplay.Boyfriend;
+import funkin.Controls;
+
+var music:Sound;
+
+var confirm:Sound;
+var cancelMenu:Sound;
+
+var freakyMenu:Sound;
+
+var camFollowPos:FlxObject;
+
+var boyfriend:Boyfriend;
+
+var updateCamera:Bool = false;
+
+function create(x, y, camX, camY, character) {
+    FlxG.sound.music.stop();
+    PlayState.vocals.stop();
+    
+    boyfriend = new Boyfriend(x, y);
+    boyfriend.loadCharacter(character);
+    boyfriend.flipX = !boyfriend.flipX;
+    add(boyfriend);
+
+    music = Paths.music("gameOver");
+    cancelMenu = Paths.sound("menus/cancelMenu");
+    confirm = Paths.sound("gameOverEnd");
+    freakyMenu = Paths.music("freakyMenu");
+
+    FlxG.sound.play(Paths.sound("fnf_loss_sfx"));
+    boyfriend.playAnim("firstDeath");
+    Conductor.changeBPM(100);
+    camFollowPos = new FlxObject(camX, camY, 1, 1);
+    add(camFollowPos);
+    FlxG.camera.follow(camFollowPos, FlxCameraFollowStyle.LOCKON, 0.02);
+}
+
+var isEnding:Bool = false;
+
+function update() {
+    if (boyfriend.animation.curAnim != null && boyfriend.animation.curAnim.name == 'firstDeath') {
+        if(boyfriend.animation.curAnim.curFrame >= 12 && !updateCamera) {
+            camFollowPos.setPosition(boyfriend.getGraphicMidpoint().x, boyfriend.getGraphicMidpoint().y);
+            updateCamera = true;
+        }
+
+        if(boyfriend.animation.curAnim.finished) {
+            boyfriend.playAnim("deathLoop");
+            FlxG.sound.playMusic(music);
+        }
+    }
+
+    if(Controls.BACK_P) {
+        FlxG.sound.music.stop();
+        FlxG.sound.playMusic(freakyMenu);
+        FlxG.sound.play(cancelMenu);
+        if(PlayState_.isStoryMode)
+            Main.switchScene(new ScriptedScene("StoryMenu"));
+        else
+            Main.switchScene(new ScriptedScene("FreeplayMenu"));
+    }
+
+    if(Controls.ACCEPT_P) {
+		if (!isEnding) {
+			isEnding = true;
+			boyfriend.playAnim('deathConfirm');
+			FlxG.sound.music.stop();
+			FlxG.sound.play(confirm);
+			new FlxTimer().start(0.7, function(tmr:FlxTimer) {
+				FlxG.camera.fade(FlxColor.BLACK, 2, false, function() {
+                    Main.resetScene();
+				});
+			});
+		}
+    }
+}

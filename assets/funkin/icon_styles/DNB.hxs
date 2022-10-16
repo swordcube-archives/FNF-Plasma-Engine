@@ -1,0 +1,20 @@
+var iconP2 = UI.iconP2;
+var iconP1 = UI.iconP1;
+
+function beatHit(curBeat:Int) {
+    iconP2.scale.set(1.4, 0.85);
+    iconP2.updateHitbox();
+
+    iconP1.scale.set(1.4, 0.85);
+    iconP1.updateHitbox();
+}
+
+function update(delta:Float) {
+    var iconLerp:Float = delta * 60 * 0.25;
+
+    iconP2.scale.set(FlxMath.lerp(iconP2.scale.x, 1, iconLerp), FlxMath.lerp(iconP2.scale.y, 1, iconLerp));
+    iconP2.updateHitbox();
+
+    iconP1.scale.set(FlxMath.lerp(iconP1.scale.x, 1, iconLerp), FlxMath.lerp(iconP1.scale.y, 1, iconLerp));
+    iconP1.updateHitbox();
+}

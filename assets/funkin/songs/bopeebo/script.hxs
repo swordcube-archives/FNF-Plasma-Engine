@@ -1,8 +1,6 @@
 function beatHit(curBeat) {
-    if (curBeat % 8 == 7)
-    {
-        if(PlayState.bf != null)
-        {
+    if (curBeat % 8 == 7) {
+        if(PlayState.bf != null) {
             PlayState.bf.animTimer = 0.6;
             PlayState.bf.playAnim('hey', true);
             PlayState.bf.specialAnim = true;

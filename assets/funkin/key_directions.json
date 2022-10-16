@@ -1,0 +1,16 @@
+{
+    //If you want to add new directions, Make sure they are named as in the xml for your notes!
+    
+    "directions": [
+        ["space"],
+        ["left", "right"],
+        ["left", "space", "right"],
+        ["left", "down", "up", "right"],
+        ["left", "down", "space", "up", "right"],
+        ["left", "down", "right", "left", "up", "right"],
+        ["left", "down", "right", "space", "left", "up", "right"],
+        ["left", "down", "up", "right", "left", "down", "up", "right"],
+        ["left", "down", "up", "right", "space", "left", "down", "up", "right"],
+        ["left", "down", "up", "right", "space", "space", "left", "down", "up", "right"]
+    ]
+}

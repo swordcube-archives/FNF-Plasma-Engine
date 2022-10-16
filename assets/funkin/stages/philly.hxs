@@ -1,74 +1,71 @@
-var windows:Map<Int, FlxGraphic> = [];
 var trainSound:FlxSound;
 
 var light:FlxSprite;
 var phillyTrain:FlxSprite;
 
-function create() {
-    removeStage();
-    PlayState.defaultCamZoom = 1.05;
+var lightColors:Array<Int> = [
+    0xFFFBA633,
+    0xFF31A2FD,
+    0xFFFB33F5,
+    0xFF31FD8C,
+    0xFFFD4531
+];
 
-    windows = [
-        0 => FNFAssets.getImage(AssetPaths.image("stages/philly/win0")),
-        1 => FNFAssets.getImage(AssetPaths.image("stages/philly/win1")),
-        2 => FNFAssets.getImage(AssetPaths.image("stages/philly/win2")),
-        3 => FNFAssets.getImage(AssetPaths.image("stages/philly/win3")),
-        4 => FNFAssets.getImage(AssetPaths.image("stages/philly/win4")),
-    ];
+function create() {
+    defaultCamZoom = 1.05;
 
     trainSound = new FlxSound();
-    trainSound.loadEmbedded(FNFAssets.getSound(AssetPaths.sound("train_passes")));
+    trainSound.loadEmbedded(Paths.sound("train_passes"));
     FlxG.sound.list.add(trainSound);
 
-    var bg:FlxSprite = new FlxSprite(-100);
-    bg.loadGraphic(FNFAssets.getImage(AssetPaths.image("stages/philly/sky")));
+    var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.image(stageImage("sky")));
     bg.scrollFactor.set(0.1, 0.1);
     bg.antialiasing = Settings.get("Antialiasing");
     add(bg);
 
-    var city:FlxSprite = new FlxSprite(-10);
-    city.loadGraphic(FNFAssets.getImage(AssetPaths.image("stages/philly/city")));
+    var city:FlxSprite = new FlxSprite(-10).loadGraphic(Paths.image(stageImage("city")));
     city.scrollFactor.set(0.3, 0.3);
-    city.antialiasing = Settings.get("Antialiasing");
     city.setGraphicSize(Std.int(city.width * 0.85));
     city.updateHitbox();
+    city.antialiasing = Settings.get("Antialiasing");
     add(city);
 
-    light = new FlxSprite(city.x);
-    light.loadGraphic(windows[4]);
+    light = new FlxSprite(-10).loadGraphic(Paths.image(stageImage("windows")));
     light.scrollFactor.set(0.3, 0.3);
     light.setGraphicSize(Std.int(light.width * 0.85));
     light.updateHitbox();
+    light.color = lightColors[0];
     light.antialiasing = Settings.get("Antialiasing");
     add(light);
 
     var streetBehind:FlxSprite = new FlxSprite(-40, 50);
-    streetBehind.loadGraphic(FNFAssets.getImage(AssetPaths.image("stages/philly/behindTrain")));
+    streetBehind.loadGraphic(Paths.image(stageImage("behindTrain")));
     streetBehind.antialiasing = Settings.get("Antialiasing");
     add(streetBehind);
 
     phillyTrain = new FlxSprite(2000, 360);
-    phillyTrain.loadGraphic(FNFAssets.getImage(AssetPaths.image("stages/philly/train")));
+    phillyTrain.loadGraphic(Paths.image(stageImage("train")));
     phillyTrain.antialiasing = Settings.get("Antialiasing");
     add(phillyTrain);
 
     var street:FlxSprite = new FlxSprite(-40, streetBehind.y);
-    street.loadGraphic(FNFAssets.getImage(AssetPaths.image("stages/philly/street")));
+    street.loadGraphic(Paths.image(stageImage("street")));
     street.antialiasing = Settings.get("Antialiasing");
     add(street);
+}
+
+function stageImage(path:String) {
+    return "stages/philly/"+path;
 }
 
 var trainMoving:Bool = false;
 var trainFrameTiming:Float = 0.0;
 
-function update(elapsed)
-{
-    if (trainMoving)
-    {
+function update(elapsed) {
+    if (trainMoving) {
         trainFrameTiming += elapsed;
 
-        if (trainFrameTiming >= 1 / 24)
-        {
+        if (trainFrameTiming >= 1 / 24) {
             updateTrainPos();
             trainFrameTiming = 0;
         }
@@ -85,47 +82,38 @@ var trainSound:FlxSound;
 
 var startedMoving:Bool = false;
 
-function trainStart()
-{
+function trainStart() {
     trainMoving = true;
     trainSound.play(true);
 }
 
-function beatHit(curBeat)
-{
+function beatHit(curBeat) {
     if (!trainMoving)
         trainCooldown += 1;
 
-    if (curBeat % 4 == 0)
-    {
+    if (curBeat % 4 == 0) {
         curLight = FlxG.random.int(0, 4);
-
-        light.loadGraphic(windows[curLight]);
+        light.color = lightColors[curLight];
     }
 
-    if (curBeat % 8 == 4 && FlxG.random.bool(Conductor.bpm > 320 ? 150 : 30) && !trainMoving && trainCooldown > 8)
-    {
+    if (curBeat % 8 == 4 && FlxG.random.bool(Conductor.bpm > 320 ? 150 : 30) && !trainMoving && trainCooldown > 8) {
         trainCooldown = FlxG.random.int(-4, 0);
         trainStart();
     }
 }
 
-function updateTrainPos():Void
-{
-    if (trainSound.time >= 4700)
-    {
+function updateTrainPos():Void {
+    if (trainSound.time >= 4700) {
         startedMoving = true;
 
         if (PlayState.gf != null)
             PlayState.gf.playAnim('hairBlow');
     }
 
-    if (startedMoving)
-    {
+    if (startedMoving) {
         phillyTrain.x -= 400;
 
-        if (phillyTrain.x < -2000 && !trainFinishing)
-        {
+        if (phillyTrain.x < -2000 && !trainFinishing) {
             phillyTrain.x = -1150;
             trainCars -= 1;
 
@@ -138,8 +126,7 @@ function updateTrainPos():Void
     }
 }
 
-function trainReset():Void
-{
+function trainReset():Void {
     if (PlayState.gf != null)
         PlayState.gf.playAnim('hairFall');
 

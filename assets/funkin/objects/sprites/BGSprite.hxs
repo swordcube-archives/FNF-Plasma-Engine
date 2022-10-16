@@ -13,7 +13,7 @@ function new(image:String, scrollX:Float, scrollY:Float, animations:Array<String
 
     if (animations != null)
     {
-        frames = FNFAssets.getSparrow(image);
+        frames = Paths.sparrow(image);
         for (anim in animations)
         {
             animation.addByPrefix(anim, anim, 24, loopAnims);
@@ -24,7 +24,7 @@ function new(image:String, scrollX:Float, scrollY:Float, animations:Array<String
     }
     else
     {
-        loadGraphic(FNFAssets.getImage(AssetPaths.image(image)));
+        loadGraphic(Paths.image(image));
         active = false;
     }
     scrollFactor.set(scrollX, scrollY);

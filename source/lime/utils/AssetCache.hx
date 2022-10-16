@@ -1,8 +1,8 @@
 package lime.utils;
 
 import haxe.macro.Compiler;
-import lime.media.AudioBuffer;
 import lime.graphics.Image;
+import lime.media.AudioBuffer;
 #if !(macro || commonjs)
 import lime._internal.macros.AssetsMacro;
 #end
@@ -103,7 +103,7 @@ class AssetCache
 		}
         
         @:privateAccess
-        for(lib in Assets.libraries) {
+        for(lib in LimeAssets.libraries) {
             lib.clearExceptArray(array);
         }
 	}

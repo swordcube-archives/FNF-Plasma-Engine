@@ -1,37 +1,3 @@
 function create() {
-    character.frames = FNFAssets.getCharacterSparrow(character.curCharacter);
-
-    character.healthIcon = "mom";
-    character.healthBarColor = FlxColor.fromString("#D8558E");
-
-    character.animation.addByPrefix('idle', "Mom Idle", 24, false);
-    character.animation.addByIndices('idle-loop', 'Mom Idle', [10,11,12,13], "", 24, true);
-
-    character.animation.addByPrefix('singUP', "Mom Up Pose", 24, false);
-    character.animation.addByIndices('singUP-loop', 'Mom Up Pose', [11,12,13,14], "", 24, true);
-
-    character.animation.addByPrefix('singDOWN', "MOM DOWN POSE", 24, false);
-    character.animation.addByIndices('singDOWN-loop', 'MOM DOWN POSE', [11,12,13,14], "", 24, true);
-
-    character.animation.addByPrefix('singLEFT', 'Mom Left Pose', 24, false);
-    character.animation.addByIndices('singLEFT-loop', 'Mom Left Pose', [6,7,8,9], "", 24, true);
-
-    // thanks dave from fnf dev team 👍👍
-    character.animation.addByPrefix('singRIGHT', 'Mom Pose Left', 24, false);
-    character.animation.addByIndices('singRIGHT-loop', 'Mom Pose Left', [6,7,8,9], "", 24, true);
-
-    character.setOffset('idle');
-    character.setOffset('idle-loop');
-
-    character.setOffset("singUP", 14, 71);
-    character.setOffset("singRIGHT", 10, -60);
-    character.setOffset("singLEFT", 250, -23);
-    character.setOffset("singDOWN", 20, -160);
-
-    character.setOffset("singUP-loop", 14, 71);
-    character.setOffset("singRIGHT-loop", 10, -60);
-    character.setOffset("singLEFT-loop", 250, -23);
-    character.setOffset("singDOWN-loop", 20, -160);
-
-    character.dance();
+    character.loadPsychJSON(); // This is literally all you need to do to load a psych character, I'm not even joking.
 }

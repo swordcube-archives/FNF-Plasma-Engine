@@ -1,4 +1,4 @@
-var halloweenBG:FNFSprite;
+var halloweenBG:Sprite;
 var thunder1:Sound;
 var thunder2:Sound;
 
@@ -6,14 +6,12 @@ var lightningStrikeBeat:Int = 0;
 var lightningOffset:Int = 8;
 
 function create() {
-    removeStage();
-    PlayState.defaultCamZoom = 1.05;
+    defaultCamZoom = 1.05;
 
-    thunder1 = FNFAssets.getSound(AssetPaths.sound('thunder_1'));
-    thunder2 = FNFAssets.getSound(AssetPaths.sound('thunder_2'));
+    thunder1 = Paths.sound('thunder_1');
+    thunder2 = Paths.sound('thunder_2');
 
-    halloweenBG = new FNFSprite(-200, -100);
-    halloweenBG.frames = FNFAssets.getSparrow('stages/spooky/halloween_bg');
+    halloweenBG = new Sprite(-200, -100).load("SPARROW", Paths_.image('stages/spooky/halloween_bg'));
     halloweenBG.animation.addByPrefix('static', 'halloweem bg0', 24, true);
     halloweenBG.animation.addByPrefix('lightning', 'halloweem bg lightning strike', 24, false);
     halloweenBG.antialiasing = Settings.get("Antialiasing");

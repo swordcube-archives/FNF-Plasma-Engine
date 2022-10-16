@@ -1,0 +1,40 @@
+function create() {
+    defaultCamZoom = 0.9;
+
+    var bg = new FlxSprite(-600, -200);
+    bg.loadGraphic(Assets.get("IMAGE", Paths_.image('stages/stage/stageback')));
+    bg.scrollFactor.set(0.9, 0.9);
+    bg.antialiasing = Settings.get("Antialiasing");
+    add(bg);
+
+    var stageFront = new FlxSprite(-650, 600);
+    stageFront.loadGraphic(Assets.get("IMAGE", Paths_.image('stages/stage/stagefront')));
+    stageFront.scrollFactor.set(0.9, 0.9);
+    stageFront.scale.set(1.1, 1.1);
+    stageFront.updateHitbox();
+    stageFront.antialiasing = Settings.get("Antialiasing");
+    add(stageFront);
+
+    var stageLight:FlxSprite = new FlxSprite(-125, -100);
+    stageLight.loadGraphic(Assets.get("IMAGE", Paths_.image('stages/stage/stage_light')));
+    stageLight.scrollFactor.set(0.9, 0.9);
+    stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
+    stageLight.updateHitbox();
+    add(stageLight);
+
+    var stageLight:FlxSprite = new FlxSprite(1225, -100);
+    stageLight.loadGraphic(Assets.get("IMAGE", Paths_.image('stages/stage/stage_light')));
+    stageLight.scrollFactor.set(0.9, 0.9);
+    stageLight.setGraphicSize(Std.int(stageLight.width * 1.1));
+    stageLight.updateHitbox();
+    stageLight.flipX = true;
+    add(stageLight);
+
+    var stageCurtains = new FlxSprite(-500, -300);
+    stageCurtains.loadGraphic(Assets.get("IMAGE", Paths_.image('stages/stage/stagecurtains')));
+    stageCurtains.scrollFactor.set(1.3, 1.3);
+    stageCurtains.scale.set(0.9, 0.9);
+    stageCurtains.updateHitbox();
+    stageCurtains.antialiasing = Settings.get("Antialiasing");
+    add(stageCurtains);
+}

@@ -1,0 +1,156 @@
+import funkin.Controls;
+
+var logo:Sprite;
+var gf:Sprite;
+var titleEnter:Sprite;
+var ngSpr:Sprite;
+
+var credGroup:FlxGroup;
+
+var cover:Sprite;
+
+var danced:Bool = true;
+var accepted:Bool = false;
+var skippedIntro:Bool = false;
+
+var curWacky:Array<String> = ["PLACEHOLDER", "SAMPLE TEXT"];
+
+var confirmMenu:Sound = Paths.sound('menus/confirmMenu');
+
+function getIntroTextShit() {
+    var fullText:String = Paths.txt('introText');
+    var firstArray:Array<String> = fullText.split('\n');
+    var swagGoodArray:Array<Array<String>> = [];
+    for (i in firstArray) swagGoodArray.push(i.split('--'));
+    return swagGoodArray;
+}
+
+function startIntro() {
+    if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing)) {
+        FlxG.sound.playMusic(Paths.music("freakyMenu"), 0);
+        FlxG.sound.music.fadeIn(4, 0, 0.7);
+    }
+}
+
+function start() {
+    DiscordRPC.changePresence(
+        "In the Title Screen",
+        null
+    );
+
+    gf = new Sprite(FlxG.width * 0.4, FlxG.height * 0.07).load("SPARROW", Paths_.image("title/gfTitle"));
+    gf.addAnim("INDICES", "danceLeft", "GF dance", 24, false, null, CoolUtil.range(14));
+    gf.addAnim("INDICES", "danceRight", "GF dance", 24, false, null, CoolUtil.range(29, 15));
+    gf.playAnim("danceLeft");
+    add(gf);
+
+    logo = new Sprite(-150, -100).load("SPARROW", Paths_.image("title/fnfLogo"));
+    logo.addAnim("PREFIX", "bump", "bump", 24, false);
+    logo.playAnim("bump");
+    add(logo);
+
+    titleEnter = new Sprite(100, FlxG.height * 0.8).load("SPARROW", Paths_.image("title/titleEnter"));
+    titleEnter.addAnim("PREFIX", "idle", "Press Enter to Begin", 24, true);
+    titleEnter.addAnim("PREFIX", "confirm", "ENTER PRESSED", 24, true);
+    titleEnter.playAnim("idle");
+    add(titleEnter);
+
+    cover = new Sprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+    add(cover);
+
+    credGroup = new FlxGroup();
+    add(credGroup);
+
+    ngSpr = new Sprite(0, FlxG.height * 0.52).load("IMAGE", Paths_.image("title/newgrounds"));
+    ngSpr.scale.set(0.8, 0.8);
+    ngSpr.updateHitbox();
+    ngSpr.screenCenter(FlxAxes.X);
+    ngSpr.visible = false;
+    add(ngSpr);
+
+    new FlxTimer().start(1, function(tmr:FlxTimer) {
+        startIntro();
+    });
+
+    var introArray:Array<String> = getIntroTextShit();
+    curWacky = introArray[FlxG.random.int(0, introArray.length-1)];
+}
+
+function createMultipleTexts(textArray:Array<String>) {
+    for (i in 0...textArray.length) addText(textArray[i]);
+}
+
+function addText(text:String) {
+    var coolText:Alphabet = new Alphabet(0, 0, text, true);
+    coolText.screenCenter(FlxAxes.X);
+    coolText.y += (credGroup.length * 60) + 200;
+    credGroup.add(coolText);
+}
+
+function update(delta:Float) {
+    if(FlxG.sound.music != null && FlxG.sound.music.playing)
+        Conductor.position = FlxG.sound.music.time;
+
+    if(Controls.ACCEPT_P) {
+        if(!skippedIntro)
+            skipIntro();
+        else if(!accepted) {
+            accepted = true;
+            FlxG.sound.play(confirmMenu);
+            FlxG.camera.flash(0xFFFFFFFF, 2);
+            titleEnter.animation.play("confirm", true);
+
+            new FlxTimer().start(1, function(tmr:FlxTimer) {
+                Main.switchScene(new ScriptedScene("MainMenu"));
+            });
+        }
+    }
+}
+
+function beatHit(curBeat:Int) {
+    logo.playAnim("bump", true);
+    danced = !danced;
+    gf.playAnim(danced ? "danceLeft" : "danceRight");
+
+    if(!skippedIntro) {
+        switch(curBeat) {
+            case 1:
+                createMultipleTexts(["swordcube", "Leather128", "Stilic", "Raf"]);
+            case 3:
+                addText('present');
+            case 4:
+                credGroup.clear();
+            case 5:
+                createMultipleTexts(['In association', 'with']);
+            case 7:
+                addText('newgrounds');
+                ngSpr.visible = true;
+            case 8:
+                credGroup.clear();
+                ngSpr.visible = false;
+            case 9:
+                createMultipleTexts([curWacky[0]]);
+            case 11:
+                addText(curWacky[1]);
+            case 12:
+                credGroup.clear();
+            case 13:
+                addText('Friday');
+            case 14:
+                addText('Night');
+            case 15:
+                addText('Funkin');
+            default:
+                if(curBeat >= 16)
+                    skipIntro();
+        }
+    }
+}
+
+function skipIntro() {
+    skippedIntro = true;
+    remove(ngSpr, true);
+    remove(credGroup, true);
+    remove(cover, true);
+    FlxG.camera.flash(0xFFFFFFFF, 4);
+}

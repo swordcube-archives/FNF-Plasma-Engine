@@ -1,20 +1,20 @@
 package flixel.system;
 
-import openfl.events.IEventDispatcher;
-import openfl.events.Event;
-import openfl.media.Sound;
-// import flash.media.SoundChannel;
-import openfl.media.SoundChannel;
-import openfl.media.SoundTransform;
-import openfl.net.URLRequest;
 import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.math.FlxMath;
+import flixel.math.FlxPoint;
 import flixel.math.FlxPoint;
 import flixel.system.FlxAssets.FlxSoundAsset;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxStringUtil;
 import openfl.Assets;
+import openfl.events.Event;
+import openfl.events.IEventDispatcher;
+import openfl.media.Sound;
+import openfl.media.SoundChannel;
+import openfl.media.SoundTransform;
+import openfl.net.URLRequest;
 #if flash11
 import flash.utils.ByteArray;
 #end
@@ -429,6 +429,7 @@ class FlxSound extends FlxBasic
 		updateTransform();
 		exists = true;
 		onComplete = OnComplete;
+		pitch = 1;
 		_length = (_sound == null) ? 0 : _sound.length;
 		endTime = _length;
 		return this;
@@ -612,9 +613,7 @@ class FlxSound extends FlxBasic
 		_channel = _sound.play(_time, 0, _transform);
 		if (_channel != null)
 		{
-			#if (sys)
 			pitch = _pitch;
-			#end
 			_channel.addEventListener(Event.SOUND_COMPLETE, stopped);
 			active = true;
 		}
@@ -746,8 +745,41 @@ class FlxSound extends FlxBasic
 
 	function set_pitch(v:Float):Float
 	{
+		@:privateAccess
+		#if openfl_legacy
+			#if sys
+			@:privateAccess
+			if (_channel != null)
+				_channel.__source.pitch = v;
+			#else
+			FlxG.log.error("Pitch is supported only in sys systems while using openfl legacy!! switch the build into sys or upgrade your openfl!");
+			return 1;
+			#end
+		#else
+		#if flash
+		FlxG.log.error("Pitch is not supported on Flash!!!");
+		v = 1;
+		#elseif (html5 && lime_howlerjs)
 		if (_channel != null)
-			_channel.pitch = v;
+			_channel.__source.buffer.__srcHowl.rate(v);
+		#else
+        if(_channel != null && _channel.__source != null) {
+            var backend = _channel.__source.__backend;
+            @:privateAccess
+			if (backend.timer != null)
+				backend.timer.stop();
+
+			var timeRemaining = (backend.getLength() - backend.getCurrentTime()) / v;
+			if (timeRemaining > 0) {
+				backend.timer = new haxe.Timer(timeRemaining);
+				backend.timer.run = backend.timer_onRun;
+			}
+            @:privateAccess
+            if (backend.handle != null)
+                lime.media.openal.AL.sourcef(backend.handle, lime.media.openal.AL.PITCH, v);
+        }
+		#end
+		#end
 		return _pitch = v;
 	}
 

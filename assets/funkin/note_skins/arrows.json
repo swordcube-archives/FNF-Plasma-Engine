@@ -1,0 +1,15 @@
+{
+    "image_location": "ui/notes/NOTE_assets",
+    "splash_image_location": "ui/note_splashes/NOTE_splashes",
+
+    "strum_scale": 0.7,
+    "note_scale": 0.7,
+
+    "sustain_scale": 0.7,
+    "use_color_shader": true,
+
+    "skin_type": "default",
+
+    "framerate": 24,
+    "splash_framerate": 32
+}

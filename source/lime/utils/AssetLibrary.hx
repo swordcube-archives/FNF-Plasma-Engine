@@ -4,8 +4,8 @@ import haxe.io.Path;
 import lime.app.Event;
 import lime.app.Future;
 import lime.app.Promise;
-import lime.media.AudioBuffer;
 import lime.graphics.Image;
+import lime.media.AudioBuffer;
 import lime.net.HTTPRequest;
 import lime.text.Font;
 import lime.utils.AssetType;
@@ -665,7 +665,7 @@ class AssetLibrary
 
 	@:noCompletion private function __cacheBreak(path:String):String
 	{
-		return Assets.__cacheBreak(path);
+		return LimeAssets.__cacheBreak(path);
 	}
 
 	@:noCompletion private function __fromBundle(bundle:AssetBundle, manifest:AssetManifest = null):Void

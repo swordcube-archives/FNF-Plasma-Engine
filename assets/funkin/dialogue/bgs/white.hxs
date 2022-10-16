@@ -1,6 +1,0 @@
-function create() {
-    bg.makeGraphic(1280,720,0x7FFFFFFF);
-    bg.screenCenter();
-    bg.cameras = [PlayState.camOther];
-    add(bg);
-}

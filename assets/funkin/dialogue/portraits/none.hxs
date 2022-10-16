@@ -1,3 +1,0 @@
-function create() {
-    portrait.makeGraphic(1,1,0);
-}

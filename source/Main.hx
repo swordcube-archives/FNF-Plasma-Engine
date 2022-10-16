@@ -1,46 +1,62 @@
 package;
 
-import systems.ZipUtils;
-import display.PlasmaFPS;
-import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.addons.transition.FlxTransitionableState;
+import funkin.Transition;
 import lime.app.Application;
-import openfl.Lib;
+import misc.FPSCounter;
 import openfl.display.Sprite;
-import states.ScriptedState;
+import scenes.ScriptedScene;
 
 using StringTools;
 
-class Main extends Sprite
-{
-	public static var engineVersion:String = "0.1.2";
-	public static var gameWidth:Int = 1280;
-	public static var gameHeight:Int = 720;
+class Main extends Sprite {
+	// Edit game settings here!
+	public static var gameInfo = {
+		width: 1280,
+		height: 720,
+		framerate: 1000,
+		appTitle: "FNF: Plasma Engine",
+		startingScene: scenes.ScriptedScene,
+		startingSceneArgs: ["TitleScene"],
+		skipFlixelSplash: true
+	};
 
-	// Shit gets weird with lerping above 300fps with the 1/currentFPS calculation shit
-	// So we're capping at 300fps fuck you :DDD
-	public static var framerate:Int = 1000;
+	public static var engineVersion:String = "1.0.0";
+
+	/**
+		The frames per second (FPS) of the game. Change this variable to instantly change the FPS.
+	**/
+	public static var framerate(default, set):Int = 1000;
+	static function set_framerate(value:Int):Int {
+		var modified_value = Std.int(FlxMath.bound(value, 10, 1000));
+		if(modified_value > FlxG.drawFramerate) {
+			FlxG.updateFramerate = modified_value;
+			FlxG.drawFramerate = modified_value;
+		} else {
+			FlxG.drawFramerate = modified_value;
+			FlxG.updateFramerate = modified_value;
+		}
+		return framerate = modified_value;
+	}
+
+	public static var fpsCounter:FPSCounter;
+
+	public static var currentState:Class<Scene> = Init;
 	
-	/**
-		Whether to skip the flixel splash screen that appears in release mode.
-	**/
-	public static var skipSplash:Bool = true;
-	public static var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
-
-	public static var fpsCounter:PlasmaFPS;
-
-	static var startTime:Float = 0.0;
-
-	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
-
-	/**
-		The FlxState the game starts with.
-	**/
-	public static var currentState:Class<flixel.FlxState> = Init;
-
 	public static var ansiColors:Map<String,String> = new Map();
 
+	/**
+		Supported file types for scripts.
+	**/
+	public static var supportedFileTypes:Array<String> = [
+		".lua",
+		".hxs",
+		".hsc",
+		".hscript",
+		".hx"
+	];
+	
 	public static function fixWorkingDirectory() {
 		var curDir = Sys.getCwd();
 		var execPath = Sys.programPath();
@@ -49,53 +65,8 @@ class Main extends Sprite
 		Sys.setCwd(p.join("\\") + "\\");
 	}
 
-	public function new()
-	{
+	public function new() {
 		super();
-		startTime = getTime(true);
-
-		setupZoom(); // Setup the "zoom" variable
-		initAnsiColors();
-
-		// Start the game
-		addChild(new FlxGame(gameWidth, gameHeight, currentState, zoom, framerate, framerate, skipSplash, startFullscreen));
-
-		// FPS Counter
-		fpsCounter = new PlasmaFPS(10, 3, 0xFFFFFFFF);
-		addChild(fpsCounter);
-
-		Application.current.onExit.add(function(exitCode) {
-			#if discord_rpc
-			DiscordRPC.shutdown();
-			#end
-			Init.saveSettings();
-		});
-
-		Application.current.window.onDropFile.add(function(file) {
-			#if DEBUG_PRINTING
-			trace("FILE DRAGGED ON WINDOW: " + file);
-			#end
-			if(file.endsWith(".plasmod")) {
-				var outputPath:String = '${AssetPaths.cwd}assets';
-
-				sys.thread.Thread.create(function() {
-					#if DEBUG_PRINTING
-					trace("EXTRACTING "+file+" TO "+outputPath);
-					#end
-
-					// actually uncompress the thing
-					ZipUtils.uncompressZip(ZipUtils.openZip(file), outputPath);
-
-					#if DEBUG_PRINTING
-					trace("YO WE'RE DONE EXTRACTING DUMBASS");
-					#end
-				});
-			}
-		});
-	}
-
-	public static function initAnsiColors()
-	{
 		ansiColors['black'] = '\033[0;30m';
 		ansiColors['red'] = '\033[31m';
 		ansiColors['green'] = '\033[32m';
@@ -107,157 +78,113 @@ class Main extends Sprite
 		ansiColors['white'] = '\033[1;37m';
 		ansiColors['orange'] = '\033[38;5;214m';
 
-		// reuse it for quick lookups of colors to log levels
 		ansiColors['default'] = ansiColors['grey'];
+
+		Application.current.window.title = gameInfo.appTitle;
+		addChild(new FlxGame(
+			gameInfo.width, 
+			gameInfo.height, 
+			Init, 
+			1, // The default zoom used for cameras
+			gameInfo.framerate, 
+			gameInfo.framerate, 
+			gameInfo.skipFlixelSplash
+		));
+		#if !mobile
+		fpsCounter = new FPSCounter(10, 3, FlxColor.WHITE);
+		addChild(fpsCounter);
+		#end
 	}
 
-	public static function getOS()
-	{
-		#if sys return Sys.systemName(); #end
-		#if html5 return "HTML5"; #end
-		#if android return "Android"; #end
-
-		// Fallback if we can't find the OS the user is on (or is unsupported)
-		return "Unknown";
-	}
-
-	public static function getSizeLabel(num:Int):String
-	{
-		// 2147483648 is 2048 mb btw lmao
+	/**
+		Generates a more human-readable version of `num` (must be in bytes)
+		@param num        The bytes to convert.
+	**/
+	public static function getSizeLabel(num:UInt):String {
 		var size:Float = Math.abs(num) != num ? Math.abs(num) + 2147483648 : num;
 		var data = 0;
 		var dataTexts = ["b", "kb", "mb", "gb", "tb", "pb"];
 
-		while (size > 1024 && data < dataTexts.length - 1)
-		{
+		while (size > 1024 && data < dataTexts.length - 1) {
 			data++;
 			size = size / 1024;
 		}
 
-		size = Math.round(size * 100) / 100;
-		return size + dataTexts[data]; // smth like 100mb
+		return FlxMath.roundDecimal(size, 2) + dataTexts[data];
 	}
 
-	function setupZoom()
-	{
-		var stageWidth:Int = Lib.current.stage.stageWidth;
-		var stageHeight:Int = Lib.current.stage.stageHeight;
+	public static function print(type:String, text:String) {
+		switch (type.toLowerCase()) {
+			case "debug":
+				Sys.println('${ansiColors["cyan"]}[   DEBUG   ] ${ansiColors["default"]}' + text);
 
-		if (zoom == -1)
-		{
-			var ratioX:Float = stageWidth / gameWidth;
-			var ratioY:Float = stageHeight / gameHeight;
-			zoom = Math.min(ratioX, ratioY);
-			gameWidth = Math.ceil(stageWidth / zoom);
-			gameHeight = Math.ceil(stageHeight / zoom);
+			case "error":
+				Sys.println('${ansiColors["red"]}[   ERROR   ] ${ansiColors["default"]}' + text);
+
+			case "warn" | "warning":
+				Sys.println('${ansiColors["yellow"]}[  WARNING  ] ${ansiColors["default"]}' + text);
+
+			case "hscript":
+				Sys.println('${ansiColors["magenta"]}[  HSCRIPT  ] ${ansiColors["default"]}' + text);
+
+			case "lua":
+				Sys.println('${ansiColors["cyan"]}[    LUA    ] ${ansiColors["default"]}' + text);
+
+			default:
+				Sys.println('${ansiColors["blue"]}[   TRACE   ] ${ansiColors["default"]}' + text);
 		}
 	}
 
 	/**
-		A function to switch to a new state.
-
-		@param newState          The state to switch to (Must be an `FlxState` or a state based off of `FlxState`)
+		A function to switch to a new scene.
+		@param newState          The scene to switch to (Must be an `FlxState` or a scene based off of `FlxState`)
 		@param transition        Whether or not to transition to the scene. Change `source/Transition.hx` to change how the transition looks.
 	**/
-	public static function switchState(newState:flixel.FlxState, transition:Bool = true)
-	{
+	public static function switchScene(newState:Scene, transition:Bool = true) {
 		currentState = Type.getClass(newState);
 		FlxTransitionableState.skipNextTransOut = !transition;
-		if (transition)
-		{
+		if (transition) {
 			FlxG.state.openSubState(new Transition(0.45, false));
-			Transition.finishCallback = function()
-			{
+			Transition.finishCallback = function() {
 				FlxG.switchState(newState);
 			};
-			if (Std.isOfType(newState, states.ScriptedState))
-				return #if DEBUG_PRINTING print('debug', 'Switched state to states.ScriptedState [${cast(newState, ScriptedState).name}] (transition)') #end;
+			if (Std.isOfType(newState, ScriptedScene))
+				return #if DEBUG_PRINTING print('debug', 'Switched state to scenes.ScriptedScene [${cast(newState, ScriptedScene).name}] (transition)') #end;
 			else
 				return #if DEBUG_PRINTING print('debug', 'Switched state to ${Type.getClassName(currentState)} (transition)') #end;
 		}
 		FlxG.switchState(newState);
-		if (Std.isOfType(newState, states.ScriptedState))
-			return #if DEBUG_PRINTING print('debug', 'Switched state to states.ScriptedState [${cast(newState, ScriptedState).name}] (no transition)') #end;
+		if (Std.isOfType(newState, ScriptedScene))
+			return #if DEBUG_PRINTING print('debug', 'Switched state to scenes.ScriptedScene [${cast(newState, ScriptedScene).name}] (no transition)') #end;
 		else
 			return #if DEBUG_PRINTING print('debug', 'Switched state to ${Type.getClassName(currentState)} (no transition)') #end;
 	}
 
 	/**
-		Resets the current state.
-
+		Resets the current scene.
 		@param transition        Whether or not to transition to the scene. Change `source/Transition.hx` to change how the transition looks.
 	**/
-	public static function resetState(transition:Bool = true)
-	{
+	public static function resetScene(transition:Bool = true) {
 		FlxTransitionableState.skipNextTransOut = !transition;
-		if (transition)
-		{
+		if (transition) {
 			FlxG.state.openSubState(new Transition(0.45, false));
-			Transition.finishCallback = function()
-			{
-				if (Std.isOfType(FlxG.state, states.ScriptedState))
-					FlxG.switchState(new ScriptedState(cast(FlxG.state, ScriptedState).name, cast(FlxG.state, ScriptedState).args));
+			Transition.finishCallback = function() {
+				if (Std.isOfType(FlxG.state, scenes.ScriptedScene))
+					FlxG.switchState(new ScriptedScene(cast(FlxG.state, ScriptedScene).name, cast(FlxG.state, ScriptedScene).args));
 				else
 					FlxG.resetState();
 			};
-			if (Std.isOfType(FlxG.state, states.ScriptedState))
-				return #if DEBUG_PRINTING print('debug', 'Reloaded state states.ScriptedState [${cast(FlxG.state, ScriptedState).name}] (transition)') #end;
+			if (Std.isOfType(FlxG.state, scenes.ScriptedScene))
+				return #if DEBUG_PRINTING print('debug', 'Reloaded state scenes.ScriptedScene [${cast(FlxG.state, ScriptedScene).name}] (transition)') #end;
 			else
 				return #if DEBUG_PRINTING print('debug', 'Reloaded state ${Type.getClassName(currentState)} (transition)') #end;
 		}
-		if (Std.isOfType(FlxG.state, states.ScriptedState)) {
-			FlxG.switchState(new ScriptedState(cast(currentState, ScriptedState).name, cast(currentState, ScriptedState).args));
-			return #if DEBUG_PRINTING print('debug', 'Reloaded state states.ScriptedState [${cast(currentState, ScriptedState).name}] (no transition)') #end;
+		if (Std.isOfType(FlxG.state, scenes.ScriptedScene)) {
+			FlxG.switchState(new ScriptedScene(cast(currentState, ScriptedScene).name, cast(currentState, ScriptedScene).args));
+			return #if DEBUG_PRINTING print('debug', 'Reloaded state scenes.ScriptedScene [${cast(currentState, ScriptedScene).name}] (no transition)') #end;
 		} else {
 			FlxG.resetState();
 			return #if DEBUG_PRINTING print('debug', 'Reloaded state ${Type.getClassName(currentState)} (no transition)') #end;
 		}
-	}
-
-	/**
-		A function for tracing/printing text with indicators for errors, warnings, and hscript prints.
-	**/
-	public static function print(type:String, text:String)
-	{
-		switch (type.toLowerCase())
-		{
-			case "debug":
-				trace('${ansiColors["cyan"]}[   DEBUG   ] ${ansiColors["default"]}' + text);
-				Init.log('debug', text);
-				return;
-
-			case "error":
-				trace('${ansiColors["red"]}[   ERROR   ] ${ansiColors["default"]}' + text);
-				Init.log('error', text);
-				return;
-
-			case "warn" | "warning":
-				trace('${ansiColors["yellow"]}[  WARNING  ] ${ansiColors["default"]}' + text);
-				Init.log('warning', text);
-				return;
-
-			case "hxs" | "hscript":
-				trace('${ansiColors["orange"]}[  HSCRIPT  ] ${ansiColors["default"]}' + text);
-				Init.log('hscript', text);
-				return;
-		}
-		trace(text);
-		Init.log('trace', text);
-		return;
-	}
-
-	/**
-	 * Get the time in seconds.
-	 * @param abs Whether the timestamp is absolute or relative to the start time.
-	 */
-	public static function getTime(abs:Bool = false):Float
-	{
-		#if sys
-		// Use this one on CPP and Neko since it's more accurate.
-		return abs ? Sys.time() : (Sys.time() - startTime);
-		#else
-		// This one is more accurate on non-CPP platforms.
-		return abs ? Date.now().getTime() : (Date.now().getTime() - startTime);
-		#end
 	}
 }
