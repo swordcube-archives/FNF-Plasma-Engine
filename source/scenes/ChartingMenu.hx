@@ -93,6 +93,8 @@ class ChartingMenu extends Scene
 			};
 		}
 
+		if(SONG.stage == null) SONG.stage = "stage";
+
         var bg:FlxSprite = new FlxSprite().loadGraphic(Assets.get(IMAGE, Paths.image("menuBGGradient")));
         bg.alpha = 0.2;
         bg.scrollFactor.set();
@@ -234,18 +236,49 @@ class ChartingMenu extends Scene
             }
         }
 
-		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String) {
+		var stages:Array<String> = [];
+        var basePath:String = '${Sys.getCwd()}assets/';
+        for(folder in FileSystem.readDirectory(basePath)) {
+            if(FileSystem.exists(basePath+folder) && FileSystem.isDirectory(basePath+folder)) {
+                if(FileSystem.exists(basePath+folder+"/stages")) {
+                    for(item in FileSystem.readDirectory(basePath+folder+"/stages")) {
+                        if(FileSystem.exists(basePath+folder+"/stages/"+item) && !FileSystem.isDirectory(basePath+folder+"/stages/"+item)) {
+                            stages.push(item.split("."+Path.extension(item))[0]);
+                        }
+                    }
+                }
+            }
+        }
+
+		var player2DropDown = new FlxUIDropDownMenu(10, 125, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String) {
+			SONG.player2 = characters[Std.parseInt(character)];
+            updateHeads();
+		});
+		player2DropDown.selectedLabel = SONG.player2;
+
+		var opponentText:FlxText = new FlxText(player2DropDown.x, player2DropDown.y - 15, 0, "Opponent");
+
+		var player1DropDown = new FlxUIDropDownMenu(140, 125, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String) {
 			SONG.player1 = characters[Std.parseInt(character)];
             updateHeads();
 		});
 		player1DropDown.selectedLabel = SONG.player1;
 
-		var player2DropDown = new FlxUIDropDownMenu(140, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String) {
-			SONG.player2 = characters[Std.parseInt(character)];
-            updateHeads();
-		});
+		var playerText:FlxText = new FlxText(player1DropDown.x, player1DropDown.y - 15, 0, "Player");
 
-		player2DropDown.selectedLabel = SONG.player2;
+		var gfDropDown = new FlxUIDropDownMenu(10, 165, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String) {
+			SONG.gf = characters[Std.parseInt(character)];
+		});
+		gfDropDown.selectedLabel = SONG.gf;
+
+		var gfText:FlxText = new FlxText(gfDropDown.x, gfDropDown.y - 15, 0, "Girlfriend");
+		
+		var stageDropDown = new FlxUIDropDownMenu(140, 165, FlxUIDropDownMenu.makeStrIdLabelArray(stages, true), function(stage:String) {
+			SONG.stage = stages[Std.parseInt(stage)];
+		});
+		stageDropDown.selectedLabel = SONG.stage;
+
+		var stageText:FlxText = new FlxText(stageDropDown.x, stageDropDown.y - 15, 0, "Stage");
 
 		var tab_groupSONG = new FlxUI(null, UI_box);
 		tab_groupSONG.name = "Song";
@@ -258,8 +291,14 @@ class ChartingMenu extends Scene
 		tab_groupSONG.add(loadAutosaveBtn);
 		tab_groupSONG.add(stepperBPM);
 		tab_groupSONG.add(stepperSpeed);
-		tab_groupSONG.add(player1DropDown);
+		tab_groupSONG.add(opponentText);
+		tab_groupSONG.add(playerText);
+		tab_groupSONG.add(gfText);
+		tab_groupSONG.add(stageText);
+		tab_groupSONG.add(gfDropDown);
+		tab_groupSONG.add(stageDropDown);
 		tab_groupSONG.add(player2DropDown);
+		tab_groupSONG.add(player1DropDown);
 
 		UI_box.addGroup(tab_groupSONG);
 		UI_box.scrollFactor.set();

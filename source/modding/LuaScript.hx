@@ -401,8 +401,9 @@ class LuaScript extends Script {
 		}
     }
 
-	public static function getPropertyLoopThingWhatever(split:Array<String>, ?getProperty:Bool=true):Dynamic {
-		var obj:Dynamic = getLuaObject(split[0]);
+	public static function getPropertyLoopThingWhatever(split:Array<String>, ?getProperty:Bool=true, ?instance:Dynamic):Dynamic {
+		var obj:Dynamic = instance != null ? Reflect.getProperty(instance, split[0]) : getLuaObject(split[0]);
+		
 		var end = split.length;
 		if(getProperty) end = split.length-1;
 
@@ -419,8 +420,7 @@ class LuaScript extends Script {
 				var retVal:Dynamic = PlayState.current.luaVars.get(shit[0]);
 				if(retVal != null)
 					blah = retVal;
-			}
-			else
+			} else
 				blah = Reflect.getProperty(instance, shit[0]);
 
 			for (i in 1...shit.length) {

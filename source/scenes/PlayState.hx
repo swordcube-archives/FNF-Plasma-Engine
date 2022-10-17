@@ -248,6 +248,8 @@ class PlayState extends Scene {
 		if(SONG.gf != null)
 			gfVersion = SONG.gf;
 
+		SONG.gf = gfVersion;
+
 		// Load song's script
 		script = Script.createScript('songs/${SONG.song.toLowerCase()}/script');
 		if(script.type == "hscript")

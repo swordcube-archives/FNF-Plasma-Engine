@@ -126,7 +126,7 @@ class Character extends Sprite {
     public var healthBarColor:FlxColor = FlxColor.BLACK;
 
     public var curDanceStep:Int = 0;
-	public var danceSteps:Array<String> = [];
+	public var danceSteps:Array<String> = ["idle"];
 	public var canDance:Bool = true;
 
 	public var isPlayer:Bool = false;
@@ -181,42 +181,43 @@ class Character extends Sprite {
                 // i hate working with lua everything has to be a function and it sucks omfg
                 var script:LuaScript = cast this.script;
                 script.set("curCharacter", curCharacter);
-                script.setFunction("getSparrow", function(path:String, ?mod:Null<String>, useRootFolder:Bool = true) {
-                    return Assets.get(SPARROW, Paths.image(path, mod, useRootFolder));
+                script.setFunction("loadSparrow", function(path:String, ?mod:Null<String>, useRootFolder:Bool = true) {
+                    frames = Assets.get(SPARROW, Paths.image(path, mod, useRootFolder));
                 });
-                script.setFunction("getPacker", function(path:String, ?mod:Null<String>, useRootFolder:Bool = true) {
-                    return Assets.get(PACKER, Paths.image(path, mod, useRootFolder));
+                script.setFunction("loadPacker", function(path:String, ?mod:Null<String>, useRootFolder:Bool = true) {
+                    frames = Assets.get(PACKER, Paths.image(path, mod, useRootFolder));
                 });
-                script.setFunction("getProperty", function(object:String, variable:String) {
-                    var result:Dynamic = null;
-                    var split:Array<String> = variable.split('.');
-                    if(split.length > 1)
-                        result = LuaScript.getVarInArray(LuaScript.getPropertyLoopThingWhatever(split), split[split.length-1]);
-                    else
-                        result = LuaScript.getVarInArray(this, variable);
-        
-                    if(result == null) llua.Lua.pushnil(script.lua);
-                    return result;
-                });
-                script.setFunction("setProperty", function(variable:String, value:Dynamic) {
-                    var split:Array<String> = variable.split('.');
-                    if(split.length > 1) {
-                        LuaScript.setVarInArray(LuaScript.getPropertyLoopThingWhatever(split), split[split.length-1], value);
-                        return true;
-                    }
-                    LuaScript.setVarInArray(this, variable, value);
-                    return true;
-                });
+				script.setFunction("getProperty", function(object:String, variable:String) {
+					var result:Dynamic = null;
+					var split:Array<String> = variable.split('.');
+					if(split.length > 1)
+						result = LuaScript.getVarInArray(LuaScript.getPropertyLoopThingWhatever(split, true, this), split[split.length-1]);
+					else
+						result = LuaScript.getVarInArray(this, variable);
+		
+					if(result == null) llua.Lua.pushnil(script.lua);
+					return result;
+				});
+				script.setFunction("setProperty", function(variable:String, value:Dynamic) {
+					var split:Array<String> = variable.split('.');
+					if(split.length > 1) {
+						LuaScript.setVarInArray(LuaScript.getPropertyLoopThingWhatever(split, true, this), split[split.length-1], value);
+						return true;
+					}
+					LuaScript.setVarInArray(this, variable, value);
+					return true;
+				});
                 
                 // animation functions grrr >:((
                 script.setFunction("addAnim", function(type:String = "PREFIX", name:String, prefix:String, fps:Int, loop:Bool = false, ?offsets:Array<Float>, ?indices:Array<Int>) {
+					if(offsets == null) offsets = [0, 0];
                     switch(type.toLowerCase()) {
                         case "prefix": addAnim(PREFIX, name, prefix, fps, loop, {x:offsets[0], y:offsets[1]}, indices);
                         case "indices": addAnim(INDICES, name, prefix, fps, loop, {x:offsets[0], y:offsets[1]}, indices);
                     }
                 });
-                script.setFunction("playAnim", playAnim);
-                script.setFunction("dance", dance);
+                script.setFunction("playAnim", function(anim:String, force:Bool = false, reversed:Bool = false, frame:Int = 0) {playAnim(anim, force, reversed, frame);});
+                script.setFunction("dance", function() {dance();});
                 script.setFunction("setOffset", setOffset);
 
                 // loading functions
@@ -226,6 +227,8 @@ class Character extends Sprite {
             #end
         }
         script.start();
+		if(animation.curAnim == null)
+			dance();
 
         this.x = ogPosition.x + positionOffset.x;
         this.y = ogPosition.y + positionOffset.y;
@@ -460,14 +463,12 @@ class Character extends Sprite {
 		}
 	}
 
-    override public function playAnim(anim:String, force:Bool = false, reversed:Bool = false, frame:Int = 0)
-	{
+    override public function playAnim(anim:String, force:Bool = false, reversed:Bool = false, frame:Int = 0) {
 		super.playAnim(anim, force, reversed, frame);
 		specialAnim = false;
 	}
 
-	override function update(elapsed:Float)
-	{
+	override function update(elapsed:Float) {
 		super.update(elapsed);
 
 		script.call("onUpdate", [elapsed]);
@@ -519,17 +520,21 @@ class Character extends Sprite {
 			if ((animation.curAnim != null && !animation.curAnim.name.startsWith("hair")) || animation.curAnim == null) {
 				danced = !danced;
 				
-				if(curDanceStep > danceSteps.length-1)
-					curDanceStep = 0;
+				if(danceSteps.length > 1) {
+					if(curDanceStep > danceSteps.length-1)
+						curDanceStep = 0;
 
-				playAnim(danceSteps[curDanceStep]);
-				curDanceStep++;
+					playAnim(danceSteps[curDanceStep]);
+					curDanceStep++;
+				} else {
+					playAnim(danceSteps[0]);
+				}
 			} else {
 				playAnim(danceSteps[0]);
-				curDanceStep = 1;
+				curDanceStep = danceSteps.length > 1 ? 1 : 0;
 			}
 
-			script.call("dance");
+			script.call("onDance");
 		}
 	}
 }

@@ -1,7 +1,7 @@
 -- this character is in lua
 -- because fuck you that's why
 function create()
-    setProperty('frames', getSparrow('characters/'..curCharacter..'/spritesheet'))
+    loadSparrow('characters/'..curCharacter..'/spritesheet', nil, false)
     setProperty('isPlayer', true)
     setProperty('healthIcon', 'template')
 
@@ -30,6 +30,4 @@ function create()
     setProperty('positionOffset.x', 0)
     setProperty('positionOffset.y', 350)
     setProperty('flipX', true)
-
-    dance()
 end

@@ -198,7 +198,7 @@ function update(elapsed) {
 
                 case "Restart Song":
                     PlayState_.paused = false;
-                    Main.resetState();
+                    Main.resetScene();
 
                 case "Skip Time":
                     if(curTime != Conductor.position) {
