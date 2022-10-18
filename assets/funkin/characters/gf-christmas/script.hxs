@@ -1,0 +1,3 @@
+function create() {
+    character.loadPlasmaXML(); // Haha XML go brrrrrrrrrrrrr
+}

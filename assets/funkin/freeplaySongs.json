@@ -133,6 +133,36 @@
                 "normal",
                 "hard"
             ]
+        },
+        {
+            "name": "Cocoa",
+            "icon": "parents-christmas",
+            "color": "#A0D1FF",
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "Eggnog",
+            "icon": "parents-christmas",
+            "color": "#A0D1FF",
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
+        },
+        {
+            "name": "Winter Horrorland",
+            "icon": "monster",
+            "color": "#A0D1FF",
+            "difficulties": [
+                "easy",
+                "normal",
+                "hard"
+            ]
         }
     ]
 }
