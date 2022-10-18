@@ -182,6 +182,7 @@ class HScript extends Script {
         set("ScriptedSprite", modding.ScriptedSprite);
         set("ScriptedScene", scenes.ScriptedScene);
         set("ScriptedSubscene", scenes.subscenes.ScriptedSubscene);
+        set("Character", funkin.gameplay.Character);
         set("UI_", funkin.gameplay.UI);
         set("Settings", misc.Settings);
         set("Keybinds", misc.Keybinds);

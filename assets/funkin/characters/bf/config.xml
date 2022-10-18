@@ -1,5 +1,5 @@
 <!DOCTYPE plasma-character >
-<character spritesheet="spritesheet" antialiasing="true" sing_duration="4" icon="bf" flip_x="true" dance_steps="idle" >
+<character spritesheet="spritesheet" is_player="true" antialiasing="true" sing_duration="4" death_character="bf-dead" icon="bf" flip_x="true" dance_steps="idle" >
     <animations>
         <animation name="idle" anim="BF idle dance" indices="" fps="24" looped="false" offsetX="0" offsetY="0" />
 

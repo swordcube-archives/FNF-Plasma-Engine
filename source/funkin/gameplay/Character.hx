@@ -149,6 +149,8 @@ class Character extends Sprite {
 
 	public var stunned:Bool = false;
 
+	public var initialized:Bool = false;
+
     public function new(x:Float, y:Float, isPlayer:Bool = false) {
         super(x, y);
         this.isPlayer = isPlayer;
@@ -230,8 +232,23 @@ class Character extends Sprite {
 		if(animation.curAnim == null)
 			dance();
 
+		if(isPlayer && !initialized) {
+			// Automatically adjust animation offsets for player's side
+			var oldOffsets:Array<Point> = [
+				{x:animOffsets["singLEFT"].x,y:animOffsets["singLEFT"].y},
+				{x:animOffsets["singRIGHT"].x,y:animOffsets["singRIGHT"].y},
+			];
+			animOffsets["singLEFT"] = oldOffsets[1];
+			animOffsets["singRIGHT"] = oldOffsets[0];
+			flipX = !flipX;
+		}
+
+		initialized = true;
+
         this.x = ogPosition.x + positionOffset.x;
         this.y = ogPosition.y + positionOffset.y;
+
+		return this;
     }
 
     override public function setPosition(x:Float = 0, y:Float = 0) {
@@ -247,10 +264,12 @@ class Character extends Sprite {
 
 		// Load attributes from the 'character' node aka first element.
 		frames = Assets.get(SPARROW, Paths.image('characters/$curCharacter/${data.att.spritesheet}', mod, false));
-		antialiasing = data.att.antialiasing == 'true';
+		antialiasing = data.att.antialiasing == 'true' ? Settings.get("Antialiasing") : false;
 		singDuration = Std.parseFloat(data.att.sing_duration);
 		healthIcon = data.att.icon;
 		flipX = data.att.flip_x == "true";
+
+		deathCharacter = data.has.death_character ? data.att.death_character : "bf-dead";
 		
 		// Load animations
 		var animations_node:Access = data.node.animations; // <- This is done to make the code look cleaner (aka instead of data.node.animations.nodes.animation)
@@ -281,6 +300,8 @@ class Character extends Sprite {
 		this.scale.set(Std.parseFloat(scale.att.x), Std.parseFloat(scale.att.y));
 		updateHitbox();
 		
+		// leather is based for adding this because gf in base game has 0.95 scroll factor
+		// and also it's just nice to have this
 		scrollFactor.set(Std.parseFloat(scroll.att.x), Std.parseFloat(scroll.att.y));
 
 		if (icon_color.has.hex && icon_color.att.hex != "")
@@ -291,7 +312,21 @@ class Character extends Sprite {
 		// Dance Steps moment
 		danceSteps = data.att.dance_steps.split(",");
 		for(i in 0...danceSteps.length) danceSteps[i] = danceSteps[i].trim();
-		dance();
+		if(!initialized)
+			dance();
+
+		if(isPlayer) flipX = !flipX;
+		if(!(data.has.is_player && data.att.is_player == "true") && isPlayer && initialized) {
+			// Automatically adjust animation offsets for player's side
+			var oldOffsets:Array<Point> = [
+				{x:animOffsets["singLEFT"].x,y:animOffsets["singLEFT"].y},
+				{x:animOffsets["singRIGHT"].x,y:animOffsets["singRIGHT"].y},
+			];
+			animOffsets["singLEFT"] = oldOffsets[1];
+			animOffsets["singRIGHT"] = oldOffsets[0];
+		}
+
+		initialized = true;
 	}
 
 	public function loadPsychJSON() {
@@ -322,7 +357,21 @@ class Character extends Sprite {
 
 			danceSteps = animation.exists("danceLeft") && animation.exists("danceRight") ? ["danceLeft", "danceRight"] : ["idle"];
 
-			dance();
+			if(!initialized)
+            	dance();
+
+			if(isPlayer) flipX = !flipX;
+			if(isPlayer && initialized) {
+				// Automatically adjust animation offsets for player's side
+				var oldOffsets:Array<Point> = [
+					animOffsets["singLEFT"],
+					animOffsets["singRIGHT"],
+				];
+				animOffsets["singLEFT"] = oldOffsets[1];
+				animOffsets["singRIGHT"] = oldOffsets[0];
+			}
+
+			initialized = true;
 		}
 	}
 
@@ -353,7 +402,21 @@ class Character extends Sprite {
             scale.set(json.scale, json.scale);
             updateHitbox();
 
-            dance();
+			if(!initialized)
+            	dance();
+
+			if(isPlayer && initialized) {
+				// Automatically adjust animation offsets for player's side
+				var oldOffsets:Array<Point> = [
+					animOffsets["singLEFT"],
+					animOffsets["singRIGHT"],
+				];
+				animOffsets["singLEFT"] = oldOffsets[1];
+				animOffsets["singRIGHT"] = oldOffsets[0];
+				flipX = !flipX;
+			}
+
+			initialized = true;
         }
     }
 
@@ -407,12 +470,8 @@ class Character extends Sprite {
 
 			if(animation.exists("firstDeath"))
 				playAnim("firstDeath");
-			else {
-				if(config.dancesLeftAndRight)
-					playAnim("danceRight");
-				else
-					playAnim("idle");
-			}
+			else if(!initialized)
+				dance();
 
 			if(debugMode)
 				flipX = config.defaultFlipX;
@@ -460,6 +519,8 @@ class Character extends Sprite {
 				var offset_data:Array<String> = offset_string.split(" ");
 				setOffset(offset_data[0], Std.parseFloat(offset_data[1]), Std.parseFloat(offset_data[2]));
 			}
+
+			initialized = true;
 		}
 	}
 
@@ -492,12 +553,24 @@ class Character extends Sprite {
 		}
 
 		if (!isPlayer) {
-			if (animation.curAnim != null && animation.curAnim.name.startsWith('sing'))
-				holdTimer += elapsed * (FlxG.state == PlayState.current ? PlayState.songMultiplier : 1.0);
+			if (!debugMode) {
+				if (animation.curAnim != null && animation.curAnim.name.startsWith('sing'))
+					holdTimer += elapsed * (FlxG.state == PlayState.current ? PlayState.songMultiplier : 1.0);
 
-			if (holdTimer >= Conductor.stepCrochet * singDuration * 0.001) {
-				dance();
-				holdTimer = 0;
+				if (holdTimer >= Conductor.stepCrochet * singDuration * 0.001) {
+					dance();
+					holdTimer = 0;
+				}
+			}
+		} else {
+			if (!debugMode) {
+				if (animation.curAnim != null && animation.curAnim.name.startsWith('sing'))
+					holdTimer += elapsed * (FlxG.state == PlayState.current ? PlayState.songMultiplier : 1.0);
+				else
+					holdTimer = 0;
+	
+				if (animation.curAnim != null && animation.curAnim.name.endsWith('miss') && animation.curAnim.finished)
+					playAnim('idle', true, false, 10);
 			}
 		}
 

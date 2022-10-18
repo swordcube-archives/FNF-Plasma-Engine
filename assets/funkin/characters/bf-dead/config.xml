@@ -1,0 +1,16 @@
+<!DOCTYPE plasma-character >
+<character spritesheet="spritesheet" is_player="true" antialiasing="true" sing_duration="4" death_character="bf-dead" icon="bf" flip_x="true" dance_steps="idle" >
+    <animations>
+        <animation name="firstDeath" anim="BF dies" indices="" fps="24" looped="false" offsetX="37" offsetY="11" />
+        <animation name="deathLoop" anim="BF Dead Loop" indices="" fps="24" looped="false" offsetX="37" offsetY="5" />
+        <animation name="deathConfirm" anim="BF Dead confirm" indices="" fps="24" looped="false" offsetX="37" offsetY="69" />
+    </animations>
+
+    <global_pos offsetX="0" offsetY="0" />
+    <scale x="1" y="1" />
+    <scroll x="1" y="1" />
+
+    <color r="49" g="176" b="209" hex="" />
+
+    <camera offsetX="0" offsetY="0" />
+</character>

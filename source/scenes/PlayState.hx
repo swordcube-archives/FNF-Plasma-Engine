@@ -9,7 +9,6 @@ import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
 import funkin.Ranking;
 import funkin.Song;
-import funkin.gameplay.Boyfriend;
 import funkin.gameplay.Character;
 import funkin.gameplay.Note;
 import funkin.gameplay.StageGroup;
@@ -72,10 +71,10 @@ class PlayState extends Scene {
 
 	public var dad:Character;
 	public var gf:Character;
-	public var bf:Boyfriend;
+	public var bf:Character;
 
 	public var dads:Array<Character> = [];
-	public var bfs:Array<Boyfriend> = [];
+	public var bfs:Array<Character> = [];
 
 	public var script:Script;
     public var scripts:ScriptGroup = new ScriptGroup([]);
@@ -334,16 +333,14 @@ class PlayState extends Scene {
 
 			// Load characters
 			var pos:FlxPoint = stage.dadPosition;
-			dad = new Character(pos.x, pos.y);
-			dad.loadCharacter(SONG.player2);
+			dad = new Character(pos.x, pos.y).loadCharacter(SONG.player2);
 			dad.isPlayer = false;
 			dads.push(dad);
 			add(stage.layeredSprites[0]);
 
 			var pos:FlxPoint = stage.gfPosition;
 			if(SONG.player2 != gfVersion) {
-				gf = new Character(pos.x, pos.y);
-				gf.loadCharacter(gfVersion);
+				gf = new Character(pos.x, pos.y).loadCharacter(gfVersion);
 				add(gf);
 				add(stage.layeredSprites[1]);
 				add(dad);
@@ -354,9 +351,7 @@ class PlayState extends Scene {
 			}
 			
 			var pos:FlxPoint = stage.bfPosition;
-			bf = new Boyfriend(pos.x, pos.y);
-			bf.loadCharacter(SONG.player1);
-			bf.flipX = !bf.flipX;
+			bf = new Character(pos.x, pos.y, true).loadCharacter(SONG.player1);
 			add(bf);
 			bfs.push(bf);
 			add(stage.layeredSprites[2]);

@@ -1,6 +1,5 @@
 import flixel.math.FlxPoint;
 import flixel.FlxObject;
-import funkin.gameplay.Boyfriend;
 import funkin.Controls;
 
 var music:Sound;
@@ -12,7 +11,7 @@ var freakyMenu:Sound;
 
 var camFollowPos:FlxObject;
 
-var boyfriend:Boyfriend;
+var boyfriend:Character;
 
 var updateCamera:Bool = false;
 
@@ -20,9 +19,7 @@ function create(x, y, camX, camY, character) {
     FlxG.sound.music.stop();
     PlayState.vocals.stop();
     
-    boyfriend = new Boyfriend(x, y);
-    boyfriend.loadCharacter(character);
-    boyfriend.flipX = !boyfriend.flipX;
+    boyfriend = new Character(x, y, true).loadCharacter(character);
     add(boyfriend);
 
     music = Paths.music("gameOver");

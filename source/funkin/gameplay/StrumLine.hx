@@ -394,6 +394,9 @@ class StrumLine extends FlxTypedSpriteGroup<StrumNote> {
                         var ret:Dynamic = PlayState.current.scripts.call("onNoteMiss", [note.strumTime, note.noteData, note.isSustain], true, [note]);
                         var ret2:Dynamic = PlayState.current.scripts.call("noteMiss", [note.strumTime, note.noteData, note.isSustain], true, [note]);
                         if(!note.isSustain && ret != false && ret2 != false) {
+                            if(PlayState.current.combo >= 10)
+                                PlayState.current.gf.playAnim("sad");
+                            
                             PlayState.current.combo = 0;
                             PlayState.current.songMisses++;
                             

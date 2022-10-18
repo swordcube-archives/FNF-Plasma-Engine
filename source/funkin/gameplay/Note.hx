@@ -54,6 +54,9 @@ class Note extends Sprite {
 
     public var colorShader:ColorShader = new ColorShader(255, 0, 0);
 
+    // Only used for the charter! lmao!
+    public var mustPress:Bool = false;
+
     public function new(x:Float, y:Float, noteData:Int, isSustain:Bool = false) {
         super(x, y);
         this.noteData = noteData;

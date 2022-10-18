@@ -163,7 +163,8 @@ class ChartingMenu extends Scene
 		var tabs = [
 			{name: "Song", label: 'Song'},
 			{name: "Section", label: 'Section'},
-			{name: "Note", label: 'Note'}
+			{name: "Note", label: 'Note'},
+			{name: "Charting", label: 'Charting'}
 		];
 
 		UI_box = new FlxUITabMenu(null, tabs, true);
@@ -176,6 +177,7 @@ class ChartingMenu extends Scene
 		addSongUI();
 		addSectionUI();
 		addNoteUI();
+		addChartingUI();
         updateGrid();
         updateHeads();
 
@@ -186,6 +188,25 @@ class ChartingMenu extends Scene
 
         Conductor.position = 0;
         FlxG.sound.music.time = 0;
+	}
+
+	var hitsoundsOpponent:FlxUICheckBox;
+	var hitsoundsPlayer:FlxUICheckBox;
+
+	function addChartingUI() {
+		hitsoundsOpponent = new FlxUICheckBox(10, 10, null, null, "Enable Hitsounds (Opponent)", 100);
+		hitsoundsOpponent.checked = false;
+
+		hitsoundsPlayer = new FlxUICheckBox(10, 40, null, null, "Enable Hitsounds (Player)", 100);
+		hitsoundsPlayer.checked = false;
+
+		var tab_groupCharting = new FlxUI(null, UI_box);
+		tab_groupCharting.name = "Charting";
+
+		tab_groupCharting.add(hitsoundsOpponent);
+		tab_groupCharting.add(hitsoundsPlayer);
+		
+		UI_box.addGroup(tab_groupCharting);
 	}
 
 	function addSongUI():Void {
@@ -649,7 +670,8 @@ class ChartingMenu extends Scene
 				note.alpha = 0.4;
                 if(note.strumTime > lastConductorPos && FlxG.sound.music.playing && note.noteData > -1) {
 					if(!playedSound[note.noteData % SONG.keyCount]) {
-                        FlxG.sound.play(Assets.get(SOUND, Paths.sound("hitsound")));
+						if((hitsoundsOpponent.checked && !note.mustPress) || (hitsoundsPlayer.checked && note.mustPress))
+                        	FlxG.sound.play(Assets.get(SOUND, Paths.sound("hitsound")));
                         playedSound[note.noteData % SONG.keyCount] = true;
 					}
                 }
@@ -791,6 +813,10 @@ class ChartingMenu extends Scene
                 var daSus = i[2];
 
                 var note:Note = new Note(0, 0, daNoteInfo % SONG.keyCount, false);
+				var gottaHitNote:Bool = SONG.notes[sex].mustHitSection;
+				if (daNoteInfo > (SONG.keyCount - 1))
+					gottaHitNote = !SONG.notes[sex].mustHitSection;
+				note.mustPress = gottaHitNote;
                 note.rawStrumTime = daStrumTime;
                 note.rawNoteData = daNoteInfo;
                 note.strumTime = daStrumTime;
