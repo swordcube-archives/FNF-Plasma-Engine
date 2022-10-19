@@ -23,6 +23,7 @@
 
 	<source path="source" />
 	<assets path="assets" />
+	<assets path="info" />
 
 	<!-- ____________________________ Engine Settings ___________________________ -->
 
@@ -66,4 +67,18 @@
 	<icon path="art/icon256.png" size="256"/>
 	<icon path="art/icon512.png" size="512"/>
 	<icon path="art/iconOG.png"/>
+
+	<!-- ________________________________ Misc ________________________________ -->
+	<haxeflag name="-dce" value="no" />
+
+	<!-- This is here so every flixel library gets compiled into the game so you can import them in HScript -->
+	<haxeflag name="--macro" value="include('flixel')" />
+	<haxeflag name="--macro" value="include('sys')" />
+
+	<!-- Haxe Shit that also gets imported 👍👍👍👍👍👍👍 -->
+	<haxeflag name="--macro" value="include('DateTools')" />
+	<haxeflag name="--macro" value="include('EReg')" />
+	<haxeflag name="--macro" value="include('Lambda')" />
+	<haxeflag name="--macro" value="include('StringBuf')" />
+	<haxeflag name="--macro" value="include('haxe.crypto')" />
 </project>

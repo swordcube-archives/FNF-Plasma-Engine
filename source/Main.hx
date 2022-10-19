@@ -23,6 +23,7 @@ class Main extends Sprite {
 	};
 
 	public static var engineVersion:String = "1.0.0";
+	public static var buildNumber:String = macros.BuildInfo.getBuildNumber();
 
 	/**
 		The frames per second (FPS) of the game. Change this variable to instantly change the FPS.

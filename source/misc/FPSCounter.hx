@@ -1,5 +1,6 @@
 package misc;
 
+import external.memory.Memory;
 import flixel.FlxG;
 import lime.app.Application;
 import openfl.Lib;
@@ -16,8 +17,6 @@ import openfl.text.TextFormat;
 class FPSCounter extends TextField {
 	//                                      fps   mem   version
 	public var infoDisplayed:Array<Bool> = [true, true, true];
-
-	public var memPeak:Int = 0;
 	public var currentFPS:Int = 0;
 
 	var fpsCounter:FPS;
@@ -42,21 +41,15 @@ class FPSCounter extends TextField {
 		height = FlxG.height;
 	}
 
-	private function onEnter(event:Event)
-	{
+	private function onEnter(event:Event) {
 		currentFPS = fpsCounter.currentFPS;
 		infoDisplayed = [true, true, true];
 
-		if (visible)
-		{
+		if (visible) {
 			text = "";
-
-			for (i in 0...infoDisplayed.length)
-			{
-				if (infoDisplayed[i])
-				{
-					switch (i)
-					{
+			for (i in 0...infoDisplayed.length) {
+				if (infoDisplayed[i]) {
+					switch (i) {
 						case 0:
 							// FPS
                             if (Settings.get('Show FPS'))
@@ -79,30 +72,24 @@ class FPSCounter extends TextField {
 			text = "";
 	}
 
-	function fps_Function()
-	{
+	function fps_Function() {
         if (!Settings.get('Simplify Info'))
 		text += "FPS: " + currentFPS;
         else
         text += currentFPS + 'fps';
 	}
 
-	function memory_Function()
-	{
-		if (System.totalMemory > memPeak)
-			memPeak = System.totalMemory;
-
+	function memory_Function() {
         if (!Settings.get('Simplify Info'))
-		text += "MEM: " + Main.getSizeLabel(System.totalMemory) + " / " + Main.getSizeLabel(memPeak);
+		text += "MEM: " + Main.getSizeLabel(Memory.getCurrentUsage()) + " / " + Main.getSizeLabel(Memory.getPeakUsage());
         else
-        text += Main.getSizeLabel(System.totalMemory);
+        text += Main.getSizeLabel(Memory.getCurrentUsage());
 	}
 
-	function version_Function()
-	{
+	function version_Function() {
         if (!Settings.get('Simplify Info'))
-		text += "Version: " + Main.engineVersion;
+		text += "Version: " + Main.engineVersion + " (Build: " + Main.buildNumber + ")";
         else
-		text += 'v'+Main.engineVersion;
+		text += 'v'+Main.engineVersion+' (b${Main.buildNumber})';
 	}
 }

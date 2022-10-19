@@ -1,13 +1,5 @@
 package modding;
 
-import flixel.addons.display.FlxBackdrop;
-import flixel.addons.display.FlxRuntimeShader;
-import flixel.effects.FlxFlicker;
-import flixel.effects.particles.FlxEmitter.FlxTypedEmitter;
-import flixel.effects.particles.FlxEmitter;
-import flixel.util.typeLimit.OneOfFour;
-import flixel.util.typeLimit.OneOfThree;
-import flixel.util.typeLimit.OneOfTwo;
 import hscript.Expr;
 import hscript.Interp;
 import hscript.Parser;
