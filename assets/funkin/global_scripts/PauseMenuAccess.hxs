@@ -1,9 +1,0 @@
-import funkin.Controls;
-function update(delta:Float) {
-    if(Controls.ACCEPT_P) {
-        FlxG.state.persistentUpdate = false;
-        FlxG.state.persistentDraw = true;
-        PlayState_.paused = true;
-        openSubState(new ScriptedSubscene("PauseMenu"));
-    }
-}

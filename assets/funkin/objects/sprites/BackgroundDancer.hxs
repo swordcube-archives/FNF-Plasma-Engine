@@ -1,6 +1,0 @@
-var danceDir:Bool = false;
-
-function dance() {
-    danceDir = !danceDir;
-    playAnim(danceDir ? 'danceRight' : "danceLeft", true);
-}

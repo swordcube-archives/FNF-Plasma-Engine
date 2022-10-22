@@ -1,9 +1,0 @@
-var testVariable:String = "your mom";
-
-function create() {
-    trace("TestClass has been createdsd!!!!vgftuyiwud");
-}
-
-function balls() {
-    Main.print("debug", "ding");
-}
