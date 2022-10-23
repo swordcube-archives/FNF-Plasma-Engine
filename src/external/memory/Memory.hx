@@ -16,19 +16,11 @@ extern class Memory {
     public static function getCurrentUsage():Int;
 }
 #else
-import openfl.system.System;
-
 /**
- * If you are not running on a CPP Platform, The `totalMemory` variable from `openfl.system.System` gets used instead!
- * Doesn't work on HTML5!
- * @author swordcube
+ * fuck you
  */
 class Memory {
-    public static var peak:Int = 0;
-    public static function getPeakUsage():Int { 
-        if(System.totalMemory > peak) peak = System.totalMemory;
-        return peak;
-    };
-    public static function getCurrentUsage():Int { return System.totalMemory; };
+    public static function getPeakUsage():Int { return 0; };
+    public static function getCurrentUsage():Int { return 0; };
 }
 #end

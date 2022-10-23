@@ -16,6 +16,7 @@ class Main extends Sprite {
 	public function new() {
 		super();
 		Console.init();
+		FlxTransitionableState.skipNextTransOut = true;
 		addChild(new FlxGame(1280, 720, currentState, 1, 1000, 1000, true));
 		addChild(fpsCounter = new FPSCounter(10, 3, 0xFFFFFFFF));
 		FlxG.fixedTimestep = false;

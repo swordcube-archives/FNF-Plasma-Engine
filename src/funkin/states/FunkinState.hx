@@ -56,7 +56,12 @@ class FunkinState extends FlxState {
             stepHit(curStep);
 
         if (oldBeat != curBeat && curBeat > 0)
-            beatHit(curStep);
+            beatHit(curBeat);
+
+		#if debug
+		if(FlxG.keys.justPressed.F5)
+			Main.resetState();
+		#end
 
         super.update(elapsed);
     }

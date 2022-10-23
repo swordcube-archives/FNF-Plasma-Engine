@@ -1,9 +1,11 @@
 package base;
 
+import flixel.util.FlxColor;
+
 class Sprite extends flixel.FlxSprite {
     public var offsets:Map<String, BasicPoint> = [];
 
-    public function new(x:Float, y:Float) {
+    public function new(x:Float = 0, y:Float = 0) {
         super(x, y);
         antialiasing = true;
     }
@@ -19,11 +21,18 @@ class Sprite extends flixel.FlxSprite {
         return this;
     }
 
+    override public function makeGraphic(width:Int, height:Int, color:FlxColor = FlxColor.WHITE, unique:Bool = false, ?key:Null<String>):Sprite {
+        return cast super.makeGraphic(width,height,color,unique,key);
+    }
+
     public function addAnim(name:String, prefix:String, fps:Int = 24, loop:Bool = false, ?offsets:BasicPoint) {
         animation.addByPrefix(name, prefix, fps, loop);
 
+        // offsets are inverted becuase flixel is like
+        // forward = negative, negative = forward
+        // by default
         if(offsets != null)
-            this.offsets.set(name, offsets);
+            this.offsets.set(name, {x: -offsets.x, y: -offsets.y});
         else
             this.offsets.set(name, {x: 0, y: 0});
     }
@@ -31,14 +40,20 @@ class Sprite extends flixel.FlxSprite {
     public function addAnimByIndices(name:String, prefix:String, indices:Array<Int>, fps:Int = 24, loop:Bool = false, ?offsets:BasicPoint) {
         animation.addByIndices(name, prefix, indices, "", fps, loop);
 
+        // offsets are inverted becuase flixel is like
+        // forward = negative, negative = forward
+        // by default
         if(offsets != null)
-            this.offsets.set(name, offsets);
+            this.offsets.set(name, {x: -offsets.x, y: -offsets.y});
         else
             this.offsets.set(name, {x: 0, y: 0});
     }
 
     public function setOffset(name:String, x:Float = 0, y:Float = 0) {
-        this.offsets.set(name, {x: x, y: y});
+        // offsets are inverted becuase flixel is like
+        // forward = negative, negative = forward
+        // by default
+        this.offsets.set(name, {x: -x, y: -y});
     }
 
     public function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame:Int = 0) {

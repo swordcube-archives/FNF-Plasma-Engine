@@ -1,5 +1,6 @@
 // Flixel
 import flixel.FlxG;
+import flixel.util.FlxColor;
 
 // Assets
 import base.assets.Assets;
