@@ -13,6 +13,7 @@ class TitleScreen extends FunkinState {
 
     var danced:Bool = true;
 
+    var startedIntro:Bool = false;
     var skippedIntro:Bool = false;
     var accepted:Bool = false;
 
@@ -66,6 +67,7 @@ class TitleScreen extends FunkinState {
         add(textGroup);
 
         new FlxTimer().start(1, function(t:FlxTimer) {
+            startedIntro = true;
             if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
                 FlxG.sound.playMusic(Assets.load(SOUND, Paths.music("menus/titleScreen")));
         });
@@ -93,7 +95,7 @@ class TitleScreen extends FunkinState {
         if(FlxG.sound.music != null)
             Conductor.position = FlxG.sound.music.time;
 
-        if(FlxG.keys.justPressed.ENTER) {
+        if(FlxG.keys.justPressed.ENTER && startedIntro) {
             if(!skippedIntro)
                 skipIntro();
             else if(!accepted) {

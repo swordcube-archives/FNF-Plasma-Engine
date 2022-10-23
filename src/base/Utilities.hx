@@ -1,5 +1,8 @@
 package base;
 
+import haxe.xml.Access;
+import funkin.states.FreeplayMenu.FreeplaySong;
+
 using StringTools;
 
 class Utilities {
@@ -9,6 +12,14 @@ class Utilities {
 		var p = execPath.replace("\\", "/").split("/");
 		var execName = p.pop(); // interesting
 		Sys.setCwd(p.join("\\") + "\\");
+	}
+
+	public static function openURL(url:String) {
+		#if linux
+		Sys.command('/usr/bin/xdg-open', [url, "&"]);
+		#else
+		FlxG.openURL(url);
+		#end
 	}
 
 	public static function getOS() {
@@ -33,5 +44,27 @@ class Utilities {
 
 		size = Math.round(size * 100) / 100;
 		return size + dataTexts[data]; // smth like 100mb
+	}
+
+	public static function trimArray(a:Array<String>):Array<String> {
+		var f:Array<String> = [];
+		for(i in a) f.push(i.trim());
+		return f;
+	}
+
+	public static function loadSongListXML(text:String) {
+		var retArray:Array<FreeplaySong> = [];
+		var data = new Access(Xml.parse(text).firstElement());
+		for (song in data.nodes.song) {
+			var newSong:FreeplaySong = {
+				song: song.att.name,
+				displayName: song.has.displayName ? song.att.displayName : song.att.name,
+				character: song.att.character,
+				color: FlxColor.fromString(song.att.color),
+				difficulties: trimArray(song.att.difficulties.split(","))
+			}
+			retArray.push(newSong);
+		}
+		return retArray;
 	}
 }

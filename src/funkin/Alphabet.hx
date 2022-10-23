@@ -1,5 +1,6 @@
 package funkin;
 
+import flixel.math.FlxMath;
 import base.BasicPoint;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 
@@ -13,6 +14,13 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
     public var size:Float = 1.0;
     public var text:String = "";
 
+    public var isMenuItem:Bool = false;
+	public var forceX:Float = Math.NEGATIVE_INFINITY;
+	public var targetY:Float = 0;
+	public var yMult:Float = 120;
+	public var xAdd:Float = 0;
+	public var yAdd:Float = 0;
+
     public function new(x:Float, y:Float, font:AlphabetFont, text:String, size:Float = 1.0) {
         super(x, y);
 
@@ -22,6 +30,21 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
 
         refreshText();
     }
+
+    override function update(elapsed:Float) {
+        if (isMenuItem) {
+            var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
+
+            var lerpVal:Float = FlxMath.bound(elapsed * 9.6, 0, 1);
+            y = FlxMath.lerp(y, (scaledY * yMult) + (FlxG.height * 0.48) + yAdd, lerpVal);
+            if(forceX != Math.NEGATIVE_INFINITY)
+                x = forceX;
+            else
+                x = FlxMath.lerp(x, (targetY * 20) + 90 + xAdd, lerpVal);
+        }
+
+        super.update(elapsed);
+    }    
 
     public function refreshText() {
         for(a in members) {
@@ -44,7 +67,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
 }
 
 class AlphabetChar extends Sprite {
-    public static var supportedChars:Array<String> = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()?,.<> ".split("");
+    public static var supportedChars:Array<String> = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()?,.<>“”'\\/ ".split("");
 
     public var char:String = "";
     public var font:AlphabetFont = Bold;
@@ -82,7 +105,9 @@ class AlphabetChar extends Sprite {
             var fr = frame.frame;
             cast(shader, shaders.OutlineShader).setClip(fr.x / pixels.width, fr.y / pixels.height, fr.width / pixels.width, fr.height / pixels.height);
             scale.set(size * 1.5, size * 1.5);
-            offset.set(offsets[animation.curAnim.name].x, offsets[animation.curAnim.name].y);
+            updateHitbox();
+            offset.add(offsets[animation.curAnim.name].x, offsets[animation.curAnim.name].y);
+            offset.add(15, 10);
         } else {
             shader = null;
         }

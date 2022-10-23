@@ -1,5 +1,7 @@
 package;
 
+import openfl.ui.Keyboard;
+import openfl.events.KeyboardEvent;
 import base.FPSCounter;
 import funkin.Transition;
 import flixel.FlxState;
@@ -21,6 +23,12 @@ class Main extends Sprite {
 		addChild(fpsCounter = new FPSCounter(10, 3, 0xFFFFFFFF));
 		FlxG.fixedTimestep = false;
 		FlxG.mouse.visible = false;
+		addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent) {
+			switch(e.keyCode) {
+				case Keyboard.F11:
+					FlxG.fullscreen = !FlxG.fullscreen;
+			}
+		});
 	}
 
 	/**

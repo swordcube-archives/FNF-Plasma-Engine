@@ -19,19 +19,21 @@ class Console {
 		ansiColors['default'] = ansiColors['grey'];
     }
 
-    public static function log(text:String) {
+    public static function log(text:Dynamic) {
         Sys.println('${ansiColors["grey"]}[   TRACE   ] ${ansiColors["default"]}' + text);
     }
 
-    public static function debug(text:String) {
+    public static function debug(text:Dynamic) {
+        #if debug
         Sys.println('${ansiColors["cyan"]}[   DEBUG   ] ${ansiColors["default"]}' + text);
+        #end
     }
 
-    public static function error(text:String) {
+    public static function error(text:Dynamic) {
         Sys.println('${ansiColors["red"]}[   ERROR   ] ${ansiColors["default"]}' + text);
     }
 
-    public static function warn(text:String) {
+    public static function warn(text:Dynamic) {
         Sys.println('${ansiColors["yellow"]}[  WARNING  ] ${ansiColors["default"]}' + text);
     }
 }

@@ -1,0 +1,6 @@
+<songs>
+    <song name="tutorial" character="gf" color="#9271FD" difficulties="easy,normal,hard"/>
+    <song name="bopeebo" character="dad" color="#9271FD" difficulties="easy,normal,hard"/>
+    <song name="fresh" character="dad" color="#9271FD" difficulties="easy,normal,hard"/>
+    <song name="dad battle" character="dad" color="#9271FD" difficulties="easy,normal,hard"/>
+</songs>
