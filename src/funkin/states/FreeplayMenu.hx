@@ -105,6 +105,10 @@ class FreeplayMenu extends FunkinState {
 		if(Controls.getP("ui_right"))
 			changeDifficulty(1);
 
+		if(Controls.getP("accept")) {
+			Main.switchState(new PlayState());
+		}
+
 		if(Controls.getP("back")) {
 			FlxG.sound.play(cachedSounds["cancel"]);
 			Main.switchState(new MainMenu());
