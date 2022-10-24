@@ -9,6 +9,7 @@ import base.assets.Paths;
 // Funkin
 import base.Controls;
 import base.Conductor;
+import base.Highscore;
 
 // Utilities
 import base.Console;
