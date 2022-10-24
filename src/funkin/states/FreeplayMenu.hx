@@ -1,8 +1,12 @@
 package funkin.states;
 
+import flixel.math.FlxMath;
+import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import openfl.media.Sound;
+
+using StringTools;
 
 typedef FreeplaySong = {
 	var song:String;
@@ -16,6 +20,9 @@ typedef FreeplaySong = {
 class FreeplayMenu extends FunkinState {
 	var bg:Sprite;
 	var curSelected:Int = 0;
+	var curDifficulty:Int = 1;
+
+	static var curSpeed:Float = 1.0;
 
     var grpSongs:FlxTypedGroup<Alphabet>;
     var grpIcons:FlxTypedGroup<HealthIcon>;
@@ -24,6 +31,13 @@ class FreeplayMenu extends FunkinState {
 		"scroll" => Assets.load(SOUND, Paths.sound("menus/scrollMenu")),
 		"cancel" => Assets.load(SOUND, Paths.sound("menus/cancelMenu")),
 	];
+
+	var scoreBG:Sprite;
+	var scoreText:FlxText;
+	var diffText:FlxText;
+	var speedText:FlxText;
+	var lerpScore:Float = 0;
+	var intendedScore:Int = 0;
 
 	var songList:Array<FreeplaySong> = Utilities.loadSongListXML(Assets.load(TEXT, Paths.xml("data/freeplaySongs")));
 	var colorTween:FlxTween;
@@ -53,22 +67,71 @@ class FreeplayMenu extends FunkinState {
 			grpIcons.add(icon);
         }
 
+		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
+		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
+	
+		scoreBG = new Sprite(scoreText.x - 6, 0).makeGraphic(1, 99, 0xFF000000);
+		scoreBG.antialiasing = false;
+		scoreBG.alpha = 0.6;
+		add(scoreBG);
+	
+		diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
+		diffText.font = scoreText.font;
+		add(diffText);
+	
+		speedText = new FlxText(scoreText.x, scoreText.y + 66, 0, "", 24);
+		speedText.font = scoreText.font;
+		add(speedText);
+	
+		add(scoreText);
+
 		changeSelection();
 	}
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (Controls.getP("ui_up"))
+		updateScore();
+
+		if(Controls.getP("ui_up"))
 			changeSelection(-1);
 
-		if (Controls.getP("ui_down"))
+		if(Controls.getP("ui_down"))
 			changeSelection(1);
 
-		if (Controls.getP("back")) {
+		if(Controls.getP("ui_left"))
+			changeDifficulty(-1);
+
+		if(Controls.getP("ui_right"))
+			changeDifficulty(1);
+
+		if(Controls.getP("back")) {
 			FlxG.sound.play(cachedSounds["cancel"]);
 			Main.switchState(new MainMenu());
 		}
+	}
+
+	function updateScore() {
+		intendedScore = Highscore.getScore(songList[curSelected].song+"-"+songList[curSelected].difficulties[curDifficulty].trim());
+	
+		lerpScore = FlxMath.lerp(lerpScore, intendedScore, FlxG.elapsed * 9.0);
+	
+		scoreText.text = "PERSONAL BEST:" + Math.round(lerpScore);
+	
+		speedText.text = "Speed: " + curSpeed;
+		positionHighscore();
+	}
+	
+	function positionHighscore() {
+		scoreText.x = FlxG.width - scoreText.width - 6;
+		scoreBG.scale.x = FlxG.width - scoreText.x + 6;
+	
+		scoreBG.x = FlxG.width - scoreBG.scale.x / 2;
+		diffText.x = scoreBG.x + scoreBG.width / 2;
+		diffText.x -= diffText.width / 2;
+	
+		speedText.x = scoreBG.x + scoreBG.width / 2;
+		speedText.x -= speedText.width / 2;
 	}
 
 	function changeSelection(change:Int = 0) {
@@ -89,5 +152,17 @@ class FreeplayMenu extends FunkinState {
 		colorTween = FlxTween.color(bg, 0.45, bg.color, songList[curSelected].color);
 
 		FlxG.sound.play(cachedSounds["scroll"]);
+		changeDifficulty();
+	}
+
+	function changeDifficulty(change:Int = 0) {
+		curDifficulty += change;
+		if(curDifficulty < 0)
+			curDifficulty = songList[curSelected].difficulties.length - 1;
+		if(curDifficulty > songList[curSelected].difficulties.length - 1)
+			curDifficulty = 0;
+	
+		diffText.text = "< " + songList[curSelected].difficulties[curDifficulty].toUpperCase() + " >";
+		updateScore();
 	}
 }
