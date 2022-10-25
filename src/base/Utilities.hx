@@ -14,6 +14,17 @@ class Utilities {
 		Sys.setCwd(p.join("\\") + "\\");
 	}
 
+	/**
+	 * Converts `b1` and `b2` into either -1 or 1.
+	 * @param b1 The first `Bool`
+	 * @param b2 The second `Bool`
+	 */
+	public static function getBoolAxis(b1:Bool, b2:Bool) {
+		var num1:Float = b1 ? 1 : 0;
+		var num2:Float = b2 ? 1 : 0;
+		return num1 - num2;
+	}
+
 	public static function openURL(url:String) {
 		#if linux
 		Sys.command('/usr/bin/xdg-open', [url, "&"]);

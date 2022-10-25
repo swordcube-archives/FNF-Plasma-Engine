@@ -62,7 +62,7 @@ class FreeplayMenu extends FunkinState {
             text.ID = i;
             grpSongs.add(text);
 
-            var icon:HealthIcon = new HealthIcon(text.x, text.y, song.character);
+            var icon:HealthIcon = new HealthIcon(text.x, text.y).loadIcon(song.character);
 			icon.sprTracker = text;
 			grpIcons.add(icon);
         }
@@ -88,6 +88,8 @@ class FreeplayMenu extends FunkinState {
 		changeSelection();
 	}
 
+	var holdTimer:Float = 0.0;
+
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
@@ -99,11 +101,18 @@ class FreeplayMenu extends FunkinState {
 		if(Controls.getP("ui_down"))
 			changeSelection(1);
 
-		if(Controls.getP("ui_left"))
-			changeDifficulty(-1);
+		if(FlxG.keys.pressed.SHIFT) {
+			if (Controls.get("ui_left") || Controls.get("ui_right")) {
+				changeSpeed(Utilities.getBoolAxis(Controls.get("ui_right"), Controls.get("ui_left")) * 0.05);
+			} else holdTimer = 0;
+		} else {
+			holdTimer = 0;
+			if(Controls.getP("ui_left"))
+				changeDifficulty(-1);
 
-		if(Controls.getP("ui_right"))
-			changeDifficulty(1);
+			if(Controls.getP("ui_right"))
+				changeDifficulty(1);
+		}
 
 		if(Controls.getP("accept")) {
 			Main.switchState(new PlayState());
@@ -114,14 +123,20 @@ class FreeplayMenu extends FunkinState {
 			Main.switchState(new MainMenu());
 		}
 	}
+	
+	function changeSpeed(mult:Float) {
+		holdTimer += FlxG.elapsed;
+		if ((Controls.getP("ui_left") || Controls.getP("ui_right")) || holdTimer > 0.5) {
+			curSpeed = FlxMath.bound(FlxMath.roundDecimal(curSpeed + mult, 2), 0.05, 10);
+			holdTimer = 0.425;
+		}
+	}
 
 	function updateScore() {
 		intendedScore = Highscore.getScore(songList[curSelected].song+"-"+songList[curSelected].difficulties[curDifficulty].trim());
-	
 		lerpScore = FlxMath.lerp(lerpScore, intendedScore, FlxG.elapsed * 9.0);
 	
 		scoreText.text = "PERSONAL BEST:" + Math.round(lerpScore);
-	
 		speedText.text = "Speed: " + curSpeed;
 		positionHighscore();
 	}

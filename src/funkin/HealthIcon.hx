@@ -9,8 +9,7 @@ class HealthIcon extends Sprite {
     public var copyAlpha:Bool = true;
 
     public var char:String = "face";
-
-    public var healthIconSteps:Array<Array<Dynamic>> = [];
+    public var iconAmount:Int = 0;
     
     /**
         Ranges from 0-100.
@@ -22,11 +21,11 @@ class HealthIcon extends Sprite {
         return boundedAss;
 	}
 
-    public function new(x:Float = 0, y:Float = 0, char:String = "face") {
-        super(x, y);
-        loadIcon(char);
-    }
-
+    /**
+    * Loads an icon from "images/icons".
+    * @param char The character's icon to load
+    * @author swordcube
+    */
     public function loadIcon(char:String) {
         this.char = char;
         if(!FileSystem.exists(Paths.image('icons/$char'))) {
@@ -36,40 +35,44 @@ class HealthIcon extends Sprite {
         var iconGraphic:FlxGraphic = Assets.load(IMAGE, Paths.image('icons/$char'));
 		loadGraphic(iconGraphic, true, iconGraphic.height, iconGraphic.height);
 
-        healthIconSteps = [];
-        var bitch:Array<Int> = [for(i in 0...frames.numFrames) i];
-        var g:Int = bitch.length;
-        for(i in bitch) {
-            healthIconSteps.push([(100.0 / bitch.length) / i+1, g]);
-            g--;
-        };
-        if(healthIconSteps.length > 1) {
-            healthIconSteps[0][1] = 1;
-            healthIconSteps[1][1] = 0;
+        iconAmount = frames.numFrames;
+        var bitch = [for(i in 0...frames.numFrames) i];
+        var oldBitch = [for(i in 0...frames.numFrames) i];
+        if(bitch.length > 1) {
+            bitch[0] = oldBitch[1];
+            bitch[1] = oldBitch[0];
         }
         animation.add('icon', bitch, 0, false);
 		animation.play('icon');
-
-        if(FlxG.state == PlayState.current) {
-            trace("GUH:"+iconHealth);
-            for(shit in healthIconSteps) {
-                trace(shit[0]);
-            }
-        }
+        if(bitch.length > 1)
+            animation.curAnim.curFrame = 1;
         
         return this;
+    }
+
+    /**
+    * Gets desired icon index from specified data.
+    * @param health Amount of health from 0 to 100 to use.
+    * @param icons Amount of icons in our checks.
+    * @return Int
+    * @author Leather128
+    */
+    function getIconIndex(health:Float, icons:Int):Int {
+        for (i in 0...icons) {
+            if (health > (100.0 / icons) * (i+1)) continue;
+            
+            // finds the first icon we are less or equal to, then choose it
+            return i;
+        }
+        return 0;
     }
 
     override function update(elapsed:Float) {
         super.update(elapsed);
 
-        if(FlxG.state == PlayState.current) {
-            for(shit in healthIconSteps) {
-                if(iconHealth >= shit[0])
-                    animation.curAnim.curFrame = shit[1];
-            }
-        }
-
+        if(FlxG.state == PlayState.current)
+            animation.curAnim.curFrame = getIconIndex(iconHealth, iconAmount);
+        
         if (sprTracker != null) {
             setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - 30);
             if(copyAlpha) alpha = sprTracker.alpha;

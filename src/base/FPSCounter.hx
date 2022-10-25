@@ -30,7 +30,7 @@ class FPSCounter extends TextField {
 		var font = Paths.font('vcr.ttf'); // default font is usually _sans, but vcr looks nicer
 		defaultTextFormat = new TextFormat(font, 14, inCol);
 
-		fpsCounter = new FPS(10000, 10000, inCol);
+		fpsCounter = new FPS(-10000, -10000, inCol);
 		fpsCounter.visible = false;
 		Lib.current.addChild(fpsCounter);
 
@@ -41,7 +41,7 @@ class FPSCounter extends TextField {
 
 	private function onEnter(event:Event) {
 		currentFPS = fpsCounter.currentFPS;
-		infoDisplayed = [true, true, true];
+		infoDisplayed = [Settings.get('FPS Counter'), Settings.get('Memory Counter'), Settings.get('Display Version')];
 
 		if (visible) {
 			text = "";
@@ -49,17 +49,11 @@ class FPSCounter extends TextField {
 				if (infoDisplayed[i]) {
 					switch (i) {
 						case 0:
-							// FPS
-                            //if (Settings.get('Show FPS'))
-							fps_Function();
+							fpsFunction();
 						case 1:
-							// Memory
-                            //if (Settings.get('Show Memory'))
-							memory_Function();
+							memoryFunction();
 						case 2:
-							// Version
-                            //if (Settings.get('Show Version'))
-							version_Function();
+							versionFunction();
 					}
 
 					text += "\n";
@@ -70,24 +64,13 @@ class FPSCounter extends TextField {
 			text = "";
 	}
 
-	function fps_Function() {
-       // if (!Settings.get('Simplify Info'))
-		text += "FPS: " + currentFPS;
-        // else
-        // text += currentFPS + 'fps';
+	function fpsFunction() {
+    	text += currentFPS+' FPS';
 	}
-
-	function memory_Function() {
-        //if (!Settings.get('Simplify Info'))
-		text += "MEM: " + Utilities.getSizeLabel(Memory.getCurrentUsage()) + " / " + Utilities.getSizeLabel(Memory.getPeakUsage());
-        // else
-        // text += Main.getSizeLabel(Memory.getCurrentUsage());
+	function memoryFunction() {
+        text += Utilities.getSizeLabel(Memory.getCurrentUsage())+" / "+Utilities.getSizeLabel(Memory.getPeakUsage());
 	}
-
-	function version_Function() {
-        // if (!Settings.get('Simplify Info'))
-		text += "Version: " + Main.engineVersion;
-        // else
-		// text += 'v'+Main.engineVersion;
+	function versionFunction() {
+		text += 'v'+Main.engineVersion;
 	}
 }

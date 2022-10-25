@@ -1,5 +1,6 @@
 package;
 
+import openfl.Lib;
 import openfl.ui.Keyboard;
 import openfl.events.KeyboardEvent;
 import base.FPSCounter;
@@ -21,8 +22,17 @@ class Main extends Sprite {
 		FlxTransitionableState.skipNextTransOut = true;
 		addChild(new FlxGame(1280, 720, currentState, 1, 1000, 1000, true));
 		addChild(fpsCounter = new FPSCounter(10, 3, 0xFFFFFFFF));
+
 		FlxG.fixedTimestep = false;
 		FlxG.mouse.visible = false;
+
+		FlxG.save.bind("PlasmaEngine", "options");
+		Settings.init();
+		Controls.init();
+		Lib.current.stage.frameRate = Settings.get("Framerate Cap");
+		if(FlxG.save.data.volume != null)
+			FlxG.sound.volume = FlxG.save.data.volume;
+
 		addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent) {
 			switch(e.keyCode) {
 				case Keyboard.F11:

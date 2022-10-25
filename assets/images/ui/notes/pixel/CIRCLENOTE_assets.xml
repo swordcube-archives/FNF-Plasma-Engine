@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="arrows.png">
+    <SubTexture name="left static0000" x="0" y="0" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="down static0000" x="0" y="0" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="space static0000" x="0" y="0" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="up static0000" x="0" y="0" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="right static0000" x="0" y="0" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="left0000" x="0" y="17" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="down0000" x="0" y="17" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="space0000" x="0" y="17" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="up0000" x="0" y="17" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="right0000" x="0" y="17" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="left press0000" x="0" y="17" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="down press0000" x="0" y="17" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="space press0000" x="0" y="17" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="up press0000" x="0" y="17" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="right press0000" x="0" y="17" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="left press0001" x="0" y="34" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="down press0001" x="0" y="34" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="space press0001" x="0" y="34" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="up press0001" x="0" y="34" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="right press0001" x="0" y="34" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="left confirm0000" x="0" y="51" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="down confirm0000" x="0" y="51" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="space confirm0000" x="0" y="51" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="up confirm0000" x="0" y="51" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="right confirm0000" x="0" y="51" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="left confirm0001" x="0" y="68" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="down confirm0001" x="0" y="68" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="space confirm0001" x="0" y="68" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="up confirm0001" x="0" y="68" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="right confirm0001" x="0" y="68" width="17" height="17" frameX="0" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="left hold0000" x="0" y="85" width="7" height="17" frameX="-5" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="down hold0000" x="0" y="85" width="7" height="17" frameX="-5" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="space hold0000" x="0" y="85" width="7" height="17" frameX="-5" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="up hold0000" x="0" y="85" width="7" height="17" frameX="-5" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="right hold0000" x="0" y="85" width="7" height="17" frameX="-5" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="left tail0000" x="7" y="85" width="7" height="17" frameX="-5" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="down tail0000" x="7" y="85" width="7" height="17" frameX="-5" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="space tail0000" x="7" y="85" width="7" height="17" frameX="-5" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="up tail0000" x="7" y="85" width="7" height="17" frameX="-5" frameY="0" frameWidth="17" frameHeight="17" />
+    <SubTexture name="right tail0000" x="7" y="85" width="7" height="17" frameX="-5" frameY="0" frameWidth="17" frameHeight="17" />
+</TextureAtlas>

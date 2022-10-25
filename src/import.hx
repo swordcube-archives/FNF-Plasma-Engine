@@ -6,8 +6,11 @@ import flixel.util.FlxColor;
 import base.assets.Assets;
 import base.assets.Paths;
 
-// Funkin
+// Game
 import base.Controls;
+import base.Settings;
+
+// Funkin
 import base.Conductor;
 import base.Highscore;
 
