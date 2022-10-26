@@ -14,7 +14,11 @@ haxelib git openfl https://github.com/openfl/openfl
 haxelib install tjson
 haxelib remove flixel 4.11.0
 haxelib remove openfl 9.2.0
+haxelib remove flixel-tools
+haxelib remove flixel-ui
 ```
+(Some stuff gets removed because we either need the git version or the flixel library includes it already!)
+
 - Step 5. If you run on Windows, install [Visual Studio Community 2019](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=community&rel=16&utm_medium=microsoft&utm_source=docs.microsoft.com&utm_campaign=download+from+relnotes&utm_content=vs2019ga+button) using these specific components in `Individual Components` instead of selecting the normal options:
 ```
 * MSVC v142 - VS 2019 C++ x64/x86 build tools
