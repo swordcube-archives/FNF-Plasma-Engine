@@ -25,7 +25,7 @@
 	<haxelib name="flixel" />
 	<haxelib name="hscript-improved" />
 
-	<haxelib name="hxcpp-debug-server" if="debug" /> <!-- mmmm debugging -->
+	<haxelib name="hxcpp-debug-server" if="debug cpp" /> <!-- mmmm debugging -->
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
@@ -35,7 +35,7 @@
 	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 
-	<haxedef name="HXCPP_GC_BIG_BLOCKS" /> <!-- mmmm memory -->
+	<haxedef name="HXCPP_GC_BIG_BLOCKS" if="cpp" /> <!-- mmmm memory -->
 	<haxedef name="no-deprecation-warnings" /> <!-- heheheha -->
 
 	<!-- HScript shit!! -->
@@ -44,7 +44,7 @@
 
 	<haxeflag name="--macro" value="include('funkin')" /> <!-- Compiles the entirety of the "funkin" folder into the exe-->
 	<haxeflag name="--macro" value="include('flixel')" /> <!-- Compiles the entirety of flixel into the exe-->
-	<haxeflag name="--macro" value="include('sys')" /> <!-- Compiles the entirety of sys into the exe-->
+	<haxeflag name="--macro" value="include('sys')" /> <!-- Compiles the entirety of sys into the exe -->
 
 	<!-- _________________________________ Custom _______________________________ -->
 
