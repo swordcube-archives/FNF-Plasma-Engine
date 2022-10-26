@@ -18,6 +18,12 @@ class Paths {
     public static function sound(p:String) {
         return asset('sounds/$p$SOUND_EXT');
     }
+    public static function songInst(p:String) {
+        return asset('songs/${p.toLowerCase()}/Inst$SOUND_EXT');
+    }
+    public static function songVoices(p:String) {
+        return asset('songs/${p.toLowerCase()}/Voices$SOUND_EXT');
+    }
     public static function music(p:String) {
         return asset('music/$p$SOUND_EXT');
     }

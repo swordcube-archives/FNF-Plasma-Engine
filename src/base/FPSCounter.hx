@@ -50,8 +50,10 @@ class FPSCounter extends TextField {
 					switch (i) {
 						case 0:
 							fpsFunction();
+						#if cpp
 						case 1:
 							memoryFunction();
+						#end
 						case 2:
 							versionFunction();
 					}
@@ -67,9 +69,11 @@ class FPSCounter extends TextField {
 	function fpsFunction() {
     	text += currentFPS+' FPS';
 	}
+	#if cpp
 	function memoryFunction() {
         text += Utilities.getSizeLabel(Memory.getCurrentUsage())+" / "+Utilities.getSizeLabel(Memory.getPeakUsage());
 	}
+	#end
 	function versionFunction() {
 		text += 'v'+Main.engineVersion;
 	}

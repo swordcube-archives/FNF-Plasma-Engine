@@ -10,6 +10,8 @@ import flixel.util.FlxTimer;
 import openfl.media.Sound;
 import flixel.text.FlxText;
 
+using StringTools;
+
 class MainMenu extends FunkinState {
     var bg:Sprite;
     var magenta:Sprite;
@@ -25,6 +27,9 @@ class MainMenu extends FunkinState {
 
     override function create() {
         super.create();
+
+        if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
+            FlxG.sound.playMusic(Assets.load(SOUND, Paths.music("menus/titleScreen")));
 
         persistentUpdate = true;
         persistentDraw = true;
@@ -61,7 +66,10 @@ class MainMenu extends FunkinState {
             startExitState(new TitleScreen());
         });
 
-        var watermark:FlxText = new FlxText(5,0,0,'Plasma Engine v${Main.engineVersion}');
+        var devwarningformat = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED,  true), "<dev>");
+        var warnStringShit:String = Main.engineVersion.endsWith("-dev") ? '<dev>[UNSTABLE]<dev>' : '';
+        var watermark:FlxText = new FlxText(5,0,0,'Plasma Engine v${Main.engineVersion} $warnStringShit');
+        watermark.applyMarkup(watermark.text, [devwarningformat]);
         watermark.setFormat(Paths.font("vcr.ttf"), 17, LEFT, OUTLINE, FlxColor.BLACK);
         watermark.y = FlxG.height - (watermark.height + 5);
         watermark.scrollFactor.set();

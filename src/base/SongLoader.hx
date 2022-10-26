@@ -44,6 +44,6 @@ typedef Section = {
 }
 
 class SongLoader {
-    public static function getJSON(song:String, diff:String = "normal"):Song
+    public static function returnSong(song:String, diff:String = "normal"):Song
         return Json.parse(Assets.load(TEXT, Paths.json('songs/${song.toLowerCase()}/$diff'))).song;
 }

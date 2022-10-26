@@ -45,6 +45,9 @@ class FreeplayMenu extends FunkinState {
 	override function create() {
 		super.create();
 
+		if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
+			FlxG.sound.playMusic(Assets.load(SOUND, Paths.music("menus/titleScreen")));
+
 		bg = new Sprite().load(IMAGE, Paths.image("menus/menuBGDesat"));
 		add(bg);
 
@@ -104,9 +107,9 @@ class FreeplayMenu extends FunkinState {
 		if(FlxG.keys.pressed.SHIFT) {
 			if (Controls.get("ui_left") || Controls.get("ui_right")) {
 				changeSpeed(Utilities.getBoolAxis(Controls.get("ui_right"), Controls.get("ui_left")) * 0.05);
-			} else holdTimer = 0;
+			} else holdTimer = 0.0;
 		} else {
-			holdTimer = 0;
+			holdTimer = 0.0;
 			if(Controls.getP("ui_left"))
 				changeDifficulty(-1);
 
@@ -115,7 +118,7 @@ class FreeplayMenu extends FunkinState {
 		}
 
 		if(Controls.getP("accept")) {
-			Main.switchState(new PlayState());
+			Main.switchState(new PlayState(curSpeed));
 		}
 
 		if(Controls.getP("back")) {
@@ -126,9 +129,10 @@ class FreeplayMenu extends FunkinState {
 	
 	function changeSpeed(mult:Float) {
 		holdTimer += FlxG.elapsed;
-		if ((Controls.getP("ui_left") || Controls.getP("ui_right")) || holdTimer > 0.5) {
+		if ((Controls.getP("ui_left") || Controls.getP("ui_right")) || holdTimer > 1.5) {
 			curSpeed = FlxMath.bound(FlxMath.roundDecimal(curSpeed + mult, 2), 0.05, 10);
-			holdTimer = 0.425;
+			FlxG.sound.music.pitch = curSpeed;
+			holdTimer = 1.025;
 		}
 	}
 

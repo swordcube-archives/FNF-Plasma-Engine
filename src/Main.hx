@@ -11,7 +11,7 @@ import flixel.FlxGame;
 import openfl.display.Sprite;
 
 class Main extends Sprite {
-	public static var engineVersion:String = "1.0.0";
+	public static var engineVersion:String = "1.0.0-dev";
 	public static var currentState:Class<FlxState> = funkin.states.TitleScreen;
 
 	public static var fpsCounter:FPSCounter;

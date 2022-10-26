@@ -1,10 +1,15 @@
 package funkin.states;
 
+import flixel.system.FlxSound;
+import base.SongLoader;
+import openfl.media.Sound;
 import flixel.FlxCamera;
 import funkin.gameplay.FunkinUI;
 
 class PlayState extends FunkinState {
+    public static var songData:Song = SongLoader.returnSong("bopeebo", "hard");
     public static var current:PlayState;
+    public static var isStoryMode:Bool = false;
 
     public var UI:FunkinUI;
 
@@ -32,6 +37,15 @@ class PlayState extends FunkinState {
 
     public var songSpeed:Float = 1.0;
 
+    public var startedSong:Bool = false;
+    public var endingSong:Bool = false;
+
+    public var cachedSounds:Map<String, Sound> = [
+        // Music
+        "titleScreen" => Assets.load(SOUND, Paths.music("menus/titleScreen"))
+    ];
+    public var vocals:FlxSound = new FlxSound();
+
     public function new(songSpeed:Float = 1.0) {
         super();
         current = this;
@@ -42,8 +56,10 @@ class PlayState extends FunkinState {
         super.create();
         current = this;
 		
+        // Stop the currently playing music because grrr >:(
 		FlxG.sound.music.stop();
 
+        // Setup cameras
         camGame = FlxG.camera;
 		camHUD = new FlxCamera();
 		camOther = new FlxCamera();
@@ -53,9 +69,52 @@ class PlayState extends FunkinState {
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
 
+        // Setup song
+        Conductor.changeBPM(songData.bpm);
+        Conductor.mapBPMChanges(songData);
+        Conductor.position = Conductor.crochet * -5;
+
+        cachedSounds["inst"] = Assets.load(SOUND, Paths.songInst(songData.song));
+        if(FileSystem.exists(Paths.songVoices(songData.song))) {
+            cachedSounds["voices"] = Assets.load(SOUND, Paths.songVoices(songData.song));
+            vocals.loadEmbedded(cachedSounds["voices"]);
+        }
+
+        // Setup UI
         UI = new FunkinUI();
         UI.cameras = [camHUD];
         add(UI);
+    }
+
+    override function update(elapsed:Float) {
+        super.update(elapsed);
+
+        Conductor.position += elapsed * 1000.0;
+        if(Conductor.position >= 0 && !startedSong)
+            startSong();
+
+        if(Controls.getP("back")) {
+            endingSong = true;
+            FlxG.sound.playMusic(cachedSounds["titleScreen"]);
+            Main.switchState(new FreeplayMenu());
+        }
+    }
+
+    function startSong() {
+        startedSong = true;
+        Conductor.position = 0;
+        FlxG.sound.playMusic(cachedSounds["inst"], 1, false);
+        if(cachedSounds.exists("voices"))
+            vocals.play();
+
+        FlxG.sound.music.pause();
+        vocals.pause();
+
+        FlxG.sound.music.time = 0;
+        vocals.time = 0;
+
+        FlxG.sound.music.play();
+        vocals.play();
     }
 
     override function destroy() {
