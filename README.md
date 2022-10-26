@@ -11,7 +11,6 @@ haxelib git hxCodec https://github.com/swordcube/hxCodec-testing
 haxelib git hscript-improved https://github.com/YoshiCrafter29/hscript-improved
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
 haxelib git openfl https://github.com/openfl/openfl
-haxelib git linc_luajit https://github.com/nebulazorua/linc_luajit
 haxelib install tjson
 ```
 - Step 5. If you run on Windows, install [Visual Studio Community 2019](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=community&rel=16&utm_medium=microsoft&utm_source=docs.microsoft.com&utm_campaign=download+from+relnotes&utm_content=vs2019ga+button) using these specific components in `Individual Components` instead of selecting the normal options:
