@@ -155,7 +155,6 @@ class PlayState extends FunkinState {
         super.update(elapsed);
 
         Conductor.position += (elapsed * 1000.0) * songSpeed;
-        trace(startSong);
         if(Conductor.position >= 0 && !startedSong)
             startSong();
 
