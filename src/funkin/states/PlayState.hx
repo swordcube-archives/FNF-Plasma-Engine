@@ -91,11 +91,27 @@ class PlayState extends FunkinState {
         Conductor.mapBPMChanges(songData);
         Conductor.position = Conductor.crochet * -5;
 
+        if(songData.keyCount == null)
+            songData.keyCount = 4;
+
+        if(songData.keyNumber != null)
+            songData.keyCount = songData.keyNumber;
+
+        if(songData.mania != null) {
+			switch(songData.mania) {
+				case 1: songData.keyCount = 6;
+				case 2: songData.keyCount = 7;
+				case 3: songData.keyCount = 9;
+				default: songData.keyCount = 4;
+			}
+		}
+
         cachedSounds["inst"] = Assets.load(SOUND, Paths.songInst(songData.song));
         if(FileSystem.exists(Paths.songVoices(songData.song))) {
             cachedSounds["voices"] = Assets.load(SOUND, Paths.songVoices(songData.song));
             vocals.loadEmbedded(cachedSounds["voices"]);
         }
+        FlxG.sound.list.add(vocals);
 
         // Load the notes
 		for(section in songData.notes) {
@@ -114,7 +130,7 @@ class PlayState extends FunkinState {
 
 					unspawnNotes.push({
 						strumTime: strumTime, // 0 = strum tie m
-						noteData: Std.int(note[1] % songData.keyCount), // 1 = ntpeo data
+						noteData: Std.int(note[1]) % songData.keyCount, // 1 = ntpeo data
 						susLength: susLength, // 2 = sussy amongle sus length! (sustain length)
 						mustPress: gottaHitNote, // 3 = must press
 						stepCrochet: Conductor.stepCrochet, // 4 = sustain bullshit
@@ -138,7 +154,8 @@ class PlayState extends FunkinState {
     override function update(elapsed:Float) {
         super.update(elapsed);
 
-        Conductor.position += elapsed * 1000.0;
+        Conductor.position += (elapsed * 1000.0) * songSpeed;
+        trace(startSong);
         if(Conductor.position >= 0 && !startedSong)
             startSong();
 
@@ -151,7 +168,7 @@ class PlayState extends FunkinState {
 			if(note.strumTime + (Settings.get("Note Offset") * songSpeed) > Conductor.position + spawnMult)
 				break;
 
-			var noteSkin:String = currentSkin.replace("Default", Settings.get("Note Skin").toLowerCase());
+			var noteSkin:String = currentSkin.replace("Default", Settings.get("Note Skin"));
 
 			var dunceNote:Note = new Note(-9999, -9999, parent, note.noteData, false, false, noteSkin);
 			dunceNote.stepCrochet = Conductor.stepCrochet;
@@ -159,24 +176,51 @@ class PlayState extends FunkinState {
 			dunceNote.strumTime = note.strumTime + (Settings.get("Note Offset") * songSpeed);
 			dunceNote.altAnim = note.altAnim;
 			dunceNote.parent = note.mustPress ? UI.playerStrums : UI.enemyStrums;
-
-			var cum:Int = Math.floor(note.susLength);
-			for(i in 0...cum) {
-				var susNote:Note = new Note(-9999, -9999, parent, note.noteData, true, false, noteSkin);
-				susNote.stepCrochet = Conductor.stepCrochet;
-				susNote.rawStrumTime = note.strumTime;
-				susNote.strumTime = dunceNote.strumTime + (Conductor.stepCrochet * i) + Conductor.stepCrochet;
-				susNote.altAnim = note.altAnim;
-				susNote.parent = note.mustPress ? UI.playerStrums : UI.enemyStrums;
-				if(i >= cum-1) {
-                    susNote.isSustainTail = true;
-					susNote.playAnim("tail");
+            var event = new funkin.events.NoteCreationEvent();
+            event.note = dunceNote;
+            dunceNote.script.call("onNoteCreation", [event]);
+            if(event.cancelled) {
+                dunceNote.script.destroy();
+                dunceNote.destroy();
+                dunceNote = null;
+            } else {
+                // Make the note have a shader if it's enabled
+                if(dunceNote.useRGBShader) {
+                    var rgb = Note.keyInfo[parent.keyCount].colors[dunceNote.direction];
+                    dunceNote.colorShader.setColors(rgb[0], rgb[1], rgb[2]);
+                    dunceNote.shader = dunceNote.colorShader;
+                };
+                var cum:Int = Math.floor(note.susLength);
+                for(i in 0...cum) {
+                    var susNote:Note = new Note(-9999, -9999, parent, note.noteData, true, false, noteSkin);
+                    susNote.stepCrochet = Conductor.stepCrochet;
+                    susNote.rawStrumTime = note.strumTime;
+                    susNote.strumTime = dunceNote.strumTime + (Conductor.stepCrochet * i) + Conductor.stepCrochet;
+                    susNote.altAnim = note.altAnim;
+                    susNote.parent = note.mustPress ? UI.playerStrums : UI.enemyStrums;
+                    if(i >= cum-1) {
+                        susNote.isSustainTail = true;
+                        susNote.playAnim("tail");
+                    }
+                    var event = new funkin.events.NoteCreationEvent();
+                    event.note = susNote;
+                    susNote.script.call("onNoteCreation", [event]);
+                    if(event.cancelled) {
+                        susNote.script.destroy();
+                        susNote.destroy();
+                        susNote = null;
+                    } else {
+                        // Make the note have a shader if it's enabled
+                        if(susNote.useRGBShader) {
+                            var rgb = Note.keyInfo[parent.keyCount].colors[susNote.direction];
+                            susNote.colorShader.setColors(rgb[0], rgb[1], rgb[2]);
+                            susNote.shader = susNote.colorShader;
+                        };
+                        susNote.parent.notes.add(susNote);
+                    }
                 }
-
-				susNote.parent.add(susNote);
-			}
-
-			dunceNote.parent.add(dunceNote);
+                dunceNote.parent.notes.add(dunceNote);
+            }
 			unspawnNotes.remove(note);
 		}
 
@@ -188,6 +232,8 @@ class PlayState extends FunkinState {
     }
 
     public function resyncSong() {
+        if(!startedSong || endingSong) return;
+        
 		if(cachedSounds.exists("vocals")) {
             FlxG.sound.music.pause();
             vocals.pause();

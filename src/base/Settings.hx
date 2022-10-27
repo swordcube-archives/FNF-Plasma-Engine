@@ -123,6 +123,7 @@ class Settings {
                 }
             }
         }
+        trace(settingsMap);
     }
 
     /**

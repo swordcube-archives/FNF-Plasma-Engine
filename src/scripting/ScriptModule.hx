@@ -8,7 +8,7 @@ import flixel.util.FlxDestroyUtil.IFlxDestroyable;
  */
 class ScriptModule implements IFlxDestroyable {
     // Use the create() function so you're not forced to use super
-    @:noCompletion public function new(scriptPath:String) {}
+    @:noCompletion public function new(scriptPath:String) {create(scriptPath);}
 
     /**
      * Override this to control what happens when this script is created.

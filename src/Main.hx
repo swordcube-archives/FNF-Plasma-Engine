@@ -33,7 +33,7 @@ class Main extends Sprite {
 		if(FlxG.save.data.volume != null)
 			FlxG.sound.volume = FlxG.save.data.volume;
 
-		addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent) {
+		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent) {
 			switch(e.keyCode) {
 				case Keyboard.F11:
 					FlxG.fullscreen = !FlxG.fullscreen;

@@ -111,6 +111,7 @@ class MainMenu extends FunkinState {
 	}
 
     function changeSelection(change:Int = 0) {
+        if(!menuButtons.enabled) return;
         curSelected += change;
         if(curSelected < 0)
             curSelected = menuButtons.length-1;

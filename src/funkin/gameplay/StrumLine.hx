@@ -9,12 +9,16 @@ import flixel.tweens.FlxTween;
 import flixel.group.FlxSpriteGroup;
 import openfl.ui.Keyboard;
 
+using StringTools;
+
 class StrumLine extends FlxSpriteGroup {
     /**
      * The amount of strums this `StrumLine` has.
      */
     public var keyCount(default, set):Int;
     public var strums:FlxTypedSpriteGroup<StrumNote>;
+    public var notes:FlxTypedSpriteGroup<Note>;
+
     /**
      * The skin the strums of this `StrumLine` use.
      */
@@ -25,7 +29,7 @@ class StrumLine extends FlxSpriteGroup {
     /**
      * Controls whether or not the notes get hit automatically and control the opponent.
      */
-    public var isOpponent:Bool = true;
+    public var isOpponent:Bool = false;
 
     public var noteSpeed:Float = Settings.get("Scroll Speed") > 0 ? Settings.get("Scroll Speed") : PlayState.songData.speed;
 
@@ -35,16 +39,20 @@ class StrumLine extends FlxSpriteGroup {
 		return keyCount = v;
 	}
     function set_skin(v:String):String {
+        skin = v;
         if(initialized) generateStrums(keyCount);
 		return skin = v;
 	}
 
-    public function new(x:Float = 0, y:Float = 0, keyCount:Int = 4, skin:String = "default") {
+    public function new(x:Float = 0, y:Float = 0, keyCount:Int = 4, skin:String = "Arrows") {
         super(x, y);
         scrollFactor.set();
         strums = new FlxTypedSpriteGroup<StrumNote>();
         strums.scrollFactor.set();
         add(strums);
+        notes = new FlxTypedSpriteGroup<Note>();
+        notes.scrollFactor.set();
+        add(notes);
         this.keyCount = keyCount;
         initialized = true;
         this.skin = skin;
@@ -81,7 +89,9 @@ class StrumLine extends FlxSpriteGroup {
 			if (binds[i].toLowerCase() == key.toLowerCase())
 				data = i;
 		}
-		if (data == -1 || pressed[data])
+		if (data == -1)
+			return;
+        if (pressed[data])
 			return;
 
 		pressed[data] = true;
@@ -91,12 +101,10 @@ class StrumLine extends FlxSpriteGroup {
 
         var closestNotes:Array<Note> = [];
 
-        for(i in 0...members.length) {
-            if(i < 1) continue; // Skip the first member (That being the strums)
-            var note:Note = cast members[i];
-            if(Conductor.position - note.strumTime >= -Conductor.safeZoneOffset)
+        notes.forEachAlive(function(note:Note) {
+            if(Conductor.position - note.strumTime >= -Conductor.safeZoneOffset*1.5)
                 closestNotes.push(note);
-        }
+        });
 
 		closestNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
 
@@ -117,7 +125,7 @@ class StrumLine extends FlxSpriteGroup {
 				for (i in 0...dataNotes.length) {
 					if (i == 0) continue;
 					var note = dataNotes[i];
-					if (!note.isSustain && ((note.strumTime - coolNote.strumTime) < 2) && note.direction == data) {
+					if (!note.isSustain && ((note.strumTime - coolNote.strumTime) < 5) && note.direction == data) {
 						remove(note, true);
 						note.destroy();
 					}
@@ -138,22 +146,17 @@ class StrumLine extends FlxSpriteGroup {
         @:privateAccess
         var key = FlxKey.toStringMap.get(evt.keyCode);
 
-        var binds:Array<String> = [
-			FlxG.save.data.leftBind,
-			FlxG.save.data.downBind,
-			FlxG.save.data.upBind,
-			FlxG.save.data.rightBind
-		];
+        var binds:Array<String> = Controls.gameplayList[keyCount];
 
 		var data = -1;
 		switch (evt.keyCode) {
-			case 37:
+			case Keyboard.LEFT:
 				data = 0;
-			case 40:
+			case Keyboard.DOWN:
 				data = 1;
-			case 38:
+			case Keyboard.UP:
 				data = 2;
-			case 39:
+			case Keyboard.RIGHT:
 				data = 3;
 		}
 
@@ -170,10 +173,10 @@ class StrumLine extends FlxSpriteGroup {
     }
 
     override function update(elapsed:Float) {
-        for(i in 0...members.length) {
-            if(i < 1) continue; // Skip the first member (That being the strums)
-            var note:Note = cast members[i];
-            note.y = 0.45 * (Conductor.position - note.strumTime) * noteSpeed;
+        super.update(elapsed);
+        notes.forEachAlive(function(note:Note) {
+            note.x = strums.members[note.direction].x;
+            note.y = strums.members[note.direction].y + (0.45 * (Conductor.position - note.strumTime) * (noteSpeed/PlayState.current.songSpeed));
             if(isOpponent) {
                 if(Conductor.position - note.strumTime >= 0) {
                     remove(note, true);
@@ -181,7 +184,7 @@ class StrumLine extends FlxSpriteGroup {
                 }
             } else {
                 if(Conductor.position - note.strumTime >= 0 && note.isSustain && pressed[note.direction]) {
-                    strums.members[note.direction].playAnim("confirm");
+                    strums.members[note.direction].playAnim("confirm", true);
                     var rgb:Array<Int> = Note.keyInfo[keyCount].colors[note.direction];
                     strums.members[note.direction].colorShader.setColors(rgb[0], rgb[1], rgb[2]);
                     remove(note, true);
@@ -192,7 +195,7 @@ class StrumLine extends FlxSpriteGroup {
                     note.destroy();
                 }
             }
-        }
+        });
     }
 
     /**
@@ -205,8 +208,9 @@ class StrumLine extends FlxSpriteGroup {
             s.destroy();
         }
         for(i in 0...keyCount) {
+            var noteSkin:String = PlayState.current.currentSkin.replace("Default", Settings.get("Note Skin"));
             var keySpacing:Float = Note.keyInfo[keyCount].spacing;
-            var strum:StrumNote = new StrumNote(Note.spacing * (keySpacing * i), -10, this, i, "default");
+            var strum:StrumNote = new StrumNote(Note.spacing * (keySpacing * i), -10, this, i, noteSkin);
             strum.alpha = 0.001;
             FlxTween.tween(strum, {alpha: 1, y: y+10}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * i)});
             strums.add(strum);
@@ -223,26 +227,31 @@ class StrumLine extends FlxSpriteGroup {
 class StrumNote extends Sprite {
     public var direction:Int = 0;
     public var parent:StrumLine;
-    public var skin(default, set):String = "";
+    public var skin(default, set):String;
     public var strumScale:Float = 0.7;
 
     public var colorShader:ColorShader = new ColorShader(255, 0, 0);
 
     function set_skin(v:String):String {
-        switch(v) {
+        skin = v;
+        reloadSkin();
+		return skin = v;
+	}
+
+    public function reloadSkin() {
+        switch(skin) {
             case "Arrows":
                 frames = Assets.load(SPARROW, Paths.image("ui/notes/NOTE_assets"));
                 var dir:String = Note.keyInfo[parent.keyCount].directions[direction];
-                addAnim("static", dir+" static");
-                addAnim("press", dir+" press");
-                addAnim("confirm", dir+" confirm");
+                addAnim("static", dir+" static0");
+                addAnim("press", dir+" press0");
+                addAnim("confirm", dir+" confirm0");
                 strumScale = 0.7 * Note.keyInfo[parent.keyCount].scale;
                 scale.set(strumScale, strumScale);
                 updateHitbox();
                 playAnim("static");
         }
-		return skin = v;
-	}
+    }
 
     public function new(x:Float = 0, y:Float = 0, parent:StrumLine, direction:Int = 0, skin:String = "Arrows") {
         super(x, y);

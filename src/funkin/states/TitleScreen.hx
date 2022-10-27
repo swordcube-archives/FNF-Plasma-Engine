@@ -95,7 +95,7 @@ class TitleScreen extends FunkinState {
         if(FlxG.sound.music != null)
             Conductor.position = FlxG.sound.music.time;
 
-        if(FlxG.keys.justPressed.ENTER && startedIntro) {
+        if(Controls.getP("accept") && startedIntro) {
             if(!skippedIntro)
                 skipIntro();
             else if(!accepted) {

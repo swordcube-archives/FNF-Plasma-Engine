@@ -51,7 +51,7 @@ class Note extends Sprite {
     public var altAnim:Bool = false;
 
     public var noteScale:Float = 0.7;
-    public var skin(default, set):String = "";
+    public var skin(default, set):String;
 
     public var stepCrochet:Float = 0.0;
 
@@ -63,32 +63,38 @@ class Note extends Sprite {
     public var script:ScriptModule;
 
     function set_skin(v:String):String {
-        switch(v) {
+        skin = v;
+        reloadSkin();
+		return skin = v;
+	}
+
+    public function reloadSkin() {
+        switch(skin) {
             case "Arrows":
                 frames = Assets.load(SPARROW, Paths.image("ui/notes/NOTE_assets"));
                 var dir:String = Note.keyInfo[parent.keyCount].directions[direction];
-                addAnim("normal", dir);
-                addAnim("press", dir+" hold");
-                addAnim("confirm", dir+" tail");
+                addAnim("normal", dir+"0");
+                addAnim("hold", dir+" hold0");
+                addAnim("tail", dir+" tail0");
                 noteScale = 0.7 * Note.keyInfo[parent.keyCount].scale;
                 scale.set(noteScale, noteScale);
                 updateHitbox();
-                playAnim("static");
+                playAnim(isSustain ? "hold" : "normal");
+                if(isSustainTail) playAnim("tail");
         }
-		return skin = v;
-	}
+    }
 
     public function new(x:Float = 0, y:Float = 0, parent:StrumLine, direction:Int = 0, isSustain:Bool = false, isSustainTail:Bool = false, skin:String = "Arrows", type:String = "Default Note") {
         super(x, y);
         this.direction = direction;
+        this.isSustain = isSustain;
+        this.isSustainTail = isSustainTail;
         this.parent = parent;
         this.skin = skin;
         this.type = type;
         // Initialize this note's script
         script = Script.create(Paths.hxs('data/scripts/note_types/$type'));
-        script.call("onCreate", []);
-        // Make the note have a shader if it's enabled
-        if(useRGBShader) shader = colorShader;
+        script.call("onCreate", [this]);
     }
 
     override public function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame:Int = 0) {
