@@ -63,6 +63,10 @@ class PlayState extends FunkinState {
 
     public var currentSkin:String = "Default";
 
+    public var totalNotes:Int = 0;
+    public var totalHit:Float = 0.0;
+    public var accuracy:Float = 0.0;
+
     public function new(songSpeed:Float = 1.0) {
         super();
         current = this;

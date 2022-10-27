@@ -121,19 +121,24 @@ class StrumLine extends FlxSpriteGroup {
 				break;
 			}
 
-            // stacked notes
-			if (dataNotes.length > 1) {
-				for (i in 0...dataNotes.length) {
-					if (i == 0) continue;
-					var note = dataNotes[i];
-					if (!note.isSustain && ((note.strumTime - coolNote.strumTime) < 5) && note.direction == data) {
-						remove(note, true);
-						note.destroy();
-					}
-				}
-			}
-            remove(coolNote, true);
-            coolNote.destroy();
+            var event = new funkin.events.NoteHitEvent();
+            event.note = coolNote;
+            coolNote.script.call("onPlayerNoteHit", [event]);
+            if(!event.cancelled) {
+                // stacked notes
+                if (dataNotes.length > 1) {
+                    for (i in 0...dataNotes.length) {
+                        if (i == 0) continue;
+                        var note = dataNotes[i];
+                        if (!note.isSustain && ((note.strumTime - coolNote.strumTime) < 5) && note.direction == data) {
+                            remove(note, true);
+                            note.destroy();
+                        }
+                    }
+                }
+                remove(coolNote, true);
+                coolNote.destroy();
+            }
             strums.members[data].playAnim("confirm");
         }
     }
@@ -181,7 +186,7 @@ class StrumLine extends FlxSpriteGroup {
             if(note.isSustain) {
                 var stepHeight = (0.45 * note.stepCrochet * (noteSpeed/PlayState.current.songSpeed));
                 if(Settings.get("Downscroll")) {
-                    note.y -= height - stepHeight;
+                    note.y -= note.height - stepHeight;
                     if ((isOpponent || (!isOpponent && pressed[note.direction])) && note.y - note.offset.y * note.scale.y + note.height >= (y + Note.spacing / 2)) {
                         // Clip to strumline
                         var swagRect = new FlxRect(0, 0, note.frameWidth * 2, note.frameHeight * 2);
@@ -192,7 +197,7 @@ class StrumLine extends FlxSpriteGroup {
                     }
                 } else {
                     note.y += 5;
-                    if ((isOpponent || (!isOpponent && pressed[note.direction])) && note.y + note.offset.y * note.scale.y <= (note.y + Note.spacing / 2)) {
+                    if ((isOpponent || (!isOpponent && pressed[note.direction])) && note.y + note.offset.y * note.scale.y <= (y + Note.spacing / 2)) {
                         // Clip to strumline
                         var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
                         swagRect.y = (strums.members[note.direction].y + Note.spacing / 2 - note.y) / note.scale.y;
@@ -209,11 +214,16 @@ class StrumLine extends FlxSpriteGroup {
                 }
             } else {
                 if(Conductor.position - note.strumTime >= 0 && note.isSustain && pressed[note.direction]) {
-                    strums.members[note.direction].playAnim("confirm", true);
-                    var rgb:Array<Int> = Note.keyInfo[keyCount].colors[note.direction];
-                    strums.members[note.direction].colorShader.setColors(rgb[0], rgb[1], rgb[2]);
-                    remove(note, true);
-                    note.destroy();
+                    var event = new funkin.events.NoteHitEvent();
+                    event.note = note;
+                    note.script.call("onPlayerNoteHit", [event]);
+                    if(!event.cancelled) {
+                        strums.members[note.direction].playAnim("confirm", true);
+                        var rgb:Array<Int> = Note.keyInfo[keyCount].colors[note.direction];
+                        strums.members[note.direction].colorShader.setColors(rgb[0], rgb[1], rgb[2]);
+                        remove(note, true);
+                        note.destroy();
+                    }
                 }
                 if(Conductor.position - note.strumTime >= Conductor.safeZoneOffset) {
                     remove(note, true);
