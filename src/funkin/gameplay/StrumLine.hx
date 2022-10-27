@@ -1,5 +1,6 @@
 package funkin.gameplay;
 
+import flixel.math.FlxRect;
 import funkin.states.PlayState;
 import shaders.ColorShader;
 import flixel.input.keyboard.FlxKey;
@@ -176,7 +177,31 @@ class StrumLine extends FlxSpriteGroup {
         super.update(elapsed);
         notes.forEachAlive(function(note:Note) {
             note.x = strums.members[note.direction].x;
-            note.y = strums.members[note.direction].y + (0.45 * (Conductor.position - note.strumTime) * (noteSpeed/PlayState.current.songSpeed));
+            note.y = strums.members[note.direction].y + ((Settings.get("Downscroll") ? 0.45 : -0.45) * (Conductor.position - note.strumTime) * (noteSpeed/PlayState.current.songSpeed)) - (Settings.get("Downscroll") ? note.noteYOff : -note.noteYOff);
+            if(note.isSustain) {
+                var stepHeight = (0.45 * note.stepCrochet * (noteSpeed/PlayState.current.songSpeed));
+                if(Settings.get("Downscroll")) {
+                    note.y -= height - stepHeight;
+                    if ((isOpponent || (!isOpponent && pressed[note.direction])) && note.y - note.offset.y * note.scale.y + note.height >= (y + Note.spacing / 2)) {
+                        // Clip to strumline
+                        var swagRect = new FlxRect(0, 0, note.frameWidth * 2, note.frameHeight * 2);
+                        swagRect.height = (strums.members[note.direction].y + Note.spacing / 2 - note.y) / note.scale.y;
+                        swagRect.y = note.frameHeight - swagRect.height;
+
+                        note.clipRect = swagRect;
+                    }
+                } else {
+                    note.y += 5;
+                    if ((isOpponent || (!isOpponent && pressed[note.direction])) && note.y + note.offset.y * note.scale.y <= (note.y + Note.spacing / 2)) {
+                        // Clip to strumline
+                        var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
+                        swagRect.y = (strums.members[note.direction].y + Note.spacing / 2 - note.y) / note.scale.y;
+                        swagRect.height -= swagRect.y;
+
+                        note.clipRect = swagRect;
+                    }
+                }
+            }
             if(isOpponent) {
                 if(Conductor.position - note.strumTime >= 0) {
                     remove(note, true);
@@ -203,6 +228,7 @@ class StrumLine extends FlxSpriteGroup {
      * @param keyCount 
      */
     public function generateStrums(keyCount:Int) {
+        pressed = [for(i in 0...keyCount) false];
         for(s in strums.members) {
             strums.remove(s, true);
             s.destroy();

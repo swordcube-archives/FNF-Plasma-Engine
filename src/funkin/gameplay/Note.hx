@@ -1,5 +1,6 @@
 package funkin.gameplay;
 
+import funkin.states.PlayState;
 import scripting.Script;
 import scripting.ScriptModule;
 import shaders.ColorShader;
@@ -54,6 +55,7 @@ class Note extends Sprite {
     public var skin(default, set):String;
 
     public var stepCrochet:Float = 0.0;
+    public var noteYOff:Int = 0;
 
     public var type:String = "Default Note";
     public var useRGBShader:Bool = false;
@@ -76,6 +78,7 @@ class Note extends Sprite {
                 addAnim("normal", dir+"0");
                 addAnim("hold", dir+" hold0");
                 addAnim("tail", dir+" tail0");
+                sustainScale = 0.7;
                 noteScale = 0.7 * Note.keyInfo[parent.keyCount].scale;
                 scale.set(noteScale, noteScale);
                 updateHitbox();
@@ -97,6 +100,24 @@ class Note extends Sprite {
         script.call("onCreate", [this]);
     }
 
+    public var stepHeight:Float = 0.0;
+    public var sustainScale:Float = 0.7;
+    override function update(elapsed:Float) {
+        super.update(elapsed);
+        var speed:Float = (parent.noteSpeed/PlayState.current.songSpeed);
+        stepHeight = ((0.45 * stepCrochet) * speed);
+
+        if(isSustain && animation.curAnim != null && animation.curAnim.name != "tail")
+            scale.y = sustainScale * ((stepCrochet / 100 * 1.5) * speed);
+
+        if(isSustain) {
+            flipY = Settings.get("Downscroll");
+            noteYOff = Math.round(-stepHeight + spacing * 0.5);
+            updateHitbox();
+            offsetX();
+        }
+    }
+
     override public function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame:Int = 0) {
         super.playAnim(name, force, reversed, frame);
 
@@ -110,6 +131,14 @@ class Note extends Sprite {
 			offset.y -= 156 * (noteScale / 2);
 		} else
 			centerOffsets();
+    }
+
+    public function offsetX() {
+        if (skin != "pixel") {
+			offset.x = frameWidth / 2;
+			offset.x -= 156 * (noteScale / 2);
+		} else
+            offset.x = (frameWidth - width) * 0.5;
     }
 
     override public function destroy() {
