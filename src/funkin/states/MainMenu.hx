@@ -66,8 +66,8 @@ class MainMenu extends FunkinState {
             startExitState(new TitleScreen());
         });
 
-        var devwarningformat = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED,  true), "<dev>");
-        var warnStringShit:String = Main.engineVersion.endsWith("-dev") ? '<dev>[UNSTABLE]<dev>' : '';
+        var devwarningformat = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED,  true), "<red>");
+        var warnStringShit:String = Main.engineVersion.endsWith("-dev") ? '<red>[UNSTABLE]<red>' : '';
         var watermark:FlxText = new FlxText(5,0,0,'Plasma Engine v${Main.engineVersion} $warnStringShit');
         watermark.applyMarkup(watermark.text, [devwarningformat]);
         watermark.setFormat(Paths.font("vcr.ttf"), 17, LEFT, OUTLINE, FlxColor.BLACK);

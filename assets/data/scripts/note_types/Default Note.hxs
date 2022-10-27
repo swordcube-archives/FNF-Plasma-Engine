@@ -1,0 +1,3 @@
+function onCreate(event:NoteCreationEvent) {
+    event.note.useRGBShader = true;
+}

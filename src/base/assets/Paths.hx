@@ -11,6 +11,22 @@ class Paths {
         return path('assets/$p');
     }
 
+    // Functions for getting paths to code for scripting.
+    public static function hxs(p:String) {
+        var pathsToCheck:Array<String> = [
+            asset('$p.hx'),
+            asset('$p.hxs'),
+            asset('$p.hsc'),
+            asset('$p.hscript')
+        ];
+        for(path in pathsToCheck) {
+            if(FileSystem.exists(path)) return path;
+        }
+        return asset('$p.hxs');
+    }
+    public static function lua(p:String) {
+        return asset('$p.lua');
+    }
     // Functions for getting paths to Images, Sounds, or Text.
     public static function image(p:String) {
         return asset('images/$p$IMAGE_EXT');

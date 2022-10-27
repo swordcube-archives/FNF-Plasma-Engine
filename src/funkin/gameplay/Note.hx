@@ -1,5 +1,9 @@
 package funkin.gameplay;
 
+import scripting.Script;
+import scripting.ScriptModule;
+import shaders.ColorShader;
+
 typedef NoteInfo = {
     var directions:Array<String>;
     var colors:Array<Array<Int>>;
@@ -35,4 +39,75 @@ class Note extends Sprite {
             spacing: 1
         },
     ];
+
+    public var strumTime:Float = 0.0;
+    public var rawStrumTime:Float = 0.0;
+    public var direction:Int = 0;
+    public var parent:StrumLine;
+
+    public var isSustain:Bool = false;
+    public var isSustainTail:Bool = false;
+
+    public var altAnim:Bool = false;
+
+    public var noteScale:Float = 0.7;
+    public var skin(default, set):String = "";
+
+    public var stepCrochet:Float = 0.0;
+
+    public var type:String = "Default Note";
+    public var useRGBShader:Bool = false;
+
+    public var colorShader:ColorShader = new ColorShader(255, 0, 0);
+
+    public var script:ScriptModule;
+
+    function set_skin(v:String):String {
+        switch(v) {
+            case "Arrows":
+                frames = Assets.load(SPARROW, Paths.image("ui/notes/NOTE_assets"));
+                var dir:String = Note.keyInfo[parent.keyCount].directions[direction];
+                addAnim("normal", dir);
+                addAnim("press", dir+" hold");
+                addAnim("confirm", dir+" tail");
+                noteScale = 0.7 * Note.keyInfo[parent.keyCount].scale;
+                scale.set(noteScale, noteScale);
+                updateHitbox();
+                playAnim("static");
+        }
+		return skin = v;
+	}
+
+    public function new(x:Float = 0, y:Float = 0, parent:StrumLine, direction:Int = 0, isSustain:Bool = false, isSustainTail:Bool = false, skin:String = "Arrows", type:String = "Default Note") {
+        super(x, y);
+        this.direction = direction;
+        this.parent = parent;
+        this.skin = skin;
+        this.type = type;
+        // Initialize this note's script
+        script = Script.create(Paths.hxs('data/scripts/note_types/$type'));
+        script.call("onCreate", []);
+        // Make the note have a shader if it's enabled
+        if(useRGBShader) shader = colorShader;
+    }
+
+    override public function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame:Int = 0) {
+        super.playAnim(name, force, reversed, frame);
+
+		centerOrigin();
+
+		if (skin != "pixel") {
+			offset.x = frameWidth / 2;
+			offset.y = frameHeight / 2;
+
+			offset.x -= 156 * (noteScale / 2);
+			offset.y -= 156 * (noteScale / 2);
+		} else
+			centerOffsets();
+    }
+
+    override public function destroy() {
+        script.destroy();
+        super.destroy();
+    }
 }

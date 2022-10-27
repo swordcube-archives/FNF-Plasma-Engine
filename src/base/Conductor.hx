@@ -1,5 +1,6 @@
 package base;
 
+import flixel.system.FlxSound;
 import base.SongLoader;
 
 typedef BPMChangeEvent = {
@@ -48,4 +49,8 @@ class Conductor {
 		crochet = ((60 / bpm) * 1000);
 		stepCrochet = (crochet / 4) * measure;
 	}
+
+	public static function isAudioSynced(sound:FlxSound) {
+        return !(sound.time > position + 20 || sound.time < position - 20);
+    }
 }

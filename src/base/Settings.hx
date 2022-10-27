@@ -60,6 +60,22 @@ class Settings {
                 limits: [30, 1000],
                 value: 1000
             },
+            {
+                name: "Scroll Speed",
+                desc: "Change how fast your notes go. (0 = Chart Scroll Speed)",
+                type: Number,
+                increment: 0.1,
+                limits: [0, 10],
+                decimals: 1,
+                value: 0
+            },
+            {
+                name: "Note Skin",
+                desc: "Change how your notes look.",
+                type: Selector,
+                values: ["Arrows", "Quants", "Circles", "Quant Circles"],
+                value: "Arrows"
+            }
         ],
         "Appearance" => [
             {
@@ -89,7 +105,7 @@ class Settings {
         ]
     ];
 
-    public static var settingsMap:Map<String, Any> = [];
+    public static var settingsMap:Map<String, Dynamic> = [];
 
     /**
      * Load the settings from save data.

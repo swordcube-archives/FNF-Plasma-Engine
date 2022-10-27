@@ -1,5 +1,7 @@
 package funkin.gameplay;
 
+import funkin.states.PlayState;
+import shaders.ColorShader;
 import flixel.input.keyboard.FlxKey;
 import openfl.events.KeyboardEvent;
 import flixel.tweens.FlxEase;
@@ -24,6 +26,8 @@ class StrumLine extends FlxSpriteGroup {
      * Controls whether or not the notes get hit automatically and control the opponent.
      */
     public var isOpponent:Bool = true;
+
+    public var noteSpeed:Float = Settings.get("Scroll Speed") > 0 ? Settings.get("Scroll Speed") : PlayState.songData.speed;
 
     function set_keyCount(v:Int):Int {
         pressed = [for(i in 0...v) false];
@@ -80,8 +84,49 @@ class StrumLine extends FlxSpriteGroup {
 		if (data == -1 || pressed[data])
 			return;
 
-
 		pressed[data] = true;
+        strums.members[data].playAnim("press");
+        var rgb:Array<Int> = Note.keyInfo[keyCount].colors[data];
+        strums.members[data].colorShader.setColors(rgb[0], rgb[1], rgb[2]);
+
+        var closestNotes:Array<Note> = [];
+
+        for(i in 0...members.length) {
+            if(i < 1) continue; // Skip the first member (That being the strums)
+            var note:Note = cast members[i];
+            if(Conductor.position - note.strumTime >= -Conductor.safeZoneOffset)
+                closestNotes.push(note);
+        }
+
+		closestNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
+
+		var dataNotes = [];
+		for (i in closestNotes)
+			if (i.direction == data && !i.isSustain)
+				dataNotes.push(i);
+
+		if (dataNotes.length > 0) {
+			var coolNote = null;
+			for (i in dataNotes) {
+				coolNote = i;
+				break;
+			}
+
+            // stacked notes
+			if (dataNotes.length > 1) {
+				for (i in 0...dataNotes.length) {
+					if (i == 0) continue;
+					var note = dataNotes[i];
+					if (!note.isSustain && ((note.strumTime - coolNote.strumTime) < 2) && note.direction == data) {
+						remove(note, true);
+						note.destroy();
+					}
+				}
+			}
+            remove(coolNote, true);
+            coolNote.destroy();
+            strums.members[data].playAnim("confirm");
+        }
     }
 
     /**
@@ -120,6 +165,34 @@ class StrumLine extends FlxSpriteGroup {
 			return;
 
 		pressed[data] = false;
+        strums.members[data].playAnim("static");
+        strums.members[data].colorShader.setColors(255, 0, 0);
+    }
+
+    override function update(elapsed:Float) {
+        for(i in 0...members.length) {
+            if(i < 1) continue; // Skip the first member (That being the strums)
+            var note:Note = cast members[i];
+            note.y = 0.45 * (Conductor.position - note.strumTime) * noteSpeed;
+            if(isOpponent) {
+                if(Conductor.position - note.strumTime >= 0) {
+                    remove(note, true);
+                    note.destroy();
+                }
+            } else {
+                if(Conductor.position - note.strumTime >= 0 && note.isSustain && pressed[note.direction]) {
+                    strums.members[note.direction].playAnim("confirm");
+                    var rgb:Array<Int> = Note.keyInfo[keyCount].colors[note.direction];
+                    strums.members[note.direction].colorShader.setColors(rgb[0], rgb[1], rgb[2]);
+                    remove(note, true);
+                    note.destroy();
+                }
+                if(Conductor.position - note.strumTime >= Conductor.safeZoneOffset) {
+                    remove(note, true);
+                    note.destroy();
+                }
+            }
+        }
     }
 
     /**
@@ -135,7 +208,7 @@ class StrumLine extends FlxSpriteGroup {
             var keySpacing:Float = Note.keyInfo[keyCount].spacing;
             var strum:StrumNote = new StrumNote(Note.spacing * (keySpacing * i), -10, this, i, "default");
             strum.alpha = 0.001;
-            FlxTween.tween(strum, {alpha: 1, y: y+10}, 0.5, {ease: FlxEase.circOut, startDelay: 0.3 * i});
+            FlxTween.tween(strum, {alpha: 1, y: y+10}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * i)});
             strums.add(strum);
         }
     }
@@ -153,9 +226,11 @@ class StrumNote extends Sprite {
     public var skin(default, set):String = "";
     public var strumScale:Float = 0.7;
 
+    public var colorShader:ColorShader = new ColorShader(255, 0, 0);
+
     function set_skin(v:String):String {
         switch(v) {
-            case "default":
+            case "Arrows":
                 frames = Assets.load(SPARROW, Paths.image("ui/notes/NOTE_assets"));
                 var dir:String = Note.keyInfo[parent.keyCount].directions[direction];
                 addAnim("static", dir+" static");
@@ -169,11 +244,12 @@ class StrumNote extends Sprite {
 		return skin = v;
 	}
 
-    public function new(x:Float = 0, y:Float = 0, parent:StrumLine, direction:Int = 0, skin:String = "default") {
+    public function new(x:Float = 0, y:Float = 0, parent:StrumLine, direction:Int = 0, skin:String = "Arrows") {
         super(x, y);
         this.direction = direction;
         this.parent = parent;
         this.skin = skin;
+        shader = colorShader;
     }
 
     override public function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame:Int = 0) {
