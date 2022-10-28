@@ -152,14 +152,13 @@ class Character extends Sprite {
 			script.destroy();
 
 		script = Script.create(Paths.hxs('data/characters/$character/script'));
-		if (Std.isOfType(script, ScriptModule)) {
-            script.destroy();
-			script = Script.create(Paths.hxs('data/characters/template/script'));
-			this.curCharacter = "template";
-		}
 		if (Std.isOfType(script, HScriptModule)) {
 			script.set("character", this);
 			cast(script, HScriptModule).setScriptObject(this);
+		} else {
+			script.destroy();
+			script = Script.create(Paths.hxs('data/characters/template/script'));
+			this.curCharacter = "template";
 		}
 		script.start(true, []);
 		if (animation.curAnim == null)
@@ -472,25 +471,24 @@ class Character extends Sprite {
 	public var danced:Bool = false;
 
 	public function dance() {
-		if (canDance) {
-			if ((animation.curAnim != null && !animation.curAnim.name.startsWith("hair")) || animation.curAnim == null) {
-				danced = !danced;
+		if (!canDance) return;
+		if ((animation.curAnim != null && !animation.curAnim.name.startsWith("hair")) || animation.curAnim == null) {
+			danced = !danced;
 
-				if (danceSteps.length > 1) {
-					if (curDanceStep > danceSteps.length - 1)
-						curDanceStep = 0;
+			if (danceSteps.length > 1) {
+				if (curDanceStep > danceSteps.length - 1)
+					curDanceStep = 0;
 
-					playAnim(danceSteps[curDanceStep]);
-					curDanceStep++;
-				} else {
-					playAnim(danceSteps[0]);
-				}
+				playAnim(danceSteps[curDanceStep]);
+				curDanceStep++;
 			} else {
 				playAnim(danceSteps[0]);
-				curDanceStep = danceSteps.length > 1 ? 1 : 0;
 			}
-
-			script.call("onDance", []);
+		} else {
+			playAnim(danceSteps[0]);
+			curDanceStep = danceSteps.length > 1 ? 1 : 0;
 		}
+
+		script.call("onDance", []);
 	}
 }

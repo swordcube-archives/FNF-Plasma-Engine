@@ -85,6 +85,12 @@ class PlayState extends FunkinState {
     public var dads:Array<Character> = [];
     public var bfs:Array<Character> = [];
 
+    public var countdownProperties = {
+        scale: 1,
+        imagePath: "gameplay/countdown/default",
+        soundPath: "gameplay/countdown/default"
+    };
+
     public function new(songSpeed:Float = 1.0) {
         super();
         current = this;
@@ -209,6 +215,8 @@ class PlayState extends FunkinState {
         bf = new Character(point.x, point.y, true).loadCharacter(songData.player1);
         add(bf);
         add(stage.layeredGroups[2]);
+        dads.push(dad);
+        bfs.push(bf);
 
         // Setup UI
         UI = new FunkinUI();
@@ -336,7 +344,7 @@ class PlayState extends FunkinState {
 			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing") && !c.stunned)
 				c.dance();
 		}
-		if(gf != null && curBeat % gfSpeed == 0 && !gf.stunned) gf.dance();
+		if(gf != null && !gf.animation.curAnim.name.startsWith("hair") && curBeat % gfSpeed == 0 && !gf.stunned) gf.dance();
 		for(c in bfs) {
 			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing") && !c.stunned)
 				c.dance();

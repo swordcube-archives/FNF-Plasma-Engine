@@ -19,6 +19,7 @@
 
 	<source path="src" />
 	<assets path="assets" />
+	<assets path="mods" />
 
 	<!-- _______________________________ Libraries ______________________________ -->
 

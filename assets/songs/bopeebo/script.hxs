@@ -1,9 +1,0 @@
-function beatHit(curBeat) {
-    if (curBeat % 8 == 7) {
-        if(bf != null) {
-            bf.animTimer = 0.6;
-            bf.playAnim('hey', true);
-            bf.specialAnim = true;
-        }
-    }
-}

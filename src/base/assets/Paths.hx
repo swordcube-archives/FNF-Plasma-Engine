@@ -1,6 +1,9 @@
 package base.assets;
 
 class Paths {
+    public static var fallbackMod:String = "Friday Night Funkin'";
+    public static var currentMod:String = fallbackMod;
+
     public static var IMAGE_EXT:String = ".png";
     public static var SOUND_EXT:String = ".ogg";
 
@@ -8,7 +11,10 @@ class Paths {
         return '${Sys.getCwd()}$p';
     }
     public static function asset(p:String) {
-        return path('assets/$p');
+        var mmm:String = path('mods/$currentMod/$p');
+        if(!FileSystem.exists(mmm)) mmm = path('mods/$fallbackMod/$p');
+        if(!FileSystem.exists(mmm)) mmm = path('assets/$p');
+        return mmm;
     }
 
     // Functions for getting paths to code for scripting.

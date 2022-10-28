@@ -32,6 +32,12 @@ class Main extends Sprite {
 		Lib.current.stage.frameRate = Settings.get("Framerate Cap");
 		if(FlxG.save.data.volume != null)
 			FlxG.sound.volume = FlxG.save.data.volume;
+		if(FlxG.save.data.currentMod != null)
+			Paths.currentMod = FlxG.save.data.currentMod;
+		else {
+			FlxG.save.data.currentMod = Paths.currentMod;
+			FlxG.save.flush();
+		}
 
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent) {
 			switch(e.keyCode) {
