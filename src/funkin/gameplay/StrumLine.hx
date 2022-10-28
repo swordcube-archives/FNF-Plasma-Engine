@@ -124,6 +124,7 @@ class StrumLine extends FlxSpriteGroup {
             var event = new funkin.events.NoteHitEvent();
             event.note = coolNote;
             coolNote.script.call("onPlayerNoteHit", [event]);
+            PlayState.current.scripts.call("onPlayerNoteHit", [event]);
             if(!event.cancelled) {
                 // stacked notes
                 if (dataNotes.length > 1) {
@@ -217,6 +218,7 @@ class StrumLine extends FlxSpriteGroup {
                     var event = new funkin.events.NoteHitEvent();
                     event.note = note;
                     note.script.call("onPlayerNoteHit", [event]);
+                    PlayState.current.scripts.call("onPlayerNoteHit", [event]);
                     if(!event.cancelled) {
                         strums.members[note.direction].playAnim("confirm", true);
                         var rgb:Array<Int> = Note.keyInfo[keyCount].colors[note.direction];

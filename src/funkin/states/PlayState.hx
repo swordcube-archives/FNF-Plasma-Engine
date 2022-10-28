@@ -1,5 +1,10 @@
 package funkin.states;
 
+import scripting.HScriptModule;
+import haxe.io.Path;
+import scripting.Script;
+import scripting.ScriptModule;
+import scripting.Script.ScriptGroup;
 import funkin.gameplay.Note;
 import funkin.gameplay.StrumLine;
 import flixel.util.FlxSort;
@@ -67,6 +72,11 @@ class PlayState extends FunkinState {
     public var totalHit:Float = 0.0;
     public var accuracy:Float = 0.0;
 
+    public var songScript:ScriptModule;
+    public var scripts:ScriptGroup = new ScriptGroup();
+
+    public var stage:Stage;
+
     public function new(songSpeed:Float = 1.0) {
         super();
         current = this;
@@ -101,6 +111,9 @@ class PlayState extends FunkinState {
         if(songData.keyNumber != null)
             songData.keyCount = songData.keyNumber;
 
+        if(songData.stage == null)
+            songData.stage = "default";
+
         if(songData.mania != null) {
 			switch(songData.mania) {
 				case 1: songData.keyCount = 6;
@@ -109,7 +122,6 @@ class PlayState extends FunkinState {
 				default: songData.keyCount = 4;
 			}
 		}
-
         cachedSounds["inst"] = Assets.load(SOUND, Paths.songInst(songData.song));
         if(FileSystem.exists(Paths.songVoices(songData.song))) {
             cachedSounds["voices"] = Assets.load(SOUND, Paths.songVoices(songData.song));
@@ -144,6 +156,27 @@ class PlayState extends FunkinState {
 			}
 		}
 		unspawnNotes.sort(unspawnNoteSorting);
+        
+        // Setup scripts
+        songScript = Script.create(Paths.hxs('songs/${songData.song.toLowerCase()}/script'));
+        if(Std.isOfType(songScript, HScriptModule)) cast(songScript, HScriptModule).setScriptObject(this);
+        songScript.start(true, []);
+        var basePath:String = Paths.asset('data/scripts/global/');
+        for(item in FileSystem.readDirectory(basePath)) {
+            if(!FileSystem.isDirectory(basePath+item)) {
+                var path:String = "data/scripts/global/"+item.split("."+Path.extension(item))[0];
+                var script:ScriptModule = Script.create(Paths.hxs(path));
+                if(Std.isOfType(script, HScriptModule)) cast(script, HScriptModule).setScriptObject(this);
+                script.start(true, []);
+                scripts.addScript(script);
+            }
+        }
+        // Setup stage + characters
+        stage = new Stage().loadStage(songData.stage);
+        add(stage);
+        add(stage.layeredGroups[0]);
+        add(stage.layeredGroups[1]);
+        add(stage.layeredGroups[2]);
 
         // Setup UI
         UI = new FunkinUI();
@@ -201,6 +234,7 @@ class PlayState extends FunkinState {
                     susNote.strumTime = dunceNote.strumTime + (Conductor.stepCrochet * i) + Conductor.stepCrochet;
                     susNote.altAnim = note.altAnim;
                     susNote.parent = note.mustPress ? UI.playerStrums : UI.enemyStrums;
+                    susNote.alpha = 0.6;
                     if(i >= cum-1) {
                         susNote.isSustainTail = true;
                         susNote.playAnim("tail");
@@ -229,6 +263,9 @@ class PlayState extends FunkinState {
 
         if(Controls.getP("back")) {
             endingSong = true;
+            FlxG.sound.music.stop();
+            FlxG.sound.music.time = 0;
+            vocals.stop();
             FlxG.sound.playMusic(cachedSounds["titleScreen"]);
             Main.switchState(new FreeplayMenu());
         }

@@ -97,7 +97,7 @@ class Note extends Sprite {
         this.type = type;
         // Initialize this note's script
         script = Script.create(Paths.hxs('data/scripts/note_types/$type'));
-        script.call("onCreate", [this]);
+        script.start(true, []);
     }
 
     public var stepHeight:Float = 0.0;

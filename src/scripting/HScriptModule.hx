@@ -1,5 +1,6 @@
 package scripting;
 
+import funkin.states.PlayState;
 import tjson.TJSON;
 import flixel.math.FlxMath;
 import flixel.FlxSprite;
@@ -12,10 +13,12 @@ class HScriptModule extends ScriptModule {
     var program:Expr;
     var interp:Interp = new Interp();
 
+    var code:String = "";
+
     public var running:Bool = true;
 
     override function create(scriptPath:String) {
-        var code:String = Assets.load(TEXT, scriptPath);
+        code = Assets.load(TEXT, scriptPath);
 
         parser.allowTypes = true; // Allow typing of things like: var sprite:FlxSprite;
         parser.allowJSON = true; // Dunno what this does but uh yes.
@@ -32,11 +35,14 @@ class HScriptModule extends ScriptModule {
         addClasses([FlxG, FlxSprite, FlxMath]);
         // Funkin
         addClasses([Sprite, Settings, Utilities, Controls, Main, Conductor]);
+        set("PlayState", PlayState.current);
+        set("PlayState_", PlayState);
         // Abstracts
         set("Float", Float);
         set("Int", Int);
-
-        // Start the script
+        set("Bool", Bool);
+    }
+    override public function start(create:Bool = true, args:Array<Any>) {
         try {
             program = parser.parseString(code);
             interp.execute(program);
@@ -44,6 +50,11 @@ class HScriptModule extends ScriptModule {
             Console.error(e.details());
             running = false;
         }
+        if(create)
+            call("onCreate", [this]);
+    }
+    public function setScriptObject(o:Dynamic) {
+        interp.scriptObject = o;
     }
     function addClass(c:Class<Dynamic>) {
         set(Type.getClassName(Type.getClass(c)), c);
@@ -60,7 +71,7 @@ class HScriptModule extends ScriptModule {
     override public function setFunc(variable:String, value:Dynamic) {
         set(variable, value);
     }
-    override public function call(funcName:String, args:Array<Any>) {
+    override public function call(funcName:String, args:Array<Any>):Dynamic {
         if(!running) return true;
         try {
             var func:Dynamic = interp.variables.get(funcName);

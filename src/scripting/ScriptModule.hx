@@ -15,6 +15,7 @@ class ScriptModule implements IFlxDestroyable {
      * @param scriptPath The path to the code to load.
      */
     public function create(scriptPath) {}
+    public function start(create:Bool = true, args:Array<Any>) {}
     public function get(variable:String):Dynamic {return null;}
     public function set(variable:String, value:Dynamic) {}
     public function setFunc(funcName:String, value:Dynamic) {}
