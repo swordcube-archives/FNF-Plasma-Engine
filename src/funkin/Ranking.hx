@@ -94,7 +94,7 @@ class Ranking {
 	}
 
 	public static function judgeNote(strumTime:Float) {
-		var noteDiff:Float = Math.abs(Conductor.position - strumTime) / PlayState.current.songSpeed;
+		var noteDiff:Float = Math.abs(Conductor.position - strumTime) / FlxG.sound.music.pitch;
 		var lastJudge:String = "no";
 		
 		for(judge in judgements) {

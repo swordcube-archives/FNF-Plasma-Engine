@@ -59,6 +59,7 @@ class Stage extends FlxGroup {
                         });
                     }
                 });
+                script.set("stage", this);
                 script.start(true, []);
                 PlayState.current.scripts.addScript(script);
         }

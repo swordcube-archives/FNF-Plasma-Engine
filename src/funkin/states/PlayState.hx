@@ -1,5 +1,6 @@
 package funkin.states;
 
+import flixel.math.FlxMath;
 import scripting.HScriptModule;
 import haxe.io.Path;
 import scripting.Script;
@@ -76,6 +77,13 @@ class PlayState extends FunkinState {
     public var scripts:ScriptGroup = new ScriptGroup();
 
     public var stage:Stage;
+
+    public var dad:Character;
+    public var gf:Character;
+    public var bf:Character;
+
+    public var dads:Array<Character> = [];
+    public var bfs:Array<Character> = [];
 
     public function new(songSpeed:Float = 1.0) {
         super();
@@ -171,11 +179,35 @@ class PlayState extends FunkinState {
                 scripts.addScript(script);
             }
         }
+        // Initialize the gfVersion used for creating Girlfriend.
+		var gfVersion:String = "gf";
+		if(songData.player3 != null)
+			gfVersion = songData.player3;
+		if(songData.gfVersion != null)
+			gfVersion = songData.gfVersion;
+		if(songData.gf != null)
+			gfVersion = songData.gf;
+		songData.gf = gfVersion;
         // Setup stage + characters
         stage = new Stage().loadStage(songData.stage);
         add(stage);
+        var point = stage.characterPositions["dad"];
+        dad = new Character(point.x, point.y).loadCharacter(songData.player2);
+        add(dad);
         add(stage.layeredGroups[0]);
-        add(stage.layeredGroups[1]);
+        if(gfVersion == songData.player2) {
+            var point = stage.characterPositions["gf"];
+            dad.setPosition(point.x, point.y);
+            add(stage.layeredGroups[1]);
+        } else {
+            var point = stage.characterPositions["gf"];
+            gf = new Character(point.x, point.y).loadCharacter(gfVersion);
+            add(gf);
+            add(stage.layeredGroups[1]);
+        }
+        var point = stage.characterPositions["bf"];
+        bf = new Character(point.x, point.y, true).loadCharacter(songData.player1);
+        add(bf);
         add(stage.layeredGroups[2]);
 
         // Setup UI
@@ -191,17 +223,26 @@ class PlayState extends FunkinState {
     override function update(elapsed:Float) {
         super.update(elapsed);
 
-        Conductor.position += (elapsed * 1000.0) * songSpeed;
+        Conductor.position += (elapsed * 1000.0) * FlxG.sound.music.pitch;
         if(Conductor.position >= 0 && !startedSong)
             startSong();
 
         if(!(Conductor.isAudioSynced(FlxG.sound.music) && Conductor.isAudioSynced(vocals)))
             resyncSong();
 
+        for (c in bfs) {
+			if (c != null && c.animation.curAnim != null && c.holdTimer > Conductor.stepCrochet * c.singDuration * 0.001
+				&& !UI.playerStrums.pressed.contains(true)) {
+				if (c.animation.curAnim.name.startsWith('sing') && !c.animation.curAnim.name.endsWith('miss')) {
+					c.holdTimer = 0;
+					c.dance();
+				}
+			}
+		}
         for(note in unspawnNotes) {
 			var parent:StrumLine = note.mustPress ? UI.playerStrums : UI.enemyStrums;
-			var spawnMult:Float = (2500 / Math.abs(parent.noteSpeed)) * songSpeed;
-			if(note.strumTime + (Settings.get("Note Offset") * songSpeed) > Conductor.position + spawnMult)
+			var spawnMult:Float = (2500 / Math.abs(parent.noteSpeed)) * FlxG.sound.music.pitch;
+			if(note.strumTime + (Settings.get("Note Offset") * FlxG.sound.music.pitch) > Conductor.position + spawnMult)
 				break;
 
 			var noteSkin:String = currentSkin.replace("Default", Settings.get("Note Skin"));
@@ -209,7 +250,7 @@ class PlayState extends FunkinState {
 			var dunceNote:Note = new Note(-9999, -9999, parent, note.noteData, false, false, noteSkin);
 			dunceNote.stepCrochet = Conductor.stepCrochet;
 			dunceNote.rawStrumTime = note.strumTime;
-			dunceNote.strumTime = note.strumTime + (Settings.get("Note Offset") * songSpeed);
+			dunceNote.strumTime = note.strumTime + (Settings.get("Note Offset") * FlxG.sound.music.pitch);
 			dunceNote.altAnim = note.altAnim;
 			dunceNote.parent = note.mustPress ? UI.playerStrums : UI.enemyStrums;
             var event = new funkin.events.NoteCreationEvent();
@@ -260,7 +301,6 @@ class PlayState extends FunkinState {
             }
 			unspawnNotes.remove(note);
 		}
-
         if(Controls.getP("back")) {
             endingSong = true;
             FlxG.sound.music.stop();
@@ -273,7 +313,6 @@ class PlayState extends FunkinState {
 
     public function resyncSong() {
         if(!startedSong || endingSong) return;
-        
 		if(cachedSounds.exists("vocals")) {
             FlxG.sound.music.pause();
             vocals.pause();
@@ -284,6 +323,36 @@ class PlayState extends FunkinState {
             FlxG.sound.music.play();
 		} else Conductor.position = FlxG.sound.music.time;
 	}
+
+    public var gfSpeed:Int = 1;
+    
+    override function beatHit(curBeat:Int) {
+        if(endingSong) return;
+		var curSection:Int = Std.int(FlxMath.bound(curStep / 16, 0, songData.notes.length-1));
+		if (songData.notes[curSection].changeBPM)
+			Conductor.changeBPM(songData.notes[curSection].bpm);
+
+		for(c in dads) {
+			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing") && !c.stunned)
+				c.dance();
+		}
+		if(gf != null && curBeat % gfSpeed == 0 && !gf.stunned) gf.dance();
+		for(c in bfs) {
+			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing") && !c.stunned)
+				c.dance();
+		}
+
+        scripts.call("onBeatHit", [curBeat]);
+        super.beatHit(curBeat);
+        scripts.call("onBeatHitPost", [curBeat]);
+    }
+
+    override function stepHit(curStep:Int) {
+        if(endingSong) return;
+        scripts.call("onStepHit", [curStep]);
+        super.stepHit(curStep);
+        scripts.call("onStepHitPost", [curStep]);
+    }
 
     function startSong() {
         startedSong = true;
@@ -296,6 +365,8 @@ class PlayState extends FunkinState {
         vocals.pause();
         FlxG.sound.music.time = 0;
         vocals.time = 0;
+        FlxG.sound.music.pitch = songSpeed;
+        vocals.pitch = songSpeed;
         FlxG.sound.music.play();
         vocals.play();
     }

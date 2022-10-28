@@ -61,7 +61,7 @@ class StrumLine extends FlxSpriteGroup {
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, releaseInput);
     }
 
-    var pressed = [];
+    public var pressed = [];
 
     /**
      * The function used for handling when you press a key.
@@ -183,9 +183,9 @@ class StrumLine extends FlxSpriteGroup {
         super.update(elapsed);
         notes.forEachAlive(function(note:Note) {
             note.x = strums.members[note.direction].x;
-            note.y = strums.members[note.direction].y + ((Settings.get("Downscroll") ? 0.45 : -0.45) * (Conductor.position - note.strumTime) * (noteSpeed/PlayState.current.songSpeed)) - (Settings.get("Downscroll") ? note.noteYOff : -note.noteYOff);
+            note.y = strums.members[note.direction].y + ((Settings.get("Downscroll") ? 0.45 : -0.45) * (Conductor.position - note.strumTime) * (noteSpeed/FlxG.sound.music.pitch)) - (Settings.get("Downscroll") ? note.noteYOff : -note.noteYOff);
             if(note.isSustain) {
-                var stepHeight = (0.45 * note.stepCrochet * (noteSpeed/PlayState.current.songSpeed));
+                var stepHeight = (0.45 * note.stepCrochet * (noteSpeed/FlxG.sound.music.pitch));
                 if(Settings.get("Downscroll")) {
                     note.y -= note.height - stepHeight;
                     if ((isOpponent || (!isOpponent && pressed[note.direction])) && note.y - note.offset.y * note.scale.y + note.height >= (y + Note.spacing / 2)) {

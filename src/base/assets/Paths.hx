@@ -28,8 +28,9 @@ class Paths {
         return asset('$p.lua');
     }
     // Functions for getting paths to Images, Sounds, or Text.
-    public static function image(p:String) {
-        return asset('images/$p$IMAGE_EXT');
+    public static function image(p:String, useRoot:Bool = true) {
+        var root:String = useRoot ? "images/" : "";
+        return asset('$root$p$IMAGE_EXT');
     }
     public static function sound(p:String) {
         return asset('sounds/$p$SOUND_EXT');

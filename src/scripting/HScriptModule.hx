@@ -13,7 +13,7 @@ class HScriptModule extends ScriptModule {
     var program:Expr;
     var interp:Interp = new Interp();
 
-    var code:String = "";
+    public var code:String = "";
 
     public var running:Bool = true;
 
@@ -44,6 +44,7 @@ class HScriptModule extends ScriptModule {
     }
     override public function start(create:Bool = true, args:Array<Any>) {
         try {
+            running = true;
             program = parser.parseString(code);
             interp.execute(program);
         } catch(e) {
@@ -57,7 +58,8 @@ class HScriptModule extends ScriptModule {
         interp.scriptObject = o;
     }
     function addClass(c:Class<Dynamic>) {
-        set(Type.getClassName(Type.getClass(c)), c);
+        var array = Type.getClassName(c).split(".");
+        set(array[array.length-1], c);
     }
     function addClasses(a:Array<Class<Dynamic>>) {
         for(c in a) addClass(c);

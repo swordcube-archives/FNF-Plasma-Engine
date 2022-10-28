@@ -104,7 +104,7 @@ class Note extends Sprite {
     public var sustainScale:Float = 0.7;
     override function update(elapsed:Float) {
         super.update(elapsed);
-        var speed:Float = (parent.noteSpeed/PlayState.current.songSpeed);
+        var speed:Float = (parent.noteSpeed/FlxG.sound.music.pitch);
         stepHeight = ((0.45 * stepCrochet) * speed);
 
         if(isSustain && animation.curAnim != null && animation.curAnim.name != "tail")
