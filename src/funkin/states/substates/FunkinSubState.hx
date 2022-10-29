@@ -9,28 +9,6 @@ class FunkinSubState extends FlxSubState {
     var curStep:Int = 0;
 	var curBeat:Int = 0;
 
-    override function create() {
-        super.create();
-
-		// Clears sounds from memory
-		FlxG.sound.list.forEach(function(sound:FlxSound) {
-			FlxG.sound.list.remove(sound, true);
-			sound.stop();
-			sound.destroy();
-		});
-		FlxG.sound.list.clear();
-
-        // Clear all bitmaps from memory
-		FlxG.bitmap.dumpCache();
-		FlxG.bitmap.clearCache();
-
-		// Clear all cache
-		Assets.cache.clear();
-
-        // Run the garbage collector
-        System.gc();
-    }
-
     override function update(elapsed:Float) {
         var oldStep:Int = curStep;
         var oldBeat:Int = curBeat;
@@ -54,10 +32,8 @@ class FunkinSubState extends FlxSubState {
         if (oldBeat != curBeat && curBeat > 0)
             beatHit(curBeat);
 
-		#if debug
 		if(FlxG.keys.justPressed.F5)
 			Main.resetState();
-		#end
 
         super.update(elapsed);
     }

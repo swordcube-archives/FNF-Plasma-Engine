@@ -15,7 +15,12 @@ class Assets {
     public static function load(type:AssetType, path:String) {
         switch(type) {
             case IMAGE:
-                if(!cache.exists(path)) cache.add(path, FlxGraphic.fromBitmapData(BitmapData.fromFile(path), false, path, false));
+                if(!cache.exists(path)) {
+                    var graphic = FlxGraphic.fromBitmapData(BitmapData.fromFile(path), false, path, false);
+                    graphic.destroyOnNoUse = false;
+                    graphic.persist = true;
+                    cache.add(path, graphic);
+                }
                 return cache.get(path);
 
             case SPARROW:

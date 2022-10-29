@@ -1,8 +1,5 @@
 package;
 
-import openfl.Lib;
-import openfl.ui.Keyboard;
-import openfl.events.KeyboardEvent;
 import base.FPSCounter;
 import funkin.Transition;
 import flixel.FlxState;
@@ -12,7 +9,7 @@ import openfl.display.Sprite;
 
 class Main extends Sprite {
 	public static var engineVersion:String = "1.0.0-dev";
-	public static var currentState:Class<FlxState> = funkin.states.TitleScreen;
+	public static var currentState:Class<FlxState> = Init;
 
 	public static var fpsCounter:FPSCounter;
 
@@ -22,29 +19,6 @@ class Main extends Sprite {
 		FlxTransitionableState.skipNextTransOut = true;
 		addChild(new FlxGame(1280, 720, currentState, 1, 1000, 1000, true));
 		addChild(fpsCounter = new FPSCounter(10, 3, 0xFFFFFFFF));
-
-		FlxG.fixedTimestep = false;
-		FlxG.mouse.visible = false;
-
-		FlxG.save.bind("PlasmaEngine", "options");
-		Settings.init();
-		Controls.init();
-		Lib.current.stage.frameRate = Settings.get("Framerate Cap");
-		if(FlxG.save.data.volume != null)
-			FlxG.sound.volume = FlxG.save.data.volume;
-		if(FlxG.save.data.currentMod != null)
-			Paths.currentMod = FlxG.save.data.currentMod;
-		else {
-			FlxG.save.data.currentMod = Paths.currentMod;
-			FlxG.save.flush();
-		}
-
-		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent) {
-			switch(e.keyCode) {
-				case Keyboard.F11:
-					FlxG.fullscreen = !FlxG.fullscreen;
-			}
-		});
 	}
 
 	/**

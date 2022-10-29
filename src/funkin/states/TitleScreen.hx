@@ -33,6 +33,11 @@ class TitleScreen extends FunkinState {
     override function create() {
         super.create();
 
+        DiscordRPC.changePresence(
+            "In the Title Screen",
+            null
+        );
+
         Conductor.changeBPM(102);
         curWacky = FlxG.random.getObject(getIntroTextShit());
 

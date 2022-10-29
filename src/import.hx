@@ -7,8 +7,10 @@ import base.assets.Assets;
 import base.assets.Paths;
 
 // Game
+import tjson.TJSON;
 import base.Controls;
 import base.Settings;
+import base.DiscordRPC;
 
 // Funkin
 import base.Conductor;

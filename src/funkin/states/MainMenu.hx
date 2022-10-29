@@ -68,7 +68,7 @@ class MainMenu extends FunkinState {
 
         var devwarningformat = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED,  true), "<red>");
         var warnStringShit:String = Main.engineVersion.endsWith("-dev") ? '<red>[UNSTABLE]<red>' : '';
-        var watermark:FlxText = new FlxText(5,0,0,'Plasma Engine v${Main.engineVersion} $warnStringShit');
+        var watermark:FlxText = new FlxText(5,0,0,'Plasma Engine v${Main.engineVersion} $warnStringShit\nSelected Mod: ${Paths.currentMod}');
         watermark.applyMarkup(watermark.text, [devwarningformat]);
         watermark.setFormat(Paths.font("vcr.ttf"), 17, LEFT, OUTLINE, FlxColor.BLACK);
         watermark.y = FlxG.height - (watermark.height + 5);
@@ -126,5 +126,10 @@ class MainMenu extends FunkinState {
 
         FlxG.camera.follow(menuButtons.members[curSelected], null, 0.06);
         FlxG.sound.play(cachedSounds["scroll"]);
+
+        DiscordRPC.changePresence(
+            "In the Main Menu",
+            "Selecting "+Utilities.firstLetterUppercase(menuButtons.list[curSelected])
+        );
     }
 }

@@ -21,9 +21,15 @@
 	<assets path="assets" />
 	<assets path="mods" />
 
+	<!-- ____________________________ Engine Settings ____________________________-->
+
+	<define name="VIDEOS_ALLOWED" if="desktop || android" />
+	<define name="DISCORD_RPC" if="desktop cpp" />
+
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />
+	<haxelib name="discord_rpc" if="DISCORD_RPC" />
 	<haxelib name="hscript-improved" />
 	<haxelib name="tjson" />
 

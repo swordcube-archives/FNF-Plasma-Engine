@@ -4,9 +4,11 @@ import funkin.states.MainMenu;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
 class MainMenuList extends FlxTypedGroup<MainMenuItem> {
+    public var list:Array<String> = [];
     public var enabled:Bool = true;
 
     public function addItem(name:String, callback:Void->Void) {
+        list.push(name);
         var button:MainMenuItem = new MainMenuItem(0, 70 + (150 * members.length));
         button.load(SPARROW, Paths.image('menus/main/$name'));
         button.addAnim("idle", "basic", 24, true);

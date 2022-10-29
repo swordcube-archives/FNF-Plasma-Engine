@@ -10,6 +10,8 @@ class FunkinState extends FlxState {
     var curStep:Int = 0;
 	var curBeat:Int = 0;
 
+	public var allowSwitchingMods:Bool = true;
+
     override function create() {
         super.create();
 
@@ -58,10 +60,14 @@ class FunkinState extends FlxState {
         if (oldBeat != curBeat && curBeat > 0)
             beatHit(curBeat);
 
-		#if debug
 		if(FlxG.keys.justPressed.F5)
 			Main.resetState();
-		#end
+
+		if(allowSwitchingMods && FlxG.keys.justPressed.TAB) {
+            persistentUpdate = false;
+            persistentDraw = true;
+            openSubState(new funkin.states.substates.ModSelection());
+        }
 
         super.update(elapsed);
     }

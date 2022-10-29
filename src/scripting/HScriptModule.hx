@@ -1,7 +1,6 @@
 package scripting;
 
 import funkin.states.PlayState;
-import tjson.TJSON;
 import flixel.math.FlxMath;
 import flixel.FlxSprite;
 import hscript.Interp;

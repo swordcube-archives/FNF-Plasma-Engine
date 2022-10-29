@@ -1,5 +1,6 @@
 package funkin.states;
 
+import base.SongLoader;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
@@ -88,10 +89,27 @@ class FreeplayMenu extends FunkinState {
 	
 		add(scoreText);
 
+		var dumbStripThing = new Sprite(0, FlxG.height - 30);
+		dumbStripThing.makeGraphic(FlxG.width, 30, FlxColor.BLACK);
+		dumbStripThing.alpha = 0.6;
+		add(dumbStripThing);
+	
+		var dumbText = new FlxText(0, dumbStripThing.y + 5, 0, "Press SPACE to listen to the selected song.", 16);
+		dumbText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
+		dumbText.x = FlxG.width - (dumbText.width + 5);
+		add(dumbText);
+
+		var modPackJSON:ModPackData = TJSON.parse(Assets.load(TEXT, Paths.json("pack")));
+
+		var dumbText = new FlxText(5, dumbStripThing.y + 5, 0, "Current Mod: "+modPackJSON.name+" - Press TAB to switch", 16);
+		dumbText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT);
+		add(dumbText);
+
 		changeSelection();
 	}
 
-	var holdTimer:Float = 0.0;
+	var curPlaying:String = "";
+	var speedTimer:Float = 0.0;
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
@@ -107,9 +125,8 @@ class FreeplayMenu extends FunkinState {
 		if(FlxG.keys.pressed.SHIFT) {
 			if (Controls.get("ui_left") || Controls.get("ui_right")) {
 				changeSpeed(Utilities.getBoolAxis(Controls.get("ui_right"), Controls.get("ui_left")) * 0.05);
-			} else holdTimer = 0.0;
+			} else speedTimer = 0.0;
 		} else {
-			holdTimer = 0.0;
 			if(Controls.getP("ui_left"))
 				changeDifficulty(-1);
 
@@ -117,7 +134,21 @@ class FreeplayMenu extends FunkinState {
 				changeDifficulty(1);
 		}
 
-		if(Controls.getP("accept")) {
+		if(FlxG.keys.justPressed.SPACE && curPlaying != songList[curSelected].song) {
+			curPlaying = songList[curSelected].song;
+			var fart:Sound;
+			sys.thread.Thread.create(function() {
+				fart = Assets.load(SOUND, Paths.songInst(curPlaying));
+				if(FlxG.sound.music != null) FlxG.sound.music.stop();
+				FlxG.sound.playMusic(fart);
+				FlxG.sound.music.pitch = curSpeed;
+				FlxG.sound.music.fadeIn(1, 0, 1);
+			});
+		} else if(Controls.getP("accept")) {
+			PlayState.isStoryMode = false;
+			PlayState.availableDifficulties = songList[curSelected].difficulties;
+			PlayState.currentDifficulty = songList[curSelected].difficulties[curDifficulty];
+			PlayState.songData = SongLoader.returnSong(songList[curSelected].song, PlayState.currentDifficulty);
 			Main.switchState(new PlayState(curSpeed));
 		}
 
@@ -128,17 +159,17 @@ class FreeplayMenu extends FunkinState {
 	}
 	
 	function changeSpeed(mult:Float) {
-		holdTimer += FlxG.elapsed;
-		if ((Controls.getP("ui_left") || Controls.getP("ui_right")) || holdTimer > 1.5) {
+		speedTimer += FlxG.elapsed;
+		if ((Controls.getP("ui_left") || Controls.getP("ui_right")) || speedTimer > 0.5) {
 			curSpeed = FlxMath.bound(FlxMath.roundDecimal(curSpeed + mult, 2), 0.05, 10);
 			FlxG.sound.music.pitch = curSpeed;
-			holdTimer = 1.425;
+			speedTimer -= 0.025;
 		}
 	}
 
 	function updateScore() {
 		intendedScore = Highscore.getScore(songList[curSelected].song+"-"+songList[curSelected].difficulties[curDifficulty].trim());
-		lerpScore = FlxMath.lerp(lerpScore, intendedScore, FlxG.elapsed * 9.0);
+		lerpScore = FlxMath.lerp(lerpScore, intendedScore, FlxG.elapsed * 60 * 0.4);
 	
 		scoreText.text = "PERSONAL BEST:" + Math.round(lerpScore);
 		speedText.text = "Speed: " + curSpeed;
@@ -187,5 +218,10 @@ class FreeplayMenu extends FunkinState {
 	
 		diffText.text = "< " + songList[curSelected].difficulties[curDifficulty].toUpperCase() + " >";
 		updateScore();
+
+		DiscordRPC.changePresence(
+            "In the Freeplay Menu",
+            "Selecting "+songList[curSelected].displayName+" ["+songList[curSelected].difficulties[curDifficulty].toUpperCase()+']'
+        );
 	}
 }

@@ -1,5 +1,11 @@
 package funkin.states;
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.graphics.FlxGraphic;
+import flixel.FlxObject;
+import flixel.util.FlxTimer;
+import flixel.util.FlxStringUtil;
 import flixel.math.FlxMath;
 import scripting.HScriptModule;
 import haxe.io.Path;
@@ -27,13 +33,23 @@ typedef UnspawnNote = {
 }
 
 class PlayState extends FunkinState {
+    // Song stuff
     public static var songData:Song = SongLoader.returnSong("bopeebo", "hard");
     public static var current:PlayState;
-    public static var isStoryMode:Bool = false;
+	public static var currentDifficulty:String = "hard";
+	public static var availableDifficulties:Array<String> = ["easy", "normal", "hard"];
+	public static var isStoryMode:Bool = false;
+	public static var weekName:String = "";
+	public static var storyScore:Int = 0;
+	public static var storyPlaylist:Array<String> = [];
+    public var vocals:FlxSound = new FlxSound();
 
     public var unspawnNotes:Array<UnspawnNote> = [];
+
+    // UI
     public var UI:FunkinUI;
 
+    // Health
     public var health:Float = 1.0;
     public var minHealth:Float = 0.0;
     public var maxHealth:Float = 2.0;
@@ -50,32 +66,53 @@ class PlayState extends FunkinState {
 	**/
 	public var camBumping:Bool = true;
 
+	/**
+	 * The amount of zoom the background has (UI is unaffected)
+	 */
 	public var defaultCamZoom:Float = 1.0;
+
+    public var camFollow:FlxObject;
+	public static var prevCamFollow:FlxObject;
 
 	public var camGame:FlxCamera;
 	public var camHUD:FlxCamera;
 	public var camOther:FlxCamera;
 
+    /**
+     * The song multiplier. Not really used much. Use
+     * Use/modify `FlxG.sound.music.pitch` instead.
+     */
     public var songSpeed:Float = 1.0;
 
     public var startedSong:Bool = false;
     public var endingSong:Bool = false;
 
+    // Sounds that are cached
     public var cachedSounds:Map<String, Sound> = [
         // Music
         "titleScreen" => Assets.load(SOUND, Paths.music("menus/titleScreen"))
     ];
-    public var vocals:FlxSound = new FlxSound();
 
+    /**
+     * The skin the notes use for the current song.
+     * 
+     * Change this to something else to forcefully override to a different skin.
+     */
     public var currentSkin:String = "Default";
 
+    // Accuracy Stuff
+    public var combo:Int = 0;
+    public var score:Int = 0;
+    public var misses:Int = 0;
     public var totalNotes:Int = 0;
     public var totalHit:Float = 0.0;
     public var accuracy:Float = 0.0;
 
+    // Scripts
     public var songScript:ScriptModule;
     public var scripts:ScriptGroup = new ScriptGroup();
 
+    // Stage & Characters
     public var stage:Stage;
 
     public var dad:Character;
@@ -84,6 +121,11 @@ class PlayState extends FunkinState {
 
     public var dads:Array<Character> = [];
     public var bfs:Array<Character> = [];
+
+    // Misc
+    public var inCutscene:Bool = false;
+    public var usedPractice:Bool = false;
+	public var practiceMode:Bool = false;
 
     public var countdownProperties = {
         scale: 1,
@@ -100,6 +142,9 @@ class PlayState extends FunkinState {
     override function create() {
         super.create();
         current = this;
+
+        persistentUpdate = true;
+        persistentDraw = true;
 		
         // Stop the currently playing music because grrr >:(
 		FlxG.sound.music.stop();
@@ -113,6 +158,27 @@ class PlayState extends FunkinState {
 
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
+
+        countdownReady.antialiasing = Settings.get("Antialiasing");
+		countdownReady.cameras = [camHUD];
+		countdownReady.alpha = 0;
+		add(countdownReady);
+
+		countdownSet.antialiasing = Settings.get("Antialiasing");
+		countdownSet.cameras = [camHUD];
+		countdownSet.alpha = 0;
+		add(countdownSet);
+
+		countdownGo.antialiasing = Settings.get("Antialiasing");
+		countdownGo.cameras = [camHUD];
+		countdownGo.alpha = 0;
+		add(countdownGo);
+
+		if(!inCutscene) startCountdown();
+
+        camFollow = new FlxObject(0, 0, 1, 1);
+		add(camFollow);
+		FlxG.camera.follow(camFollow, LOCKON, 1);
 
         // Setup song
         Conductor.changeBPM(songData.bpm);
@@ -142,6 +208,11 @@ class PlayState extends FunkinState {
             vocals.loadEmbedded(cachedSounds["voices"]);
         }
         FlxG.sound.list.add(vocals);
+
+        DiscordRPC.changePresence(
+            "Playing "+songData.song,
+            "Starting song..."
+        );
 
         // Load the notes
 		for(section in songData.notes) {
@@ -197,6 +268,7 @@ class PlayState extends FunkinState {
         // Setup stage + characters
         stage = new Stage().loadStage(songData.stage);
         add(stage);
+        camGame.zoom = defaultCamZoom;
         var point = stage.characterPositions["dad"];
         dad = new Character(point.x, point.y).loadCharacter(songData.player2);
         add(dad);
@@ -215,6 +287,7 @@ class PlayState extends FunkinState {
         bf = new Character(point.x, point.y, true).loadCharacter(songData.player1);
         add(bf);
         add(stage.layeredGroups[2]);
+        moveCamera(!songData.notes[0].mustHitSection);
         dads.push(dad);
         bfs.push(bf);
 
@@ -228,10 +301,98 @@ class PlayState extends FunkinState {
 		return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime);
 	}
 
+    public function moveCamera(mustHitSection:Bool) {
+		if(!mustHitSection) {
+			if(dad == null) return;
+			camFollow.setPosition(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
+			camFollow.x += dad.cameraOffset.x;
+			camFollow.y += dad.cameraOffset.y;
+		} else {
+			if(bf == null) return;
+			camFollow.setPosition(bf.getMidpoint().x - 100, bf.getMidpoint().y - 100);
+			camFollow.x -= bf.cameraOffset.x;
+			camFollow.y += bf.cameraOffset.y;
+		}
+	}
+
+    // Countdown stuff!!
+	public var countdownReady:Sprite = new Sprite();
+	public var countdownSet:Sprite = new Sprite();
+	public var countdownGo:Sprite = new Sprite();
+
+	public var countdownTimer:FlxTimer;
+	public var countdownTick:Int = 0;
+
+	public function startCountdown() {
+		if(scripts.call("onStartCountdown", [], true) != false) {
+            var countdownSounds:Map<String, Sound> = [
+                "3"  => Assets.load(SOUND, Paths.sound(countdownProperties.soundPath+"/intro3")),
+                "2"  => Assets.load(SOUND, Paths.sound(countdownProperties.soundPath+"/intro2")),
+                "1"  => Assets.load(SOUND, Paths.sound(countdownProperties.soundPath+"/intro1")),
+                "go" => Assets.load(SOUND, Paths.sound(countdownProperties.soundPath+"/introGo")),
+            ];
+            var countdownTextures:Map<String, FlxGraphic> = [
+                "ready" => Assets.load(IMAGE, Paths.image(countdownProperties.imagePath+"/ready")),
+                "set"   => Assets.load(IMAGE, Paths.image(countdownProperties.imagePath+"/set")),
+                "go"    => Assets.load(IMAGE, Paths.image(countdownProperties.imagePath+"/go")),
+            ];
+			countdownTimer = new FlxTimer().start((Conductor.crochet / 1000.0) / FlxG.sound.music.pitch, function(tmr:FlxTimer) {
+				for(c in dads) {
+					if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing") && !c.stunned)
+						c.dance();
+				}
+				if(gf != null && tmr.loopsLeft % gfSpeed == 0 && !gf.stunned) gf.dance();
+				for(c in bfs) {
+					if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing") && !c.stunned)
+						c.dance();
+				}
+				scripts.call("onCountdownTick", [countdownTick]);
+				switch(countdownTick) {
+					case 0:
+						Conductor.position = Conductor.crochet * -4;
+                        FlxG.sound.play(countdownSounds["3"]);
+					case 1:
+						Conductor.position = Conductor.crochet * -3;
+						FlxG.sound.play(countdownSounds["2"]);
+						countdownReady.loadGraphic(countdownTextures["ready"]);
+						countdownReady.scale.set(countdownProperties.scale, countdownProperties.scale);
+						countdownReady.updateHitbox();
+						countdownReady.screenCenter();
+						countdownReady.alpha = 1;
+						FlxTween.tween(countdownReady, { alpha: 0 }, (Conductor.crochet / 1000.0) / FlxG.sound.music.pitch, { ease: FlxEase.cubeInOut });
+					case 2:
+						Conductor.position = Conductor.crochet * -2;
+						FlxG.sound.play(countdownSounds["1"]);
+						countdownSet.loadGraphic(countdownTextures["set"]);
+						countdownSet.scale.set(countdownProperties.scale, countdownProperties.scale);
+						countdownSet.updateHitbox();
+						countdownSet.screenCenter();
+						countdownSet.alpha = 1;
+						FlxTween.tween(countdownSet, { alpha: 0 }, (Conductor.crochet / 1000.0) / FlxG.sound.music.pitch, { ease: FlxEase.cubeInOut });
+					case 3:
+						Conductor.position = Conductor.crochet * -1;
+						FlxG.sound.play(countdownSounds["go"]);
+						countdownGo.loadGraphic(countdownTextures["go"]);
+						countdownGo.scale.set(countdownProperties.scale, countdownProperties.scale);
+						countdownGo.updateHitbox();
+						countdownGo.screenCenter();
+						countdownGo.alpha = 1;
+						FlxTween.tween(countdownGo, { alpha: 0 }, (Conductor.crochet / 1000.0) / FlxG.sound.music.pitch, { ease: FlxEase.cubeInOut });
+				}
+				scripts.call("onCountdownTickPost", [countdownTick]);
+				countdownTick++;
+			}, 5);
+		}
+	}
+
     override function update(elapsed:Float) {
         super.update(elapsed);
 
-        Conductor.position += (elapsed * 1000.0) * FlxG.sound.music.pitch;
+        var curSection:Int = Std.int(FlxMath.bound(curStep / 16, 0, songData.notes.length-1));
+        FlxG.camera.followLerp = 0.04;
+        moveCamera(songData.notes[curSection].mustHitSection);
+
+        if(!endingSong) Conductor.position += (elapsed * 1000.0) * FlxG.sound.music.pitch;
         if(Conductor.position >= 0 && !startedSong)
             startSong();
 
@@ -310,7 +471,10 @@ class PlayState extends FunkinState {
 			unspawnNotes.remove(note);
 		}
         if(Controls.getP("back")) {
+            persistentUpdate = false;
+			persistentDraw = true;
             endingSong = true;
+            rpcTimer.cancel();
             FlxG.sound.music.stop();
             FlxG.sound.music.time = 0;
             vocals.stop();
@@ -318,6 +482,75 @@ class PlayState extends FunkinState {
             Main.switchState(new FreeplayMenu());
         }
     }
+
+    public function finishSong(?ignoreNoteOffset:Bool = false) {
+		endingSong = true;
+
+		if(FlxG.sound.music != null)
+			FlxG.sound.music.time = 0;
+
+		if((Settings.get("Note Offset") * FlxG.sound.music.pitch) <= 0 || ignoreNoteOffset) {
+			endSong();
+		} else {
+			new FlxTimer().start((Settings.get("Note Offset") * FlxG.sound.music.pitch) / 1000, function(tmr:FlxTimer) {
+				endSong();
+			});
+		}
+	}
+
+    public function endSong() {
+		if(inCutscene) return;
+        persistentUpdate = false;
+        persistentDraw = true;
+        
+        endingSong = true;
+        
+        if(!usedPractice && score > Highscore.getScore(songData.song+"-"+currentDifficulty))
+            Highscore.setScore(songData.song+"-"+currentDifficulty, score);
+
+        if(scripts.call("onEndSong", [songData.song], true) != false) {
+            if(vocals != null)
+                vocals.stop();
+
+            FlxG.sound.playMusic(cachedSounds["titleScreen"]);
+            FlxG.sound.music.time = 0;
+
+            unspawnNotes = [];
+            for(note in UI.enemyStrums.notes.members) {
+                UI.enemyStrums.notes.remove(note, true);
+                note.destroy();
+                note = null;
+            }
+
+            for(note in UI.playerStrums.notes.members) {
+                UI.playerStrums.notes.remove(note, true);
+                note.destroy();
+                note = null;
+            }
+
+            if(isStoryMode) {
+                storyPlaylist.shift();
+                storyScore += score;
+
+                prevCamFollow = camFollow;
+
+                if(storyPlaylist.length > 0) {
+                    songData = SongLoader.returnSong(storyPlaylist[0], currentDifficulty);
+                    Main.switchState(new funkin.states.PlayState());
+                } else {
+                    if(storyScore > Highscore.getScore(weekName+"-"+currentDifficulty))
+                        Highscore.setScore(weekName+"-"+currentDifficulty, storyScore);
+                    
+                    Main.switchState(new funkin.states.MainMenu()); //REPLACE WITH STORY MENU!!!
+                }
+            }
+            else
+                Main.switchState(new funkin.states.FreeplayMenu());
+        }
+
+        scripts.call("onEndSongPost", [songData.song]);
+        scripts.call("endSongPost", [songData.song]);
+	}
 
     public function resyncSong() {
         if(!startedSong || endingSong) return;
@@ -362,6 +595,8 @@ class PlayState extends FunkinState {
         scripts.call("onStepHitPost", [curStep]);
     }
 
+    public var rpcTimer:FlxTimer;
+
     function startSong() {
         startedSong = true;
         Conductor.position = 0;
@@ -369,6 +604,7 @@ class PlayState extends FunkinState {
         if(cachedSounds.exists("voices"))
             vocals.play();
 
+        FlxG.sound.music.onComplete = finishSong.bind();
         FlxG.sound.music.pause();
         vocals.pause();
         FlxG.sound.music.time = 0;
@@ -377,6 +613,19 @@ class PlayState extends FunkinState {
         vocals.pitch = songSpeed;
         FlxG.sound.music.play();
         vocals.play();
+
+        DiscordRPC.changePresence(
+            "Playing "+songData.song,
+            'Time remaining: ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)} / ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)}'
+        );
+        rpcTimer = new FlxTimer().start(1, function(tmr:FlxTimer) {
+            if(startedSong && !endingSong) {
+                DiscordRPC.changePresence(
+                    "Playing "+songData.song,
+                    'Time remaining: ${FlxStringUtil.formatTime((FlxG.sound.music.length-FlxG.sound.music.time)/1000.0)} / ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)}'
+                );
+            }
+        }, 0);
     }
 
     override public function destroy() {

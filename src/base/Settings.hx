@@ -79,6 +79,12 @@ class Settings {
         ],
         "Appearance" => [
             {
+                name: "Antialiasing",
+                desc: "Gives you an extra bit of performance at the cost of slightly worse looking graphics.",
+                type: Checkbox,
+                value: true
+            },
+            {
                 name: "FPS Counter",
                 desc: "Choose whether or not to display the FPS at the top left of the screen.",
                 type: Checkbox,
