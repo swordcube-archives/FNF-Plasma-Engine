@@ -227,8 +227,8 @@ class Character extends Sprite {
 
 	/**
 	 * Sets the X and Y of this character to `x` and `y` with an offset of `positionOffset`'s x and y.
-	 * @param x 
-	 * @param y 
+	 * @param x The X to apply.
+	 * @param y The Y to apply.
 	 */
 	override public function setPosition(x:Float = 0, y:Float = 0) {
 		super.setPosition(x, y);
