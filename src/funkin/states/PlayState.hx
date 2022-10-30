@@ -266,8 +266,6 @@ class PlayState extends FunkinState {
         camGame.zoom = defaultCamZoom;
         var point = stage.characterPositions["dad"];
         dad = new Character(point.x, point.y).loadCharacter(songData.player2);
-        add(dad);
-        add(stage.layeredGroups[0]);
         if(gfVersion == songData.player2) {
             var point = stage.characterPositions["gf"];
             dad.setPosition(point.x, point.y);
@@ -278,6 +276,8 @@ class PlayState extends FunkinState {
             add(gf);
             add(stage.layeredGroups[1]);
         }
+        add(dad);
+        add(stage.layeredGroups[0]);
         var point = stage.characterPositions["bf"];
         bf = new Character(point.x, point.y, true).loadCharacter(songData.player1);
         add(bf);
