@@ -53,8 +53,8 @@ jobs:
       
       - name: Create Documentation Site
         run: |
-            chmod +x docs/docs.sh
-            docs/docs.sh
+            chmod +x docs/generate.sh
+            docs/generate.sh
       
       - name: github-actions deploy
         uses: JamesIves/github-pages-deploy-action@v4
