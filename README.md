@@ -17,6 +17,7 @@ haxelib remove openfl 9.2.0
 haxelib remove flixel-addons
 haxelib remove flixel-ui
 ```
+(Documentation is at https://swordcube.github.io/FNF-Plasma-Engine/)
 (Some stuff gets removed/replaced because we either need the git version or the flixel library includes it already!)
 
 - Step 5. If you run on Windows, install [Visual Studio Community 2019](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=community&rel=16&utm_medium=microsoft&utm_source=docs.microsoft.com&utm_campaign=download+from+relnotes&utm_content=vs2019ga+button) using these specific components in `Individual Components` instead of selecting the normal options:
