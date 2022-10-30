@@ -6,9 +6,9 @@ name: github-pages
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ main, dev ]
+    branches: [ dev ]
   pull_request:
-    branches: [ main, dev ]
+    branches: [ dev ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -49,7 +49,7 @@ jobs:
           haxelib install hxcpp-debug-server
           haxelib install dox
           haxelib install format
-          haxelib list
+          haxelib install tjson
       
       - name: Create Documentation Site
         run: |
