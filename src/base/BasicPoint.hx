@@ -1,6 +1,6 @@
 package base;
 
-typedef BasicPoint = {
+@:noCompletion typedef BasicPoint = {
     var x:Float;
     var y:Float;
 }

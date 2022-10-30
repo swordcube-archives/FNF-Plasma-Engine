@@ -3,6 +3,9 @@ package funkin.events;
 import funkin.gameplay.Note;
 import base.CancellableEvent;
 
+/**
+ * An event that runs whenever a note is created.
+ */
 class NoteCreationEvent extends CancellableEvent {
     /**
      * The note that triggered the event.

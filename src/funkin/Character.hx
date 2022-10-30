@@ -12,7 +12,7 @@ import funkin.states.PlayState;
 using StringTools;
 
 // psych
-typedef PsychCharacter = {
+@:noCompletion typedef PsychCharacter = {
 	var animations:Array<PsychCharacterAnimation>;
 	var no_antialiasing:Bool;
 	var image:String;
@@ -25,7 +25,7 @@ typedef PsychCharacter = {
 	var scale:Float;
 };
 
-typedef PsychCharacterAnimation = {
+@:noCompletion typedef PsychCharacterAnimation = {
 	var offsets:Array<Float>;
 	var loop:Bool;
 	var anim:String;
@@ -36,7 +36,7 @@ typedef PsychCharacterAnimation = {
 
 // leather
 
-typedef LeatherCharacterConfig = {
+@:noCompletion typedef LeatherCharacterConfig = {
 	var imagePath:String;
 	var animations:Array<LeatherCharacterAnimation>;
 	var defaultFlipX:Bool;
@@ -62,7 +62,7 @@ typedef LeatherCharacterConfig = {
 	var antialiased:Null<Bool>;
 };
 
-typedef LeatherCharacterAnimation = {
+@:noCompletion typedef LeatherCharacterAnimation = {
 	var name:String;
 	var animation_name:String;
 	var indices:Null<Array<Int>>;
@@ -72,10 +72,10 @@ typedef LeatherCharacterAnimation = {
 
 // yoshi
 
-typedef YoshiCharacter = {
+@:noCompletion typedef YoshiCharacter = {
 	var arrowColors:Array<String>; // Unused
-	var camOffset:YoshiCharPosShit;
-	var globalOffset:YoshiCharPosShit;
+	var camOffset:BasicPoint;
+	var globalOffset:BasicPoint;
 	var healthbarColor:String;
 	var flipX:Bool;
 	var anims:Array<YoshiCharacterAnimation>;
@@ -86,12 +86,7 @@ typedef YoshiCharacter = {
 	var scale:Float;
 };
 
-typedef YoshiCharPosShit = {
-	var x:Float;
-	var y:Float;
-};
-
-typedef YoshiCharacterAnimation = {
+@:noCompletion typedef YoshiCharacterAnimation = {
 	var indices:Null<Array<Int>>;
 	var x:Float;
 	var y:Float;

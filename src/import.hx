@@ -20,6 +20,7 @@ import base.Highscore;
 import base.Console;
 import base.CoolUtil;
 import base.MathUtil;
+import base.BasicPoint;
 
 // File System
 import sys.io.File;

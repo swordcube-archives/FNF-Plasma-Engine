@@ -1,12 +1,12 @@
 package base;
 
-enum SettingType {
+@:noCompletion enum SettingType {
     Checkbox;
     Selector;
     Number;
 }
 
-typedef Setting = {
+@:noCompletion typedef Setting = {
     var name:String;
     var desc:String;
     var type:SettingType;
@@ -17,6 +17,9 @@ typedef Setting = {
     var value:Any;
 };
 
+/**
+ * A class for managing preferences/settings.
+ */
 class Settings {
     public static final settings:Map<String, Array<Setting>> = [
         "Preferences" => [

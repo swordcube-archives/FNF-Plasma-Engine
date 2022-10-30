@@ -17,7 +17,9 @@ extern class Memory {
 }
 #else
 /**
- * fuck you
+ * Memory class to properly get accurate memory counts
+ * for the program.
+ * @author Leather128 (Haxe) - David Robert Nadeau (Original C Header)
  */
 class Memory {
     public static function getPeakUsage():Int { return 0; };

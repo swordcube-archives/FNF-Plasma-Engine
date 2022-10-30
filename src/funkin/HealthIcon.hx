@@ -4,6 +4,9 @@ import funkin.states.PlayState;
 import flixel.math.FlxMath;
 import flixel.graphics.FlxGraphic;
 
+/**
+ * An extension of a `Sprite` for health bar icons.
+ */
 class HealthIcon extends Sprite {
     public var sprTracker:flixel.FlxSprite;
     public var copyAlpha:Bool = true;

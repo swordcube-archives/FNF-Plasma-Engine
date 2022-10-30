@@ -16,6 +16,10 @@ class HScriptModule extends ScriptModule {
 
     public var running:Bool = true;
 
+    /**
+     * Controls what happens when this script is created.
+     * @param scriptPath The path to the code to load.
+     */
     override function create(scriptPath:String) {
         code = Assets.load(TEXT, scriptPath);
 
@@ -41,6 +45,11 @@ class HScriptModule extends ScriptModule {
         set("Int", Int);
         set("Bool", Bool);
     }
+    /**
+     * Starts the script.
+     * @param create Whether or not an `onCreate()` function should be called.
+     * @param args The arguments for the `onCreate()` function.
+     */
     override public function start(create:Bool = true, args:Array<Any>) {
         try {
             running = true;
@@ -63,15 +72,35 @@ class HScriptModule extends ScriptModule {
     function addClasses(a:Array<Class<Dynamic>>) {
         for(c in a) addClass(c);
     }
+    /**
+     * Gets a variable from this script.
+     * @param variable The variable name.
+     * @return Dynamic
+     */
     override public function get(variable:String) {
         return interp.variables.get(variable);
     }
+    /**
+     * Sets a variable from this script to `value`.
+     * @param variable The variable name.
+     * @param value The value of the variable.
+     */
     override public function set(variable:String, value:Dynamic) {
         interp.variables.set(variable, value);
     }
+    /**
+     * Sets a function from this script to `value`.
+     * @param funcName The function name.
+     * @param value The function to use.
+     */
     override public function setFunc(variable:String, value:Dynamic) {
         set(variable, value);
     }
+    /**
+     * Calls a function from the script.
+     * @param funcName The name of the function to be called.
+     * @param args The arguments for the `onCreate()` function.
+     */
     override public function call(funcName:String, args:Array<Any>):Dynamic {
         if(!running) return true;
         try {

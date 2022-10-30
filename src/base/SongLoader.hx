@@ -43,6 +43,9 @@ typedef Section = {
 	var changeTimeScale:Bool;
 }
 
+/**
+ * A class for loading song data.
+ */
 class SongLoader {
     public static function returnSong(song:String, diff:String = "normal"):Song
         return Json.parse(Assets.load(TEXT, Paths.json('songs/${song.toLowerCase()}/$diff'))).song;

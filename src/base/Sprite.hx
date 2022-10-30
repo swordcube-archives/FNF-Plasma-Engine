@@ -1,5 +1,8 @@
 package base;
 
+/**
+ * An extension of `FlxSprite` with offsets for specific animations.
+ */
 class Sprite extends flixel.FlxSprite {
     public var offsets:Map<String, BasicPoint> = [];
 

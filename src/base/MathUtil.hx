@@ -2,6 +2,9 @@ package base;
 
 import flixel.math.FlxMath;
 
+/**
+ * A class full of math utilties.
+ */
 class MathUtil {
     /**
      * This is just `FlxMath.lerp` but it adjusts to your framerate.

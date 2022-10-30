@@ -2,6 +2,9 @@ package funkin;
 
 import flixel.FlxSprite;
 
+/**
+ * A class for making sprites for a stage easier.
+ */
 class BGSprite extends FlxSprite {
 	private var idleAnim:String;
 
@@ -28,8 +31,7 @@ class BGSprite extends FlxSprite {
 	}
 
 	public function dance(?forceplay:Bool = false) {
-		if (idleAnim != null) {
+		if (idleAnim != null)
 			animation.play(idleAnim, forceplay);
-		}
 	}
 }

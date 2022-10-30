@@ -31,7 +31,7 @@ class CoolUtil {
 
 	/**
 	 * Opens a web browser and goes to `url`.
-	 * @param url 
+	 * @param url The URL to open.
 	 */
 	public static function openURL(url:String) {
 		#if linux
@@ -134,8 +134,8 @@ class CoolUtil {
 
 	/**
 	 * Splits `string` using `delimeter` and then converts all items in the array into an `Int` and returns it.
-	 * @param string 
-	 * @param delimeter 
+	 * @param string The string to split.
+	 * @param delimeter The character to use for splitting.
 	 * @return Array<Int>
 	 * @author Leather128
 	 */

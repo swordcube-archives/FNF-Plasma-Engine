@@ -8,6 +8,9 @@ import scripting.ScriptModule;
 import scripting.HScriptModule;
 import flixel.group.FlxGroup;
 
+/**
+ * A class for handling backgrounds in `PlayState`.
+ */
 class Stage extends FlxGroup {
     public var curStage:String = "";
     public var script:ScriptModule;

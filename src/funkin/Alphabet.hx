@@ -82,7 +82,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
     }
 }
 
-class AlphabetChar extends Sprite {
+@:noCompletion class AlphabetChar extends Sprite {
     public static var supportedChars:Array<String> = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()?,.<>“”'\\/ ".split("");
 
     public var char:String = "";
