@@ -11,6 +11,7 @@ import tjson.TJSON;
 import base.Controls;
 import base.Settings;
 import base.DiscordRPC;
+import base.VideoHelper;
 
 // Funkin
 import base.Conductor;

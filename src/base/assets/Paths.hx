@@ -63,4 +63,11 @@ class Paths {
     public static function font(p:String, ?mod:Null<String>) {
         return asset('fonts/$p', mod);
     }
+    public static function video(p:String, ?mod:Null<String>) {
+        if(mod == null) mod = currentMod;
+        var mmm:String = 'mods/$mod/videos/$p';
+        if(!FileSystem.exists(path(mmm))) mmm = 'mods/$fallbackMod/videos/$p';
+        if(!FileSystem.exists(path(mmm))) mmm = 'assets/videos/$p';
+        return mmm;
+    }
 }
