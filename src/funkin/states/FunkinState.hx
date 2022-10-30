@@ -10,6 +10,9 @@ class FunkinState extends FlxState {
     var curStep:Int = 0;
 	var curBeat:Int = 0;
 
+	var curStepFloat:Float = 0;
+	var curBeatFloat:Float = 0;
+
 	public var allowSwitchingMods:Bool = true;
 
     override function create() {
@@ -53,6 +56,9 @@ class FunkinState extends FlxState {
 
 		curStep = lastChange.stepTime + Math.floor((Conductor.position - lastChange.songTime) / Conductor.stepCrochet);
         curBeat = Math.floor(curStep / 4);
+
+		curStepFloat = lastChange.stepTime + ((Conductor.position - lastChange.songTime) / Conductor.stepCrochet);
+        curBeatFloat = curStepFloat / 4;
 
         if (oldStep != curStep && curStep > 0)
             stepHit(curStep);

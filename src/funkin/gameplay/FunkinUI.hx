@@ -28,4 +28,8 @@ class FunkinUI extends FlxGroup {
         healthBar = new HealthBar(0, Settings.get("Downscroll") ? 72 : FlxG.height * 0.9);
         add(healthBar);
     }
+
+    public function beatHit(curBeat:Int) {
+        healthBar.beatHit(curBeat);
+    }
 }

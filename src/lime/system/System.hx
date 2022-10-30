@@ -531,7 +531,7 @@ class System
         // executes first!!
         
         #if cpp
-        Utilities.fixWorkingDirectory();
+        CoolUtil.fixWorkingDirectory();
         #end
         
 		if (__applicationEntryPoint == null)

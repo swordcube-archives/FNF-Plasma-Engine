@@ -1,5 +1,8 @@
 package base;
 
+/**
+ * A class for printing stuff to the console but in a fancier way.
+ */
 class Console {
     public static var ansiColors:Map<String, String> = [];
 

@@ -18,7 +18,8 @@ import base.Highscore;
 
 // Utilities
 import base.Console;
-import base.Utilities;
+import base.CoolUtil;
+import base.MathUtil;
 
 // File System
 import sys.io.File;

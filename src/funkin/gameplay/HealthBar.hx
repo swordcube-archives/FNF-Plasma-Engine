@@ -41,7 +41,23 @@ class HealthBar extends FlxGroup {
         iconP1.iconHealth = bar.percent;
 
         var iconOffset:Int = 26;
-		iconP1.x = bar.x + (bar.width * (FlxMath.remapToRange(iconP1.iconHealth, 0, 100, 100, 0) * 0.01) - iconOffset);
-		iconP2.x = bar.x + (bar.width * (FlxMath.remapToRange(iconP2.iconHealth, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
+		iconP1.x = bar.x + (bar.width * (FlxMath.remapToRange(bar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
+		iconP2.x = bar.x + (bar.width * (FlxMath.remapToRange(bar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
+
+        iconP2.scale.x = MathUtil.fixedLerp(iconP2.scale.x, 1, 0.15);
+        iconP2.scale.y = MathUtil.fixedLerp(iconP2.scale.y, 1, 0.15);
+        iconP2.updateHitbox();
+
+        iconP1.scale.x = MathUtil.fixedLerp(iconP1.scale.x, 1, 0.15);
+        iconP1.scale.y = MathUtil.fixedLerp(iconP1.scale.y, 1, 0.15);
+        iconP1.updateHitbox();
+    }
+
+    public function beatHit(curBeat:Int) {
+        iconP2.scale.set(1.2, 1.2);
+        iconP2.updateHitbox();
+
+        iconP1.scale.set(1.2, 1.2);
+        iconP1.updateHitbox();
     }
 }

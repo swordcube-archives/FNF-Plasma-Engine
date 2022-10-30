@@ -8,7 +8,13 @@ class HealthIcon extends Sprite {
     public var sprTracker:flixel.FlxSprite;
     public var copyAlpha:Bool = true;
 
+    /**
+     * The character used for this icon.
+     */
     public var char:String = "face";
+    /**
+     * The amount of icons detected.
+     */
     public var iconAmount:Int = 0;
     
     /**

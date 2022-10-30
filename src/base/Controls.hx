@@ -3,6 +3,9 @@ package base;
 import flixel.input.FlxInput.FlxInputState;
 import flixel.input.keyboard.FlxKey;
 
+/**
+ * A class for handling UI & Gameplay controls.
+ */
 class Controls {
     public static var list:Map<String, Array<FlxKey>> = [
         "ui_left"  => [A, LEFT],

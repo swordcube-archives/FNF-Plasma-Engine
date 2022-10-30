@@ -32,6 +32,9 @@ class StrumLine extends FlxSpriteGroup {
      */
     public var isOpponent:Bool = false;
 
+    /**
+     * The speed that the notes go at in gameplay.
+     */
     public var noteSpeed:Float = Settings.get("Scroll Speed") > 0 ? Settings.get("Scroll Speed") : PlayState.songData.speed;
 
     function set_keyCount(v:Int):Int {
@@ -179,6 +182,15 @@ class StrumLine extends FlxSpriteGroup {
         strums.members[data].colorShader.setColors(255, 0, 0);
     }
 
+    function getSingDirection(direction:Int = 0) {
+        var direction:String = Note.keyInfo[keyCount].directions[direction];
+        switch(direction) {
+            case "space":
+                direction = "up";
+        }
+        return direction.toUpperCase();
+    }
+
     override function update(elapsed:Float) {
         super.update(elapsed);
         notes.forEachAlive(function(note:Note) {
@@ -210,17 +222,31 @@ class StrumLine extends FlxSpriteGroup {
             }
             if(isOpponent) {
                 if(Conductor.position - note.strumTime >= 0) {
+                    for(c in PlayState.current.dads) {
+                        if(c != null && !c.specialAnim) {
+                            var alt:String = note.altAnim ? "-alt" : "";
+                            c.holdTimer = 0;
+                            c.playAnim("sing"+getSingDirection(note.direction)+alt);
+                        }
+                    }
                     remove(note, true);
                     note.destroy();
                 }
             } else {
                 if(Conductor.position - note.strumTime >= 0 && note.isSustain && pressed[note.direction]) {
+                    for(c in PlayState.current.bfs) {
+                        if(c != null && !c.specialAnim) {
+                            var alt:String = note.altAnim ? "-alt" : "";
+                            c.holdTimer = 0;
+                            c.playAnim("sing"+getSingDirection(note.direction)+alt);
+                        }
+                    }
+                    strums.members[note.direction].playAnim("confirm", true);
                     var event = new funkin.events.NoteHitEvent();
                     event.note = note;
                     note.script.call("onPlayerNoteHit", [event]);
                     PlayState.current.scripts.call("onPlayerNoteHit", [event]);
                     if(!event.cancelled) {
-                        strums.members[note.direction].playAnim("confirm", true);
                         var rgb:Array<Int> = Note.keyInfo[keyCount].colors[note.direction];
                         strums.members[note.direction].colorShader.setColors(rgb[0], rgb[1], rgb[2]);
                         remove(note, true);
@@ -265,6 +291,9 @@ class StrumLine extends FlxSpriteGroup {
 class StrumNote extends Sprite {
     public var direction:Int = 0;
     public var parent:StrumLine;
+    /**
+     * The skin used for this strum note.
+     */
     public var skin(default, set):String;
     public var strumScale:Float = 0.7;
 

@@ -101,19 +101,43 @@ typedef YoshiCharacterAnimation = {
 	var framerate:Int;
 };
 
+/**
+ * A character sprite for gameplay.
+ */
 class Character extends Sprite {
+	/**
+	 * The name of the currently loaded character.
+	 */
 	public var curCharacter:String = "";
+	/**
+	 * The character to load when you lose all of your health.
+	 */
 	public var deathCharacter:String = "bf-dead";
-
+	/**
+	 * The icon used for the health bar.
+	 */
 	public var healthIcon:String = "face";
+	/**
+	 * The color used for the left or right sides of the health bar.
+	 */
 	public var healthBarColor:FlxColor = FlxColor.BLACK;
 
 	public var curDanceStep:Int = 0;
+	/**
+	 * Allows you to have multiple animations when the character dances.
+	 */
 	public var danceSteps:Array<String> = ["idle"];
+	/**
+	 * Controls if the character can dance or not.
+	 */
 	public var canDance:Bool = true;
-
+	/**
+	 * Controls if the character acts like Boyfriend (Like only going back to idle when you release a note)
+	 */
 	public var isPlayer:Bool = false;
-
+	/**
+	 * Controls how long the character can hold down a note for before going back to idle.
+	 */
 	public var singDuration:Float = 4;
 
 	public var animTimer:Float = 0;
@@ -122,14 +146,29 @@ class Character extends Sprite {
 	public var specialAnim:Bool = false;
 	public var debugMode:Bool = false;
 
+	/**
+	 * When setting the X and Y of this character using `setPosition()`, it gets offset using this variable.
+	 */
 	public var positionOffset:FlxPoint = new FlxPoint();
+	/**
+	 * When the camera focuses on this character, it gets offset using this variable.
+	 */
 	public var cameraOffset:FlxPoint = new FlxPoint();
 	public var ogPosition:FlxPoint = new FlxPoint();
 
+	/**
+	 * The trail behind this character.
+	 */
 	public var trail:FlxTrail;
 
+	/**
+	 * The script that this character loads.
+	 */
 	public var script:ScriptModule;
 
+	/**
+	 * Prevents this character from hitting notes.
+	 */
 	public var stunned:Bool = false;
 
 	public var initialized:Bool = false;
@@ -140,24 +179,40 @@ class Character extends Sprite {
 		ogPosition = new FlxPoint(x, y);
 	}
 
+	/**
+	 * Preloads a character with the name of `character`.
+	 * @param character The character to preload.
+	 * @param mod The mod to preload from.
+	 */
 	public static function preloadCharacter(character:String, ?mod:Null<String>) {
-		Assets.load(SPARROW, Paths.image('characters/$character/spritesheet', false));
+		Assets.load(SPARROW, Paths.image('characters/$character/spritesheet', false, mod));
 		var icon = new HealthIcon().loadIcon(character);
 	}
 
-	public function loadCharacter(character:String) {
+	/**
+	 * Loads the character with the name of `character`.
+	 * @param character The character to load.
+	 * @param mod The mod to load from.
+	 */
+	public function loadCharacter(character:String, ?mod:Null<String>) {
 		this.curCharacter = character;
 
 		if (script != null)
 			script.destroy();
 
-		script = Script.create(Paths.hxs('data/characters/$character/script'));
+		script = Script.create(Paths.hxs('data/characters/$character/script', mod));
 		if (Std.isOfType(script, HScriptModule)) {
+			script.set("mod", mod);
 			script.set("character", this);
 			cast(script, HScriptModule).setScriptObject(this);
 		} else {
 			script.destroy();
-			script = Script.create(Paths.hxs('data/characters/template/script'));
+			script = Script.create(Paths.hxs('data/characters/template/script', mod));
+			if (Std.isOfType(script, HScriptModule)) {
+				script.set("mod", mod);
+				script.set("character", this);
+				cast(script, HScriptModule).setScriptObject(this);
+			}
 			this.curCharacter = "template";
 		}
 		script.start(true, []);
@@ -175,6 +230,11 @@ class Character extends Sprite {
 		return this;
 	}
 
+	/**
+	 * Sets the X and Y of this character to `x` and `y` with an offset of `positionOffset`'s x and y.
+	 * @param x 
+	 * @param y 
+	 */
 	override public function setPosition(x:Float = 0, y:Float = 0) {
 		super.setPosition(x, y);
 		ogPosition = new FlxPoint(x, y);
@@ -182,12 +242,16 @@ class Character extends Sprite {
 		this.y += positionOffset.y;
 	}
 
-	public function loadPlasmaXML():Void {
+	/**
+	 * Gets the config XML from `mods/yourMod/data/characters/yourChar/config.xml` for this character and loads it.
+	 * @param mod The mod to load from.
+	 */
+	public function loadPlasmaXML(?mod:Null<String>):Void {
 		// Load the intial XML Data.
-		var data:Access = new Access(Xml.parse(Assets.load(TEXT, Paths.xml('data/characters/$curCharacter/config'))).firstElement());
+		var data:Access = new Access(Xml.parse(Assets.load(TEXT, Paths.xml('data/characters/$curCharacter/config', mod))).firstElement());
 
 		// Load attributes from the 'character' node aka first element.
-		frames = Assets.load(SPARROW, Paths.image('data/characters/$curCharacter/${data.att.spritesheet}', false));
+		frames = Assets.load(SPARROW, Paths.image('data/characters/$curCharacter/${data.att.spritesheet}', false, mod));
 		antialiasing = data.att.antialiasing == 'true' ? Settings.get("Antialiasing") : false;
 		singDuration = Std.parseFloat(data.att.sing_duration);
 		healthIcon = data.att.icon;
@@ -201,7 +265,7 @@ class Character extends Sprite {
 		for (anim in animations_node.nodes.animation) {
 			// Add the animation
 			if (anim.has.indices && anim.att.indices.split(",").length > 1)
-				animation.addByIndices(anim.att.name, anim.att.anim, Utilities.splitInt(anim.att.indices, ","), "", Std.parseInt(anim.att.fps),
+				animation.addByIndices(anim.att.name, anim.att.anim, CoolUtil.splitInt(anim.att.indices, ","), "", Std.parseInt(anim.att.fps),
 					anim.att.looped == "true");
 			else
 				animation.addByPrefix(anim.att.name, anim.att.anim, Std.parseInt(anim.att.fps), anim.att.looped == "true");
@@ -246,11 +310,17 @@ class Character extends Sprite {
 		initialized = true;
 	}
 
-	public function loadPsychJSON() {
-		frames = Assets.load(SPARROW, Paths.image('data/characters/$curCharacter/spritesheet', false));
+	/**
+	 * Gets the config JSON from `mods/yourMod/data/characters/yourChar/config.json` for this character and loads it.
+	 * 
+	 * **This function is designed to load Psych Engine JSONs, If you need to load a Yoshi Engine JSON, use `loadYoshiJSON()`**
+	 * @param mod The mod to load from.
+	 */
+	public function loadPsychJSON(?mod:Null<String>) {
+		frames = Assets.load(SPARROW, Paths.image('data/characters/$curCharacter/spritesheet', false, mod));
 		var path:String = 'data/characters/$curCharacter/config';
 		if (FileSystem.exists(Paths.json(path))) {
-			var json:PsychCharacter = tjson.TJSON.parse(Assets.load(TEXT, Paths.json(path)));
+			var json:PsychCharacter = tjson.TJSON.parse(Assets.load(TEXT, Paths.json(path, mod)));
 			for (anim in json.animations) {
 				if (anim.indices != null && anim.indices.length > 0)
 					animation.addByIndices(anim.anim, anim.name, anim.indices, "", anim.fps, anim.loop);
@@ -283,11 +353,17 @@ class Character extends Sprite {
 		}
 	}
 
-	public function loadYoshiJSON() {
-		frames = Assets.load(SPARROW, Paths.image('characters/$curCharacter/spritesheet', false));
+	/**
+	 * Gets the config JSON from `mods/yourMod/data/characters/yourChar/config.json` for this character and loads it.
+	 * 
+	 * **This function is designed to load Yoshi Engine JSONs, If you need to load a Psych Engine JSON, use `loadPsychJSON()`**
+	 * @param mod The mod to load from.
+	 */
+	public function loadYoshiJSON(?mod:Null<String>) {
+		frames = Assets.load(SPARROW, Paths.image('characters/$curCharacter/spritesheet', false, mod));
 		var path:String = 'data/characters/$curCharacter/config';
 		if (FileSystem.exists(Paths.json(path))) {
-			var json:YoshiCharacter = tjson.TJSON.parse(Assets.load(TEXT, Paths.json(path)));
+			var json:YoshiCharacter = tjson.TJSON.parse(Assets.load(TEXT, Paths.json(path, mod)));
 			cameraOffset.set(json.camOffset.x, json.camOffset.y);
 			positionOffset.set(json.globalOffset.x, json.globalOffset.y);
 
@@ -320,11 +396,17 @@ class Character extends Sprite {
 		}
 	}
 
-	public function loadLeatherJSON() {
+	/**
+	 * Gets the config JSON from `mods/yourMod/data/characters/yourChar/config.json` for this character and loads it.
+	 * 
+	 * **This function is designed to load Leather Engine JSONs, If you need to load a Psych or Yoshi JSON, use the `loadPsychJSON()` or `loadYoshiJSON()` functions.**
+	 * @param mod The mod to load from.
+	 */
+	public function loadLeatherJSON(?mod:Null<String>) {
 		var path:String = 'data/characters/$curCharacter/';
 
-		if (FileSystem.exists(Paths.json('${path}config'))) {
-			var config:LeatherCharacterConfig = cast tjson.TJSON.parse(Assets.load(TEXT, Paths.json('${path}config')));
+		if (FileSystem.exists(Paths.json('${path}config', mod))) {
+			var config:LeatherCharacterConfig = cast tjson.TJSON.parse(Assets.load(TEXT, Paths.json('${path}config', mod)));
 
 			if (!isPlayer)
 				flipX = config.defaultFlipX;
@@ -334,11 +416,11 @@ class Character extends Sprite {
 			danceSteps = config.dancesLeftAndRight ? ["danceLeft", "danceRight"] : ["idle"];
 
 			if (FileSystem.exists(Paths.txt('${path}${config.imagePath}')))
-				frames = Assets.load(PACKER, Paths.image('../${path}${config.imagePath}', true));
+				frames = Assets.load(PACKER, Paths.image('../${path}${config.imagePath}', true, mod));
 				// else if(FileSystem.exists(Paths.json("images/characters/" + config.imagePath + "/Animation.json", TEXT, "shared")))
 			//	frames = AtlasFrameMaker.construct("characters/" + config.imagePath);
 			else
-				frames = Assets.load(SPARROW, Paths.image('../${path}${config.imagePath}.png', true));
+				frames = Assets.load(SPARROW, Paths.image('../${path}${config.imagePath}', true, mod));
 
 			var size:Null<Float> = config.graphicSize;
 
@@ -400,7 +482,7 @@ class Character extends Sprite {
 			else
 				healthIcon = curCharacter;
 
-			var offsets_string_array:Array<String> = Utilities.listFromText(Assets.load(TEXT, Paths.txt('${path}offsets')));
+			var offsets_string_array:Array<String> = CoolUtil.listFromText(Assets.load(TEXT, Paths.txt('${path}offsets')));
 
 			for (offset_string in offsets_string_array) {
 				var offset_data:Array<String> = offset_string.split(" ");
@@ -470,6 +552,9 @@ class Character extends Sprite {
 
 	public var danced:Bool = false;
 
+	/**
+	 * Plays the correct idle animation for this character. (Only runs if `canDance` is set to `true`.)
+	 */
 	public function dance() {
 		if (!canDance) return;
 		if ((animation.curAnim != null && !animation.curAnim.name.startsWith("hair")) || animation.curAnim == null) {

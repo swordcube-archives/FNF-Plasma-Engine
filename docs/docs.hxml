@@ -1,0 +1,33 @@
+-D openfl=9.2.0
+-D flixel=5.0.0
+-D lime=8.0.0
+-D hscript=2.5.0
+-D flixel-addons=2.11.0
+-D flixel-ui=2.4.0
+-D hscript-improved=2.4.0
+
+-L lime
+-L openfl
+-L flixel
+-L hscript-improved
+-L tjson
+
+--macro lime._internal.macros.DefineMacro.run()
+--macro openfl.utils._internal.ExtraParamsMacro.include()
+--remap flash:openfl
+--macro flixel.system.macros.FlxDefines.run()
+
+-cp src
+
+--macro include('base')
+--macro include('external')
+--macro include('funkin')
+--macro include('scripting')
+--macro keep('Main')
+
+--no-output
+
+-D doc-gen
+
+-xml docs/doc.xml
+-neko dummy.n

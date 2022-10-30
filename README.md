@@ -6,7 +6,7 @@ A Friday Night Funkin' engine designed to be lightweight and easy to mod. Use `.
 - Step 3. [Install HaxeFlixel](https://haxeflixel.com/documentation/install-haxeflixel/)
 - Step 4. Run these commands to install required libraries:
 ```
-haxelib git flixel https://github.com/YoshiCrafter29/flixel
+haxelib git flixel https://github.com/Leather128/flixel
 haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
 haxelib git hscript-improved https://github.com/YoshiCrafter29/hscript-improved
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
@@ -17,7 +17,7 @@ haxelib remove openfl 9.2.0
 haxelib remove flixel-addons
 haxelib remove flixel-ui
 ```
-(Some stuff gets removed because we either need the git version or the flixel library includes it already!)
+(Some stuff gets removed/replaced because we either need the git version or the flixel library includes it already!)
 
 - Step 5. If you run on Windows, install [Visual Studio Community 2019](https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=community&rel=16&utm_medium=microsoft&utm_source=docs.microsoft.com&utm_campaign=download+from+relnotes&utm_content=vs2019ga+button) using these specific components in `Individual Components` instead of selecting the normal options:
 ```

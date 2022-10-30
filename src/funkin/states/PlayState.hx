@@ -78,12 +78,6 @@ class PlayState extends FunkinState {
 	public var camHUD:FlxCamera;
 	public var camOther:FlxCamera;
 
-    /**
-     * The song multiplier. Not really used much. Use
-     * Use/modify `FlxG.sound.music.pitch` instead.
-     */
-    public var songSpeed:Float = 1.0;
-
     public var startedSong:Bool = false;
     public var endingSong:Bool = false;
 
@@ -133,10 +127,9 @@ class PlayState extends FunkinState {
         soundPath: "gameplay/countdown/default"
     };
 
-    public function new(songSpeed:Float = 1.0) {
+    public function new() {
         super();
         current = this;
-        this.songSpeed = songSpeed;
     }
 
     override function create() {
@@ -247,13 +240,15 @@ class PlayState extends FunkinState {
         if(Std.isOfType(songScript, HScriptModule)) cast(songScript, HScriptModule).setScriptObject(this);
         songScript.start(true, []);
         var basePath:String = Paths.asset('data/scripts/global/');
-        for(item in FileSystem.readDirectory(basePath)) {
-            if(!FileSystem.isDirectory(basePath+item)) {
-                var path:String = "data/scripts/global/"+item.split("."+Path.extension(item))[0];
-                var script:ScriptModule = Script.create(Paths.hxs(path));
-                if(Std.isOfType(script, HScriptModule)) cast(script, HScriptModule).setScriptObject(this);
-                script.start(true, []);
-                scripts.addScript(script);
+        if(FileSystem.exists(basePath) && FileSystem.isDirectory(basePath)) {
+            for(item in FileSystem.readDirectory(basePath)) {
+                if(!FileSystem.isDirectory(basePath+item)) {
+                    var path:String = "data/scripts/global/"+item.split("."+Path.extension(item))[0];
+                    var script:ScriptModule = Script.create(Paths.hxs(path));
+                    if(Std.isOfType(script, HScriptModule)) cast(script, HScriptModule).setScriptObject(this);
+                    script.start(true, []);
+                    scripts.addScript(script);
+                }
             }
         }
         // Initialize the gfVersion used for creating Girlfriend.
@@ -569,6 +564,7 @@ class PlayState extends FunkinState {
     
     override function beatHit(curBeat:Int) {
         if(endingSong) return;
+        scripts.call("onBeatHit", [curBeat]);
 		var curSection:Int = Std.int(FlxMath.bound(curStep / 16, 0, songData.notes.length-1));
 		if (songData.notes[curSection].changeBPM)
 			Conductor.changeBPM(songData.notes[curSection].bpm);
@@ -582,8 +578,7 @@ class PlayState extends FunkinState {
 			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing") && !c.stunned)
 				c.dance();
 		}
-
-        scripts.call("onBeatHit", [curBeat]);
+        UI.beatHit(curBeat);
         super.beatHit(curBeat);
         scripts.call("onBeatHitPost", [curBeat]);
     }
@@ -609,8 +604,8 @@ class PlayState extends FunkinState {
         vocals.pause();
         FlxG.sound.music.time = 0;
         vocals.time = 0;
-        FlxG.sound.music.pitch = songSpeed;
-        vocals.pitch = songSpeed;
+        FlxG.sound.music.pitch = Conductor.rate;
+        vocals.pitch = Conductor.rate;
         FlxG.sound.music.play();
         vocals.play();
 

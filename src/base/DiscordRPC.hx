@@ -12,6 +12,9 @@ typedef DiscordRPCConfig = {
     var largeImageText:String;
 };
 
+/**
+ * A class for handling Discord Rich Presence.
+ */
 class DiscordRPC {
     public static var data:DiscordRPCConfig = {
         clientID: "",
@@ -86,7 +89,16 @@ class DiscordRPC {
 }
 #else
 // Fuck you lmao!
-class DiscordClient {
+typedef DiscordRPCConfig = {
+    var clientID:String;
+    var largeImageKey:String;
+    var largeImageText:String;
+};
+
+/**
+ * A class for handling Discord Rich Presence. (Does nothing because you're not using C++, lloser!)
+ */
+class DiscordRPC {
     public static var data:DiscordRPCConfig = {
         clientID: "",
         largeImageKey: "",
@@ -107,4 +119,5 @@ class DiscordClient {
 	public static function initialize(clientID:String = "969729521341329449", noTitle:Bool = false) {}
 
 	public static function changePresence(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float) {}
+}
 #end

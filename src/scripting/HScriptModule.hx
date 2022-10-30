@@ -33,7 +33,7 @@ class HScriptModule extends ScriptModule {
         // Flixel
         addClasses([FlxG, FlxSprite, FlxMath]);
         // Funkin
-        addClasses([Sprite, Settings, Utilities, Controls, Main, Conductor]);
+        addClasses([Sprite, Settings, CoolUtil, Controls, Main, Conductor]);
         set("PlayState", PlayState.current);
         set("PlayState_", PlayState);
         // Abstracts

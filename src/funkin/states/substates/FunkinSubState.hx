@@ -9,6 +9,9 @@ class FunkinSubState extends FlxSubState {
     var curStep:Int = 0;
 	var curBeat:Int = 0;
 
+    var curStepFloat:Float = 0;
+	var curBeatFloat:Float = 0;
+
     override function update(elapsed:Float) {
         var oldStep:Int = curStep;
         var oldBeat:Int = curBeat;
@@ -25,6 +28,9 @@ class FunkinSubState extends FlxSubState {
 
 		curStep = lastChange.stepTime + Math.floor((Conductor.position - lastChange.songTime) / Conductor.stepCrochet);
         curBeat = Math.floor(curStep / 4);
+
+        curStepFloat = lastChange.stepTime + ((Conductor.position - lastChange.songTime) / Conductor.stepCrochet);
+        curBeatFloat = curStep / 4;
 
         if (oldStep != curStep && curStep > 0)
             stepHit(curStep);

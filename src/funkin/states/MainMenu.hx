@@ -129,7 +129,7 @@ class MainMenu extends FunkinState {
 
         DiscordRPC.changePresence(
             "In the Main Menu",
-            "Selecting "+Utilities.firstLetterUppercase(menuButtons.list[curSelected])
+            "Selecting "+CoolUtil.firstLetterUppercase(menuButtons.list[curSelected])
         );
     }
 }

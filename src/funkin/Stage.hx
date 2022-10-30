@@ -24,7 +24,12 @@ class Stage extends FlxGroup {
         "bf"  => new FlxPoint(770, 100)
     ];
 
-    public function loadStage(name:String) {
+    /**
+     * Loads a new stage and removes the currently loaded one.
+     * @param name The stage to load.
+     * @param mod The mod to load from.
+     */
+    public function loadStage(name:String, ?mod:Null<String>) {
         curStage = name;
         if(script != null) PlayState.current.scripts.removeScript(script);
         for(fuck in [this, layeredGroups[0], layeredGroups[1], layeredGroups[2]]) {
@@ -37,13 +42,16 @@ class Stage extends FlxGroup {
         // hardcode if you want too
         switch(name) {
             default:
-                script = Script.create(Paths.hxs('data/stages/$name'));
+                script = Script.create(Paths.hxs('data/stages/$name', mod));
                 // Check if the script is a generic one (shouldn't happen unless file doesn't exist)
                 if(Std.isOfType(script, ScriptModule)) {
                     script.destroy();
-                    script = Script.create(Paths.hxs('data/stages/default'));
+                    script = Script.create(Paths.hxs('data/stages/default', mod));
                 }
-                if(Std.isOfType(script, HScriptModule)) cast(script, HScriptModule).setScriptObject(PlayState.current);
+                if(Std.isOfType(script, HScriptModule)) {
+                    script.set("mod", mod);
+                    cast(script, HScriptModule).setScriptObject(PlayState.current);
+                }
                 script.set("add", function(obj:FlxBasic, layer:Int = 0) {
                     switch(layer) {
                         case 0: add(obj);

@@ -9,11 +9,26 @@ enum AlphabetFont {
     Default;
 }
 
+/**
+ * A class for displaying text in a funky style.
+ */
 class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
     public var font:AlphabetFont = Bold;
     public var size:Float = 1.0;
-    public var text:String = "";
+    /**
+     * The text to display.
+     */
+    public var text(default, set):String;
 
+    function set_text(v:String) {
+        text = v;
+        refreshText();
+        return text = v;
+    }
+
+    /**
+     * Controls if this text should lerp to the center of the screen or not.
+     */
     public var isMenuItem:Bool = false;
 	public var forceX:Float = Math.NEGATIVE_INFINITY;
 	public var targetY:Float = 0;
@@ -25,10 +40,8 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
         super(x, y);
 
         this.font = font;
-        this.text = text;
         this.size = size;
-
-        refreshText();
+        this.text = text;
     }
 
     override function update(elapsed:Float) {
@@ -46,6 +59,9 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
         super.update(elapsed);
     }    
 
+    /**
+     * Removes the currently displaying text and displays new text.
+     */
     public function refreshText() {
         for(a in members) {
             remove(a, true);

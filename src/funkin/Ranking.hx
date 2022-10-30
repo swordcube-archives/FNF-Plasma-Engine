@@ -66,24 +66,31 @@ class Ranking {
 		0 => "F"
 	];
 
-	public static function getRank(accuracy:Float) {
+	/**
+	 * Returns a rank based off of `accuracy`.
+	 * @param accuracy 
+	 * @return String
+	 */
+	public static function getRank(accuracy:Float):String {
 		if (PlayState.current.totalNotes > 0) {
 			var lastAccuracy:Int = 0;
 			var leRank:String = "";
-
 			for (minAccuracy => rank in ranks) {
 				if (minAccuracy <= accuracy && minAccuracy >= lastAccuracy) {
 					lastAccuracy = minAccuracy;
 					leRank = rank;
 				}
 			}
-
 			return leRank;
 		}
-
 		return "N/A";
 	}
 
+	/**
+	 * Finds the judgement data with the name of `rating` and returns it.
+	 * @param rating 
+	 * @return Judgement
+	 */
 	public static function getInfo(rating:String):Judgement {
 		for(judge in judgements) {
 			if(judge.name == rating) {
@@ -93,7 +100,12 @@ class Ranking {
 		return null;
 	}
 
-	public static function judgeNote(strumTime:Float) {
+	/**
+	 * Returns a judgement based on the milliseconds of hitting a note.
+	 * @param strumTime The milliseconds to get the judgement from.
+	 * @return String
+	 */
+	public static function judgeNote(strumTime:Float):String {
 		var noteDiff:Float = Math.abs(Conductor.position - strumTime) / FlxG.sound.music.pitch;
 		var lastJudge:String = "no";
 		

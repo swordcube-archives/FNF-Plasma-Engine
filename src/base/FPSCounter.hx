@@ -71,7 +71,7 @@ class FPSCounter extends TextField {
 	}
 	#if cpp
 	function memoryFunction() {
-        text += Utilities.getSizeLabel(Memory.getCurrentUsage())+" / "+Utilities.getSizeLabel(Memory.getPeakUsage());
+        text += CoolUtil.getSizeLabel(Memory.getCurrentUsage())+" / "+CoolUtil.getSizeLabel(Memory.getPeakUsage());
 	}
 	#end
 	function versionFunction() {

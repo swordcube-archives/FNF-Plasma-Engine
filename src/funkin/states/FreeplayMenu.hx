@@ -1,5 +1,8 @@
 package funkin.states;
 
+import flixel.tweens.FlxEase;
+import sys.thread.Mutex;
+import sys.thread.Thread;
 import base.SongLoader;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
@@ -12,6 +15,7 @@ using StringTools;
 typedef FreeplaySong = {
 	var song:String;
 	var character:String;
+	var bpm:Float;
 	@:optional var displayName:String;
 
 	var color:FlxColor;
@@ -21,7 +25,13 @@ typedef FreeplaySong = {
 class FreeplayMenu extends FunkinState {
 	var bg:Sprite;
 	var curSelected:Int = 0;
+	var curSongPlaying:Int = -1;
 	var curDifficulty:Int = 1;
+
+	var songThread:Thread;
+	var threadActive:Bool = true;
+	var mutex:Mutex;
+	var songToPlay:Sound = null;
 
 	static var curSpeed:Float = 1.0;
 
@@ -40,11 +50,13 @@ class FreeplayMenu extends FunkinState {
 	var lerpScore:Float = 0;
 	var intendedScore:Int = 0;
 
-	var songList:Array<FreeplaySong> = Utilities.loadSongListXML(Assets.load(TEXT, Paths.xml("data/freeplaySongs")));
+	var songList:Array<FreeplaySong> = CoolUtil.loadSongListXML(Assets.load(TEXT, Paths.xml("data/freeplaySongs")));
 	var colorTween:FlxTween;
 
 	override function create() {
 		super.create();
+
+		mutex = new Mutex();
 
 		if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
 			FlxG.sound.playMusic(Assets.load(SOUND, Paths.music("menus/titleScreen")));
@@ -114,6 +126,13 @@ class FreeplayMenu extends FunkinState {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
+		if(FlxG.sound.music.playing)
+			Conductor.position = FlxG.sound.music.time;
+
+	    if (curSongPlaying > -1) {
+			var lerp = FlxMath.lerp(1.15, 1, FlxEase.cubeOut(curBeatFloat % 1));
+			grpIcons.members[curSongPlaying].scale.set(lerp, lerp);
+		}
 		updateScore();
 
 		if(Controls.getP("ui_up"))
@@ -124,7 +143,7 @@ class FreeplayMenu extends FunkinState {
 
 		if(FlxG.keys.pressed.SHIFT) {
 			if (Controls.get("ui_left") || Controls.get("ui_right")) {
-				changeSpeed(Utilities.getBoolAxis(Controls.get("ui_right"), Controls.get("ui_left")) * 0.05);
+				changeSpeed(CoolUtil.getBoolAxis(Controls.get("ui_right"), Controls.get("ui_left")) * 0.05);
 			} else speedTimer = 0.0;
 		} else {
 			if(Controls.getP("ui_left"))
@@ -134,28 +153,32 @@ class FreeplayMenu extends FunkinState {
 				changeDifficulty(1);
 		}
 
-		if(FlxG.keys.justPressed.SPACE && curPlaying != songList[curSelected].song) {
-			curPlaying = songList[curSelected].song;
-			var fart:Sound;
-			sys.thread.Thread.create(function() {
-				fart = Assets.load(SOUND, Paths.songInst(curPlaying));
-				if(FlxG.sound.music != null) FlxG.sound.music.stop();
-				FlxG.sound.playMusic(fart);
-				FlxG.sound.music.pitch = curSpeed;
-				FlxG.sound.music.fadeIn(1, 0, 1);
-			});
-		} else if(Controls.getP("accept")) {
+		if(Controls.getP("accept")) {
+			threadActive = false;
+			Conductor.rate = curSpeed;
 			PlayState.isStoryMode = false;
 			PlayState.availableDifficulties = songList[curSelected].difficulties;
 			PlayState.currentDifficulty = songList[curSelected].difficulties[curDifficulty];
 			PlayState.songData = SongLoader.returnSong(songList[curSelected].song, PlayState.currentDifficulty);
-			Main.switchState(new PlayState(curSpeed));
+			Main.switchState(new PlayState());
 		}
 
 		if(Controls.getP("back")) {
+			threadActive = false;
 			FlxG.sound.play(cachedSounds["cancel"]);
 			Main.switchState(new MainMenu());
 		}
+
+		mutex.acquire();
+		if (songToPlay != null) {
+			FlxG.sound.playMusic(songToPlay);
+			if (FlxG.sound.music.fadeTween != null) FlxG.sound.music.fadeTween.cancel();
+			FlxG.sound.music.volume = 0.0;
+			FlxG.sound.music.fadeIn(1.0, 0.0, 1.0);
+			Conductor.changeBPM(songList[curSelected].bpm);
+			songToPlay = null;
+		}
+		mutex.release();
 	}
 	
 	function changeSpeed(mult:Float) {
@@ -207,6 +230,7 @@ class FreeplayMenu extends FunkinState {
 
 		FlxG.sound.play(cachedSounds["scroll"]);
 		changeDifficulty();
+		changeSongPlaying();
 	}
 
 	function changeDifficulty(change:Int = 0) {
@@ -223,5 +247,29 @@ class FreeplayMenu extends FunkinState {
             "In the Freeplay Menu",
             "Selecting "+songList[curSelected].displayName+" ["+songList[curSelected].difficulties[curDifficulty].toUpperCase()+']'
         );
+	}
+
+	function changeSongPlaying() {
+		if (songThread == null) {
+			songThread = Thread.create(function() {
+				while (true) {
+					if (!threadActive) return;
+					var index:Null<Int> = Thread.readMessage(false);
+					if (index != null) {
+						if (index == curSelected && index != curSongPlaying) {
+							var inst:Sound = Assets.load(SOUND, Paths.songInst(songList[curSelected].song));
+							if (index == curSelected && threadActive) {
+								if(curSongPlaying > -1) grpIcons.members[curSongPlaying].scale.set(1,1);
+								mutex.acquire();
+								songToPlay = inst;
+								mutex.release();
+								curSongPlaying = curSelected;
+							}
+						}
+					}
+				}
+			});
+		}
+		songThread.sendMessage(curSelected);
 	}
 }
