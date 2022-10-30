@@ -140,11 +140,22 @@ class StrumLine extends FlxSpriteGroup {
                         }
                     }
                 }
-                remove(coolNote, true);
-                coolNote.destroy();
+                playerNoteHit(coolNote);
             }
             strums.members[data].playAnim("confirm");
         }
+    }
+
+    function playerNoteHit(note:Note) {
+        for(c in PlayState.current.bfs) {
+            if(c != null && !c.specialAnim) {
+                var alt:String = note.altAnim ? "-alt" : "";
+                c.holdTimer = 0;
+                c.playAnim("sing"+getSingDirection(note.direction)+alt);
+            }
+        }
+        remove(note, true);
+        note.destroy();
     }
 
     /**
