@@ -1,5 +1,8 @@
 package scripting;
 
+import flixel.util.FlxAxes;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import funkin.states.PlayState;
 import flixel.math.FlxMath;
 import flixel.FlxSprite;
@@ -36,7 +39,8 @@ class HScriptModule extends ScriptModule {
         });
         // Flixel
         set("FlxColor", HScriptClasses.get_FlxColor());
-        addClasses([FlxG, FlxSprite, FlxMath]);
+        set("FlxAxes", FlxAxes);
+        addClasses([FlxG, FlxSprite, FlxMath, FlxTween, FlxEase]);
         // Funkin
         addClasses([Paths, Assets, Sprite, Settings, CoolUtil, Controls, Main, Conductor]);
         set("PlayState", PlayState.current);

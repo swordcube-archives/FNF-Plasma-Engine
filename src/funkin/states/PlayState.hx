@@ -301,6 +301,7 @@ class PlayState extends FunkinState {
         moveCamera(!songData.notes[0].mustHitSection);
         dads.push(dad);
         bfs.push(bf);
+        scripts.call("onCreateAfterChars", []);
 
         // Setup UI
         UI = new FunkinUI();
@@ -401,10 +402,16 @@ class PlayState extends FunkinState {
     override function update(elapsed:Float) {
         super.update(elapsed);
 
+        scripts.call("onUpdate", [elapsed]);
+
         var curSection:Int = Std.int(FlxMath.bound(curStep / 16, 0, songData.notes.length-1));
         FlxG.camera.followLerp = 0.04;
         moveCamera(songData.notes[curSection].mustHitSection);
 
+        if(camZooming) {
+            camGame.zoom = MathUtil.fixedLerp(camGame.zoom, defaultCamZoom, 0.05);
+            camHUD.zoom = MathUtil.fixedLerp(camHUD.zoom, 1, 0.05);
+        }
         if(!endingSong) Conductor.position += (elapsed * 1000.0) * FlxG.sound.music.pitch;
         if(Conductor.position >= 0 && !startedSong)
             startSong();
@@ -494,6 +501,8 @@ class PlayState extends FunkinState {
             FlxG.sound.playMusic(cachedSounds["titleScreen"]);
             Main.switchState(new FreeplayMenu());
         }
+
+        scripts.call("onUpdatePost", [elapsed]);
     }
 
     public function finishSong(?ignoreNoteOffset:Bool = false) {
@@ -594,6 +603,10 @@ class PlayState extends FunkinState {
 			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing") && !c.stunned)
 				c.dance();
 		}
+        if(curBeat % 4 == 0 && camBumping && camGame.zoom < 1.35) {
+            camGame.zoom += 0.015;
+            camHUD.zoom += 0.03;
+        }
         UI.beatHit(curBeat);
         super.beatHit(curBeat);
         scripts.call("onBeatHitPost", [curBeat]);
