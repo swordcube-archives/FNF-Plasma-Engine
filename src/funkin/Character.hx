@@ -265,7 +265,7 @@ class Character extends Sprite {
 			else
 				animation.addByPrefix(anim.att.name, anim.att.anim, Std.parseInt(anim.att.fps), anim.att.looped == "true");
 
-			setOffset(anim.att.name, Std.parseFloat(anim.att.offsetX), Std.parseFloat(anim.att.offsetY));
+			setOffset(anim.att.name, -Std.parseFloat(anim.att.offsetX), -Std.parseFloat(anim.att.offsetY));
 		}
 
 		// Load miscellaneous attributes
@@ -322,7 +322,7 @@ class Character extends Sprite {
 				else
 					animation.addByPrefix(anim.anim, anim.name, anim.fps, anim.loop);
 
-				setOffset(anim.anim, anim.offsets[0], anim.offsets[1]);
+				setOffset(anim.anim, -anim.offsets[0], -anim.offsets[1]);
 			}
 
 			healthIcon = json.healthicon;
@@ -372,7 +372,7 @@ class Character extends Sprite {
 				else
 					animation.addByPrefix(anim.name, anim.anim, anim.framerate, anim.loop);
 
-				setOffset(anim.name, anim.x, anim.y);
+				setOffset(anim.name, -anim.x, -anim.y);
 			}
 
 			danceSteps = json.danceSteps;

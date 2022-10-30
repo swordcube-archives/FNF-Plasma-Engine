@@ -101,7 +101,7 @@ class Ranking {
 	}
 
 	/**
-	 * Returns a judgement based on the milliseconds of hitting a note.
+	 * Returns a judgement based on the strum time of a note.
 	 * @param strumTime The milliseconds to get the judgement from.
 	 * @return String
 	 */

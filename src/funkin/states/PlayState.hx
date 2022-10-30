@@ -127,6 +127,20 @@ class PlayState extends FunkinState {
         soundPath: "gameplay/countdown/default"
     };
 
+    public var judgementProperties = {
+        ratingPath: "ui/judgements/default/judgements",
+        comboPath: "ui/judgements/default/comboNumbers",
+
+        ratingScale: 0.7,
+        comboScale: 0.5,
+
+        ratingAntialiasing: true,
+        comboAntialiasing: true,
+
+        ratingSize: [394, 152],
+        comboSize: [150, 150]
+    };
+
     public function new() {
         super();
         current = this;
@@ -166,8 +180,6 @@ class PlayState extends FunkinState {
 		countdownGo.cameras = [camHUD];
 		countdownGo.alpha = 0;
 		add(countdownGo);
-
-		if(!inCutscene) startCountdown();
 
         camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
@@ -251,6 +263,7 @@ class PlayState extends FunkinState {
                 }
             }
         }
+        if(!inCutscene) startCountdown();
         // Initialize the gfVersion used for creating Girlfriend.
 		var gfVersion:String = "gf";
 		if(songData.player3 != null)

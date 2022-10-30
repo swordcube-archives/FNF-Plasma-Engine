@@ -22,27 +22,25 @@ class HealthBar extends FlxGroup {
 		bg.screenCenter(X);
 		add(bg);
 
+        var barColors:Array<FlxColor> = [
+            PlayState.current.dad != null ? PlayState.current.dad.healthBarColor : 0xFFFF0000,
+            PlayState.current.bf != null ? PlayState.current.bf.healthBarColor : 0xFF66FF33
+        ];
+
 		bar = new FlxBar(bg.x + 6, bg.y + 5, RIGHT_TO_LEFT, Std.int(bg.width - 12), Std.int(bg.height - 9), PlayState.current, "health", PlayState.current.minHealth, PlayState.current.maxHealth);
-        bar.createFilledBar(0xFFFF0000, 0xFF66FF33);
+        bar.createFilledBar(barColors[0], barColors[1]);
         add(bar);
 
-        iconP2 = new HealthIcon(0, bar.y - 72).loadIcon("dad");
-        add(iconP2);
-
-        iconP1 = new HealthIcon(0, bar.y - 72).loadIcon("bf");
+        iconP1 = new HealthIcon(0, bar.y - 72).loadIcon(PlayState.current.bf != null ? PlayState.current.bf.healthIcon : "face");
         iconP1.flipX = true;
         add(iconP1);
+
+        iconP2 = new HealthIcon(0, bar.y - 72).loadIcon(PlayState.current.dad != null ? PlayState.current.dad.healthIcon : "face");
+        add(iconP2);
 	}
 
     override function update(elapsed:Float) {
         super.update(elapsed);
-
-        iconP2.iconHealth = 100 - bar.percent;
-        iconP1.iconHealth = bar.percent;
-
-        var iconOffset:Int = 26;
-		iconP1.x = bar.x + (bar.width * (FlxMath.remapToRange(bar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
-		iconP2.x = bar.x + (bar.width * (FlxMath.remapToRange(bar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
 
         iconP2.scale.x = MathUtil.fixedLerp(iconP2.scale.x, 1, 0.15);
         iconP2.scale.y = MathUtil.fixedLerp(iconP2.scale.y, 1, 0.15);
@@ -51,6 +49,17 @@ class HealthBar extends FlxGroup {
         iconP1.scale.x = MathUtil.fixedLerp(iconP1.scale.x, 1, 0.15);
         iconP1.scale.y = MathUtil.fixedLerp(iconP1.scale.y, 1, 0.15);
         iconP1.updateHitbox();
+
+        updateIcons();
+    }
+
+    public function updateIcons() {
+        iconP2.iconHealth = 100 - bar.percent;
+        iconP1.iconHealth = bar.percent;
+
+        var iconOffset:Int = 26;
+		iconP1.x = bar.x + (bar.width * (FlxMath.remapToRange(bar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
+		iconP2.x = bar.x + (bar.width * (FlxMath.remapToRange(bar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
     }
 
     public function beatHit(curBeat:Int) {
@@ -59,5 +68,7 @@ class HealthBar extends FlxGroup {
 
         iconP1.scale.set(1.2, 1.2);
         iconP1.updateHitbox();
+
+        updateIcons();
     }
 }
