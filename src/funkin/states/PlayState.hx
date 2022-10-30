@@ -259,17 +259,12 @@ class PlayState extends FunkinState {
         songScript = Script.create(Paths.hxs('songs/${songData.song.toLowerCase()}/script'));
         if(Std.isOfType(songScript, HScriptModule)) cast(songScript, HScriptModule).setScriptObject(this);
         songScript.start(true, []);
-        var basePath:String = Paths.asset('data/scripts/global/');
-        if(FileSystem.exists(basePath) && FileSystem.isDirectory(basePath)) {
-            for(item in FileSystem.readDirectory(basePath)) {
-                if(!FileSystem.isDirectory(basePath+item)) {
-                    var path:String = "data/scripts/global/"+item.split("."+Path.extension(item))[0];
-                    var script:ScriptModule = Script.create(Paths.hxs(path));
-                    if(Std.isOfType(script, HScriptModule)) cast(script, HScriptModule).setScriptObject(this);
-                    script.start(true, []);
-                    scripts.addScript(script);
-                }
-            }
+        for(item in CoolUtil.readDirectory('data/scripts/global')) {
+            var path:String = "data/scripts/global/"+item.split("."+Path.extension(item))[0];
+            var script:ScriptModule = Script.create(Paths.hxs(path));
+            if(Std.isOfType(script, HScriptModule)) cast(script, HScriptModule).setScriptObject(this);
+            script.start(true, []);
+            scripts.addScript(script);
         }
         if(!inCutscene) startCountdown();
         // Initialize the gfVersion used for creating Girlfriend.
@@ -311,6 +306,8 @@ class PlayState extends FunkinState {
         UI = new FunkinUI();
         UI.cameras = [camHUD];
         add(UI);
+
+        scripts.call("onCreatePost", []);
     }
 
     function unspawnNoteSorting(Obj1:UnspawnNote, Obj2:UnspawnNote):Int {
@@ -592,7 +589,7 @@ class PlayState extends FunkinState {
 			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing") && !c.stunned)
 				c.dance();
 		}
-		if(gf != null && !gf.animation.curAnim.name.startsWith("hair") && curBeat % gfSpeed == 0 && !gf.stunned) gf.dance();
+		if(gf != null && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("hair") && curBeat % gfSpeed == 0 && !gf.stunned) gf.dance();
 		for(c in bfs) {
 			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing") && !c.stunned)
 				c.dance();

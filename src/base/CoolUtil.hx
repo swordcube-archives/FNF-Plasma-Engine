@@ -18,6 +18,20 @@ class CoolUtil {
 		Sys.setCwd(p.join("\\") + "\\");
 	}
 
+	public static function readDirectory(dir:String) {
+		var arrayToReturn:Array<String> = [];
+		var basePath:String = '${Sys.getCwd()}mods/';
+		for(folder in FileSystem.readDirectory(basePath)) {
+			if(FileSystem.isDirectory(basePath+folder) && FileSystem.exists(basePath+folder+"/"+dir)) {
+				for(item in FileSystem.readDirectory(basePath+folder+"/"+dir)) {
+					if(!arrayToReturn.contains(item))
+						arrayToReturn.push(item);
+				}
+			}
+		}
+		return arrayToReturn;
+	}
+
 	/**
 	 * Converts `b1` and `b2` into either -1 or 1.
 	 * @param b1 The first `Bool`

@@ -108,7 +108,7 @@ class StrumLine extends FlxSpriteGroup {
         var closestNotes:Array<Note> = [];
 
         notes.forEachAlive(function(note:Note) {
-            if(Conductor.position - note.strumTime >= -Conductor.safeZoneOffset*2)
+            if(Conductor.position - note.strumTime >= -((Conductor.safeZoneOffset*2)*FlxG.sound.music.pitch))
                 closestNotes.push(note);
         });
 
@@ -171,7 +171,7 @@ class StrumLine extends FlxSpriteGroup {
         var judgeData:Judgement = Ranking.getInfo(judgement);
         var placement:String = Std.string(combo);
 
-        PlayState.current.score += judgeData.score;
+        PlayState.current.score += Math.floor(judgeData.score * (Conductor.rate < 1 ? Conductor.rate : 1));
         PlayState.current.health += judgeData.health;
 
         PlayState.current.totalNotes++;
@@ -342,6 +342,10 @@ class StrumLine extends FlxSpriteGroup {
                             c.playAnim("sing"+getSingDirection(note.direction)+alt, true);
                         }
                     }
+                    // you get half the health because fuck you i guess, lmao!
+                    PlayState.current.health += PlayState.current.healthGain*0.5;
+                    if(PlayState.current.health > PlayState.current.maxHealth)
+                        PlayState.current.health = PlayState.current.maxHealth;
                     strums.members[note.direction].playAnim("confirm", true);
                     var event = new funkin.events.NoteHitEvent();
                     event.note = note;

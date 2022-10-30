@@ -66,12 +66,27 @@ class HealthIcon extends Sprite {
     * @return Int
     * @author Leather128
     */
+    // modified this a bit because this was funky as hell with 2 icons
+    // made it so if there's 1 icon it always returns 0 because well
+    // there's no other frames
     function getIconIndex(health:Float, icons:Int):Int {
-        for (i in 0...icons) {
-            if (health > (100.0 / icons) * (i+1)) continue;
-            
-            // finds the first icon we are less or equal to, then choose it
-            return i;
+        switch(icons) {
+            case 1:
+                return 0;
+            case 2:
+                if(health < 20) return 0;
+                return 1;
+            case 3:
+                if(health < 20) return 0;
+                if(health > 80) return 2;
+                return 1;
+            default:
+                for (i in 0...icons) {
+                    if (health > (100.0 / icons) * (i+1)) continue;
+                    
+                    // finds the first icon we are less or equal to, then choose it
+                    return i;
+                }
         }
         return 0;
     }

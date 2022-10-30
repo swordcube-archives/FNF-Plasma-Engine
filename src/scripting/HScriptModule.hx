@@ -35,9 +35,10 @@ class HScriptModule extends ScriptModule {
             "stringify": function(data:Dynamic, thing:String = "\t") {return TJSON.encode(data, thing == "\t" ? "fancy" : null);}
         });
         // Flixel
+        set("FlxColor", HScriptClasses.get_FlxColor());
         addClasses([FlxG, FlxSprite, FlxMath]);
         // Funkin
-        addClasses([Sprite, Settings, CoolUtil, Controls, Main, Conductor]);
+        addClasses([Paths, Assets, Sprite, Settings, CoolUtil, Controls, Main, Conductor]);
         set("PlayState", PlayState.current);
         set("PlayState_", PlayState);
         // Abstracts
