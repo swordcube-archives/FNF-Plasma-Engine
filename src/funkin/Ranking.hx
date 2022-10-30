@@ -68,7 +68,7 @@ class Ranking {
 
 	/**
 	 * Returns a rank based off of `accuracy`.
-	 * @param accuracy 
+	 * @param accuracy The accuracy to get the rank from.
 	 * @return String
 	 */
 	public static function getRank(accuracy:Float):String {

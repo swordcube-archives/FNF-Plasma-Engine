@@ -100,7 +100,15 @@ class PlayState extends FunkinState {
     public var misses:Int = 0;
     public var totalNotes:Int = 0;
     public var totalHit:Float = 0.0;
-    public var accuracy:Float = 0.0;
+    // uses a getter function because fuck you
+    public var accuracy(get, null):Float;
+
+    function get_accuracy() {
+        var calculated:Float = 0;
+        if((totalNotes+misses) != 0 && totalHit != 0.0)
+            calculated = totalHit / (totalNotes+misses);
+        return calculated;
+    }
 
     // Scripts
     public var songScript:ScriptModule;
@@ -529,13 +537,11 @@ class PlayState extends FunkinState {
                 note.destroy();
                 note = null;
             }
-
             for(note in UI.playerStrums.notes.members) {
                 UI.playerStrums.notes.remove(note, true);
                 note.destroy();
                 note = null;
             }
-
             if(isStoryMode) {
                 storyPlaylist.shift();
                 storyScore += score;

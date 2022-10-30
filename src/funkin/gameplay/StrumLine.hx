@@ -108,7 +108,7 @@ class StrumLine extends FlxSpriteGroup {
         var closestNotes:Array<Note> = [];
 
         notes.forEachAlive(function(note:Note) {
-            if(Conductor.position - note.strumTime >= -Conductor.safeZoneOffset*1.5)
+            if(Conductor.position - note.strumTime >= -Conductor.safeZoneOffset*2)
                 closestNotes.push(note);
         });
 
@@ -173,6 +173,10 @@ class StrumLine extends FlxSpriteGroup {
 
         PlayState.current.score += judgeData.score;
         PlayState.current.health += judgeData.health;
+
+        PlayState.current.totalNotes++;
+        PlayState.current.totalHit += judgeData.mod;
+        PlayState.current.UI.updateScoreText();
 
 		var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
 		coolText.screenCenter();
@@ -353,6 +357,8 @@ class StrumLine extends FlxSpriteGroup {
                 }
                 if(Conductor.position - note.strumTime >= Conductor.safeZoneOffset) {
                     PlayState.current.combo = 0;
+                    PlayState.current.misses++;
+                    PlayState.current.UI.updateScoreText();
                     for(c in PlayState.current.bfs) {
                         if(c != null && !c.specialAnim) {
                             c.holdTimer = 0;

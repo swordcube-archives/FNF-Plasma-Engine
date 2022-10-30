@@ -27,7 +27,7 @@ class HealthBar extends FlxGroup {
             PlayState.current.bf != null ? PlayState.current.bf.healthBarColor : 0xFF66FF33
         ];
 
-		bar = new FlxBar(bg.x + 6, bg.y + 5, RIGHT_TO_LEFT, Std.int(bg.width - 12), Std.int(bg.height - 9), PlayState.current, "health", PlayState.current.minHealth, PlayState.current.maxHealth);
+		bar = new FlxBar(bg.x + 6, bg.y + 4, RIGHT_TO_LEFT, Std.int(bg.width - 12), Std.int(bg.height - 9), PlayState.current, "health", PlayState.current.minHealth, PlayState.current.maxHealth);
         bar.createFilledBar(barColors[0], barColors[1]);
         add(bar);
 
