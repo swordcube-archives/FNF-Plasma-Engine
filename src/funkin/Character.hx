@@ -497,7 +497,6 @@ class Character extends Sprite {
 		super.update(elapsed);
 
 		script.call("onUpdate", [elapsed]);
-		script.call("onProcess", [elapsed]);
 
 		if (animTimer > 0) {
 			animTimer -= elapsed;
@@ -542,7 +541,6 @@ class Character extends Sprite {
 			playAnim('danceRight');
 
 		script.call("onUpdatePost", [elapsed]);
-		script.call("onProcessPost", [elapsed]);
 	}
 
 	public var danced:Bool = false;
