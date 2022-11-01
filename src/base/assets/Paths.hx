@@ -19,20 +19,18 @@ class Paths {
     }
 
     // Functions for getting paths to code for scripting.
-    public static function hxs(p:String, ?mod:Null<String>) {
+    public static function script(p:String, ?mod:Null<String>) {
         var pathsToCheck:Array<String> = [
             asset('$p.hx', mod),
             asset('$p.hxs', mod),
             asset('$p.hsc', mod),
-            asset('$p.hscript', mod)
+            asset('$p.hscript', mod),
+            asset('$p.lua', mod)
         ];
         for(path in pathsToCheck) {
             if(FileSystem.exists(path)) return path;
         }
         return asset('$p.hxs', mod);
-    }
-    public static function lua(p:String, ?mod:Null<String>) {
-        return asset('$p.lua', mod);
     }
     // Functions for getting paths to Images, Sounds, or Text.
     public static function image(p:String, useRoot:Bool = true, ?mod:Null<String>) {

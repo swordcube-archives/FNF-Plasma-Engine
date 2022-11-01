@@ -156,6 +156,7 @@ class FreeplayMenu extends FunkinState {
 		if(Controls.getP("accept")) {
 			threadActive = false;
 			Conductor.rate = curSpeed;
+			PlayState.songName = songList[curSelected].song;
 			PlayState.isStoryMode = false;
 			PlayState.availableDifficulties = songList[curSelected].difficulties;
 			PlayState.currentDifficulty = songList[curSelected].difficulties[curDifficulty];

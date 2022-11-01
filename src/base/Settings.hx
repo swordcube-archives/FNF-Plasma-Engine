@@ -99,12 +99,14 @@ class Settings {
                 type: Checkbox,
                 value: true
             },
+            #if cpp
             {
                 name: "Memory Counter",
                 desc: "Choose whether or not to display the memory at the top left of the screen.",
                 type: Checkbox,
                 value: true
             },
+            #end
             {
                 name: "Display Version",
                 desc: "Choose whether or not to display the engine version at the top left of the screen.",
@@ -138,7 +140,6 @@ class Settings {
                 }
             }
         }
-        trace(settingsMap);
     }
 
     /**

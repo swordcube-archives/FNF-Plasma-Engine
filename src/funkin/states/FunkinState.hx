@@ -1,10 +1,13 @@
 package funkin.states;
 
+import funkin.gameplay.Note;
 import openfl.system.System;
 import flixel.system.FlxSound;
 import flixel.addons.transition.FlxTransitionableState;
 import base.Conductor;
 import flixel.FlxState;
+
+using StringTools;
 
 class FunkinState extends FlxState {
     var curStep:Int = 0;
@@ -38,6 +41,13 @@ class FunkinState extends FlxState {
 
         // Run the garbage collector
         System.gc();
+
+		// Load note skins because heheheha
+		Note.skinJSONs = [];
+		for(json in CoolUtil.readDirectory("data/note_skins")) {
+			if(FileSystem.exists(Paths.asset("data/note_skins/"+json)) && json.endsWith(".json"))
+				Note.skinJSONs[json.split(".json")[0]] = TJSON.parse(Assets.load(TEXT, Paths.asset("data/note_skins/"+json)));
+		}
     }
 
     override function update(elapsed:Float) {

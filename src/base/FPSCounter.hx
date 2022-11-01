@@ -41,7 +41,7 @@ class FPSCounter extends TextField {
 
 	private function onEnter(event:Event) {
 		currentFPS = fpsCounter.currentFPS;
-		infoDisplayed = [Settings.get('FPS Counter'), Settings.get('Memory Counter'), Settings.get('Display Version')];
+		infoDisplayed = [Settings.get('FPS Counter'), #if cpp Settings.get('Memory Counter') #else false #end, Settings.get('Display Version')];
 
 		if (visible) {
 			text = "";

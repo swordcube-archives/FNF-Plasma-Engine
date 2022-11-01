@@ -1,5 +1,6 @@
 package funkin.gameplay;
 
+import funkin.gameplay.Note.NoteSkin;
 import funkin.Ranking.Judgement;
 import flixel.text.FlxText;
 import flixel.math.FlxRect;
@@ -127,6 +128,7 @@ class StrumLine extends FlxSpriteGroup {
 			}
 
             var event = new funkin.events.NoteHitEvent();
+            event.rating = Ranking.judgeNote(coolNote.strumTime);
             event.note = coolNote;
             coolNote.script.call("onPlayerNoteHit", [event]);
             PlayState.current.scripts.call("onPlayerNoteHit", [event]);
@@ -359,7 +361,7 @@ class StrumLine extends FlxSpriteGroup {
                         note.destroy();
                     }
                 }
-                if(Conductor.position - note.strumTime >= Conductor.safeZoneOffset) {
+                if(Conductor.position - note.strumTime >= Conductor.safeZoneOffset*FlxG.sound.music.pitch) {
                     PlayState.current.combo = 0;
                     PlayState.current.misses++;
                     PlayState.current.UI.updateScoreText();
@@ -414,6 +416,7 @@ class StrumNote extends Sprite {
      * The skin used for this strum note.
      */
     public var skin(default, set):String;
+    @:noCompletion public var skinData:NoteSkin; // DON'T USE!!! USE THE SKIN VAR!!
     public var strumScale:Float = 0.7;
 
     public var colorShader:ColorShader = new ColorShader(255, 0, 0);
@@ -425,14 +428,17 @@ class StrumNote extends Sprite {
 	}
 
     public function reloadSkin() {
+        // switch case if you wanna hardcode for some reason
+        // ..lmao!
         switch(skin) {
-            case "Arrows":
-                frames = Assets.load(SPARROW, Paths.image("ui/notes/NOTE_assets"));
+            default:
+                skinData = Note.skinJSONs[skin];
+                frames = Assets.load(SPARROW, Paths.image(skinData.strumTexturePath));
                 var dir:String = Note.keyInfo[parent.keyCount].directions[direction];
                 addAnim("static", dir+" static0");
                 addAnim("press", dir+" press0");
                 addAnim("confirm", dir+" confirm0");
-                strumScale = 0.7 * Note.keyInfo[parent.keyCount].scale;
+                strumScale = skinData.noteScale * Note.keyInfo[parent.keyCount].scale;
                 scale.set(strumScale, strumScale);
                 updateHitbox();
                 playAnim("static");

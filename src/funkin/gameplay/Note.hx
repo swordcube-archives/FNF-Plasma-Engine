@@ -12,6 +12,19 @@ typedef NoteInfo = {
     var spacing:Float;
 }
 
+typedef NoteSkin = {
+    var strumTexturePath:String;
+    var noteTexturePath:String;
+
+    var splashSkin:String;
+
+    var strumScale:Float;
+    var noteScale:Float;
+    var sustainScale:Float;
+
+    var isPixel:Bool;
+}
+
 class Note extends Sprite {
     public static final spacing:Float = 160 * 0.7;
     public static final keyInfo:Map<Int, NoteInfo> = [
@@ -41,6 +54,8 @@ class Note extends Sprite {
         },
     ];
 
+    public static var skinJSONs:Map<String, NoteSkin> = [];
+
     public var strumTime:Float = 0.0;
     public var rawStrumTime:Float = 0.0;
     public var direction:Int = 0;
@@ -53,6 +68,8 @@ class Note extends Sprite {
 
     public var noteScale:Float = 0.7;
     public var skin(default, set):String;
+    @:noCompletion public var skinData:NoteSkin; // DON'T USE!!! USE THE SKIN VAR!!
+    public var splashSkin:String;
 
     public var stepCrochet:Float = 0.0;
     public var noteYOff:Int = 0;
@@ -71,15 +88,19 @@ class Note extends Sprite {
 	}
 
     public function reloadSkin() {
+        // switch case if you wanna hardcode for some reason
+        // ..lmao!
         switch(skin) {
-            case "Arrows":
-                frames = Assets.load(SPARROW, Paths.image("ui/notes/NOTE_assets"));
+            default:
+                skinData = skinJSONs[skin];
+                frames = Assets.load(SPARROW, Paths.image(skinData.noteTexturePath));
                 var dir:String = Note.keyInfo[parent.keyCount].directions[direction];
                 addAnim("normal", dir+"0");
                 addAnim("hold", dir+" hold0");
                 addAnim("tail", dir+" tail0");
-                sustainScale = 0.7;
-                noteScale = 0.7 * Note.keyInfo[parent.keyCount].scale;
+                sustainScale = skinData.sustainScale;
+                noteScale = skinData.noteScale * Note.keyInfo[parent.keyCount].scale;
+                splashSkin = skinData.splashSkin;
                 scale.set(noteScale, noteScale);
                 updateHitbox();
                 playAnim(isSustain ? "hold" : "normal");
@@ -96,7 +117,7 @@ class Note extends Sprite {
         this.skin = skin;
         this.type = type;
         // Initialize this note's script
-        script = Script.create(Paths.hxs('data/scripts/note_types/$type'));
+        script = Script.create(Paths.script('data/scripts/note_types/$type'));
         script.start(true, []);
     }
 

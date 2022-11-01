@@ -195,14 +195,14 @@ class Character extends Sprite {
 		if (script != null)
 			script.destroy();
 
-		script = Script.create(Paths.hxs('data/characters/$character/script', mod));
+		script = Script.create(Paths.script('data/characters/$character/script', mod));
 		if (Std.isOfType(script, HScriptModule)) {
 			script.set("mod", mod);
 			script.set("character", this);
 			cast(script, HScriptModule).setScriptObject(this);
 		} else {
 			script.destroy();
-			script = Script.create(Paths.hxs('data/characters/template/script', mod));
+			script = Script.create(Paths.script('data/characters/template/script', mod));
 			if (Std.isOfType(script, HScriptModule)) {
 				script.set("mod", mod);
 				script.set("character", this);

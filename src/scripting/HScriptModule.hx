@@ -1,5 +1,8 @@
 package scripting;
 
+import funkin.gameplay.NoteSplash;
+import funkin.gameplay.Note;
+import funkin.gameplay.StrumLine;
 import funkin.ModPackData.GlobalModShit;
 import sys.io.Process;
 import flixel.util.FlxAxes;
@@ -34,7 +37,7 @@ class HScriptModule extends ScriptModule {
 
         // Setting up (Classes & Abstracts)
         // Haxe
-        addClasses([Std, Math, String, StringTools]);
+        addClasses([Main, Std, Math, String, StringTools]);
         if(GlobalModShit.allowUnsafeScripts)
             addClasses([Sys, File, FileSystem, Process]);
         else {
@@ -56,7 +59,8 @@ class HScriptModule extends ScriptModule {
         set("FlxAxes", FlxAxes);
         addClasses([FlxG, FlxSprite, FlxMath, FlxTween, FlxEase]);
         // Funkin
-        addClasses([Paths, Assets, Sprite, Settings, CoolUtil, Controls, Main, Conductor]);
+        addClasses([Paths, Assets, Sprite, Settings, CoolUtil, Controls]);
+        addClasses([Conductor, StrumLine, StrumNote, Note, NoteSplash]);
         set("PlayState", PlayState.current);
         set("PlayState_", PlayState);
         // Abstracts
@@ -79,7 +83,7 @@ class HScriptModule extends ScriptModule {
             running = false;
         }
         if(create)
-            call("onCreate", [this]);
+            call("onCreate", args);
     }
     public function setScriptObject(o:Dynamic) {
         interp.scriptObject = o;

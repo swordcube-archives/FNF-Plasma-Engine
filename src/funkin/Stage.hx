@@ -45,14 +45,14 @@ class Stage extends FlxGroup {
         // hardcode if you want too
         switch(name) {
             default:
-                script = Script.create(Paths.hxs('data/stages/$name', mod));
+                script = Script.create(Paths.script('data/stages/$name', mod));
                 // Check if the script is a generic one (shouldn't happen unless file doesn't exist)
                 if(Std.isOfType(script, HScriptModule)) {
                     script.set("mod", mod);
                     cast(script, HScriptModule).setScriptObject(PlayState.current);
                 } else {
                     script.destroy();
-                    script = Script.create(Paths.hxs('data/stages/default', mod));
+                    script = Script.create(Paths.script('data/stages/default', mod));
                 }
                 script.set("add", function(obj:FlxBasic, layer:Int = 0) {
                     switch(layer) {

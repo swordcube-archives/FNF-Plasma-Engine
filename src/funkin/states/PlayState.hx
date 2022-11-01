@@ -34,8 +34,9 @@ typedef UnspawnNote = {
 
 class PlayState extends FunkinState {
     // Song stuff
-    public static var songData:Song = SongLoader.returnSong("bopeebo", "hard");
+    public static var songData:Song = SongLoader.returnSong("tutorial");
     public static var current:PlayState;
+    public static var songName:String = "tutorial";
 	public static var currentDifficulty:String = "hard";
 	public static var availableDifficulties:Array<String> = ["easy", "normal", "hard"];
 	public static var isStoryMode:Bool = false;
@@ -198,6 +199,9 @@ class PlayState extends FunkinState {
         Conductor.mapBPMChanges(songData);
         Conductor.position = Conductor.crochet * -5;
 
+        if(songData == null)
+            songData = SongLoader.returnSong("tutorial");
+
         if(songData.keyCount == null)
             songData.keyCount = 4;
 
@@ -256,12 +260,12 @@ class PlayState extends FunkinState {
 		unspawnNotes.sort(unspawnNoteSorting);
         
         // Setup scripts
-        songScript = Script.create(Paths.hxs('songs/${songData.song.toLowerCase()}/script'));
+        songScript = Script.create(Paths.script('songs/${songData.song.toLowerCase()}/script'));
         if(Std.isOfType(songScript, HScriptModule)) cast(songScript, HScriptModule).setScriptObject(this);
         songScript.start(true, []);
         for(item in CoolUtil.readDirectory('data/scripts/global')) {
             var path:String = "data/scripts/global/"+item.split("."+Path.extension(item))[0];
-            var script:ScriptModule = Script.create(Paths.hxs(path));
+            var script:ScriptModule = Script.create(Paths.script(path));
             if(Std.isOfType(script, HScriptModule)) cast(script, HScriptModule).setScriptObject(this);
             script.start(true, []);
             scripts.addScript(script);
@@ -494,7 +498,7 @@ class PlayState extends FunkinState {
             persistentUpdate = false;
 			persistentDraw = true;
             endingSong = true;
-            rpcTimer.cancel();
+            if(rpcTimer != null) rpcTimer.cancel(); // i forgor to check if this was null 💀
             FlxG.sound.music.stop();
             FlxG.sound.music.time = 0;
             vocals.stop();
@@ -527,10 +531,10 @@ class PlayState extends FunkinState {
         
         endingSong = true;
         
-        if(!usedPractice && score > Highscore.getScore(songData.song+"-"+currentDifficulty))
-            Highscore.setScore(songData.song+"-"+currentDifficulty, score);
+        if(!usedPractice && score > Highscore.getScore(songName+"-"+currentDifficulty))
+            Highscore.setScore(songName+"-"+currentDifficulty, score);
 
-        if(scripts.call("onEndSong", [songData.song], true) != false) {
+        if(scripts.call("onEndSong", [songName], true) != false) {
             if(vocals != null)
                 vocals.stop();
 
@@ -568,8 +572,8 @@ class PlayState extends FunkinState {
                 Main.switchState(new funkin.states.FreeplayMenu());
         }
 
-        scripts.call("onEndSongPost", [songData.song]);
-        scripts.call("endSongPost", [songData.song]);
+        scripts.call("onEndSongPost", [songName]);
+        scripts.call("endSongPost", [songName]);
 	}
 
     public function resyncSong() {
