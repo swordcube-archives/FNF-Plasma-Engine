@@ -306,6 +306,7 @@ class PlayState extends FunkinState {
         dads.push(dad);
         bfs.push(bf);
         scripts.call("onCreateAfterChars", []);
+        scripts.call("createAfterChars", []);
 
         // Setup UI
         UI = new FunkinUI();
@@ -313,6 +314,7 @@ class PlayState extends FunkinState {
         add(UI);
 
         scripts.call("onCreatePost", []);
+        scripts.call("createPost", []);
     }
 
     function unspawnNoteSorting(Obj1:UnspawnNote, Obj2:UnspawnNote):Int {
@@ -407,6 +409,7 @@ class PlayState extends FunkinState {
         super.update(elapsed);
 
         scripts.call("onUpdate", [elapsed]);
+        scripts.call("update", [elapsed]);
 
         var curSection:Int = Std.int(FlxMath.bound(curStep / 16, 0, songData.notes.length-1));
         FlxG.camera.followLerp = 0.04;
@@ -507,6 +510,7 @@ class PlayState extends FunkinState {
         }
 
         scripts.call("onUpdatePost", [elapsed]);
+        scripts.call("updatePost", [elapsed]);
     }
 
     public function finishSong(?ignoreNoteOffset:Bool = false) {
@@ -594,6 +598,7 @@ class PlayState extends FunkinState {
     override function beatHit(curBeat:Int) {
         if(endingSong) return;
         scripts.call("onBeatHit", [curBeat]);
+        scripts.call("beatHit", [curBeat]);
 		var curSection:Int = Std.int(FlxMath.bound(curStep / 16, 0, songData.notes.length-1));
 		if (songData.notes[curSection].changeBPM)
 			Conductor.changeBPM(songData.notes[curSection].bpm);
@@ -614,13 +619,16 @@ class PlayState extends FunkinState {
         UI.beatHit(curBeat);
         super.beatHit(curBeat);
         scripts.call("onBeatHitPost", [curBeat]);
+        scripts.call("beatHitPost", [curBeat]);
     }
 
     override function stepHit(curStep:Int) {
         if(endingSong) return;
         scripts.call("onStepHit", [curStep]);
+        scripts.call("stepHit", [curStep]);
         super.stepHit(curStep);
         scripts.call("onStepHitPost", [curStep]);
+        scripts.call("stepHitPost", [curStep]);
     }
 
     public var rpcTimer:FlxTimer;
