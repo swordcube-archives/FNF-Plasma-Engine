@@ -1,10 +1,59 @@
 import funkin.gameplay.DancingSprite;
 
+function stageImage(asset:String) {
+    return "gameplay/stages/limo/"+asset;
+}
+
+var grpLimoDancers:FlxGroup;
+
 function onCreate() {
     stage.characterPositions["dad"].set(100, 100);
     stage.characterPositions["gf"].set(400, 130);
     stage.characterPositions["bf"].set(1030, -120);
+
+    var skyBG:Sprite = new Sprite(-120, -50).load("IMAGE", Paths.image(stageImage("limoSunset")));
+    skyBG.scrollFactor.set(0.1, 0.1);
+    skyBG.antialiasing = Settings.get("Antialiasing");
+    add(skyBG);
+
+    var bgLimo:Sprite = new Sprite(-200, 480).load("IMAGE", Paths.image(stageImage("bgLimo")));
+    bgLimo.animation.addByPrefix('drive', "background limo pink", 24);
+    bgLimo.animation.play('drive');
+    bgLimo.scrollFactor.set(0.4, 0.4);
+    bgLimo.antialiasing = Settings.get("Antialiasing");
+    add(bgLimo);
+
+    grpLimoDancers = new FlxGroup();
+    add(grpLimoDancers);
+
+    for (i in 0...5)
+    {
+        var dancer:DancingSprite = new DancingSprite(370 * i + 130, bgLimo.y - 400);
+        dancer.frames = Assets.load("SPARROW", Paths.image(stageImage("limoDancer")));
+		dancer.animation.addByIndices('danceLeft', 'bg dancer sketch PINK', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
+		dancer.animation.addByIndices('danceRight', 'bg dancer sketch PINK', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
+        dancer.scrollFactor.set(0.4, 0.4);
+        dancer.antialiasing = Settings.get("Antialiasing");
+        //dancer.shader = new CustomShader('BlurShader');
+        dancer.dance();
+        grpLimoDancers.add(dancer);
+    }
+
+    limo = new Sprite(-120, 550).load("SPARROW", Paths.image(stageImage("limoDrive")));
+    limo.animation.addByPrefix('drive', "Limo stage", 24);
+    limo.animation.play('drive');
+    limo.antialiasing = Settings.get("Antialiasing");
+    add(limo, 1);
 }
-function stageImage(asset:String) {
-    return "gameplay/stages/limo/"+asset;
+
+function onCountdownTick()
+{
+    for(dancer in grpLimoDancers.members)
+        dancer.dance();
+}
+
+function onBeatHit()
+{
+    for(dancer in grpLimoDancers.members)
+        dancer.dance();
 }
