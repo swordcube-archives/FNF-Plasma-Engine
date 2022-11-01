@@ -1,5 +1,6 @@
 package scripting;
 
+import flixel.group.FlxGroup;
 import funkin.gameplay.NoteSplash;
 import funkin.gameplay.Note;
 import funkin.gameplay.StrumLine;
@@ -53,10 +54,13 @@ class HScriptModule extends ScriptModule {
             "parse": function(data:String) {return TJSON.parse(data);},
             "stringify": function(data:Dynamic, thing:String = "\t") {return TJSON.encode(data, thing == "\t" ? "fancy" : null);}
         });
+        set("Reflect", Reflect);
         set("scriptModule", this);
         // Flixel
         set("FlxColor", HScriptClasses.get_FlxColor());
+        set("FlxKey", HScriptClasses.get_FlxKey());
         set("FlxAxes", FlxAxes);
+        set("FlxGroup", FlxGroup);
         addClasses([FlxG, FlxSprite, FlxMath, FlxTween, FlxEase]);
         // Funkin
         addClasses([Paths, Assets, Sprite, Settings, CoolUtil, Controls]);
@@ -64,9 +68,11 @@ class HScriptModule extends ScriptModule {
         set("PlayState", PlayState.current);
         set("PlayState_", PlayState);
         // Abstracts
+	    set("Array", Array);
         set("Float", Float);
         set("Int", Int);
         set("Bool", Bool);
+        set("Dynamic", Dynamic);
     }
     /**
      * Starts the script.
@@ -78,6 +84,9 @@ class HScriptModule extends ScriptModule {
             running = true;
             program = parser.parseString(code);
             interp.execute(program);
+            interp.errorHandler = function(e) {
+                Console.error(e);
+            }
         } catch(e) {
             Console.error(e.details());
             running = false;

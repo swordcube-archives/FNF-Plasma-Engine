@@ -1,11 +1,19 @@
 <songs>
     <!-- tutorial + week 1 -->
-    <song name="tutorial" character="gf" color="#9271FD" difficulties="easy,normal,hard" bpm="100"/>
-    <song name="bopeebo" character="dad" color="#9271FD" difficulties="easy,normal,hard" bpm="100"/>
-    <song name="fresh" character="dad" color="#9271FD" difficulties="easy,normal,hard" bpm="120"/>
-    <song name="dad battle" character="dad" color="#9271FD" difficulties="easy,normal,hard" bpm="180"/>
+    <song name="Tutorial" character="gf" color="#9271FD" difficulties="easy,normal,hard" bpm="100"/>
+    <song name="Bopeebo" character="dad" color="#9271FD" difficulties="easy,normal,hard" bpm="100"/>
+    <song name="Fresh" character="dad" color="#9271FD" difficulties="easy,normal,hard" bpm="120"/>
+    <song name="Dad Battle" character="dad" color="#9271FD" difficulties="easy,normal,hard" bpm="180"/>
     <!-- week 2 -->
-    <song name="spookeez" character="spooky" color="#223344" difficulties="easy,normal,hard" bpm="150"/>
-    <song name="south" character="spooky" color="#223344" difficulties="easy,normal,hard" bpm="165"/>
-    <song name="monster" character="monster" color="#223344" difficulties="easy,normal,hard" bpm="95"/>
+    <song name="Spookeez" character="spooky" color="#223344" difficulties="easy,normal,hard" bpm="150"/>
+    <song name="South" character="spooky" color="#223344" difficulties="easy,normal,hard" bpm="165"/>
+    <song name="Monster" character="monster" color="#223344" difficulties="easy,normal,hard" bpm="95"/>
+    <!-- week 3 -->
+    <song name="Pico" character="pico" color="#941653" difficulties="easy,normal,hard" bpm="150"/>
+    <song name="Philly Nice" character="pico" color="#941653" difficulties="easy,normal,hard" bpm="175"/>
+    <song name="Blammed" character="pico" color="#941653" difficulties="easy,normal,hard" bpm="165"/>
+    <!-- week 4 -->
+    <song name="Satin Panties" character="mom" color="#FC96D7" difficulties="easy,normal,hard" bpm="110"/>
+    <song name="High" character="mom" color="#FC96D7" difficulties="easy,normal,hard" bpm="125"/>
+    <song name="M.I.L.F" character="mom" color="#FC96D7" difficulties="easy,normal,hard" bpm="180"/>
 </songs>

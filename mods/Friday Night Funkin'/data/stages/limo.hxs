@@ -1,0 +1,10 @@
+import funkin.gameplay.DancingSprite;
+
+function onCreate() {
+    stage.characterPositions["dad"].set(100, 100);
+    stage.characterPositions["gf"].set(400, 130);
+    stage.characterPositions["bf"].set(1030, -120);
+}
+function stageImage(asset:String) {
+    return "gameplay/stages/limo/"+asset;
+}

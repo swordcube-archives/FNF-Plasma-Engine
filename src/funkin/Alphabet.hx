@@ -137,7 +137,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
                 load(SPARROW, Paths.image("ui/alphabet/bold"));
                 var offsets:BasicPoint = {x: 0, y: 0};
                 var anim:String = char.toUpperCase();
-                switch(char.toUpperCase()) {
+                switch(char) {
                     case " ":
                         visible = false;
                     case "😠", "😡":
@@ -158,10 +158,13 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
                         anim = "-exclamation point-";
                     case ".":
                         anim = "-period-";
+                        offsets.y += 52 * size;
                     case ",":
                         anim = "-comma-";
+                        offsets.y += 52 * size;
                     case "-":
                         anim = "-dash-";
+                        offsets.y += 18 * size;
                 }
                 addAnim("idle", anim+"0", 24, true, offsets);
                 playAnim("idle");

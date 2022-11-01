@@ -227,7 +227,7 @@ class PlayState extends FunkinState {
         FlxG.sound.list.add(vocals);
 
         DiscordRPC.changePresence(
-            "Playing "+songData.song,
+            "Playing "+songName,
             "Starting song..."
         );
 
@@ -643,13 +643,13 @@ class PlayState extends FunkinState {
         vocals.play();
 
         DiscordRPC.changePresence(
-            "Playing "+songData.song,
+            "Playing "+songName,
             'Time remaining: ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)} / ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)}'
         );
         rpcTimer = new FlxTimer().start(1, function(tmr:FlxTimer) {
             if(startedSong && !endingSong) {
                 DiscordRPC.changePresence(
-                    "Playing "+songData.song,
+                    "Playing "+songName,
                     'Time remaining: ${FlxStringUtil.formatTime((FlxG.sound.music.length-FlxG.sound.music.time)/1000.0)} / ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)}'
                 );
             }
