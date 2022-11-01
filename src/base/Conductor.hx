@@ -3,7 +3,7 @@ package base;
 import flixel.system.FlxSound;
 import base.SongLoader;
 
-@:noCompletion typedef BPMChangeEvent = {
+#if docs @:noCompletion #end typedef BPMChangeEvent = {
 	var stepTime:Int;
 	var songTime:Float;
 	var bpm:Float;

@@ -1,5 +1,6 @@
 package base;
 
+import haxe.io.Path;
 import flixel.math.FlxPoint;
 import haxe.xml.Access;
 import funkin.states.FreeplayMenu.FreeplaySong;
@@ -18,14 +19,23 @@ class CoolUtil {
 		Sys.setCwd(p.join("\\") + "\\");
 	}
 
-	public static function readDirectory(dir:String) {
+	public static function readDirectory(dir:String, ?mod:Null<String>) {
 		var arrayToReturn:Array<String> = [];
 		var basePath:String = '${Sys.getCwd()}mods/';
-		for(folder in FileSystem.readDirectory(basePath)) {
-			if(FileSystem.isDirectory(basePath+folder) && FileSystem.exists(basePath+folder+"/"+dir)) {
-				for(item in FileSystem.readDirectory(basePath+folder+"/"+dir)) {
+		if(mod != null) {
+			if(FileSystem.isDirectory(basePath+mod) && FileSystem.exists(basePath+mod+"/"+dir)) {
+				for(item in FileSystem.readDirectory(basePath+mod+"/"+dir)) {
 					if(!arrayToReturn.contains(item))
 						arrayToReturn.push(item);
+				}
+			}
+		} else {
+			for(folder in FileSystem.readDirectory(basePath)) {
+				if(FileSystem.isDirectory(basePath+folder) && FileSystem.exists(basePath+folder+"/"+dir)) {
+					for(item in FileSystem.readDirectory(basePath+folder+"/"+dir)) {
+						if(!arrayToReturn.contains(item))
+							arrayToReturn.push(item);
+					}
 				}
 			}
 		}

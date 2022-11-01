@@ -1,5 +1,7 @@
 package scripting;
 
+import funkin.ModPackData.GlobalModShit;
+import sys.io.Process;
 import flixel.util.FlxAxes;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -32,11 +34,23 @@ class HScriptModule extends ScriptModule {
 
         // Setting up (Classes & Abstracts)
         // Haxe
-        addClasses([Sys, FileSystem, Std, Math, String, StringTools]);
+        addClasses([Std, Math, String, StringTools]);
+        if(GlobalModShit.allowUnsafeScripts)
+            addClasses([Sys, File, FileSystem, Process]);
+        else {
+            interp.importBlocklist = [
+                "Sys",
+                "sys.io.File",
+                "sys.io.Process",
+                "sys.FileSystem"
+            ];
+            addClassesAsNull([Sys, File, FileSystem, Process]);
+        }
         set("Json", {
             "parse": function(data:String) {return TJSON.parse(data);},
             "stringify": function(data:Dynamic, thing:String = "\t") {return TJSON.encode(data, thing == "\t" ? "fancy" : null);}
         });
+        set("scriptModule", this);
         // Flixel
         set("FlxColor", HScriptClasses.get_FlxColor());
         set("FlxAxes", FlxAxes);
@@ -74,8 +88,15 @@ class HScriptModule extends ScriptModule {
         var array = Type.getClassName(c).split(".");
         set(array[array.length-1], c);
     }
+    function addClassAsNull(c:Class<Dynamic>) {
+        var array = Type.getClassName(c).split(".");
+        set(array[array.length-1], null);
+    }
     function addClasses(a:Array<Class<Dynamic>>) {
         for(c in a) addClass(c);
+    }
+    function addClassesAsNull(a:Array<Class<Dynamic>>) {
+        for(c in a) addClassAsNull(c);
     }
     /**
      * Gets a variable from this script.

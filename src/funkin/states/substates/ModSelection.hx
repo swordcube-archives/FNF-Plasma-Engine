@@ -1,5 +1,6 @@
 package funkin.states.substates;
 
+import funkin.ModPackData.GlobalModShit;
 import flixel.input.keyboard.FlxKey;
 import flixel.text.FlxText;
 
@@ -17,6 +18,8 @@ class ModSelection extends FunkinSubState {
     var availableMods:Map<String, ModPackData> = [];
     var selectedText:FlxText;
     var modNames:Array<String> = [];
+
+    var unsafeText:FlxText;
 
     override function create() {
         super.create();
@@ -48,6 +51,7 @@ class ModSelection extends FunkinSubState {
         icon.setGraphicSize(100);
         icon.updateHitbox();
         icon.scrollFactor.set();
+        icon.antialiasing = Settings.get("Antialiasing");
         add(icon);
 
         title = new FlxText(icon.x + (icon.width + 20), icon.y + (icon.height / 2), 0, data.name+"\n  ");
@@ -71,6 +75,15 @@ class ModSelection extends FunkinSubState {
         warn.x -= warn.width + 10;
         warn.y -= warn.height - 10;
         add(warn);
+
+        var unsafeWarnTextBS:String = !Settings.get("Allow Unsafe Mods") ? "This mod contains unsafe scripts and can\'t be selected!\nEnable \"Allow Unsafe Mods\" in Options to select.\n  " : "This mod contains unsafe scripts!\nSelect with caution!\n  ";
+        unsafeText = new FlxText(icon.x, card.y + (card.height - 10), unsafeWarnTextBS);
+        unsafeText.setFormat(Paths.font("funkin.ttf"), 18, FlxColor.WHITE, LEFT);
+        unsafeText.scrollFactor.set();
+        unsafeText.antialiasing = Settings.get("Antialiasing");
+        unsafeText.visible = data.allowUnsafeScripts;
+        unsafeText.y -= unsafeText.height - 10;
+        add(unsafeText);
 
         arrowLeft = new Alphabet(35, 0, Bold, "<", 1.5);
         arrowLeft.screenCenter(Y);
@@ -111,10 +124,15 @@ class ModSelection extends FunkinSubState {
             close();
         }
         if(Controls.getP("accept")) {
-            FlxG.save.data.currentMod = Paths.currentMod;
-            FlxG.save.flush();
-            FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/confirmMenu")));
-            Main.resetState();
+            var canAccept:Bool = (Settings.get("Allow Unsafe Mods") && availableMods[Paths.currentMod].allowUnsafeScripts) || (!Settings.get("Allow Unsafe Mods") && !availableMods[Paths.currentMod].allowUnsafeScripts);
+            if(canAccept) {
+                FlxG.sound.music.stop();
+                FlxG.save.data.currentMod = Paths.currentMod;
+                FlxG.save.flush();
+                GlobalModShit.allowUnsafeScripts = availableMods[Paths.currentMod].allowUnsafeScripts;
+                FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/confirmMenu")));
+                Main.resetState();
+            }
         }
     }
 
@@ -134,6 +152,8 @@ class ModSelection extends FunkinSubState {
 
         title.text = data.name+"\n  ";
         desc.text = data.desc+"\n  ";
+
+        unsafeText.visible = data.allowUnsafeScripts;
 
         FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/scrollMenu")));
     }

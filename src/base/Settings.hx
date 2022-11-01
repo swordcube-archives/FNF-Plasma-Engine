@@ -1,12 +1,12 @@
 package base;
 
-@:noCompletion enum SettingType {
+#if docs @:noCompletion #end enum SettingType {
     Checkbox;
     Selector;
     Number;
 }
 
-@:noCompletion typedef Setting = {
+#if docs @:noCompletion #end typedef Setting = {
     var name:String;
     var desc:String;
     var type:SettingType;
@@ -46,6 +46,12 @@ class Settings {
                 desc: "Choose whether or not to pause the game automatically if the window is unfocused.",
                 type: Checkbox,
                 value: true
+            },
+            {
+                name: "Allow Unsafe Mods",
+                desc: "Allows mods with potentially dangerous scripts to be selected.",
+                type: Checkbox,
+                value: false
             },
             {
                 name: "Note Offset",

@@ -1,0 +1,36 @@
+var halloweenBG:Sprite;
+var cachedThunder = [
+    Assets.load("SOUND", Paths.sound('gameplay/thunder_1')),
+    Assets.load("SOUND", Paths.sound('gameplay/thunder_2'))
+];
+
+var lightningStrikeBeat:Int = 0;
+var lightningOffset:Int = 8;
+
+function onCreate() {
+    defaultCamZoom = 1.05;
+    halloweenBG = new Sprite(-200, -100).load("SPARROW", Paths.image('gameplay/stages/halloween/halloween_bg'));
+    halloweenBG.animation.addByPrefix('static', 'halloweem bg0', 24, true);
+    halloweenBG.animation.addByPrefix('lightning', 'halloweem bg lightning strike', 24, false);
+    halloweenBG.antialiasing = Settings.get("Antialiasing");
+    halloweenBG.animation.play('static');
+    add(halloweenBG);
+}
+
+function onBeatHit(curBeat:Int) {
+    if(FlxG.random.bool(10) && curBeat > lightningStrikeBeat + lightningOffset)
+        lightningStrikeShit(curBeat);
+}
+
+function lightningStrikeShit(curBeat:Int) {
+    FlxG.sound.play(cachedThunder[FlxG.random.int(1, 2)-1]);
+    halloweenBG.animation.play('lightning');
+
+    lightningStrikeBeat = curBeat;
+    lightningOffset = FlxG.random.int(8, 24);
+
+    if(gf != null)
+        gf.playAnim('scared', true);
+    if(bf != null)
+        bf.playAnim('scared', true);
+}

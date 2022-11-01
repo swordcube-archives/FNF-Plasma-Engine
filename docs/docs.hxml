@@ -6,6 +6,8 @@
 -D flixel-ui=2.4.0
 -D hscript-improved=2.4.0
 
+--define docs
+
 -L lime
 -L openfl
 -L flixel
