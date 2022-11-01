@@ -91,8 +91,10 @@ class HScriptModule extends ScriptModule {
             Console.error(e.details());
             running = false;
         }
-        if(create)
+        if(create) {
             call("onCreate", args);
+            call("create", args);
+        }
     }
     public function setScriptObject(o:Dynamic) {
         interp.scriptObject = o;
