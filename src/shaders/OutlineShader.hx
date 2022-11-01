@@ -1,5 +1,8 @@
 package shaders;
 
+/**
+ * This shader was made by YoshiCrafter29
+ */
 class OutlineShader extends FlxFixedShader {
     @:glFragmentSource('#pragma header
 

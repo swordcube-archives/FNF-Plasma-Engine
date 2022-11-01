@@ -81,8 +81,6 @@ using StringTools;
 	var anims:Array<YoshiCharacterAnimation>;
 	var danceSteps:Array<String>;
 	var antialiasing:Bool;
-	var healthIconSteps:Array<Array<Int>>; // I don't know exactly what this does, but it's gonna go unused because
-	// the way health icons work in plasma is different from yoshi
 	var scale:Float;
 };
 

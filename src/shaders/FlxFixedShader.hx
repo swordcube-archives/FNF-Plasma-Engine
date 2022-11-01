@@ -11,6 +11,9 @@ using StringTools;
 @:access(openfl.display3D.Program3D)
 @:access(openfl.display.ShaderInput)
 @:access(openfl.display.ShaderParameter)
+/**
+ * This shader was made by YoshiCrafter29
+ */
 class FlxFixedShader extends FlxShader {
     public var custom:Bool = false;
     public override function new() {
