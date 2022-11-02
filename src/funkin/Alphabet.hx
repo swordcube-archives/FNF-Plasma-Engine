@@ -38,7 +38,6 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
 
     public function new(x:Float, y:Float, font:AlphabetFont, text:String, size:Float = 1.0) {
         super(x, y);
-
         this.font = font;
         this.size = size;
         this.text = text;
@@ -47,7 +46,6 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
     override function update(elapsed:Float) {
         if (isMenuItem) {
             var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
-
             var lerpVal:Float = FlxMath.bound(elapsed * 9.6, 0, 1);
             y = FlxMath.lerp(y, (scaledY * yMult) + (FlxG.height * 0.48) + yAdd, lerpVal);
             if(forceX != Math.NEGATIVE_INFINITY)
@@ -55,7 +53,6 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
             else
                 x = FlxMath.lerp(x, (targetY * 20) + 90 + xAdd, lerpVal);
         }
-
         super.update(elapsed);
     }    
 
@@ -83,7 +80,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
 }
 
 #if docs @:noCompletion #end class AlphabetChar extends Sprite {
-    public static var supportedChars:Array<String> = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()?,.<>“”'\\/ ".split("");
+    public static var supportedChars:Array<String> = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-~!@#$%^&*()?,.<>“”'\\/ ".split("");
 
     public var char:String = "";
     public var font:AlphabetFont = Bold;
@@ -137,7 +134,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
                 load(SPARROW, Paths.image("ui/alphabet/bold"));
                 var offsets:BasicPoint = {x: 0, y: 0};
                 var anim:String = char.toUpperCase();
-                switch(char) {
+                switch(char.toUpperCase()) {
                     case " ":
                         visible = false;
                     case "😠", "😡":
@@ -158,16 +155,21 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
                         anim = "-exclamation point-";
                     case ".":
                         anim = "-period-";
-                        offsets.y += 52 * size;
+                        offsets.y += 42 * size;
                     case ",":
                         anim = "-comma-";
-                        offsets.y += 52 * size;
+                        offsets.y += 42 * size;
                     case "-":
                         anim = "-dash-";
-                        offsets.y += 18 * size;
+                        offsets.y += 14 * size;
                 }
                 addAnim("idle", anim+"0", 24, true, offsets);
                 playAnim("idle");
+
+                scale.set(size, size);
+                updateHitbox();
+
+                offset.subtract(offsets.x, offsets.y); 
 
                 if(!animation.exists("idle")) {
                     this.font = Default;
@@ -175,9 +177,6 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
                     x += 10 * size;
                     loadFont();
                 }
-
-                scale.set(size, size);
-                updateHitbox();
 
             case Default:
                 load(SPARROW, Paths.image("ui/alphabet/default"));
