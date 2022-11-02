@@ -28,7 +28,7 @@ class FunkinUI extends FlxGroup {
         playerStrums.x += strumSpacing;
         add(playerStrums);
 
-        healthBar = new HealthBar(0, Settings.get("Downscroll") ? 72 : FlxG.height * 0.9);
+        healthBar = new HealthBar(0, Settings.get("Downscroll") ? 72 : FlxG.height * 0.8);
         add(healthBar);
 
         scoreTxt = new FlxText(0, healthBar.bg.y + 40, 0, "???");
