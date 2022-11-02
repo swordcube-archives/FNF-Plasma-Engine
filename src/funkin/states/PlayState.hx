@@ -158,6 +158,8 @@ class PlayState extends FunkinState {
     override function create() {
         super.create();
         current = this;
+	    
+	allowSwitchingMods = false;
 
         persistentUpdate = true;
         persistentDraw = true;
