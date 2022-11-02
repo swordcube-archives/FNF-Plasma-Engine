@@ -21,8 +21,8 @@ class HScriptModule extends ScriptModule {
     var program:Expr;
     var interp:Interp = new Interp();
 
+    public var scriptPath:String = "";
     public var code:String = "";
-
     public var running:Bool = true;
 
     /**
@@ -30,11 +30,23 @@ class HScriptModule extends ScriptModule {
      * @param scriptPath The path to the code to load.
      */
     override function create(scriptPath:String) {
+        this.scriptPath = scriptPath;
         code = Assets.load(TEXT, scriptPath);
 
         parser.allowTypes = true; // Allow typing of things like: var sprite:FlxSprite;
         parser.allowJSON = true; // Dunno what this does but uh yes.
         parser.allowMetadata = true; // Dunno what this does but uh yes #2.
+
+        // Error handling
+        interp.errorHandler = function(e:hscript.Error) {
+            #if debug
+            Console.error(e);
+            #end
+            var posInfo = interp.posInfos();
+            var lineNumber = Std.string(posInfo.lineNumber);
+            var methodName = posInfo.methodName;
+            Console.error('Exception occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'}\n\n${e}\n\nScript File: $scriptPath');
+        }
 
         // Setting up (Classes & Abstracts)
         // Haxe
@@ -84,9 +96,6 @@ class HScriptModule extends ScriptModule {
             running = true;
             program = parser.parseString(code);
             interp.execute(program);
-            interp.errorHandler = function(e) {
-                Console.error(e);
-            }
         } catch(e) {
             create = false;
             Console.error(e.details());
