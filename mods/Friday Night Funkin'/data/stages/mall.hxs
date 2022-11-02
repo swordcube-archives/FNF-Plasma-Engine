@@ -1,0 +1,70 @@
+var upperBoppers:Sprite;
+var bottomBoppers:Sprite;
+var santa:Sprite;
+
+function stageImage(asset:String) {
+    return "gameplay/stages/mall/"+asset;
+}
+
+function onCreate() {
+    defaultCamZoom = 0.8;
+
+    stage.characterPositions["dad"].set(100, 100);
+    stage.characterPositions["gf"].set(400, 130);
+    stage.characterPositions["bf"].set(970, 100);
+
+    var bg = new Sprite(-1000, -500).load("IMAGE", Paths.image(stageImage('bgWalls')));
+    bg.antialiasing = Settings.get("Antialiasing");
+    bg.scrollFactor.set(0.2, 0.2);
+    bg.active = false;
+    bg.setGraphicSize(Std.int(bg.width * 0.8));
+    bg.updateHitbox();
+    add(bg);
+
+    upperBoppers = new Sprite(-240, -90).load("SPARROW", Paths.image(stageImage('upperBop')));
+    upperBoppers.animation.addByPrefix('bop', "Upper Crowd Bob", 24, false);
+    upperBoppers.antialiasing = Settings.get("Antialiasing");
+    upperBoppers.scrollFactor.set(0.33, 0.33);
+    upperBoppers.setGraphicSize(Std.int(upperBoppers.width * 0.85));
+    upperBoppers.updateHitbox();
+    add(upperBoppers);
+
+    var bgEscalator = new Sprite(-1100, -600).load("IMAGE", Paths.image(stageImage('bgEscalator')));
+    bgEscalator.antialiasing = Settings.get("Antialiasing");
+    bgEscalator.scrollFactor.set(0.3, 0.3);
+    bgEscalator.setGraphicSize(Std.int(bgEscalator.width * 0.9));
+    bgEscalator.updateHitbox();
+    add(bgEscalator);
+
+    var tree = new Sprite(370, -250).load("IMAGE", Paths.image(stageImage('christmasTree')));
+    tree.antialiasing = Settings.get("Antialiasing");
+    tree.scrollFactor.set(0.40, 0.40);
+    add(tree);
+
+    bottomBoppers = new Sprite(-300, 140).load("SPARROW", Paths.image(stageImage('bottomBop')));
+    bottomBoppers.animation.addByPrefix('bop', 'Bottom Level Boppers', 24, false);
+    bottomBoppers.antialiasing = Settings.get("Antialiasing");
+    bottomBoppers.scrollFactor.set(0.9, 0.9);
+    add(bottomBoppers);
+
+    var fgSnow = new Sprite(-600, 700).load("IMAGE", Paths.image(stageImage('fgSnow')));
+    fgSnow.antialiasing = Settings.get("Antialiasing");
+    add(fgSnow);
+
+    santa = new Sprite(-840, 150).load("SPARROW", Paths.image(stageImage('santa')));
+    santa.animation.addByPrefix('idle', 'santa idle in fear', 24, false);
+    santa.antialiasing = Settings.get("Antialiasing");
+    add(santa);
+}
+
+function countdownTick() {
+    bop();
+}
+function beatHit() {
+    bop();
+}
+function bop() {
+    upperBoppers.animation.play("bop");
+    bottomBoppers.animation.play("bop");
+    santa.animation.play("idle");
+}

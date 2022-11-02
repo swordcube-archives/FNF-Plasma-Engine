@@ -16,4 +16,8 @@
     <song name="Satin Panties" character="mom" color="#FC96D7" difficulties="easy,normal,hard" bpm="110"/>
     <song name="High" character="mom" color="#FC96D7" difficulties="easy,normal,hard" bpm="125"/>
     <song name="M.I.L.F" character="mom" color="#FC96D7" difficulties="easy,normal,hard" bpm="180"/>
+    <!-- week 5 -->
+    <song name="Cocoa" character="parents-christmas" color="#A0D1FF" difficulties="easy,normal,hard" bpm="100"/>
+    <song name="Eggnog" character="parents-christmas" color="#A0D1FF" difficulties="easy,normal,hard" bpm="150"/>
+    <song name="Winter Horrorland" character="monster" color="#A0D1FF" difficulties="easy,normal,hard" bpm="159"/>
 </songs>

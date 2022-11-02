@@ -1,0 +1,24 @@
+<!DOCTYPE plasma-character >
+<character spritesheet="spritesheet" antialiasing="true" sing_duration="6.1" icon="parents-christmas" flip_x="false" dance_steps="idle" >
+    <animations>
+        <animation name="idle" anim="Parent Christmas Idle" indices="" fps="24" looped="false" offsetX="2" offsetY="0" />
+
+        <animation name="singLEFT" anim="Parent Left Note Dad" indices="" fps="24" looped="false" offsetX="-30" offsetY="16" />
+        <animation name="singDOWN" anim="Parent Down Note Dad" indices="" fps="24" looped="false" offsetX="-31" offsetY="-29" />
+        <animation name="singUP" anim="Parent Up Note Dad" indices="" fps="24" looped="false" offsetX="-47" offsetY="24" />
+        <animation name="singRIGHT" anim="Parent Right Note Dad" indices="" fps="24" looped="false" offsetX="-1" offsetY="-23" />
+
+        <animation name="singLEFT-alt" anim="Parent Left Note Mom" indices="" fps="24" looped="false" offsetX="-30" offsetY="15" />
+        <animation name="singDOWN-alt" anim="Parent Down Note Mom" indices="" fps="24" looped="false" offsetX="-30" offsetY="-27" />
+        <animation name="singUP-alt" anim="Parent Up Note Mom" indices="" fps="24" looped="false" offsetX="-47" offsetY="24" />
+        <animation name="singRIGHT-alt" anim="Parent Right Note Mom" indices="" fps="24" looped="false" offsetX="-1" offsetY="-24" />
+    </animations>
+
+    <global_pos offsetX="-500" offsetY="0" />
+    <scale x="1" y="1" />
+    <scroll x="1" y="1" />
+
+    <color r="175" g="102" b="206" hex="" />
+
+    <camera offsetX="0" offsetY="0" />
+</character>
