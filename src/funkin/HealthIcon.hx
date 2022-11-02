@@ -33,15 +33,16 @@ class HealthIcon extends Sprite {
     /**
     * Loads an icon from "images/icons".
     * @param char The character's icon to load
+    * @param mod The mod to load from
     * @author swordcube
     */
-    public function loadIcon(char:String) {
+    public function loadIcon(char:String, ?mod:Null<String>) {
         this.char = char;
-        if(!FileSystem.exists(Paths.image('icons/$char'))) {
+        if(!FileSystem.exists(Paths.image('icons/$char', mod))) {
             char = "face";
             this.char = char;
         }
-        var iconGraphic:FlxGraphic = Assets.load(IMAGE, Paths.image('icons/$char'));
+        var iconGraphic:FlxGraphic = Assets.load(IMAGE, Paths.image('icons/$char', mod));
 		loadGraphic(iconGraphic, true, iconGraphic.height, iconGraphic.height);
 
         iconAmount = frames.numFrames;

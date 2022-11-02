@@ -178,8 +178,8 @@ class Character extends Sprite {
 	 * @param mod The mod to preload from.
 	 */
 	public static function preloadCharacter(character:String, ?mod:Null<String>) {
-		new HealthIcon().loadIcon(character);
-		return new Character(0,0,false).loadCharacter(character);
+		new HealthIcon().loadIcon(character, mod);
+		return new Character(0,0,false).loadCharacter(character, mod);
 	}
 
 	/**
