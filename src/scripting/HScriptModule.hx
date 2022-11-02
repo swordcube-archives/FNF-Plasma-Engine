@@ -88,6 +88,7 @@ class HScriptModule extends ScriptModule {
                 Console.error(e);
             }
         } catch(e) {
+            create = false;
             Console.error(e.details());
             running = false;
         }

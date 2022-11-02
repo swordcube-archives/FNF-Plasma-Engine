@@ -263,6 +263,7 @@ class PlayState extends FunkinState {
         songScript = Script.create(Paths.script('songs/${songData.song.toLowerCase()}/script'));
         if(Std.isOfType(songScript, HScriptModule)) cast(songScript, HScriptModule).setScriptObject(this);
         songScript.start(true, []);
+        scripts.addScript(songScript);
         for(item in CoolUtil.readDirectory('data/scripts/global')) {
             var path:String = "data/scripts/global/"+item.split("."+Path.extension(item))[0];
             var script:ScriptModule = Script.create(Paths.script(path));
