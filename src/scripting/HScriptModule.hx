@@ -1,5 +1,6 @@
 package scripting;
 
+import shaders.CustomShader;
 import flixel.group.FlxGroup;
 import funkin.gameplay.NoteSplash;
 import funkin.gameplay.Note;
@@ -76,7 +77,7 @@ class HScriptModule extends ScriptModule {
         addClasses([FlxG, FlxSprite, FlxMath, FlxTween, FlxEase]);
         // Funkin
         addClasses([Paths, Assets, Sprite, Settings, CoolUtil, Controls]);
-        addClasses([Conductor, StrumLine, StrumNote, Note, NoteSplash]);
+        addClasses([Conductor, StrumLine, StrumNote, Note, NoteSplash, CustomShader]);
         set("PlayState", PlayState.current);
         set("PlayState_", PlayState);
         // Abstracts

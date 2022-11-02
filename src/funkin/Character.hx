@@ -178,8 +178,8 @@ class Character extends Sprite {
 	 * @param mod The mod to preload from.
 	 */
 	public static function preloadCharacter(character:String, ?mod:Null<String>) {
-		Assets.load(SPARROW, Paths.image('characters/$character/spritesheet', false, mod));
-		var icon = new HealthIcon().loadIcon(character);
+		new HealthIcon().loadIcon(character);
+		return new Character(0,0,false).loadCharacter(character);
 	}
 
 	/**

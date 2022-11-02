@@ -68,4 +68,10 @@ class Paths {
         if(!FileSystem.exists(path(mmm))) mmm = 'assets/videos/$p';
         return mmm;
     }
+    public static function frag(p:String, ?mod:Null<String>) {
+        return asset('data/shaders/$p.frag', mod);
+    }
+    public static function vert(p:String, ?mod:Null<String>) {
+        return asset('data/shaders/$p.vert', mod);
+    }
 }
