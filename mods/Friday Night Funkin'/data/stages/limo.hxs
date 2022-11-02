@@ -11,6 +11,10 @@ function onCreate() {
     stage.characterPositions["gf"].set(400, 130);
     stage.characterPositions["bf"].set(1030, -120);
 
+    var blurShader = new CustomShader(Assets.load("TEXT", Paths.frag("blur")));
+    blurShader.setFloat("Quality", 5);
+    blurShader.setFloat("Size", 2.05);
+
     var skyBG:Sprite = new Sprite(-120, -50).load("IMAGE", Paths.image(stageImage("limoSunset")));
     skyBG.scrollFactor.set(0.1, 0.1);
     skyBG.antialiasing = Settings.get("Antialiasing");
@@ -21,6 +25,7 @@ function onCreate() {
     bgLimo.animation.play('drive');
     bgLimo.scrollFactor.set(0.4, 0.4);
     bgLimo.antialiasing = Settings.get("Antialiasing");
+    bgLimo.shader = blurShader;
     add(bgLimo);
 
     grpLimoDancers = new FlxGroup();
@@ -33,7 +38,7 @@ function onCreate() {
 		dancer.animation.addByIndices('danceRight', 'bg dancer sketch PINK', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
         dancer.scrollFactor.set(0.4, 0.4);
         dancer.antialiasing = Settings.get("Antialiasing");
-        dancer.shader = new CustomShader(Assets.load("TEXT", Paths.frag("blur")));
+        dancer.shader = blurShader;
         dancer.dance();
         grpLimoDancers.add(dancer);
     }
@@ -45,14 +50,13 @@ function onCreate() {
     add(limo, 1);
 }
 
-function onCountdownTick()
-{
-    for(dancer in grpLimoDancers.members)
-        dancer.dance();
+function onCountdownTick() {
+    bop();
 }
-
-function onBeatHit()
-{
+function onBeatHit() {
+    bop();
+}
+function bop() {
     for(dancer in grpLimoDancers.members)
         dancer.dance();
 }
