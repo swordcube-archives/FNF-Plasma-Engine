@@ -11,9 +11,10 @@ package base;
     var desc:String;
     var type:SettingType;
     @:optional var limits:Array<Float>; // Used for Numbers
-    @:optional var decimals:Float; // Used for Numbers
+    @:optional var decimals:Int; // Used for Numbers
     @:optional var increment:Float; // Used for Numbers
     @:optional var values:Array<Dynamic>; // Used for Selectors
+    @:optional var locked:Bool; // Controls if you can lock the option from being modified in the options menu.
     var value:Any;
 };
 
@@ -21,7 +22,7 @@ package base;
  * A class for managing preferences/settings.
  */
 class Settings {
-    public static final settings:Map<String, Array<Setting>> = [
+    public static final settings:Map<String, Array<Dynamic>> = [
         "Preferences" => [
             {
                 name: "Downscroll",
@@ -66,7 +67,7 @@ class Settings {
                 desc: "Change how high your FPS can go.",
                 type: Number,
                 increment: 10,
-                limits: [30, 1000],
+                limits: [10, 1000],
                 value: 1000
             },
             {

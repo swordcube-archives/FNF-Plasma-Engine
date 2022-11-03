@@ -1,5 +1,5 @@
 package funkin.states.options.pages;
 
-class ControlsMenu extends OptionsPage {
+class ControlsMenu extends BaseOptionsPage {
     
 }

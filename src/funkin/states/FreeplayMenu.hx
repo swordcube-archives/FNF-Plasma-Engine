@@ -79,7 +79,7 @@ class FreeplayMenu extends FunkinState {
             grpSongs.add(text);
 
             var icon:HealthIcon = new HealthIcon(text.x, text.y).loadIcon(song.character);
-			icon.sprTracker = text;
+			icon.tracked = text;
 			grpIcons.add(icon);
         }
 
@@ -187,8 +187,7 @@ class FreeplayMenu extends FunkinState {
 		if ((Controls.getP("ui_left") || Controls.getP("ui_right")) || speedTimer > 0.5) {
 			curSpeed = FlxMath.bound(FlxMath.roundDecimal(curSpeed + mult, 2), 0.05, 10);
 			FlxG.sound.music.pitch = curSpeed;
-			if(speedTimer > 0.5)
-				speedTimer = 0.425;
+			if(speedTimer > 0.5) speedTimer = 0.425;
 		}
 	}
 

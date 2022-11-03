@@ -16,6 +16,11 @@ class Init extends FunkinState {
         FlxG.save.bind("PlasmaEngine", "options");
 		Settings.init();
 		Controls.init();
+
+		// This is here so you can't softlock your copy of the engine.
+		if(Settings.get("Framerate Cap") < 10) Settings.set("Framerate Cap", 10);
+		if(Settings.get("Framerate Cap") > 1000) Settings.set("Framerate Cap", 1000);
+
 		Lib.current.stage.frameRate = Settings.get("Framerate Cap");
 		if(FlxG.save.data.volume != null)
 			FlxG.sound.volume = FlxG.save.data.volume;
@@ -28,6 +33,9 @@ class Init extends FunkinState {
 		FlxG.keys.preventDefaultKeys = [TAB];
 
 		#if debug
+		// This basically allows me to add assets to the source code's assets folder
+		// and have those assets be used, So i don't have to recompile every time i add an asset
+		// or deal with the hellhole that can be the export folder.
 		if(Sys.args().contains("-livereload")) Main.developerMode = true;
 		#end
 

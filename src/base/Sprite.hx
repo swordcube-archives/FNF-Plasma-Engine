@@ -8,9 +8,14 @@ class Sprite extends flixel.FlxSprite {
 
     public function new(x:Float = 0, y:Float = 0) {
         super(x, y);
-        antialiasing = true;
+        antialiasing = Settings.get("Antialiasing");
     }
     
+    /**
+     * A function to load certain types of assets onto this sprite.
+     * @param type The asset type.
+     * @param path The path to the asset.
+     */
     public function load(type:base.assets.AssetType, path:String) {
         switch(type) {
             case IMAGE: loadGraphic(Assets.load(IMAGE, path));

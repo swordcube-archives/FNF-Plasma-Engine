@@ -5,11 +5,9 @@ import flixel.math.FlxMath;
 import flixel.graphics.FlxGraphic;
 
 /**
- * An extension of a `Sprite` for health bar icons.
+ * An extension of a `TrackingSprite` for health bar icons.
  */
-class HealthIcon extends Sprite {
-    public var sprTracker:flixel.FlxSprite;
-    public var copyAlpha:Bool = true;
+class HealthIcon extends TrackingSprite {
 
     /**
      * The character used for this icon.
@@ -97,10 +95,5 @@ class HealthIcon extends Sprite {
 
         if(FlxG.state == PlayState.current)
             animation.curAnim.curFrame = getIconIndex(iconHealth, iconAmount);
-        
-        if (sprTracker != null) {
-            setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - 30);
-            if(copyAlpha) alpha = sprTracker.alpha;
-        }
     }
 }

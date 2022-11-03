@@ -60,10 +60,16 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
      * Removes the currently displaying text and displays new text.
      */
     public function refreshText() {
-        for(a in members) {
-            remove(a, true);
-            a.destroy();
-        }
+		var i:Int = members.length;
+		while (i > 0) {
+			--i;
+			var letter:AlphabetChar = members[i];
+			if(letter != null) {
+				letter.kill();
+				members.remove(letter);
+				letter.destroy();
+			}
+		}
         var splitChars:Array<String> = text.split("");
         var xPos:Float = 0.0;
 
@@ -71,6 +77,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
             if(!AlphabetChar.supportedChars.contains(char)) continue;
 
             var alphaChar:AlphabetChar = new AlphabetChar(xPos, 0, font, char, size);
+            alphaChar.color = color;
             add(alphaChar);
 
             if(char == " ") xPos += 30 * size;
@@ -119,7 +126,8 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
             cast(shader, shaders.OutlineShader).setClip(fr.x / pixels.width, fr.y / pixels.height, fr.width / pixels.width, fr.height / pixels.height);
             scale.set(size * 1.5, size * 1.5);
             updateHitbox();
-            offset.add(offsets[animation.curAnim.name].x, offsets[animation.curAnim.name].y);
+            if(animation.curAnim != null && offsets.exists(animation.curAnim.name))
+                offset.add(offsets[animation.curAnim.name].x, offsets[animation.curAnim.name].y);
             offset.add(15, 10);
         } else {
             shader = null;
@@ -137,6 +145,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
                 switch(char.toUpperCase()) {
                     case " ":
                         visible = false;
+                        alpha = 0;
                     case "😠", "😡":
                         anim = "-angry faic-";
                     case "'":
@@ -185,6 +194,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
                 switch(char) {
                     case " ":
                         visible = false;
+                        alpha = 0;
                     case "😠" | "😡":
                         anim = "-angry faic-";
                     case "'":
@@ -203,13 +213,13 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
                         anim = "-exclamation point-";
                     case ".":
                         anim = "-period-";
-                        offsets.y += 52 * size;
+                        offsets.y += 42 * size;
                     case ",":
                         anim = "-comma-";
-                        offsets.y += 52 * size;
+                        offsets.y += 42 * size;
                     case "-":
                         anim = "-dash-";
-                        offsets.y += 18 * size;
+                        offsets.y += 14 * size;
 
                     // letter offsets
                     case "a":
@@ -236,6 +246,15 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
                 updateHitbox();
 
                 offset.subtract(offsets.x, offsets.y);
+        }
+    }
+
+    override function update(elapsed:Float) {
+        super.update(elapsed);
+
+        if(char == " ") {
+            visible = false;
+            alpha = 0;
         }
     }
 }

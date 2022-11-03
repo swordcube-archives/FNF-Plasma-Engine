@@ -45,7 +45,11 @@ class ModSelection extends FunkinSubState {
             }
         }
         curSelected = modNames.indexOf(Paths.currentMod);
-        var data:ModPackData = availableMods[Paths.currentMod];
+        var data:ModPackData = availableMods.get(Paths.currentMod);
+        if(data == null) {
+            curSelected = 0;
+            data = availableMods[Paths.fallbackMod];
+        }
 
         icon = new Sprite(card.x + 10, card.y + 10).load(IMAGE, Paths.image("pack", false));
         icon.setGraphicSize(100);

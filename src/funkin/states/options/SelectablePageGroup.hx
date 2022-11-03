@@ -12,7 +12,7 @@ class SelectablePageGroup extends FlxTypedGroup<SelectablePage> {
             if(!enabled) return;
             enabled = false;
             Console.debug("SWITCHING TO PAGE: "+name);
-            FlxFlicker.flicker(page, 1.1, 0.06, false, false, function(f:FlxFlicker) {
+            FlxFlicker.flicker(page, 1.1, 0.06, true, false, function(f:FlxFlicker) {
                 callback();
                 enabled = true;
             });

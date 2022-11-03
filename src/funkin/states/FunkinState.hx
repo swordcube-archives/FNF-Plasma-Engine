@@ -1,5 +1,6 @@
 package funkin.states;
 
+import openfl.Lib;
 import funkin.gameplay.Note;
 import openfl.system.System;
 import flixel.system.FlxSound;
@@ -51,6 +52,9 @@ class FunkinState extends FlxState {
     }
 
     override function update(elapsed:Float) {
+		Lib.current.stage.frameRate = Settings.get("Framerate Cap");
+		FlxG.autoPause = Settings.get("Auto Pause");
+
         var oldStep:Int = curStep;
         var oldBeat:Int = curBeat;
 

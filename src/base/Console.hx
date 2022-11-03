@@ -39,4 +39,8 @@ class Console {
     public static function warn(text:Dynamic) {
         Sys.println('${ansiColors["yellow"]}[  WARNING  ] ${ansiColors["default"]}' + text);
     }
+
+    public static function info(text:Dynamic) {
+        Sys.println('${ansiColors["cyan"]}[   INFO    ] ${ansiColors["default"]}' + text);
+    }
 }

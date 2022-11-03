@@ -40,7 +40,13 @@ class OptionsMenu extends FunkinState {
         pages.addPage("Controls", function() {
             openSubState(new ControlsMenu());
         });
+        pages.addPage("Mod Settings", function() {
+            Console.info("NON FUNCTIONAL!");
+        });
         pages.addPage("Exit", exit);
+
+        // Update the text
+        changeSelection();
     }
 
     public function exit() {
@@ -62,8 +68,9 @@ class OptionsMenu extends FunkinState {
     override function update(elapsed:Float) {
         super.update(elapsed);
 
-        if(Controls.getP("accept"))
-            pages.switchPage(curSelected);
+        if(Controls.getP("ui_up")) changeSelection(-1);
+        if(Controls.getP("ui_down")) changeSelection(1);
+        if(Controls.getP("accept")) pages.switchPage(curSelected);
 
         if(Controls.getP("back")) {
             FlxG.sound.play(cachedSounds["cancel"]);
