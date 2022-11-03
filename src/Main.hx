@@ -13,6 +13,8 @@ class Main extends Sprite {
 
 	public static var fpsCounter:FPSCounter;
 
+	public static var developerMode:Bool = false;
+
 	public function new() {
 		super();
 		Console.init();

@@ -1,5 +1,6 @@
 package funkin.states;
 
+import funkin.states.options.OptionsMenu;
 import funkin.mainMenu.MainMenuItem;
 import funkin.mainMenu.MainMenuList;
 import flixel.effects.FlxFlicker;
@@ -54,16 +55,13 @@ class MainMenu extends FunkinState {
         add(menuButtons);
 
         menuButtons.addItem("story mode", function() {
-            Console.debug("going to story mode menu");
             startExitState(new StoryMenu());
         });
         menuButtons.addItem("freeplay", function() {
-            Console.debug("going to freeplay");
             startExitState(new FreeplayMenu());
         });
         menuButtons.addItem("options", function() {
-            Console.debug("going to options");
-            startExitState(new TitleScreen());
+            startExitState(new OptionsMenu());
         });
 
         var devwarningformat = new FlxTextFormatMarkerPair(new FlxTextFormat(FlxColor.RED,  true), "<red>");
@@ -98,15 +96,18 @@ class MainMenu extends FunkinState {
         FlxFlicker.flicker(magenta, 1.1, 0.15, false, true);
         menuButtons.enabled = false;
 		menuButtons.forEach(function(item:MainMenuItem) {
-			if (curSelected != item.ID)
-				FlxTween.tween(item, { alpha: 0 }, 0.4, { ease: FlxEase.quadOut });
-			else {
+			if (curSelected != item.ID) {
+                new FlxTimer().start(0.4, function(tmr:FlxTimer) {
+                    FlxTween.tween(item, { alpha: 0 }, 0.4, { ease: FlxEase.quadOut });
+                });
+            } else {
 				item.visible = false;
-                FlxFlicker.flicker(item, 1, 0.06, false, false);
+                FlxFlicker.flicker(item, 1, 0.06, false, false, function(flicker) {
+                    new FlxTimer().start(0.4, function(tmr:FlxTimer) {
+                        Main.switchState(nextState);
+                    });
+                });
             }
-		});
-		new FlxTimer().start(1.1, function(tmr:FlxTimer) {
-			Main.switchState(nextState);
 		});
 	}
 

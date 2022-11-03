@@ -12,9 +12,10 @@ class Paths {
     }
     public static function asset(p:String, ?mod:Null<String>) {
         if(mod == null) mod = currentMod;
-        var mmm:String = path('mods/$mod/$p');
-        if(!FileSystem.exists(mmm)) mmm = path('mods/$fallbackMod/$p');
-        if(!FileSystem.exists(mmm)) mmm = path('assets/$p');
+        var fart:String = Main.developerMode ? "../../../../" : "";
+        var mmm:String = path('${fart}mods/$mod/$p');
+        if(!FileSystem.exists(mmm)) mmm = path('${fart}mods/$fallbackMod/$p');
+        if(!FileSystem.exists(mmm)) mmm = path('${fart}assets/$p');
         return mmm;
     }
 

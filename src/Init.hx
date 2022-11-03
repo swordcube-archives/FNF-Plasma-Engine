@@ -27,6 +27,10 @@ class Init extends FunkinState {
 		}
 		FlxG.keys.preventDefaultKeys = [TAB];
 
+		#if debug
+		if(Sys.args().contains("-livereload")) Main.developerMode = true;
+		#end
+
         var rpcConfig:DiscordRPCConfig = TJSON.parse(Assets.load(TEXT, Paths.json("data/discordRPC")));
         DiscordRPC.data = rpcConfig;
         DiscordRPC.initialize(rpcConfig.clientID);

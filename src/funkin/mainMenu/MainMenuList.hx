@@ -16,7 +16,10 @@ class MainMenuList extends FlxTypedGroup<MainMenuItem> {
         button.playAnim("idle");
         button.screenCenter(X);
         button.ID = members.length;
-        button.callback = callback;
+        button.callback = function() {
+            Console.debug("SWITCHING TO MENU: "+name);
+            callback();
+        };
         button.scrollFactor.set();
         add(button);
     }
