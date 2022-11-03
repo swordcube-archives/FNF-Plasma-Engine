@@ -128,7 +128,7 @@ class ModSelection extends FunkinSubState {
             close();
         }
         if(Controls.getP("accept")) {
-            var canAccept:Bool = (Settings.get("Allow Unsafe Mods") && availableMods[Paths.currentMod].allowUnsafeScripts) || (!Settings.get("Allow Unsafe Mods") && !availableMods[Paths.currentMod].allowUnsafeScripts);
+            var canAccept:Bool = (Settings.get("Allow Unsafe Mods") && (availableMods[Paths.currentMod].allowUnsafeScripts || !availableMods[Paths.currentMod].allowUnsafeScripts)) || (!Settings.get("Allow Unsafe Mods") && !availableMods[Paths.currentMod].allowUnsafeScripts);
             if(canAccept) {
                 FlxG.sound.music.stop();
                 FlxG.save.data.currentMod = Paths.currentMod;
