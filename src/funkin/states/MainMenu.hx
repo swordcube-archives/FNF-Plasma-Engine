@@ -55,7 +55,7 @@ class MainMenu extends FunkinState {
 
         menuButtons.addItem("story mode", function() {
             Console.debug("going to story mode menu");
-            startExitState(new TitleScreen());
+            startExitState(new StoryMenu());
         });
         menuButtons.addItem("freeplay", function() {
             Console.debug("going to freeplay");

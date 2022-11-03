@@ -33,6 +33,8 @@ typedef UnspawnNote = {
 }
 
 class PlayState extends FunkinState {
+    public static var paused:Bool = false;
+
     // Song stuff
     public static var songData:Song = SongLoader.returnSong("tutorial");
     public static var current:PlayState;
@@ -159,13 +161,16 @@ class PlayState extends FunkinState {
         super.create();
         current = this;
 	    
-	allowSwitchingMods = false;
+	    allowSwitchingMods = false;
 
         persistentUpdate = true;
         persistentDraw = true;
 		
         // Stop the currently playing music because grrr >:(
 		FlxG.sound.music.stop();
+
+        // Preload pause menu music
+        Assets.load("SOUND", Paths.music('menus/pauseMenu'));
 
         // Setup cameras
         camGame = FlxG.camera;
@@ -418,16 +423,24 @@ class PlayState extends FunkinState {
         FlxG.camera.followLerp = 0.04;
         moveCamera(songData.notes[curSection].mustHitSection);
 
+        if(Controls.getP("pause")) {
+            paused = true;
+            if(PlayState.current.countdownTimer != null)
+                PlayState.current.countdownTimer.active = false;
+            FlxG.sound.music.pause();
+            vocals.pause();
+            persistentUpdate = false;
+			persistentDraw = true;
+            openSubState(new funkin.states.substates.PauseMenu());
+        }
         if(camZooming) {
             camGame.zoom = MathUtil.fixedLerp(camGame.zoom, defaultCamZoom, 0.05);
             camHUD.zoom = MathUtil.fixedLerp(camHUD.zoom, 1, 0.05);
         }
+        
         if(!endingSong) Conductor.position += (elapsed * 1000.0) * FlxG.sound.music.pitch;
-        if(Conductor.position >= 0 && !startedSong)
-            startSong();
-
-        if(!(Conductor.isAudioSynced(FlxG.sound.music) && Conductor.isAudioSynced(vocals)))
-            resyncSong();
+        if(Conductor.position >= 0 && !startedSong) startSong();
+        if(!(Conductor.isAudioSynced(FlxG.sound.music) && Conductor.isAudioSynced(vocals))) resyncSong();
 
         for (c in bfs) {
 			if (c != null && c.animation.curAnim != null && c.holdTimer > Conductor.stepCrochet * c.singDuration * 0.001
@@ -516,8 +529,38 @@ class PlayState extends FunkinState {
         scripts.call("updatePost", [elapsed]);
     }
 
+    public function clearNotesBefore(time:Float) {
+		var i:Int = unspawnNotes.length - 1;
+		while (i >= 0) {
+			var daNote:UnspawnNote = unspawnNotes[i];
+			if(daNote.strumTime - 350 < time)
+				unspawnNotes.remove(daNote);
+			--i;
+		}
+		i = UI.enemyStrums.notes.length - 1;
+		while (i >= 0) {
+			var daNote:Note = UI.enemyStrums.notes.members[i];
+			if(daNote.strumTime - 350 < time) {
+				UI.enemyStrums.notes.remove(daNote, true);
+				daNote.destroy();
+			}
+			--i;
+		}
+		i = UI.playerStrums.notes.length - 1;
+		while (i >= 0) {
+			var daNote:Note = UI.playerStrums.notes.members[i];
+			if(daNote.strumTime - 350 < time) {
+				UI.playerStrums.notes.remove(daNote, true);
+				daNote.destroy();
+			}
+			--i;
+		}
+	}
+
     public function finishSong(?ignoreNoteOffset:Bool = false) {
 		endingSong = true;
+        persistentUpdate = false;
+        persistentDraw = true;
 
 		if(FlxG.sound.music != null)
 			FlxG.sound.music.time = 0;
@@ -636,7 +679,7 @@ class PlayState extends FunkinState {
 
     public var rpcTimer:FlxTimer;
 
-    function startSong() {
+    public function startSong() {
         startedSong = true;
         Conductor.position = 0;
         FlxG.sound.playMusic(cachedSounds["inst"], 1, false);

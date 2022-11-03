@@ -73,7 +73,7 @@ class StrumLine extends FlxSpriteGroup {
      * The function used for handling when you press a key.
      */
     function handleInput(evt:KeyboardEvent):Void {
-        if (isOpponent) return;
+        if (isOpponent || PlayState.paused) return;
 
         @:privateAccess
         var key = FlxKey.toStringMap.get(evt.keyCode);
@@ -253,7 +253,7 @@ class StrumLine extends FlxSpriteGroup {
      * The function used for handling when you release a key.
      */
     function releaseInput(evt:KeyboardEvent):Void {
-        if (isOpponent) return;
+        if (isOpponent || PlayState.paused) return;
 
         @:privateAccess
         var key = FlxKey.toStringMap.get(evt.keyCode);

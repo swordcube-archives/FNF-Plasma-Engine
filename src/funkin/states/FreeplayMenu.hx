@@ -187,7 +187,8 @@ class FreeplayMenu extends FunkinState {
 		if ((Controls.getP("ui_left") || Controls.getP("ui_right")) || speedTimer > 0.5) {
 			curSpeed = FlxMath.bound(FlxMath.roundDecimal(curSpeed + mult, 2), 0.05, 10);
 			FlxG.sound.music.pitch = curSpeed;
-			speedTimer -= 0.025;
+			if(speedTimer > 0.5)
+				speedTimer = 0.425;
 		}
 	}
 
