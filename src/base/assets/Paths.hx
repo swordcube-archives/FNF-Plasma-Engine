@@ -16,6 +16,10 @@ class Paths {
         var mmm:String = path('${fart}mods/$mod/$p');
         if(!FileSystem.exists(mmm)) mmm = path('${fart}mods/$fallbackMod/$p');
         if(!FileSystem.exists(mmm)) mmm = path('${fart}assets/$p');
+        // um
+        if(!FileSystem.exists(mmm)) mmm = path('mods/$mod/$p');
+        if(!FileSystem.exists(mmm)) mmm = path('mods/$fallbackMod/$p');
+        if(!FileSystem.exists(mmm)) mmm = path('assets/$p');
         return mmm;
     }
 
