@@ -185,68 +185,74 @@ class StrumLine extends FlxSpriteGroup {
 		coolText.x = FlxG.width * 0.55;
 
         var rating:Sprite = new Sprite(0, 0);
-        var size:Array<Int> = PlayState.current.judgementProperties.ratingSize;
-        rating.loadGraphic(Assets.load(IMAGE, Paths.image(PlayState.current.judgementProperties.ratingPath)), true, size[0], size[1]);
-        rating.antialiasing = PlayState.current.judgementProperties.ratingAntialiasing ? Settings.get("Antialiasing") : false;
-        rating.animation.add("marvelous", [0], 0);
-        rating.animation.add("sick", [1], 0);
-        rating.animation.add("good", [2], 0);
-        rating.animation.add("bad", [3], 0);
-        rating.animation.add("shit", [4], 0);
-        rating.animation.play(judgement);
-        rating.screenCenter();
-        rating.x = coolText.x - 40;
-        rating.y -= 60;
+        if(PlayState.current.showRating) {
+            var size:Array<Int> = PlayState.current.judgementProperties.ratingSize;
+            rating.loadGraphic(Assets.load(IMAGE, Paths.image(PlayState.current.judgementProperties.ratingPath)), true, size[0], size[1]);
+            rating.antialiasing = PlayState.current.judgementProperties.ratingAntialiasing ? Settings.get("Antialiasing") : false;
+            rating.animation.add("marvelous", [0], 0);
+            rating.animation.add("sick", [1], 0);
+            rating.animation.add("good", [2], 0);
+            rating.animation.add("bad", [3], 0);
+            rating.animation.add("shit", [4], 0);
+            rating.animation.play(judgement);
+            rating.screenCenter();
+            rating.x = coolText.x - 40;
+            rating.y -= 60;
+            
+            var mmm:Float = PlayState.current.judgementProperties.ratingScale;
+            rating.scale.set(mmm,mmm);
+            rating.updateHitbox();
+
+            rating.acceleration.y = 550;
+            rating.velocity.y -= FlxG.random.int(140, 175);
+            rating.velocity.x -= FlxG.random.int(0, 10);
+            PlayState.current.insert(PlayState.current.members.length-1, rating);
+        }
+
+        if(PlayState.current.showCombo) {
+            var seperatedScore:Array<String> = placement.split("");
+            while(seperatedScore.length < 3) seperatedScore.insert(0, "0");
+            var daLoop:Int = 0;
+            for (i in seperatedScore) {
+                var numScore:Sprite = new Sprite();
+                var size:Array<Int> = PlayState.current.judgementProperties.comboSize;
+                numScore.loadGraphic(Assets.load(IMAGE, Paths.image(PlayState.current.judgementProperties.comboPath)), true, size[0], size[1]);
+                numScore.screenCenter();
+                numScore.x = coolText.x + (43 * daLoop) - 90;
+                numScore.y += 80;
+                numScore.antialiasing = PlayState.current.judgementProperties.comboAntialiasing ? Settings.get("Antialiasing") : false;
+                numScore.animation.add("normal", [0,1,2,3,4,5,6,7,8,9], 0);
+                numScore.animation.add("marvelous", [10,11,12,13,14,15,16,17,18,19], 0);
+                numScore.animation.play(judgement == "marvelous" ? "marvelous" : "normal");
+                numScore.animation.curAnim.curFrame = Std.parseInt(i);
+
+                var mmm:Float = PlayState.current.judgementProperties.comboScale;
+                numScore.scale.set(mmm,mmm);
+                numScore.updateHitbox();
+
+                numScore.acceleration.y = FlxG.random.int(200, 300);
+                numScore.velocity.y -= FlxG.random.int(140, 160);
+                numScore.velocity.x = FlxG.random.float(-5, 5);
+                PlayState.current.insert(PlayState.current.members.length-1, numScore);
+
+                FlxTween.tween(numScore, {alpha: 0}, 0.2, {
+                    onComplete: function(tween:FlxTween) {
+                        numScore.destroy();
+                    },
+                    startDelay: Conductor.crochet * 0.002
+                });
+                daLoop++;
+            }
+        }
         
-        var mmm:Float = PlayState.current.judgementProperties.ratingScale;
-        rating.scale.set(mmm,mmm);
-        rating.updateHitbox();
-
-        rating.acceleration.y = 550;
-		rating.velocity.y -= FlxG.random.int(140, 175);
-		rating.velocity.x -= FlxG.random.int(0, 10);
-        PlayState.current.insert(PlayState.current.members.length-1, rating);
-
-        var seperatedScore:Array<String> = placement.split("");
-        while(seperatedScore.length < 3) seperatedScore.insert(0, "0");
-		var daLoop:Int = 0;
-		for (i in seperatedScore) {
-			var numScore:Sprite = new Sprite();
-            var size:Array<Int> = PlayState.current.judgementProperties.comboSize;
-            numScore.loadGraphic(Assets.load(IMAGE, Paths.image(PlayState.current.judgementProperties.comboPath)), true, size[0], size[1]);
-			numScore.screenCenter();
-			numScore.x = coolText.x + (43 * daLoop) - 90;
-			numScore.y += 80;
-            numScore.antialiasing = PlayState.current.judgementProperties.comboAntialiasing ? Settings.get("Antialiasing") : false;
-            numScore.animation.add("normal", [0,1,2,3,4,5,6,7,8,9], 0);
-            numScore.animation.add("marvelous", [10,11,12,13,14,15,16,17,18,19], 0);
-            numScore.animation.play(judgement == "marvelous" ? "marvelous" : "normal");
-            numScore.animation.curAnim.curFrame = Std.parseInt(i);
-
-            var mmm:Float = PlayState.current.judgementProperties.comboScale;
-            numScore.scale.set(mmm,mmm);
-			numScore.updateHitbox();
-
-			numScore.acceleration.y = FlxG.random.int(200, 300);
-			numScore.velocity.y -= FlxG.random.int(140, 160);
-			numScore.velocity.x = FlxG.random.float(-5, 5);
-			PlayState.current.insert(PlayState.current.members.length-1, numScore);
-
-			FlxTween.tween(numScore, {alpha: 0}, 0.2, {
-				onComplete: function(tween:FlxTween) {
-					numScore.destroy();
-				},
-				startDelay: Conductor.crochet * 0.002
-			});
-			daLoop++;
-		}
-        
-		FlxTween.tween(rating, {alpha: 0}, 0.2, {
-            onComplete: function(twn:FlxTween) {
-                rating.destroy();
-            },
-            startDelay: Conductor.crochet * 0.001
-		});
+        if(PlayState.current.showRating) {
+            FlxTween.tween(rating, {alpha: 0}, 0.2, {
+                onComplete: function(twn:FlxTween) {
+                    rating.destroy();
+                },
+                startDelay: Conductor.crochet * 0.001
+            });
+        }
     }
 
     /**

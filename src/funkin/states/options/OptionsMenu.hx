@@ -19,6 +19,12 @@ class OptionsMenu extends FunkinState {
 
     override function create() {
         super.create();
+
+        DiscordRPC.changePresence(
+            "In the Options Menu",
+            null
+        );
+
         var bg = new Sprite().load(IMAGE, Paths.image("menus/menuBGDesat"));
         bg.color = 0xFFEA71FD;
         bg.setGraphicSize(Std.int(bg.width * 1.1));
@@ -54,6 +60,7 @@ class OptionsMenu extends FunkinState {
     }
 
     function changeSelection(change:Int = 0) {
+        if(!pages.enabled) return;
         curSelected += change;
         if(curSelected < 0) curSelected = pages.length - 1;
         if(curSelected > pages.length - 1) curSelected = 0;

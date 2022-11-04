@@ -1,5 +1,8 @@
 package funkin.states.substates;
 
+import scripting.Script;
+import scripting.HScriptModule;
+import scripting.ScriptModule;
 import flixel.util.FlxStringUtil;
 import flixel.math.FlxMath;
 import flixel.tweens.FlxEase;
@@ -9,6 +12,9 @@ import flixel.system.FlxSound;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
 class PauseMenu extends FunkinSubState {
+	public var defaultBehavior:Bool = true;
+	var script:ScriptModule;
+
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = [
@@ -26,6 +32,16 @@ class PauseMenu extends FunkinSubState {
 	public function new() {
 		super();
 
+		DiscordRPC.changePresence(
+            "In the Freeplay Menu",
+            null
+        );
+
+		script = Script.create(Paths.script("data/states/substates/PauseMenu"));
+		if(Std.isOfType(script, HScriptModule)) cast(script, HScriptModule).setScriptObject(this);
+		script.start(true, []);
+
+		if(!defaultBehavior) return;
 		pauseMusic = new FlxSound().loadEmbedded(Assets.load("SOUND", Paths.music('menus/pauseMenu')), true, true);
 		pauseMusic.volume = 0;
 		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
@@ -87,10 +103,14 @@ class PauseMenu extends FunkinSubState {
     var holdTimer:Float = 0.0;
 
 	override function update(elapsed:Float) {
+		super.update(elapsed);
+
+		script.call("onUpdate", [elapsed]);
+		script.call("update", [elapsed]);
+
+		if(!defaultBehavior) return;
 		if (pauseMusic.volume < 0.5)
 			pauseMusic.volume += 0.01 * elapsed;
-
-		super.update(elapsed);
 
 		if(Controls.getP("ui_up"))
 			changeSelection(-1);
@@ -106,7 +126,7 @@ class PauseMenu extends FunkinSubState {
                 holdTimer = 0.0;
 
             if(Controls.getP("ui_left") || Controls.getP("ui_right") || holdTimer > 0.5) {
-                var mult:Float = Controls.getP("ui_left") ? -500 : 500;
+                var mult:Float = Controls.get("ui_left") ? -500 : 500;
                 curTime = FlxMath.bound(curTime + mult, 0, FlxG.sound.music.length);
                 timeTxt.text = FlxStringUtil.formatTime(curTime/1000.0) + " / " + FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0);
 
@@ -124,11 +144,13 @@ class PauseMenu extends FunkinSubState {
 					close();
 
 				case "Restart Song":
+					PlayState.paused = false;
 					Main.resetState();
                     close();
 
                 case "Skip Time":
                     if(curTime != Conductor.position) {
+						PlayState.paused = false;
                         PlayState.current.clearNotesBefore(curTime);
 
                         if(!PlayState.current.startedSong)
@@ -150,11 +172,13 @@ class PauseMenu extends FunkinSubState {
 
 				case "Exit To Menu":
                     exitToMenu();
+					close();
 			}
 		}
 	}
 
     public function exitToMenu() {
+		if(!defaultBehavior) return;
         PlayState.paused = false;
         if(PlayState.isStoryMode)
             FlxG.switchState(new funkin.states.StoryMenu());
@@ -163,6 +187,7 @@ class PauseMenu extends FunkinSubState {
     }
 
     public function resumeGame() {
+		if(!defaultBehavior) return;
         PlayState.paused = false;
         if(PlayState.current.startedSong) {
             FlxG.sound.music.play();
@@ -175,11 +200,12 @@ class PauseMenu extends FunkinSubState {
     }
 
 	override function destroy() {
-		pauseMusic.destroy();
+		if(defaultBehavior) pauseMusic.destroy();
 		super.destroy();
 	}
 
 	function changeSelection(change:Int = 0):Void {
+		if(!defaultBehavior) return;
 		curSelected += change;
 		if(curSelected < 0)
 			curSelected = menuItems.length - 1;

@@ -78,6 +78,7 @@ class HScriptModule extends ScriptModule {
         // Funkin
         addClasses([Paths, Assets, Sprite, Settings, CoolUtil, Controls]);
         addClasses([Conductor, StrumLine, StrumNote, Note, NoteSplash, CustomShader]);
+        addClasses([ScriptedSprite, ScriptedState, ScriptedSubState]);
         set("PlayState", PlayState.current);
         set("PlayState_", PlayState);
         // Abstracts

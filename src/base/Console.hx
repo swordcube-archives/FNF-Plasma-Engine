@@ -5,6 +5,7 @@ package base;
  */
 class Console {
     public static var ansiColors:Map<String, String> = [];
+    public static var haxeTrace = haxe.Log.trace;
 
     public static function init() {
         ansiColors['black'] = '\033[0;30m';
@@ -20,6 +21,15 @@ class Console {
 
 		// reuse it for quick lookups of colors to log levels
 		ansiColors['default'] = ansiColors['grey'];
+
+        // set default trace to new log thing
+        haxe.Log.trace = function(v:Dynamic, ?infos:Null<haxe.PosInfos>) {
+            log(v);
+        }
+    }
+
+    public static function haxeLog(text:Dynamic) {
+        haxeTrace(text);
     }
 
     public static function log(text:Dynamic) {

@@ -1,11 +1,17 @@
 package funkin.states;
 
+import scripting.HScriptModule;
+import scripting.Script;
+import scripting.ScriptModule;
 import openfl.media.Sound;
 import flixel.util.FlxTimer;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import base.Conductor;
 
 class TitleScreen extends FunkinState {
+    public var defaultBehavior:Bool = true;
+	var script:ScriptModule;
+
     var logo:Sprite;
     var gf:Sprite;
     var pressEnter:Sprite;
@@ -38,6 +44,11 @@ class TitleScreen extends FunkinState {
             null
         );
 
+        script = Script.create(Paths.script("data/states/TitleScreen"));
+		if(Std.isOfType(script, HScriptModule)) cast(script, HScriptModule).setScriptObject(this);
+		script.start(true, []);
+
+		if(!defaultBehavior) return;
         Conductor.changeBPM(102);
         curWacky = FlxG.random.getObject(getIntroTextShit());
 
@@ -79,10 +90,12 @@ class TitleScreen extends FunkinState {
     }
 
     function createTextLines(textArray:Array<String>) {
+        if(!defaultBehavior) return;
 		for (item in textArray) addTextLine(item);
 	}
 
     function addTextLine(text:String) {
+        if(!defaultBehavior) return;
 		var text:Alphabet = new Alphabet(0, 0, Bold, text);
 		text.screenCenter(X);
 		text.y += (textGroup.length * 60) + 200;
@@ -90,6 +103,7 @@ class TitleScreen extends FunkinState {
 	}
 
     function deleteTextLines() {
+        if(!defaultBehavior) return;
 		while (textGroup.members.length > 0) {
             textGroup.remove(textGroup.members[0], true);
         }
@@ -97,6 +111,11 @@ class TitleScreen extends FunkinState {
 
     override function update(elapsed:Float) {
         super.update(elapsed);
+
+        script.call("onUpdate", [elapsed]);
+		script.call("update", [elapsed]);
+
+        if(!defaultBehavior) return;
         if(FlxG.sound.music != null)
             Conductor.position = FlxG.sound.music.time;
 

@@ -78,13 +78,6 @@ class Settings {
                 limits: [0, 10],
                 decimals: 1,
                 value: 0
-            },
-            {
-                name: "Note Skin",
-                desc: "Change how your notes look.",
-                type: Selector,
-                values: ["Arrows", "Quants", "Circles", "Quant Circles"],
-                value: "Arrows"
             }
         ],
         "Appearance" => [
@@ -120,6 +113,13 @@ class Settings {
                 type: Checkbox,
                 value: true
             },
+            {
+                name: "Note Skin",
+                desc: "Change how your notes look.",
+                type: Selector,
+                values: ["Arrows", "Quants", "Circles", "Quant Circles"],
+                value: "Arrows"
+            }
         ]
     ];
 

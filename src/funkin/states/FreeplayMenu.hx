@@ -1,5 +1,8 @@
 package funkin.states;
 
+import scripting.HScriptModule;
+import scripting.Script;
+import scripting.ScriptModule;
 import flixel.tweens.FlxEase;
 import sys.thread.Mutex;
 import sys.thread.Thread;
@@ -23,6 +26,9 @@ typedef FreeplaySong = {
 }
 
 class FreeplayMenu extends FunkinState {
+	public var defaultBehavior:Bool = true;
+	var script:ScriptModule;
+
 	var bg:Sprite;
 	var curSelected:Int = 0;
 	var curSongPlaying:Int = -1;
@@ -56,6 +62,16 @@ class FreeplayMenu extends FunkinState {
 	override function create() {
 		super.create();
 
+		DiscordRPC.changePresence(
+            "In the Freeplay Menu",
+            null
+        );
+
+		script = Script.create(Paths.script("data/states/FreeplayMenu"));
+		if(Std.isOfType(script, HScriptModule)) cast(script, HScriptModule).setScriptObject(this);
+		script.start(true, []);
+
+		if(!defaultBehavior) return;
 		mutex = new Mutex();
 
 		if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
@@ -126,6 +142,10 @@ class FreeplayMenu extends FunkinState {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
+		script.call("onUpdate", [elapsed]);
+		script.call("update", [elapsed]);
+
+		if(!defaultBehavior) return;
 		if(FlxG.sound.music.playing)
 			Conductor.position = FlxG.sound.music.time;
 
@@ -183,6 +203,7 @@ class FreeplayMenu extends FunkinState {
 	}
 	
 	function changeSpeed(mult:Float) {
+		if(!defaultBehavior) return;
 		speedTimer += FlxG.elapsed;
 		if ((Controls.getP("ui_left") || Controls.getP("ui_right")) || speedTimer > 0.5) {
 			curSpeed = FlxMath.bound(FlxMath.roundDecimal(curSpeed + mult, 2), 0.05, 10);
@@ -192,6 +213,7 @@ class FreeplayMenu extends FunkinState {
 	}
 
 	function updateScore() {
+		if(!defaultBehavior) return;
 		intendedScore = Highscore.getScore(songList[curSelected].song+"-"+songList[curSelected].difficulties[curDifficulty].trim());
 		lerpScore = FlxMath.lerp(lerpScore, intendedScore, FlxG.elapsed * 60 * 0.4);
 	
@@ -201,6 +223,7 @@ class FreeplayMenu extends FunkinState {
 	}
 	
 	function positionHighscore() {
+		if(!defaultBehavior) return;
 		scoreText.x = FlxG.width - scoreText.width - 6;
 		scoreBG.scale.x = FlxG.width - scoreText.x + 6;
 	
@@ -213,6 +236,7 @@ class FreeplayMenu extends FunkinState {
 	}
 
 	function changeSelection(change:Int = 0) {
+		if(!defaultBehavior) return;
 		curSelected += change;
 		if(curSelected < 0)
 		    curSelected = grpSongs.length-1;
@@ -235,6 +259,7 @@ class FreeplayMenu extends FunkinState {
 	}
 
 	function changeDifficulty(change:Int = 0) {
+		if(!defaultBehavior) return;
 		curDifficulty += change;
 		if(curDifficulty < 0)
 			curDifficulty = songList[curSelected].difficulties.length - 1;
@@ -251,7 +276,8 @@ class FreeplayMenu extends FunkinState {
 	}
 
 	function changeSongPlaying() {
-		if (songThread == null) {
+		if(!defaultBehavior) return;
+		if(songThread == null) {
 			songThread = Thread.create(function() {
 				while (true) {
 					if (!threadActive) return;

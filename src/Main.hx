@@ -37,10 +37,16 @@ class Main extends Sprite {
 			Transition.finishCallback = function() {
 				FlxG.switchState(newState);
 			};
-			return #if debug Console.debug('Switched state to ${Type.getClassName(currentState)} (transition)') #end;
+			if (Std.isOfType(newState, scripting.ScriptedState))
+				return #if debug Console.debug('Switched state to scripting.ScriptedState [${cast(newState, scripting.ScriptedState).name}] (transition)') #end;
+			else
+				return #if debug Console.debug('Switched state to ${Type.getClassName(currentState)} (transition)') #end;
 		}
 		FlxG.switchState(newState);
-		return #if debug Console.debug('Switched state to ${Type.getClassName(currentState)} (no transition)') #end;
+		if (Std.isOfType(newState, scripting.ScriptedState))
+			return #if debug Console.debug('Switched state to scripting.ScriptedState [${cast(newState, scripting.ScriptedState).name}] (no transition)') #end;
+		else
+			return #if debug Console.debug('Switched state to ${Type.getClassName(currentState)} (no transition)') #end;
 	}
 
 	/**
@@ -53,11 +59,22 @@ class Main extends Sprite {
 		if (transition) {
 			FlxG.state.openSubState(new Transition(0.45, false));
 			Transition.finishCallback = function() {
-				FlxG.resetState();
+				if (Std.isOfType(FlxG.state, scripting.ScriptedState))
+					FlxG.switchState(new scripting.ScriptedState(cast(FlxG.state, scripting.ScriptedState).name, cast(FlxG.state, scripting.ScriptedState).args));
+				else
+					FlxG.resetState();
 			};
-			return #if debug Console.debug('Reloaded state ${Type.getClassName(currentState)} (transition)') #end;
+			if (Std.isOfType(FlxG.state, scripting.ScriptedState))
+				return #if debug Console.debug('Reloaded state scripting.ScriptedState [${cast(FlxG.state, scripting.ScriptedState).name}] (transition)') #end;
+			else
+				return #if debug Console.debug('Reloaded state ${Type.getClassName(currentState)} (transition)') #end;
 		}
-		FlxG.resetState();
-		return #if debug Console.debug('Reloaded state ${Type.getClassName(currentState)} (no transition)') #end;
+		if (Std.isOfType(FlxG.state, scripting.ScriptedState)) {
+			FlxG.switchState(new scripting.ScriptedState(cast(currentState, scripting.ScriptedState).name, cast(currentState, scripting.ScriptedState).args));
+			return #if debug Console.debug('Reloaded state scripting.ScriptedState [${cast(currentState, scripting.ScriptedState).name}] (no transition)') #end;
+		} else {
+			FlxG.resetState();
+			return #if debug Console.debug('Reloaded state ${Type.getClassName(currentState)} (no transition)') #end;
+		}
 	}
 }

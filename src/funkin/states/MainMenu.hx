@@ -1,5 +1,8 @@
 package funkin.states;
 
+import scripting.ScriptModule;
+import scripting.HScriptModule;
+import scripting.Script;
 import funkin.states.options.OptionsMenu;
 import funkin.mainMenu.MainMenuItem;
 import funkin.mainMenu.MainMenuList;
@@ -14,6 +17,9 @@ import flixel.text.FlxText;
 using StringTools;
 
 class MainMenu extends FunkinState {
+    public var defaultBehavior:Bool = true;
+	var script:ScriptModule;
+
     var bg:Sprite;
     var magenta:Sprite;
 
@@ -29,6 +35,16 @@ class MainMenu extends FunkinState {
     override function create() {
         super.create();
 
+        DiscordRPC.changePresence(
+            "In the Main Menu",
+            null
+        );
+
+        script = Script.create(Paths.script("data/states/FreeplayMenu"));
+		if(Std.isOfType(script, HScriptModule)) cast(script, HScriptModule).setScriptObject(this);
+		script.start(true, []);
+
+        if(!defaultBehavior) return;
         if(FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
             FlxG.sound.playMusic(Assets.load(SOUND, Paths.music("menus/titleScreen")));
 
@@ -79,6 +95,10 @@ class MainMenu extends FunkinState {
     override function update(elapsed:Float) {
         super.update(elapsed);
 
+        script.call("onUpdate", [elapsed]);
+		script.call("update", [elapsed]);
+
+        if(!defaultBehavior) return;
         if(Controls.getP("ui_up"))
             changeSelection(-1);
 
@@ -92,6 +112,7 @@ class MainMenu extends FunkinState {
     }
 
     function startExitState(nextState:FlxState) {
+        if(!defaultBehavior) return;
         FlxG.sound.play(cachedSounds["confirm"]);
         FlxFlicker.flicker(magenta, 1.1, 0.15, false, true);
         menuButtons.enabled = false;
@@ -112,6 +133,7 @@ class MainMenu extends FunkinState {
 	}
 
     function changeSelection(change:Int = 0) {
+        if(!defaultBehavior) return;
         if(!menuButtons.enabled) return;
         curSelected += change;
         if(curSelected < 0)

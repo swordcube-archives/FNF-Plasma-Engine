@@ -1,8 +1,4 @@
-package funkin;
-
-import scripting.Script;
-import scripting.HScriptModule;
-import scripting.ScriptModule;
+package scripting;
 
 /**
  * A sprite that has a script attached to it.

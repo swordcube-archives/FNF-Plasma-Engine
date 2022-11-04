@@ -152,6 +152,9 @@ class PlayState extends FunkinState {
         comboSize: [150, 150]
     };
 
+    public var showRating:Bool = true;
+    public var showCombo:Bool = true;
+
     public function new() {
         super();
         current = this;
@@ -160,6 +163,8 @@ class PlayState extends FunkinState {
     override function create() {
         super.create();
         current = this;
+
+        paused = false;
 	    
 	    allowSwitchingMods = false;
 
@@ -375,6 +380,7 @@ class PlayState extends FunkinState {
 						c.dance();
 				}
 				scripts.call("onCountdownTick", [countdownTick]);
+                scripts.call("countdownTick", [countdownTick]);
 				switch(countdownTick) {
 					case 0:
 						Conductor.position = Conductor.crochet * -4;
@@ -408,6 +414,7 @@ class PlayState extends FunkinState {
 						FlxTween.tween(countdownGo, { alpha: 0 }, (Conductor.crochet / 1000.0) / FlxG.sound.music.pitch, { ease: FlxEase.cubeInOut });
 				}
 				scripts.call("onCountdownTickPost", [countdownTick]);
+                scripts.call("countdownTickPost", [countdownTick]);
 				countdownTick++;
 			}, 5);
 		}
