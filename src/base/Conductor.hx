@@ -55,6 +55,6 @@ class Conductor {
 	}
 
 	public static function isAudioSynced(sound:FlxSound) {
-        return !(sound.time > position + 20 || sound.time < position - 20);
+        return !(sound.time > position + (20.0 * sound.pitch) || sound.time < position - (20.0 * sound.pitch));
     }
 }
