@@ -328,6 +328,9 @@ class PlayState extends FunkinState {
 
         scripts.call("onCreatePost", []);
         scripts.call("createPost", []);
+
+        Conductor.onBeat.add(beatHit);
+        Conductor.onStep.add(stepHit);
     }
 
     function unspawnNoteSorting(Obj1:UnspawnNote, Obj2:UnspawnNote):Int {
@@ -426,7 +429,7 @@ class PlayState extends FunkinState {
         scripts.call("onUpdate", [elapsed]);
         scripts.call("update", [elapsed]);
 
-        var curSection:Int = Std.int(FlxMath.bound(curStep / 16, 0, songData.notes.length-1));
+        var curSection:Int = Std.int(FlxMath.bound(Conductor.curStep / 16, 0, songData.notes.length-1));
         FlxG.camera.followLerp = 0.04;
         moveCamera(songData.notes[curSection].mustHitSection);
 
@@ -648,11 +651,11 @@ class PlayState extends FunkinState {
 
     public var gfSpeed:Int = 1;
     
-    override function beatHit(curBeat:Int) {
+    function beatHit(curBeat:Int) {
         if(endingSong) return;
         scripts.call("onBeatHit", [curBeat]);
         scripts.call("beatHit", [curBeat]);
-		var curSection:Int = Std.int(FlxMath.bound(curStep / 16, 0, songData.notes.length-1));
+		var curSection:Int = Std.int(FlxMath.bound(Conductor.curStep / 16, 0, songData.notes.length-1));
 		if (songData.notes[curSection].changeBPM)
 			Conductor.changeBPM(songData.notes[curSection].bpm);
 
@@ -670,16 +673,14 @@ class PlayState extends FunkinState {
             camHUD.zoom += 0.03;
         }
         UI.beatHit(curBeat);
-        super.beatHit(curBeat);
         scripts.call("onBeatHitPost", [curBeat]);
         scripts.call("beatHitPost", [curBeat]);
     }
 
-    override function stepHit(curStep:Int) {
+    function stepHit(curStep:Int) {
         if(endingSong) return;
         scripts.call("onStepHit", [curStep]);
         scripts.call("stepHit", [curStep]);
-        super.stepHit(curStep);
         scripts.call("onStepHitPost", [curStep]);
         scripts.call("stepHitPost", [curStep]);
     }

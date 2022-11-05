@@ -19,5 +19,22 @@ class ScriptedState extends FunkinState {
 		script = Script.create(Paths.script('data/states/$name'));
 		if(Std.isOfType(script, HScriptModule)) cast(script, HScriptModule).setScriptObject(this);
 		script.start(true, args);
+
+		Conductor.onBeat.add(beatHit);
+        Conductor.onStep.add(stepHit);
+    }
+
+	function beatHit(curBeat:Int) {
+        script.call("onBeatHit", [curBeat]);
+        script.call("beatHit", [curBeat]);
+        script.call("onBeatHitPost", [curBeat]);
+        script.call("beatHitPost", [curBeat]);
+    }
+
+    function stepHit(curStep:Int) {
+        script.call("onStepHit", [curStep]);
+        script.call("stepHit", [curStep]);
+        script.call("onStepHitPost", [curStep]);
+        script.call("stepHitPost", [curStep]);
     }
 }

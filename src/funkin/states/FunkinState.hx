@@ -11,16 +11,12 @@ import flixel.FlxState;
 using StringTools;
 
 class FunkinState extends FlxState {
-    var curStep:Int = 0;
-	var curBeat:Int = 0;
-
-	var curStepFloat:Float = 0;
-	var curBeatFloat:Float = 0;
-
 	public var allowSwitchingMods:Bool = true;
 
     override function create() {
         super.create();
+
+		Conductor.reset();
 
         if (!FlxTransitionableState.skipNextTransOut)
 			openSubState(new Transition(0.45, true));
@@ -55,31 +51,6 @@ class FunkinState extends FlxState {
 		Lib.current.stage.frameRate = Settings.get("Framerate Cap");
 		FlxG.autoPause = Settings.get("Auto Pause");
 
-        var oldStep:Int = curStep;
-        var oldBeat:Int = curBeat;
-
-		var lastChange:BPMChangeEvent = {
-			stepTime: 0,
-			songTime: 0,
-			bpm: 0
-		}
-		for (i in 0...Conductor.bpmChangeMap.length) {
-			if (Conductor.position >= Conductor.bpmChangeMap[i].songTime)
-				lastChange = Conductor.bpmChangeMap[i];
-		}
-
-		curStep = lastChange.stepTime + Math.floor((Conductor.position - lastChange.songTime) / Conductor.stepCrochet);
-        curBeat = Math.floor(curStep / 4);
-
-		curStepFloat = lastChange.stepTime + ((Conductor.position - lastChange.songTime) / Conductor.stepCrochet);
-        curBeatFloat = curStepFloat / 4;
-
-        if (oldStep != curStep && curStep > 0)
-            stepHit(curStep);
-
-        if (oldBeat != curBeat && curBeat > 0)
-            beatHit(curBeat);
-
 		if(FlxG.keys.justPressed.F5)
 			Main.resetState();
 
@@ -88,10 +59,6 @@ class FunkinState extends FlxState {
             persistentDraw = true;
             openSubState(new funkin.states.substates.ModSelection());
         }
-
         super.update(elapsed);
     }
-
-    public function beatHit(curBeat:Int) {}
-    public function stepHit(curStep:Int) {}
 }

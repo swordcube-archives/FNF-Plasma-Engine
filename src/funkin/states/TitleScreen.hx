@@ -48,6 +48,9 @@ class TitleScreen extends FunkinState {
 		if(Std.isOfType(script, HScriptModule)) cast(script, HScriptModule).setScriptObject(this);
 		script.start(true, []);
 
+        Conductor.onBeat.add(beatHit);
+        Conductor.onStep.add(stepHit);
+
 		if(!defaultBehavior) return;
         Conductor.changeBPM(102);
         curWacky = FlxG.random.getObject(getIntroTextShit());
@@ -115,65 +118,82 @@ class TitleScreen extends FunkinState {
         script.call("onUpdate", [elapsed]);
 		script.call("update", [elapsed]);
 
-        if(!defaultBehavior) return;
-        if(FlxG.sound.music != null)
-            Conductor.position = FlxG.sound.music.time;
+        if(defaultBehavior) {
+            if(FlxG.sound.music != null)
+                Conductor.position = FlxG.sound.music.time;
 
-        if(Controls.getP("accept") && startedIntro) {
-            if(!skippedIntro)
-                skipIntro();
-            else if(!accepted) {
-                accepted = true;
-                pressEnter.playAnim("confirm");
-                FlxG.sound.play(confirmMenu);
-                FlxG.camera.flash(FlxColor.WHITE, 1);
-                new FlxTimer().start(2, function(tmr:FlxTimer) {
-                    Main.switchState(new MainMenu());
-                });
+            if(Controls.getP("accept") && startedIntro) {
+                if(!skippedIntro)
+                    skipIntro();
+                else if(!accepted) {
+                    accepted = true;
+                    pressEnter.playAnim("confirm");
+                    FlxG.sound.play(confirmMenu);
+                    FlxG.camera.flash(FlxColor.WHITE, 1);
+                    new FlxTimer().start(2, function(tmr:FlxTimer) {
+                        Main.switchState(new MainMenu());
+                    });
+                }
             }
         }
+
+        script.call("onUpdatePost", [elapsed]);
+		script.call("updatePost", [elapsed]);
     }
 
-    override function beatHit(curBeat:Int) {
-        super.beatHit(curBeat);
+    function beatHit(curBeat:Int) {
+        script.call("onBeatHit", [curBeat]);
+        script.call("beatHit", [curBeat]);
 
-        danced = !danced;
-        logo.playAnim("idle", true);
-        gf.playAnim("dance"+(danced ? "L" : "R"));
+        if(defaultBehavior) {
+            danced = !danced;
+            logo.playAnim("idle", true);
+            gf.playAnim("dance"+(danced ? "L" : "R"));
 
-        if(!skippedIntro) {
-            switch(curBeat) {
-                case 1:
-                    createTextLines(['swordcube', 'Leather128', 'Raf', 'Stilic']);
-                case 3:
-                    addTextLine('present');
-                case 4:
-                    deleteTextLines();
-                case 5:
-                    createTextLines(['In association', 'with']);
-                case 7:
-                    addTextLine('Newgrounds');
-                    ngSpr.alpha = 1;
-                case 8:
-                    deleteTextLines();
-                    ngSpr.alpha = 0.001;
-                case 9:
-                    createTextLines([curWacky[0]]);
-                case 11:
-                    addTextLine(curWacky[1]);
-                case 12:
-                    deleteTextLines();
-                case 13:
-                    addTextLine('Friday');
-                case 14:
-                    addTextLine('Night');
-                case 15:
-                    addTextLine('Funkin');
-                default:
-                    if(curBeat >= 16)
-                        skipIntro();
+            if(!skippedIntro) {
+                switch(curBeat) {
+                    case 1:
+                        createTextLines(['swordcube', 'Leather128', 'Raf', 'Stilic']);
+                    case 3:
+                        addTextLine('present');
+                    case 4:
+                        deleteTextLines();
+                    case 5:
+                        createTextLines(['In association', 'with']);
+                    case 7:
+                        addTextLine('Newgrounds');
+                        ngSpr.alpha = 1;
+                    case 8:
+                        deleteTextLines();
+                        ngSpr.alpha = 0.001;
+                    case 9:
+                        createTextLines([curWacky[0]]);
+                    case 11:
+                        addTextLine(curWacky[1]);
+                    case 12:
+                        deleteTextLines();
+                    case 13:
+                        addTextLine('Friday');
+                    case 14:
+                        addTextLine('Night');
+                    case 15:
+                        addTextLine('Funkin');
+                    default:
+                        if(curBeat >= 16)
+                            skipIntro();
+                }
             }
         }
+
+        script.call("onBeatHitPost", [curBeat]);
+        script.call("beatHitPost", [curBeat]);
+    }
+
+    function stepHit(curStep:Int) {
+        script.call("onStepHit", [curStep]);
+        script.call("stepHit", [curStep]);
+        script.call("onStepHitPost", [curStep]);
+        script.call("stepHitPost", [curStep]);
     }
 
     function skipIntro() {

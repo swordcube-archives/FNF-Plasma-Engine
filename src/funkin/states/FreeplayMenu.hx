@@ -150,7 +150,7 @@ class FreeplayMenu extends FunkinState {
 			Conductor.position = FlxG.sound.music.time;
 
 	    if (curSongPlaying > -1) {
-			var lerp = FlxMath.lerp(1.15, 1, FlxEase.cubeOut(curBeatFloat % 1));
+			var lerp = FlxMath.lerp(1.15, 1, FlxEase.cubeOut(Conductor.curBeatFloat % 1));
 			grpIcons.members[curSongPlaying].scale.set(lerp, lerp);
 		}
 		updateScore();

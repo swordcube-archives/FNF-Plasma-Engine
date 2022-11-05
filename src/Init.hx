@@ -36,6 +36,7 @@ class Init extends FunkinState {
 		// This basically allows me to add assets to the source code's assets folder
 		// and have those assets be used, So i don't have to recompile every time i add an asset
 		// or deal with the hellhole that can be the export folder.
+		trace(Sys.args());
 		if(Sys.args().contains("-livereload")) Main.developerMode = true;
 		#end
 
@@ -54,6 +55,7 @@ class Init extends FunkinState {
 			Settings.flush();
 		});
 
+		Conductor.init();
         Main.switchState(new funkin.states.TitleScreen(), false);
     }
 }
