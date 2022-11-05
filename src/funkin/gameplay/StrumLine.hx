@@ -157,7 +157,10 @@ class StrumLine extends FlxSpriteGroup {
             if(c != null && !c.specialAnim) {
                 var alt:String = note.altAnim ? "-alt" : "";
                 c.holdTimer = 0;
-                c.playAnim("sing"+getSingDirection(note.direction)+alt, true);
+                if(c.animation.exists("sing"+getSingDirection(note.direction)+alt))
+                    c.playAnim("sing"+getSingDirection(note.direction)+alt, true);
+                else
+                    c.playAnim("sing"+getSingDirection(note.direction), true);
             }
         }
         PlayState.current.health += PlayState.current.healthGain;
@@ -334,7 +337,10 @@ class StrumLine extends FlxSpriteGroup {
                         if(c != null && !c.specialAnim) {
                             var alt:String = note.altAnim ? "-alt" : "";
                             c.holdTimer = 0;
-                            c.playAnim("sing"+getSingDirection(note.direction)+alt, true);
+                            if(c.animation.exists("sing"+getSingDirection(note.direction)+alt))
+                                c.playAnim("sing"+getSingDirection(note.direction)+alt, true);
+                            else
+                                c.playAnim("sing"+getSingDirection(note.direction), true);
                         }
                     }
                     PlayState.current.vocals.volume = 1;
@@ -347,7 +353,10 @@ class StrumLine extends FlxSpriteGroup {
                         if(c != null && !c.specialAnim) {
                             var alt:String = note.altAnim ? "-alt" : "";
                             c.holdTimer = 0;
-                            c.playAnim("sing"+getSingDirection(note.direction)+alt, true);
+                            if(c.animation.exists("sing"+getSingDirection(note.direction)+alt))
+                                c.playAnim("sing"+getSingDirection(note.direction)+alt, true);
+                            else
+                                c.playAnim("sing"+getSingDirection(note.direction), true);
                         }
                     }
                     // you get half the health because fuck you i guess, lmao!
