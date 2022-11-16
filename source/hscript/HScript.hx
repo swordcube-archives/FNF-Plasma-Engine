@@ -88,7 +88,10 @@ class HScript {
             //
 
             // Haxe/HaxeFlixel classes
-            set("trace", function(text:String) {
+	    set("trace", function(text:String) {
+		trace(text);
+	    });
+            set("traceCustom", function(text:String) {
                 Main.print("hscript", text);
             });
             set("traceDebug", function(text:String) {
@@ -274,6 +277,9 @@ class HScript {
             set("ScriptedSubState", substates.ScriptedSubState);
             set("ScriptedSprite", systems.ScriptedSprite);
             set("CustomShader", shaders.CustomShader);
+	
+	    // Flixel Addons Section
+	    set("FlxBackdrop", flixel.addons.display.FlxBackdrop);
 
             // Game substates
             set("KeybindMenu", substates.KeybindMenu);
