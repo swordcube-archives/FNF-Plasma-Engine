@@ -240,6 +240,10 @@ class Main extends Sprite
 				trace('${ansiColors["orange"]}[  HSCRIPT  ] ${ansiColors["default"]}' + text);
 				Init.log('hscript', text);
 				return;
+			case "normal":
+				trace(text);
+				Init.log('normal', text);
+				return;
 		}
 		trace(text);
 		Init.log('trace', text);
