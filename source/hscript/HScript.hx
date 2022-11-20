@@ -115,8 +115,11 @@ class HScript {
             
             set("StringTools", StringTools);
             set("FlxG", flixel.FlxG);
-            set("OpenFLAssets", openfl.utils.Assets);
             set("LimeAssets", lime.utils.Assets);
+		
+	    // openFL
+	    set("OpenFLAssets", openfl.utils.Assets);
+	    set("ShaderFilter", openfl.filters.ShaderFilter); // needed to apply shaders to the camera
 
             set("FlxFlicker", flixel.effects.FlxFlicker);
 
