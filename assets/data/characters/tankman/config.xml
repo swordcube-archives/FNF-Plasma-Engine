@@ -12,11 +12,11 @@
         <animation name="singUP-alt" anim="TANKMAN UGH0" fps="24" looped="false" offsetX="0" offsetY="0" />
     </animations>
 
-    <global_pos offsetX="0" offsetY="240" />
+    <global_pos offsetX="100" offsetY="240" />
     <scale x="1" y="1" />
     <scroll x="1" y="1" />
 
     <color r="0" g="0" b="0" hex="" />
 
-    <camera offsetX="0" offsetY="0" />
+    <camera offsetX="-100" offsetY="0" />
 </character>

@@ -6,7 +6,7 @@
 
         <animation name="scared" anim="GF FEAR" indices="" fps="24" looped="true" offsetX="-2" offsetY="-17" />
         <animation name="cheer" anim="GF cheer" indices="" fps="24" looped="false" offsetX="3" offsetY="0" />
-        <animation name="sad" anim="GF sad" indices="0,1,2,3,4,5,6,7,8,9,10,11,12" fps="24" looped="false" offsetX="-2" offsetY="-21" />
+        <animation name="sad" anim="GF sad" indices="0,1,2,3,4,5,6,7,8,9,10,11,12" fps="24" looped="true" offsetX="-2" offsetY="-21" />
 
         <animation name="singLEFT" anim="GF left note" indices="" fps="24" looped="false" offsetX="0" offsetY="-19" />
         <animation name="singDOWN" anim="GF Down Note" indices="" fps="24" looped="false" offsetX="0" offsetY="-20" />

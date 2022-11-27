@@ -1,0 +1,17 @@
+<!DOCTYPE plasma-character >
+<character icon="gf" flip_x="false" dance_steps="danceLeft,danceRight" >
+    <animations>
+        <animation name="danceLeft" anim="GF Dancing at Gunpoint" indices="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14" fps="24" looped="false" offsetX="0" offsetY="-9" />
+        <animation name="danceRight" anim="GF Dancing at Gunpoint" indices="15,16,17,18,19,20,21,22,23,24,25,26,27,28,29" fps="24" looped="false" offsetX="0" offsetY="-9" />
+
+        <animation name="sad" anim="GF Crying at Gunpoint " indices="0,1,2,3,4,5,6,7,8,9,10,11,12" fps="24" looped="true" offsetX="0" offsetY="-27" />
+    </animations>
+
+    <global_pos offsetX="0" offsetY="0" />
+    <scale x="1" y="1" />
+    <scroll x="0.95" y="0.95" />
+
+    <color r="165" g="0" b="77" hex="" />
+
+    <camera offsetX="0" offsetY="0" />
+</character>
