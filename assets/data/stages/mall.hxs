@@ -1,0 +1,70 @@
+var upperBoppers:FNFSprite;
+var bottomBoppers:FNFSprite;
+var santa:FNFSprite;
+
+function create() {
+    defaultCamZoom = 0.8;
+
+    stage.characterPositions["dad"].set(100, 100);
+    stage.characterPositions["gf"].set(400, 130);
+    stage.characterPositions["bf"].set(970, 100);
+
+    var bg = new FNFSprite(-1000, -500).load("IMAGE", Paths.image(stageImage('bgWalls')));
+    bg.antialiasing = true;
+    bg.scrollFactor.set(0.2, 0.2);
+    bg.active = false;
+    bg.setGraphicSize(Std.int(bg.width * 0.8));
+    bg.updateHitbox();
+    add(bg);
+
+    upperBoppers = new FNFSprite(-240, -90).load("SPARROW", Paths.image(stageImage('upperBop')));
+    upperBoppers.addAnim('bop', "Upper Crowd Bob", 24, false);
+    upperBoppers.antialiasing = true;
+    upperBoppers.scrollFactor.set(0.33, 0.33);
+    upperBoppers.setGraphicSize(Std.int(upperBoppers.width * 0.85));
+    upperBoppers.updateHitbox();
+    add(upperBoppers);
+
+    var bgEscalator = new FNFSprite(-1100, -600).load("IMAGE", Paths.image(stageImage('bgEscalator')));
+    bgEscalator.antialiasing = true;
+    bgEscalator.scrollFactor.set(0.3, 0.3);
+    bgEscalator.active = false;
+    bgEscalator.setGraphicSize(Std.int(bgEscalator.width * 0.9));
+    bgEscalator.updateHitbox();
+    add(bgEscalator);
+
+    var tree = new FNFSprite(370, -250).load("IMAGE", Paths.image(stageImage('christmasTree')));
+    tree.antialiasing = true;
+    tree.scrollFactor.set(0.40, 0.40);
+    tree.active = false;
+    add(tree);
+
+    bottomBoppers = new FNFSprite(-300, 140).load("SPARROW", Paths.image(stageImage("bottomBop")));
+    bottomBoppers.addAnim('bop', 'Bottom Level Boppers', 24, false);
+    bottomBoppers.antialiasing = true;
+    bottomBoppers.scrollFactor.set(0.9, 0.9);
+    add(bottomBoppers);
+
+    var fgSnow = new FNFSprite(-600, 700).load("IMAGE", Paths.image(stageImage('fgSnow')));
+    fgSnow.active = false;
+    fgSnow.antialiasing = true;
+    add(fgSnow);
+
+    santa = new FNFSprite(-840, 150).load("SPARROW", Paths.image(stageImage('santa')));
+    santa.addAnim('idle', 'santa idle in fear', 24, false);
+    santa.antialiasing = true;
+    add(santa);
+}
+
+function bopFunction() {
+    upperBoppers.playAnim('bop');
+    bottomBoppers.playAnim('bop');
+    santa.playAnim('idle');
+}
+
+function onCountdownTick() {bopFunction();}
+function beatHit() {bopFunction();}
+
+function stageImage(asset:String) {
+    return "stages/mall/"+asset;
+}

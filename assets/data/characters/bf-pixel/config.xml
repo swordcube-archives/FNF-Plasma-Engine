@@ -1,0 +1,27 @@
+<!DOCTYPE plasma-character >
+<character spritesheet="spritesheet" is_player="true" antialiasing="false" sing_duration="4" death_character="bf-pixel-dead" icon="bf-pixel" flip_x="true" dance_steps="idle" >
+    <animations>
+        <!-- All offsets are the Week 7 ones divided by 6. -->
+        <animation name="idle" anim="BF IDLE0" indices="" fps="24" looped="false" offsetX="1.1" offsetY="0" />
+
+        <animation name="singLEFT" anim="BF LEFT NOTE0" indices="" fps="24" looped="false" offsetX="0" offsetY="0" />
+        <animation name="singDOWN" anim="BF DOWN NOTE0" indices="" fps="24" looped="false" offsetX="0" offsetY="0" />
+        <animation name="singUP" anim="BF UP NOTE0" indices="" fps="24" looped="false" offsetX="0" offsetY="0" />
+        <animation name="singRIGHT" anim="BF RIGHT NOTE0" indices="" fps="24" looped="false" offsetX="0" offsetY="0" />
+
+        <animation name="singLEFTmiss" anim="BF LEFT MISS" indices="" fps="24" looped="false" offsetX="0" offsetY="0" />
+        <animation name="singDOWNmiss" anim="BF DOWN MISS" indices="" fps="24" looped="false" offsetX="0" offsetY="0" />
+        <animation name="singUPmiss" anim="BF UP MISS" indices="" fps="24" looped="false" offsetX="0" offsetY="0" />
+        <animation name="singRIGHTmiss" anim="BF RIGHT MISS" indices="" fps="24" looped="false" offsetX="0" offsetY="0" />
+
+        <animation name="hey" anim="BF Peace Sign0" indices="" fps="24" looped="false" offsetX="-3" offsetY="5" />
+    </animations>
+
+    <global_pos offsetX="0" offsetY="350" />
+    <scale x="6" y="6" />
+    <scroll x="1" y="1" />
+
+    <color r="123" g="214" b="246" hex="" />
+
+    <camera offsetX="-150" offsetY="-160" />
+</character>

@@ -1,44 +1,40 @@
 package base;
 
-/**
- * A class for handling highscores.
- */
+import flixel.FlxG;
+
 class Highscore {
-	public static var scores:Map<String, Int> = [];
+	public static var songScores:Map<String, Int> = [];
 
-	/**
-	 * Loads your scores from save data.
-	 */
-	public static function init() {
-		if (FlxG.save.data.scores != null)
-			scores = FlxG.save.data.scores;
-		else {
-			FlxG.save.data.scores = scores;
-			FlxG.save.flush();
-		}
+	public static function saveScore(song:String, score:Int = 0, ?diff:String = "normal"):Void {
+		var daSong:String = formatSong(song, diff);
+		if (songScores.exists(daSong)) {
+			if (songScores.get(daSong) < score)
+				setScore(daSong, score);
+		} else
+			setScore(daSong, score);
 	}
 
 	/**
-	 * Returns the value of a score named `thing`
-	 * @param thing 
-	 * @return Int
+	 * YOU SHOULD FORMAT SONG WITH formatSong() BEFORE TOSSING IN SONG VARIABLE
 	 */
-	public static function getScore(thing:String):Int {
-		if (scores.get(thing) == null)
-			setScore(thing, 0);
-
-		return scores.get(thing);
-	}
-
-	/**
-	 * Sets the value of a score named `thing` to `value`
-	 * @param thing The score to set.
-	 * @param value The value to use.
-	 */
-	public static function setScore(thing:String, value:Int) {
-		scores.set(thing, value);
-
-		FlxG.save.data.scores = scores;
+	static function setScore(song:String, score:Int):Void {
+		songScores.set(song, score);
+		FlxG.save.data.songScores = songScores;
 		FlxG.save.flush();
+	}
+
+	public static function formatSong(song:String, diff:String):String {
+		return song+'-'+diff;
+	}
+
+	public static function getScore(song:String, diff:String):Int {
+		var formatted:String = formatSong(song, diff);
+		if (!songScores.exists(formatted)) setScore(formatted, 0);
+		return songScores.get(formatted);
+	}
+
+	public static function load():Void {
+		if (FlxG.save.data.songScores != null)
+			songScores = FlxG.save.data.songScores;
 	}
 }

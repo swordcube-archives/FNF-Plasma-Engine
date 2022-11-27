@@ -1,31 +1,19 @@
-// Flixel
-import flixel.FlxG;
-import flixel.util.FlxColor;
-
-// Assets
-import base.assets.Assets;
-import base.assets.Paths;
-
-// Game
-import tjson.TJSON;
-import base.Controls;
-import base.Settings;
-import base.DiscordRPC;
-import base.VideoHelper;
-
-// Funkin
-import base.Conductor;
-import base.Highscore;
-
-// Utilities
-import base.Console;
-import base.CoolUtil;
-import base.MathUtil;
-import base.BasicPoint;
-
-// File System
+import base.Paths;
+import funkin.system.CoolUtil;
 import sys.io.File;
 import sys.FileSystem;
-
-// Extensions of other classes
-import base.Sprite; // Extends FlxSprite
+import flixel.FlxG;
+#if discord_rpc
+import base.DiscordRPC;
+#end
+import funkin.system.Song;
+import funkin.system.Section;
+import base.Console;
+import funkin.system.Conductor;
+import base.Highscore;
+import tjson.TJSON as Json;
+import base.Assets;
+import flixel.util.FlxColor;
+import funkin.system.PlayerSettings;
+import openfl.utils.Assets as OpenFLAssets;
+import lime.utils.Assets as LimeAssets;

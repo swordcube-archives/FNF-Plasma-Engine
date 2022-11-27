@@ -1,0 +1,61 @@
+var bg:FlxSprite;
+var dark:FlxSprite;
+var flash:FlxSprite;
+
+var cachedThunder = [
+    Assets.load("SOUND", Paths.sound('game/week2/thunder_1')),
+    Assets.load("SOUND", Paths.sound('game/week2/thunder_2'))
+];
+
+var lightningStrikeBeat:Int = 0;
+var lightningOffset:Int = 8;
+
+// I am entirely aware the lightning strike animation looks off
+// But that's because i had to do some shit for performance and memory
+
+function create() {
+    defaultCamZoom = 1.05;
+    
+    bg = new FlxSprite(-200, -100).loadGraphic(Assets.load("IMAGE", Paths.image(stageImage("bg"))));
+    bg.antialiasing = true;
+    add(bg);
+
+    dark = new FlxSprite(bg.x, bg.y).makeGraphic(bg.width, bg.height, 0xFF000000);
+    dark.alpha = 0.001;
+    dark.blend = BlendMode.HARDLIGHT;
+    add(dark);
+
+    flash = new FlxSprite(bg.x, bg.y).makeGraphic(bg.width, bg.height, 0xFFFFFFFF);
+    flash.alpha = 0.001;
+    flash.blend = BlendMode.SCREEN;
+    add(flash);
+}
+
+function onBeatHitPost(curBeat:Int) {
+    if(FlxG.random.bool(10) && curBeat > lightningStrikeBeat + lightningOffset)
+        lightningStrikeShit(curBeat);
+}
+
+function lightningStrikeShit(curBeat:Int) {
+    FlxG.sound.play(cachedThunder[FlxG.random.int(0, 1)]);
+    dark.alpha = 0.45;
+    flash.alpha = 0;
+
+    new FlxTimer().start(0.05, function(tmr) {
+        dark.alpha = 0.001;
+        flash.alpha = 0.35;
+        FlxTween.tween(flash, {alpha: 0.001}, 0.85, {ease: FlxEase.cubeOut});
+    });
+
+    lightningStrikeBeat = curBeat;
+    lightningOffset = FlxG.random.int(8, 24);
+
+    if(gf != null)
+        gf.playAnim('scared', true);
+    if(bf != null)
+        bf.playAnim('scared', true);
+}
+
+function stageImage(asset:String) {
+    return "stages/halloween/"+asset;
+}

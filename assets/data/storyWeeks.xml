@@ -1,0 +1,42 @@
+<!DOCTYPE plasma-story-weeks >
+<weeks>
+    <week name="" chars="none,bf,gf" texture="tutorial">
+        <song name="Tutorial" chartType="VANILLA" />
+    </week>
+
+    <week name="DADDY DEAREST" chars="dad,bf,gf" texture="week1">
+        <song name="Bopeebo" chartType="VANILLA" />
+        <song name="Fresh" chartType="VANILLA" />
+        <song name="Dad Battle" chartType="VANILLA" />
+    </week>
+
+    <week name="SPOOKY MONTH" chars="spooky,bf,gf" texture="week2">
+        <song name="Spookeez"          chartType="VANILLA" />
+        <song name="South"             chartType="VANILLA" />
+        <song name="Monster"           chartType="VANILLA" />
+    </week>
+
+    <week name="PICO" chars="pico,bf,gf" texture="week3">
+        <song name="Pico"              chartType="VANILLA" />
+        <song name="Philly Nice"       chartType="VANILLA" />
+        <song name="Blammed"           chartType="VANILLA" />
+    </week>
+
+    <week name="MOMMY MUST MURDER" chars="mom,bf,gf" texture="week4">
+        <song name="Satin Panties"     chartType="VANILLA" />
+        <song name="High"              chartType="VANILLA" />
+        <song name="M.I.L.F"           chartType="VANILLA" />
+    </week>
+
+    <week name="RED SNOW" chars="parents-christmas,bf,gf" texture="week5">
+        <song name="Cocoa"             chartType="VANILLA" />
+        <song name="Eggnog"            chartType="VANILLA" />
+        <song name="Winter Horrorland" chartType="VANILLA" />
+    </week>
+
+    <week name="HATING SIMULATOR FT. MOAWLING" chars="senpai,bf,gf" texture="week6">
+        <song name="Senpai"            chartType="VANILLA" />
+        <song name="Roses"             chartType="VANILLA" />
+        <song name="Thorns"            chartType="VANILLA" />
+    </week>
+</weeks>

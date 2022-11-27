@@ -1,0 +1,28 @@
+function create() {
+    stage.characterPositions["dad"].set(100, 20);
+    stage.characterPositions["gf"].set(400, 130);
+    stage.characterPositions["bf"].set(1090, 100);
+
+    var bg = new FNFSprite(-400, -500).load("IMAGE", Paths.image(stageImage('evilBG')));
+    bg.antialiasing = true;
+    bg.scrollFactor.set(0.2, 0.2);
+    bg.active = false;
+    bg.setGraphicSize(Std.int(bg.width * 0.8));
+    bg.updateHitbox();
+    add(bg);
+
+    var evilTree = new FNFSprite(300, -300).load("IMAGE", Paths.image(stageImage('evilTree')));
+    evilTree.antialiasing = true;
+    evilTree.active = false;
+    evilTree.scrollFactor.set(0.2, 0.2);
+    add(evilTree);
+
+    var evilSnow = new FNFSprite(-200, 700).load("IMAGE", Paths.image(stageImage("evilSnow")));
+    evilSnow.antialiasing = true;
+    evilSnow.active = false;
+    add(evilSnow);
+}
+
+function stageImage(asset:String) {
+    return "stages/mallEvil/"+asset;
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE plasma-freeplay >
+<songs>
+    <!-- testicles -->
+    <song name="Test"              difficulties="normal"           character="bf-pixel"          bgColor="#75b9f0" chartType="VANILLA"/>
+    <!-- tutaroll -->
+    <song name="Tutorial"          difficulties="easy,normal,hard" character="gf"                bgColor="#9271FD" chartType="VANILLA"/>
+    <!-- boring but not as much as week 5 -->
+    <song name="Bopeebo"           difficulties="easy,normal,hard" character="dad"               bgColor="#9271FD" chartType="VANILLA"/>
+    <song name="Fresh"             difficulties="easy,normal,hard" character="dad"               bgColor="#9271FD" chartType="VANILLA"/>
+    <song name="Dad battle"        difficulties="easy,normal,hard" character="dad"               bgColor="#9271FD" chartType="VANILLA"/>
+    <!-- spooky month! -->
+    <song name="Spookeez"          difficulties="easy,normal,hard" character="spooky"            bgColor="#223344" chartType="VANILLA"/>
+    <song name="South"             difficulties="easy,normal,hard" character="spooky"            bgColor="#223344" chartType="VANILLA"/>
+    <song name="Monster"           difficulties="easy,normal,hard" character="monster"           bgColor="#223344" chartType="VANILLA"/>
+    <!-- get blammed nerd -->
+    <song name="Pico"              difficulties="easy,normal,hard" character="pico"              bgColor="#941653" chartType="VANILLA"/>
+    <song name="Philly Nice"       difficulties="easy,normal,hard" character="pico"              bgColor="#941653" chartType="VANILLA"/>
+    <song name="blammed"           difficulties="easy,normal,hard" character="pico"              bgColor="#941653" chartType="VANILLA"/>
+    <!-- sexy woman ooga booga -->
+    <song name="Satin Panties"     difficulties="easy,normal,hard" character="mom"               bgColor="#FC96D7" chartType="VANILLA"/>
+    <song name="High"              difficulties="easy,normal,hard" character="mom"               bgColor="#FC96D7" chartType="VANILLA"/>
+    <song name="M.I.L.F"           difficulties="easy,normal,hard" character="mom"               bgColor="#FC96D7" chartType="VANILLA"/>
+    <!-- this shit boring as hell, mf's just filler for week 6 -->
+    <song name="Cocoa"             difficulties="easy,normal,hard" character="parents-christmas" bgColor="#A0D1FF" chartType="VANILLA"/>
+    <song name="Eggnog"            difficulties="easy,normal,hard" character="parents-christmas" bgColor="#A0D1FF" chartType="VANILLA"/>
+    <song name="Winter Horrorland" difficulties="easy,normal,hard" character="monster"           bgColor="#A0D1FF" chartType="VANILLA"/>
+    <!-- pixelated high school bi- oh he's a red blob now cool -->
+    <song name="Senpai"            difficulties="easy,normal,hard" character="senpai"            bgColor="#FF78BF" chartType="VANILLA"/>
+    <song name="Roses"             difficulties="easy,normal,hard" character="senpai-angry"      bgColor="#FF78BF" chartType="VANILLA"/>
+    <song name="Thorns"            difficulties="easy,normal,hard" character="spirit"            bgColor="#FF78BF" chartType="VANILLA"/>
+</songs>

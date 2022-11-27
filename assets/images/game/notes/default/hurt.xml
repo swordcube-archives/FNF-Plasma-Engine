@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="hurt.png">
+	<!-- Created with Adobe Animate version 22.0.0.93 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="down0000" x="1" y="171" width="157" height="154"/>
+	<SubTexture name="down hold0000" x="382" y="1" width="50" height="44"/>
+	<SubTexture name="down tail0000" x="331" y="1" width="50" height="64"/>
+	<SubTexture name="left0000" x="317" y="310" width="154" height="157"/>
+	<SubTexture name="left hold0000" x="382" y="1" width="50" height="44"/>
+	<SubTexture name="left tail0000" x="331" y="1" width="50" height="64"/>
+	<SubTexture name="right0000" x="1" y="326" width="154" height="157"/>
+	<SubTexture name="right hold0000" x="382" y="1" width="50" height="44"/>
+	<SubTexture name="right tail0000" x="331" y="1" width="50" height="64"/>
+	<SubTexture name="space0000" x="1" y="1" width="169" height="169"/>
+	<SubTexture name="space hold0000" x="382" y="1" width="50" height="44"/>
+	<SubTexture name="space tail0000" x="331" y="1" width="50" height="64"/>
+	<SubTexture name="up0000" x="159" y="310" width="157" height="154"/>
+	<SubTexture name="up hold0000" x="382" y="1" width="50" height="44"/>
+	<SubTexture name="up tail0000" x="331" y="1" width="50" height="64"/>
+</TextureAtlas>

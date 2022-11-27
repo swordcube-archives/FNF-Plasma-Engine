@@ -1,0 +1,17 @@
+import funkin.substates.GameOverSubstate;
+
+function create() {
+    CoolUtil.loadUISkinVariant(
+        "pixel", // Skin for general things like the countdown, ratings, & combo.
+        "pixel", // Skin for notes (loadUISkinVariant adds onto the currently selected skin in Options, like this: "Circles-pixel"),
+        [6, 6],  // The scale used for the countdown.
+        [4.4, 5.1], // The scale used for the ratings and combo.
+        false,   // The antialiasing used for the countdown.
+        false,   // The antialiasing used for the ratings.
+        false    // The antialiasing used for the combo.
+    );
+
+    GameOverSubstate.deathSound = Paths.sound("game/deathSound-pixel");
+    GameOverSubstate.deathMusic = Paths.music("death/default-pixel");
+    GameOverSubstate.retrySound = Paths.sound("game/retrySound-pixel");
+}

@@ -1,0 +1,20 @@
+<!DOCTYPE plasma-character >
+<character spritesheet="../senpai/spritesheet" antialiasing="false" sing_duration="4" icon="senpai-angry" flip_x="false" dance_steps="idle" >
+    <animations>
+        <!-- All offsets are the Week 7 ones divided by 6. -->
+        <animation name="idle" anim="Angry Senpai Idle" indices="" fps="24" looped="false" offsetX="1" offsetY="0" />
+
+        <animation name="singLEFT" anim="Angry Senpai LEFT NOTE" indices="" fps="24" looped="false" offsetX="6" offsetY="0" />
+        <animation name="singDOWN" anim="Angry Senpai DOWN NOTE" indices="" fps="24" looped="false" offsetX="2.3" offsetY="0" />
+        <animation name="singUP" anim="Angry Senpai UP NOTE" indices="" fps="24" looped="false" offsetX="0.8" offsetY="6.1" />
+        <animation name="singRIGHT" anim="Angry Senpai RIGHT NOTE" indices="" fps="24" looped="false" offsetX="0" offsetY="0" />
+    </animations>
+
+    <global_pos offsetX="150" offsetY="360" />
+    <scale x="6" y="6" />
+    <scroll x="1" y="1" />
+
+    <color r="255" g="170" b="111" hex="" />
+
+    <camera offsetX="-240" offsetY="-330" />
+</character>

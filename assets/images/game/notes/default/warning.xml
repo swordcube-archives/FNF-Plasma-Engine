@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="warning.png">
+		<SubTexture name="note0000" x="0" y="0" width="154" height="154"/>
+		<SubTexture name="hold0000" x="52" y="155" width="50" height="44"/>
+		<SubTexture name="tail0000" x="1" y="155" width="50" height="64"/>
+</TextureAtlas>

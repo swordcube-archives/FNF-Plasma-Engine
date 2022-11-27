@@ -1,5 +1,5 @@
 -D openfl=9.2.0
--D flixel=5.0.0
+-D flixel-yc29=git
 -D lime=8.0.0
 -D hscript=2.5.0
 -D flixel-addons=2.11.0
@@ -10,7 +10,7 @@
 
 -L lime
 -L openfl
--L flixel
+-L flixel-yc29
 -L hscript-improved
 -L tjson
 

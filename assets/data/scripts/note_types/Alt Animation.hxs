@@ -1,0 +1,7 @@
+// psych engine compatibility
+function onNoteCreation(event) {
+    event.note.altAnim = true;
+
+    // Destroy the script because it's not needed to be constantly updating
+    PlayState.scripts.removeScript(event.note.script);
+}

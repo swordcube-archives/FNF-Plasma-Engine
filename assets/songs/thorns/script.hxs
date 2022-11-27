@@ -1,0 +1,4 @@
+function create() {
+    var script = Script.load(Paths.script("data/scripts/LoadPixelUI"));
+    script.run();
+}

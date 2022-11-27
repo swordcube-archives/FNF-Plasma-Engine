@@ -1,0 +1,7 @@
+// psych engine!!!!
+function onNoteCreation(event) {
+    event.note.doSingAnim = false;
+
+    // Destroy the script because it's not needed to be constantly updating
+    PlayState.scripts.removeScript(event.note.script);
+}

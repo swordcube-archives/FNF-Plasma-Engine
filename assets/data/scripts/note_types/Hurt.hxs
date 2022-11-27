@@ -1,0 +1,15 @@
+function onNoteCreation(event) {
+    event.note.shouldHit = false;
+    event.note.load("SPARROW", Paths.image("game/notes/default/hurt"));
+    event.note.addAnim("normal", event.note.directionName+"0", 24, true);
+    event.note.addAnim("hold", event.note.directionName+" hold0", 24, true);
+    event.note.addAnim("tail", event.note.directionName+" tail0", 24, true);
+    event.note.playCorrectAnim();
+    event.note.canSplash = false;
+    event.note.isColorable = false;
+    event.note.doSingAnim = false;
+}
+
+function onPlayerHit(event) {
+    PlayState.health -= 0.2;
+}

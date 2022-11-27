@@ -3,100 +3,76 @@ package base;
 #if discord_rpc
 import Sys.sleep;
 import discord_rpc.DiscordRpc;
-#end
 
 using StringTools;
 
-typedef DiscordRPCConfig = {
-    var clientID:String;
-    var largeImageKey:String;
-    var largeImageText:String;
-};
-
-/**
- * A class for handling Discord Rich Presence.
- */
 class DiscordRPC {
-    public static var data:DiscordRPCConfig = {
-        clientID: "",
-        largeImageKey: "",
-        largeImageText: ""
-    };
-    public static var dontDoTitle:Bool = false;
-    
-	public function new(clientID:String = "969729521341329449") {
-		#if discord_rpc
-		trace("Discord RPC starting...");
+	public function new() {
+		trace("Discord Client starting...");
 		DiscordRpc.start({
-			clientID: clientID,
+			clientID: "969729521341329449",
 			onReady: onReady,
 			onError: onError,
 			onDisconnected: onDisconnected
 		});
-		trace("Discord RPC started.");
+		trace("Discord Client started.");
 
 		while (true) {
 			DiscordRpc.process();
 			sleep(2);
+			// trace("Discord Client Update");
 		}
+
 		DiscordRpc.shutdown();
-		#end
 	}
 
 	public static function shutdown() {
-		#if discord_rpc
 		DiscordRpc.shutdown();
-		#end
 	}
 
 	static function onReady() {
-		#if discord_rpc		
-        var shit:Null<String> = dontDoTitle ? null : "In the Title Screen";
 		DiscordRpc.presence({
-			details: shit,
+			details: "In the Menus",
 			state: null,
-			largeImageKey: data.largeImageKey,
-			largeImageText: data.largeImageText
+			largeImageKey: 'icon',
+			largeImageText: "Plasma Engine"
 		});
-        dontDoTitle = false;
-		#end
 	}
 
 	static function onError(_code:Int, _message:String) {
-		#if discord_rpc
-		Console.error('Discord RPC Error! $_code : $_message');
-		#end
+		trace('Error! $_code : $_message');
 	}
 
 	static function onDisconnected(_code:Int, _message:String) {
-		#if discord_rpc
-		Console.error('Discord RPC Disconnected! $_code : $_message');
-		#end
+		trace('Disconnected! $_code : $_message');
 	}
 
-	public static function initialize(clientID:String = "969729521341329449", noTitle:Bool = false) {
-		#if discord_rpc
-        var DiscordDaemon = sys.thread.Thread.create(() -> {
-            dontDoTitle = noTitle;
-            new DiscordRPC(clientID);
-        });
-		#end
-    }
+	public static function initialize() {
+		var DiscordDaemon = sys.thread.Thread.create(() -> {
+			new DiscordRPC();
+		});
+		trace("Discord Client initialized");
+	}
 
 	public static function changePresence(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float) {
-		#if discord_rpc
-		var startTimestamp:Float = hasStartTimestamp ? Date.now().getTime() : 0;
-		if (endTimestamp > 0) endTimestamp = startTimestamp + endTimestamp;
+		var startTimestamp:Float = if (hasStartTimestamp) Date.now().getTime() else 0;
+
+		if (endTimestamp > 0) {
+			endTimestamp = startTimestamp + endTimestamp;
+		}
+
 		DiscordRpc.presence({
 			details: details,
 			state: state,
-			largeImageKey: data.largeImageKey,
-			largeImageText: data.largeImageText,
-			smallImageKey : smallImageKey,
+			largeImageKey: 'icon',
+			largeImageText: "Plasma Engine",
+			smallImageKey: smallImageKey,
 			// Obtained times are in milliseconds so they are divided so Discord can use it
-			startTimestamp : Std.int(startTimestamp / 1000),
-            endTimestamp : Std.int(endTimestamp / 1000)
+			startTimestamp: Std.int(startTimestamp / 1000),
+			endTimestamp: Std.int(endTimestamp / 1000)
 		});
-		#end
+
+		// trace('Discord RPC Updated. Arguments: $details, $state, $smallImageKey, $hasStartTimestamp, $endTimestamp');
 	}
 }
+#end

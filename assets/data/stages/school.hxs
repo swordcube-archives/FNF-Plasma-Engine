@@ -1,0 +1,76 @@
+import funkin.game.BackgroundDancer;
+
+function create() {
+    stage.characterPositions["dad"].set(100, 100);
+    stage.characterPositions["gf"].set(580, 430);
+    stage.characterPositions["bf"].set(970, 320);
+
+    var bgSky = new FNFSprite().load("IMAGE", Paths.image(stageImage('weebSky')));
+    bgSky.scrollFactor.set(0.1, 0.1);
+    add(bgSky);
+
+    var repositionShit = -200;
+
+    var bgSchool = new FNFSprite(repositionShit).load("IMAGE", Paths.image(stageImage('weebSchool')));
+    bgSchool.scrollFactor.set(0.6, 0.90);
+    bgSchool.antialiasing = false;
+    add(bgSchool);
+
+    var bgStreet = new FNFSprite(repositionShit).load("IMAGE", Paths.image(stageImage('weebStreet')));
+    bgStreet.scrollFactor.set(0.95, 0.95);
+    bgStreet.antialiasing = false;
+    add(bgStreet);
+
+    var fgTrees = new FNFSprite(repositionShit + 170, 130).load("IMAGE", Paths.image(stageImage('weebTreesBack')));
+    fgTrees.scrollFactor.set(0.9, 0.9);
+    fgTrees.antialiasing = false;
+    add(fgTrees);
+
+    var bgTrees = new FNFSprite(repositionShit - 380, -800).load("PACKER", Paths.image(stageImage('weebTrees')));
+    bgTrees.animation.add('treeLoop', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], 12);
+    bgTrees.animation.play('treeLoop');
+    bgTrees.scrollFactor.set(0.85, 0.85);
+    bgTrees.antialiasing = false;
+    add(bgTrees);
+
+    var treeLeaves = new FNFSprite(repositionShit, -40).load("SPARROW", Paths.image(stageImage('petals')));
+    treeLeaves.animation.addByPrefix('leaves', 'PETALS ALL', 24);
+    treeLeaves.animation.play('leaves');
+    treeLeaves.scrollFactor.set(0.85, 0.85);
+    treeLeaves.antialiasing = false;
+    add(treeLeaves);
+
+    var widShit = Std.int(bgSky.width * 6);
+
+    bgSky.setGraphicSize(widShit);
+    bgSchool.setGraphicSize(widShit);
+    bgStreet.setGraphicSize(widShit);
+    bgTrees.setGraphicSize(Std.int(widShit * 1.4));
+    fgTrees.setGraphicSize(Std.int(widShit * 0.8));
+    treeLeaves.setGraphicSize(widShit);
+
+    fgTrees.updateHitbox();
+    bgSky.updateHitbox();
+    bgSchool.updateHitbox();
+    bgStreet.updateHitbox();
+    bgTrees.updateHitbox();
+    treeLeaves.updateHitbox();
+
+    bgGirls = new BackgroundDancer(-100, 190).load("SPARROW", Paths.image(stageImage("bgFreaks")));
+    bgGirls.scrollFactor.set(0.9, 0.9);
+    bgGirls.antialiasing = false;
+    bgGirls.animation.addByIndices('danceLeft', 'BG girls group', CoolUtil.range(14), "", 24, false);
+    bgGirls.animation.addByIndices('danceRight', 'BG girls group', CoolUtil.range(30, 15), "", 24, false);
+    bgGirls.dance();
+
+    bgGirls.setGraphicSize(Std.int(bgGirls.width * 6));
+    bgGirls.updateHitbox();
+    add(bgGirls);
+}
+
+function onCountdownTick() {bgGirls.dance(); bgGirls.updateHitbox();}
+function beatHit() {bgGirls.dance(); bgGirls.updateHitbox();}
+
+function stageImage(p:String) {
+    return "stages/school/"+p;
+}

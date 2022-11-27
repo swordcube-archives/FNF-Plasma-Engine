@@ -1,0 +1,14 @@
+function onNoteCreation(event){
+    event.note.load("SPARROW", Paths.image("game/notes/default/warning"));
+    event.note.addAnim("normal", "note0", 24, true);
+    event.note.addAnim("hold", "hold0", 24, true);
+    event.note.addAnim("tail", "tail0", 24, true);
+    event.note.playCorrectAnim();
+    event.note.canSplash = false;
+    event.note.isColorable = false;
+    event.note.doSingAnim = false;
+}
+
+function onPlayerMiss(event) {
+    PlayState.health -= 75843; // yes
+}

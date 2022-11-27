@@ -1,0 +1,6 @@
+function onPlayerHit(event) {
+    if(event.note.isSustainNote) return;
+    event.cancel();
+    FlxTween.tween(event.note, {strumTime: event.note.strumTime + (Conductor.crochet * 2)}, Conductor.crochet / 500, {ease: FlxEase.cubeOut});
+    event.note.wasGoodHit = false;
+}

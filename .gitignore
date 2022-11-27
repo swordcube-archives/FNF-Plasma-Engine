@@ -1,5 +1,5 @@
-/.vscode
-/export
-/pages
-PlasmaEngine.hxproj
-FNF-Plasma-Engine.hxproj
+export/
+pages/
+.vscode/
+mods/V.S. Sword/
+APIStuff.hx

@@ -1,0 +1,10 @@
+{
+    "texturePath": "game/note_splashes/default-pixel/NOTE_splashes",
+    "scale": 0.7,
+
+    "frameRate": 34,
+    "offsets": [0, 0],
+    "offsets2": [0, 0],
+    "noteColorsAllowed": true,
+    "alpha": 1
+}

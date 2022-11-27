@@ -1,0 +1,19 @@
+{
+    "strumTextures": "game/notes/default/NOTE_assets",
+    "noteTextures": "game/notes/default/NOTE_assets",
+
+    "strumScale": 0.7,
+    "noteScale": 0.7,
+    "sustainScale": 0.7,
+
+    "isPixel": false,
+    "noteColorsAllowed": true, // Allows the note colors in the Options to be used for this note skin.
+    "quantCompatible": true, // Allows note quantinization to be used on this note skin.
+
+    "staticFrameRate": 24,
+    "pressedFrameRate": 24,
+    "confirmFrameRate": 24,
+    "noteFrameRate": 24,
+
+    "splashSkin": "Default"
+}

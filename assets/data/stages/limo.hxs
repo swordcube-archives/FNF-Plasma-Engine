@@ -1,0 +1,54 @@
+import funkin.game.BackgroundDancer;
+
+function stageImage(asset:String) {
+    return "stages/limo/"+asset;
+}
+
+var grpLimoDancers:FlxGroup;
+
+function onCreate() {
+    defaultCamZoom = 0.9;
+    
+    stage.characterPositions["dad"].set(100, 100);
+    stage.characterPositions["gf"].set(400, 130);
+    stage.characterPositions["bf"].set(1030, -120);
+
+    var skyBG = new FNFSprite(-120, -50).load("IMAGE", Paths.image(stageImage("limoSunset")));
+    skyBG.scrollFactor.set(0.1, 0.1);
+    skyBG.antialiasing = true;
+    add(skyBG);
+
+    var bgLimo = new FNFSprite(-200, 480).load("SPARROW", Paths.image(stageImage("bgLimo")));
+    bgLimo.addAnim('drive', "background limo pink", 24, true);
+    bgLimo.playAnim('drive');
+    bgLimo.scrollFactor.set(0.4, 0.4);
+    bgLimo.antialiasing = true;
+    add(bgLimo);
+
+    grpLimoDancers = new FlxGroup();
+    add(grpLimoDancers);
+
+    for (i in 0...5) {
+        var dancer = new BackgroundDancer(370 * i + 130, bgLimo.y - 400).load("SPARROW", Paths.image(stageImage("limoDancer")));
+		dancer.addAnimByIndices('danceLeft', 'bg dancer sketch PINK', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], 24);
+		dancer.addAnimByIndices('danceRight', 'bg dancer sketch PINK', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], 24);
+        dancer.scrollFactor.set(0.4, 0.4);
+        dancer.antialiasing = true;
+        dancer.dance();
+        grpLimoDancers.add(dancer);
+    }
+
+    limo = new FNFSprite(-120, 550).load("SPARROW", Paths.image(stageImage("limoDrive")));
+    limo.addAnim('drive', "Limo stage", 24, true);
+    limo.playAnim('drive');
+    limo.antialiasing = true;
+    add(limo, 1);
+}
+
+function onCountdownTick() {
+    for(dancer in grpLimoDancers.members) dancer.dance();
+}
+
+function beatHit() {
+    for(dancer in grpLimoDancers.members) dancer.dance();
+}

@@ -1,48 +1,77 @@
 package;
 
-import lime.app.Application;
-import openfl.Lib;
+import flixel.math.FlxRect;
+import flixel.math.FlxPoint;
+import flixel.addons.transition.TransitionData;
+import flixel.addons.transition.FlxTransitionableState;
+import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
+import flixel.graphics.FlxGraphic;
 import openfl.ui.Keyboard;
 import openfl.events.KeyboardEvent;
-import funkin.states.FunkinState;
+import funkin.windows.WindowsAPI;
+import funkin.system.AudioSwitchFix;
+import lime.app.Application;
+import flixel.FlxState;
 
-class Init extends FunkinState {
+class Init extends FlxState {
     override function create() {
         super.create();
 
-        FlxG.fixedTimestep = false;
-		FlxG.mouse.visible = false;
+		FlxG.save.bind('plasmaengine', 'swordcube');
 
-        FlxG.save.bind("PlasmaEngine", "options");
-		Settings.init();
-		Controls.init();
+		var playerID:Int = -1;
+		if(FlxG.save.data.playerID != null) playerID = FlxG.save.data.playerID;
+		else {
+			playerID = 1;
+			FlxG.save.data.playerID = playerID;
+			FlxG.save.flush();
+		}
 
-		// This is here so you can't softlock your copy of the engine.
-		if(Settings.get("Framerate Cap") < 10) Settings.set("Framerate Cap", 10);
-		if(Settings.get("Framerate Cap") > 1000) Settings.set("Framerate Cap", 1000);
-
-		Lib.current.stage.frameRate = Settings.get("Framerate Cap");
-		if(FlxG.save.data.volume != null)
-			FlxG.sound.volume = FlxG.save.data.volume;
 		if(FlxG.save.data.currentMod != null)
 			Paths.currentMod = FlxG.save.data.currentMod;
 		else {
 			FlxG.save.data.currentMod = Paths.currentMod;
 			FlxG.save.flush();
 		}
+
 		FlxG.keys.preventDefaultKeys = [TAB];
 
+		PlayerSettings.init(playerID);
+		Console.init();
+		Highscore.load();
+    	Conductor.init();
+		AudioSwitchFix.init();
+		WindowsAPI.setDarkMode(true);
+
+		FlxG.stage.frameRate = PlayerSettings.prefs.get("Framerate Cap");
+		FlxG.autoPause = PlayerSettings.prefs.get("Auto Pause");
+
+		FlxG.mouse.visible = false;
+        FlxG.fixedTimestep = false;
+		// why does flixel not automatically do this bro 💀
+        if(FlxG.save.data.volume != null) FlxG.sound.volume = FlxG.save.data.volume;
+		if(FlxG.save.data.muted != null) FlxG.sound.volume = FlxG.save.data.muted;
+
 		#if debug
-		// This basically allows me to add assets to the source code's assets folder
-		// and have those assets be used, So i don't have to recompile every time i add an asset
-		// or deal with the hellhole that can be the export folder.
-		trace(Sys.args());
+		if(Sys.args().contains("-updatebuild")) {
+			var path:String = '${Sys.getCwd()}../../../../buildNumber.txt';
+			Main.buildNumber = Std.parseInt(File.getContent('$path'))+1;
+			File.saveContent(path, Main.buildNumber+"");
+		}
 		if(Sys.args().contains("-livereload")) Main.developerMode = true;
 		#end
 
-        var rpcConfig:DiscordRPCConfig = TJSON.parse(Assets.load(TEXT, Paths.json("data/discordRPC")));
-        DiscordRPC.data = rpcConfig;
-        DiscordRPC.initialize(rpcConfig.clientID);
+		#if discord_rpc
+		DiscordRPC.initialize();
+		#end
+
+		Application.current.onExit.add(function(exitCode) {
+			PlayerSettings.controls.flush();
+			PlayerSettings.prefs.flush();
+			#if discord_rpc
+			DiscordRPC.shutdown();
+			#end
+		});
 
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent) {
 			switch(e.keyCode) {
@@ -50,12 +79,29 @@ class Init extends FunkinState {
 					FlxG.fullscreen = !FlxG.fullscreen;
 			}
 		});
-		Application.current.onExit.add(function(exitCode) {
-			DiscordRPC.shutdown();
-			Settings.flush();
-		});
 
-		Conductor.init();
-        Main.switchState(new funkin.states.TitleScreen(), false);
+		// Make transitions work
+		var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
+		diamond.persist = true;
+		diamond.destroyOnNoUse = false;
+
+		FlxTransitionableState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 0.45, new FlxPoint(0, -1), {asset: diamond, width: 32, height: 32},
+			new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+		FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.45, new FlxPoint(0, 1),
+			{asset: diamond, width: 32, height: 32}, new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
+
+		// pizza roll
+		trace("PIZZA ROLL!");
+		var goodMD5:String = "4faf725d2823199a5ae0e71bc2d5db18";
+		var gottenMD5:String = haxe.crypto.Md5.encode(File.getContent('${Sys.getCwd()}assets/images/pizzarolls.png'));
+		if(gottenMD5 == goodMD5) {
+			Console.info("Pizza rolls png is untouched! You may continue on.");
+		} else {
+			Console.error("Pizza rolls png has been modified or deleted. You may NOT continue on! Fuck you!");
+			var rehe:Dynamic = null;
+			rehe.intentionalNullError();
+		}
+
+		FlxG.switchState(new funkin.states.menus.TitleState());
     }
 }

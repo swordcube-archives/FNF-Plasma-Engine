@@ -1,0 +1,17 @@
+function create() {
+    stage.characterPositions["dad"].set(100, 100);
+    stage.characterPositions["gf"].set(580, 430);
+    stage.characterPositions["bf"].set(970, 320);
+
+    var bg = new FNFSprite(400, 200).load("SPARROW", Paths.image(stageImage("animatedEvilSchool")));
+    bg.animation.addByPrefix('idle', 'background 2', 24);
+    bg.animation.play('idle');
+    bg.scrollFactor.set(0.8, 0.9);
+    bg.scale.set(6, 6);
+    bg.antialiasing = false;
+    add(bg);
+}
+
+function stageImage(p:String) {
+    return "stages/school/"+p;
+}

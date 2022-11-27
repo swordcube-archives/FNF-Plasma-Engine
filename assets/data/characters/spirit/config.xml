@@ -1,0 +1,20 @@
+<!DOCTYPE plasma-character >
+<character atlasType="packer" spritesheet="spritesheet" antialiasing="false" sing_duration="4" icon="spirit" flip_x="false" dance_steps="idle" >
+    <animations>
+        <!-- All offsets are the Week 7 ones divided by 6. -->
+        <animation name="idle" anim="idle spirit_" indices="" fps="24" looped="false" offsetX="-36.6" offsetY="-46.6" />
+
+        <animation name="singLEFT" anim="left_" indices="" fps="24" looped="false" offsetX="-33.3" offsetY="-46.6" />
+        <animation name="singDOWN" anim="spirit down_" indices="" fps="24" looped="false" offsetX="28.3" offsetY="18.3" />
+        <animation name="singUP" anim="up_" indices="" fps="24" looped="false" offsetX="-36.6" offsetY="-40" />
+        <animation name="singRIGHT" anim="right_" indices="" fps="24" looped="false" offsetX="-36.6" offsetY="-46.6" />
+    </animations>
+
+    <global_pos offsetX="-150" offsetY="100" />
+    <scale x="6" y="6" />
+    <scroll x="1" y="1" />
+
+    <color r="255" g="60" b="110" hex="" />
+
+    <camera offsetX="0" offsetY="0" />
+</character>
