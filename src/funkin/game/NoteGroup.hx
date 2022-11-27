@@ -6,6 +6,9 @@ import flixel.util.FlxSort;
 import flixel.FlxCamera;
 import funkin.system.Conductor;
 
+/**
+ * A group for rendering and updating notes in more efficent way.
+ */
 class NoteGroup extends FlxTypedSpriteGroup<Note> {
     var __loopSprite:Note;
     var i:Int = 0;

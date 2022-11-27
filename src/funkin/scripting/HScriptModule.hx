@@ -8,6 +8,9 @@ import hscript.Interp;
 import hscript.Parser;
 import funkin.scripting.Script.ScriptModule;
 
+/**
+ * A class for making scripts with HScript.
+ */
 class HScriptModule extends ScriptModule {
     var parser:Parser = new Parser();
     var program:Expr;
@@ -77,6 +80,11 @@ class HScriptModule extends ScriptModule {
         set("Dynamic", Dynamic);
     }
 
+    /**
+     * Runs the script.
+     * @param callCreate Whether or not to call a `create` function when this script runs.
+     * @param args The arguments for the `create` function, Defaults to an empty array if not specified or null.
+     */
     override public function run(callCreate:Bool = true, ?args:Array<Dynamic>) {
         try {
             running = true;
@@ -93,15 +101,30 @@ class HScriptModule extends ScriptModule {
         }
     }
 
+    /**
+     * A function to call `create` on scripts.
+     * @param args The arguments for the `create` function, Defaults to an empty array if not specified or null.
+     */
     override public function createCall(?args:Array<Dynamic>) {
         call("onCreate", args);
         call("create", args);
+        call("new", args);
     }
 
+    /**
+     * Returns a variable from this script.
+     * @param name The name of the variable.
+     * @return Dynamic
+     */
     override public function get(name:String):Dynamic {
         return interp.variables.get(name);
     }
 
+    /**
+     * Sets a variable from this script to a given variable.
+     * @param name 
+     * @param value 
+     */
     override public function set(name:String, value:Dynamic):Void {
         interp.variables.set(name, value);
     }

@@ -3,6 +3,7 @@ package funkin.system;
 /**
  * A typedef for a Mod's config JSON.
  */
+ @:dox(hide)
 typedef PackData = {
     var title:String;
     var description:String;

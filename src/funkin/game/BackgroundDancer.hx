@@ -3,6 +3,9 @@ package funkin.game;
 import base.AssetType;
 import funkin.system.FNFSprite;
 
+/**
+ * A sprite that can dance left and right.
+ */
 class BackgroundDancer extends FNFSprite {
 	var danceDir:Bool = false;
 

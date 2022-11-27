@@ -4,6 +4,9 @@ import funkin.scripting.events.CancellableEvent;
 import haxe.io.Path;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 
+/**
+ * The type a script can have. EmptyScript is used for scripts that couldn't load.
+ */
 @:enum abstract ScriptType(String) from String to String {
     var HScript = "HScript";
     var LuaScript = "LuaScript";
@@ -30,6 +33,11 @@ class Script {
     }
 }
 
+/**
+ * A placeholder script used for if a script couldn't load.
+ * 
+ * Extend this class to add support for languages like **Python** and **Lua**.
+ */
 class ScriptModule implements IFlxDestroyable {
     public var path:String = "";
     public var code:String = "";

@@ -1,5 +1,8 @@
 package funkin.system;
 
+/**
+ * A class full of math utilities.
+ */
 class MathUtil {
 	/**
 	 * Round a decimal number to have reduced precision (less decimal numbers).

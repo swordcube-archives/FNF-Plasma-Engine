@@ -10,6 +10,9 @@ import flixel.util.FlxSort;
 import openfl.events.KeyboardEvent;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 
+/**
+ * A class for handling note input.
+ */
 class NoteInput implements IFlxDestroyable {
 	var closestNotes:Array<Note> = [];
 	var parent:StrumLine;

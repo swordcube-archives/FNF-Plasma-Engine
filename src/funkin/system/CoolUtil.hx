@@ -8,6 +8,9 @@ import flixel.animation.FlxAnimation;
 
 using StringTools;
 
+/**
+ * A class full of cool utilities.
+ */
 class CoolUtil {
 	public static function fixWorkingDirectory() {
 		var curDir = Sys.getCwd();
@@ -66,6 +69,12 @@ class CoolUtil {
 		return daList;
 	}
 
+	/**
+	 * Generates an array of numbers from `min` to `max`.
+	 * @param max The maximum number in the range.
+	 * @param min The minimum number in the range.
+	 * @return Array<Int>
+	 */
 	public static function range(max:Int, ?min = 0):Array<Int> {
 		var dumbArray:Array<Int> = [];
 		for (i in min...max) dumbArray.push(i);
@@ -73,7 +82,7 @@ class CoolUtil {
 	}
 
 	/**
-	 * Trims everything in an array and returns it.
+	 * Trims everything in an array of strings and returns it.
 	 * @param a The array to modify.
 	 * @return Array<String>
 	 */
@@ -116,7 +125,6 @@ class CoolUtil {
 		anim2.frames = old;
 	}
 
-
 	/**
 		Makes the first letter of each word in `s` uppercase.
 		@param s       The string to modify
@@ -132,6 +140,12 @@ class CoolUtil {
 		return newArray.join(' ');
 	}
 
+	/**
+	 * Loads into a song.
+	 * @param chartType The chart's type, AUTO is recommended.
+	 * @param name The name of the song to load.
+	 * @param diff The difficulty to load.
+	 */
 	function loadSong(chartType:ChartType, name:String, diff:String) {
 		if(!FileSystem.exists(Paths.json('songs/${name.toLowerCase()}/$diff')))
 			return Console.error('The chart for $name on $diff difficulty doesn\'t exist!');
@@ -144,10 +158,10 @@ class CoolUtil {
 	}
 
 	/**
-		Converts an `FlxKey` to a string representation.
-
-		@param key The key to convert.
-	**/
+	 * Converts an `FlxKey` to a string representation.
+	 * @param key The key to convert.
+	 * @return String
+	 */
 	public static function keyToString(key:Null<FlxKey>):String {
 		return switch(key) {
 			case null | 0 | NONE:	"---";
@@ -185,6 +199,16 @@ class CoolUtil {
 		}
 	}
 
+	/**
+	 * A helper function for loading a UI skin in `PlayState`.
+	 * @param generalSkin The skin used for the countdown, ratings, and combo.
+	 * @param noteSkin The skin used for notes.
+	 * @param countdownScale The scale of the countdown images.
+	 * @param judgementScale The scale of the ratings and combo.
+	 * @param countdownAntialiasing The antialiasing for the countdown images.
+	 * @param ratingAntialiasing The antialiasing for the rating images.
+	 * @param comboAntialiasing The antialiasing for the combo images.
+	 */
 	public static function loadUISkin(generalSkin:String, noteSkin:String, countdownScale:Array<Float>, judgementScale:Array<Float>, countdownAntialiasing:Bool = true, ratingAntialiasing:Bool = true, comboAntialiasing:Bool = true) {
 		var game = PlayState.current;
 
@@ -210,6 +234,16 @@ class CoolUtil {
 		}
 	}
 
+	/**
+	 * A helper function for loading a variant of the currently selected UI skin in `PlayState`.
+	 * @param generalSkin The skin used for the countdown, ratings, and combo.
+	 * @param noteSkin The skin used for notes.
+	 * @param countdownScale The scale of the countdown images.
+	 * @param judgementScale The scale of the ratings and combo.
+	 * @param countdownAntialiasing The antialiasing for the countdown images.
+	 * @param ratingAntialiasing The antialiasing for the rating images.
+	 * @param comboAntialiasing The antialiasing for the combo images.
+	 */
 	public static function loadUISkinVariant(generalSkin:String, noteSkin:String, countdownScale:Array<Float>, judgementScale:Array<Float>, countdownAntialiasing:Bool = true, ratingAntialiasing:Bool = true, comboAntialiasing:Bool = true) {
 		var game = PlayState.current;
 

@@ -50,9 +50,9 @@ package funkin.system;
 /**
  * Enum to store the mode (or direction) that a tracking sprite tracks.
  */
-enum TrackingMode {
-    RIGHT;
-    LEFT;
-    UP;
-    DOWN;
+enum abstract TrackingMode(String) from String to String {
+    var RIGHT = "RIGHT";
+    var LEFT = "LEFT";
+    var UP = "UP";
+    var DOWN = "DOWN";
 }

@@ -36,6 +36,7 @@ typedef StorySong = {
 /**
 	The class that handles gameplay.
 **/
+@:dox(hide)
 class PlayState extends FNFState {
 	public static var paused:Bool = false;
 	public static var SONG:Song = ChartParser.loadSong(BASE, "tutorial");
@@ -300,8 +301,12 @@ class PlayState extends FNFState {
 		scripts.call("createPost");
 	}
 
-	public function moveCamera(playerSection:Bool = false) {
-		if(playerSection) {
+	/**
+	 * A function to pan the camera to the opponent or player.
+	 * @param panToPlayer Whether or not to pan to the player. 
+	 */
+	public function moveCamera(panToPlayer:Bool = false) {
+		if(panToPlayer) {
 			if(bf == null) return;
 			var pos = bf.getCameraPosition();
 			camFollow.setPosition(pos.x, pos.y);

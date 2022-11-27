@@ -1,5 +1,19 @@
 package funkin.system;
 
+/**
+ * The class controlling what set of preferences and controls are loaded.
+ * 
+ * Access preferences or controls using:
+ * ```haxe
+ * PlayerSettings.prefs.get("something")
+ * ```
+ * or
+ * ```haxe
+ * PlayerSettings.controls.get("ACCEPT") // gets if a control is pressed
+ * PlayerSettings.controls.getP("ACCEPT") // gets if a control was just pressed
+ * PlayerSettings.controls.getR("ACCEPT") // gets if a control was just released
+ * ```
+ */
 class PlayerSettings {
     public static var controls:PlayerControls;
     public static var prefs:PlayerPrefs;

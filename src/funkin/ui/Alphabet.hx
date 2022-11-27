@@ -5,9 +5,9 @@ import funkin.system.FNFSprite;
 import flixel.math.FlxMath;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 
-@:enum abstract AlphabetFont(Int) {
-    var Bold = 0;
-    var Default = 1;
+@:enum abstract AlphabetFont(String) from String to String {
+    var Bold = "Bold";
+    var Default = "Default";
 }
 
 /**

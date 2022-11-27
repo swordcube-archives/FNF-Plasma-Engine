@@ -1,5 +1,8 @@
 package funkin.options.types;
 
+/**
+ * The base for an option type.
+ */
 class BaseOption {
     public var title:String;
     public var description:String;

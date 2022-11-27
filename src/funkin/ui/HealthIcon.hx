@@ -14,6 +14,7 @@ class HealthIcon extends TrackingSprite {
      * The character used for this icon.
      */
     public var char:String = "face";
+    
     /**
      * The amount of icons detected.
      */
