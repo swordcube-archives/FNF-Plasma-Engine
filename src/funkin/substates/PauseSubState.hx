@@ -21,7 +21,13 @@ import flixel.util.FlxColor;
 class PauseSubState extends FNFSubState {
 	public var grpMenuShit:FlxTypedGroup<Alphabet>;
 
-	public var menuItems:Array<String> = ['Resume', 'Restart Song', 'Exit to menu'];
+	public var menuItems:Array<String> = [
+		'Resume', 
+		'Restart Song', 
+		'Skip Intro', 
+		'Exit to menu'
+	];
+
 	public var curSelected:Int = 0;
 
 	public var pauseMusic:FlxSound;
@@ -34,6 +40,9 @@ class PauseSubState extends FNFSubState {
 
 		script = Script.load(Paths.script('data/substates/PauseSubState'));
 		var event = script.event("onSubStateCreation", new SubStateCreationEvent(this));
+
+		if(PlayState.current.startingSong)
+			menuItems.remove('Skip Intro');
 
 		FlxG.sound.music.pause();
 		PlayState.current.vocals.pause();
@@ -124,9 +133,13 @@ class PauseSubState extends FNFSubState {
 							game.vocals.play();
 						}
 						close();
+
 					case "Restart Song":
 						PlayState.paused = false;
 						FlxG.resetState();
+
+					case "Skip Intro":
+
 					case "Exit to menu":
 						FlxG.sound.playMusic(Assets.load(SOUND, Paths.music("menuMusic")));
 						PlayState.paused = false;
