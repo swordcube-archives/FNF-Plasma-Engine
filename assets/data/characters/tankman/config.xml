@@ -1,0 +1,22 @@
+<!DOCTYPE plasma-character >
+<character is_player="true" icon="tankman" flip_x="true" >
+    <animations>
+        <animation name="idle" anim="Tankman Idle Dance0" fps="24" looped="false" offsetX="0" offsetY="0" />
+
+        <animation name="singRIGHT" anim="Tankman Right Note0" fps="24" looped="false" offsetX="-1" offsetY="-7" />
+        <animation name="singDOWN" anim="Tankman DOWN note0" fps="24" looped="false" offsetX="98" offsetY="-90" />
+        <animation name="singUP" anim="Tankman UP note0" fps="24" looped="false" offsetX="24" offsetY="56" />
+        <animation name="singLEFT" anim="Tankman Note Left0" fps="24" looped="false" offsetX="100" offsetY="-14" />
+
+        <animation name="singDOWN-alt" anim="PRETTY GOOD tankman0" fps="24" looped="false" offsetX="0" offsetY="0" />
+        <animation name="singUP-alt" anim="TANKMAN UGH0" fps="24" looped="false" offsetX="0" offsetY="0" />
+    </animations>
+
+    <global_pos offsetX="0" offsetY="240" />
+    <scale x="1" y="1" />
+    <scroll x="1" y="1" />
+
+    <color r="0" g="0" b="0" hex="" />
+
+    <camera offsetX="0" offsetY="0" />
+</character>

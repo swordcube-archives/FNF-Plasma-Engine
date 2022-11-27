@@ -112,15 +112,16 @@ class Character extends FNFSprite {
 
 					var atlasType:String = "SPARROW";
 					if(data.has.atlasType) atlasType = data.att.atlasType;
+					var spritesheetName:String = data.has.spritesheet ? data.att.spritesheet : "spritesheet";
 					switch(atlasType.toLowerCase()) {
 						case "packer":
-							frames = Assets.load(PACKER, Paths.image('data/characters/$curCharacter/${data.att.spritesheet}', false));
+							frames = Assets.load(PACKER, Paths.image('data/characters/$curCharacter/$spritesheetName', false));
 						default:
-							frames = Assets.load(SPARROW, Paths.image('data/characters/$curCharacter/${data.att.spritesheet}', false));
+							frames = Assets.load(SPARROW, Paths.image('data/characters/$curCharacter/$spritesheetName', false));
 					}
-					antialiasing = data.att.antialiasing == 'true' ? PlayerSettings.prefs.get("Antialiasing") : false;
-					singDuration = Std.parseFloat(data.att.sing_duration);
-					healthIcon = data.att.icon;
+					antialiasing = data.has.antialiasing ? (data.att.antialiasing == 'true' ? PlayerSettings.prefs.get("Antialiasing") : false) : PlayerSettings.prefs.get("Antialiasing");
+					singDuration = data.has.sing_duration ? Std.parseFloat(data.att.sing_duration) : 4.0;
+					healthIcon = data.has.icon ? data.att.icon : curCharacter;
 					flipX = data.att.flip_x == "true";
 					playerOffsets = data.has.is_player && data.att.is_player == "true";
 
@@ -165,7 +166,7 @@ class Character extends FNFSprite {
 						healthBarColor = FlxColor.fromRGB(Std.parseInt(icon_color.att.r), Std.parseInt(icon_color.att.g), Std.parseInt(icon_color.att.b));
 
 					// Dance Steps moment
-					danceSteps = data.att.dance_steps.split(",");
+					danceSteps = data.has.dance_steps ? data.att.dance_steps.split(",") : ["idle"];
 					for (i in 0...danceSteps.length) danceSteps[i] = danceSteps[i].trim();
 			}
 			break;

@@ -1,5 +1,5 @@
 <!DOCTYPE plasma-character >
-<character spritesheet="spritesheet" antialiasing="true" sing_duration="4" icon="spooky" flip_x="false" dance_steps="danceLeft,danceRight" >
+<character icon="spooky" flip_x="false" dance_steps="danceLeft,danceRight" >
     <animations>
         <animation name="danceLeft" anim="spooky dance idle" indices="0,2,6" fps="12" looped="false" offsetX="0" offsetY="0" />
         <animation name="danceRight" anim="spooky dance idle" indices="8,10,12,14" fps="12" looped="false" offsetX="0" offsetY="0" />

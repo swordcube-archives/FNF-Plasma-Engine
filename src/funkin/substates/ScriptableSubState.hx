@@ -61,4 +61,14 @@ class ScriptableSubState extends FNFSubState {
 			script.call(func+"Post", [step]);
 		}
 	}
+
+    /**
+     * A function that gets called when the substate is destroyed.
+     */
+     override public function destroy() {
+        script.call("onDestroy");
+        script.call("destroy");
+        script.destroy();
+        super.destroy();
+    }
 }

@@ -38,6 +38,7 @@ class NoteGroup extends FlxTypedSpriteGroup<Note> {
             if(FlxG.state == PlayState.current && __loopSprite.script != null && !PlayState.current.scripts.containsScript(__loopSprite.script)) {
                 PlayState.current.scripts.addScript(__loopSprite.script);
                 __loopSprite.reloadSkin();
+                PlayState.current.canSkipIntro = false;
             }
             __loopSprite.update(elapsed);
             i++;

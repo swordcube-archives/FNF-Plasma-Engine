@@ -94,7 +94,7 @@ class ChartingState extends FNFState {
 
 		if(SONG.stage == null) SONG.stage = "default";
 
-        var bg:FlxSprite = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image("menuBGNeo")));
+        var bg:FlxSprite = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image("menus/menuBGNeo")));
         bg.alpha = 0.2;
         bg.scrollFactor.set();
         add(bg);

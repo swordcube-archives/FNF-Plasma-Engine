@@ -1,6 +1,6 @@
 
 <!DOCTYPE plasma-character >
-<character spritesheet="spritesheet" antialiasing="true" sing_duration="6.1" icon="parents-christmas" flip_x="false" dance_steps="idle" >
+<character sing_duration="6.1" icon="parents-christmas" flip_x="false" >
     <animations>
         <animation name="idle" anim="Parent Christmas Idle" indices="" fps="24" looped="false" offsetX="2" offsetY="0" />
 

@@ -61,4 +61,14 @@ class ScriptableState extends FNFState {
 			script.call(func+"Post", [step]);
 		}
 	}
+
+    /**
+     * A function that gets called when the state is destroyed.
+     */
+    override public function destroy() {
+        script.call("onDestroy");
+        script.call("destroy");
+        script.destroy();
+        super.destroy();
+    }
 }

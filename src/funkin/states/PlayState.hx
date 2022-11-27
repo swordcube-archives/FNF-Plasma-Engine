@@ -130,6 +130,11 @@ class PlayState extends FNFState {
 	public var ratingScale:Float = 0.7;
 	public var comboScale:Float = 0.5;
 
+	public var canSkipIntro:Bool = true;
+
+	public var unsortedNotes:Array<Note> = [];
+	public var global:Map<String, Dynamic> = [];
+
 	override function create() {
 		super.create();
 		current = this;
@@ -214,8 +219,10 @@ class PlayState extends FNFState {
 						}
 					}
 		
-					if(!event.cancelled) parent.notes.add(dunceNote);
-					else {
+					if(!event.cancelled) {
+						unsortedNotes.push(dunceNote);
+						parent.notes.add(dunceNote);
+					} else {
 						dunceNote.destroy();
 						dunceNote = null;
 						event = null;

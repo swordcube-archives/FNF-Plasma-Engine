@@ -40,7 +40,7 @@ class Main extends Sprite {
 		super();
 
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, 1, framerate, framerate, skipSplash, startFullscreen));
-		addChild(fpsCounter = new FPS(10, 3, 0xFFFFFF));
 		addChild(logsOverlay = new LogsOverlay());
+		addChild(fpsCounter = new FPS(10, 3, 0xFFFFFF));
 	}
 }

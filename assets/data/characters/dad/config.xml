@@ -1,5 +1,5 @@
 <!DOCTYPE plasma-character >
-<character spritesheet="spritesheet" antialiasing="true" sing_duration="6.1" icon="dad" flip_x="false" dance_steps="idle" >
+<character sing_duration="6.1" icon="dad" flip_x="false" >
     <animations>
         <animation name="idle" anim="Dad idle dance" indices="" fps="24" looped="false" offsetX="0" offsetY="0" />
 

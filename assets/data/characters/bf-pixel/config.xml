@@ -1,5 +1,5 @@
 <!DOCTYPE plasma-character >
-<character spritesheet="spritesheet" is_player="true" antialiasing="false" sing_duration="4" death_character="bf-pixel-dead" icon="bf-pixel" flip_x="true" dance_steps="idle" >
+<character is_player="true" antialiasing="false" death_character="bf-pixel-dead" icon="bf-pixel" flip_x="true" >
     <animations>
         <!-- All offsets are the Week 7 ones divided by 6. -->
         <animation name="idle" anim="BF IDLE0" indices="" fps="24" looped="false" offsetX="1.1" offsetY="0" />

@@ -71,7 +71,7 @@ class FreeplayState extends FNFState {
 
 			mutex = new Mutex();
 
-			bg = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image('menuBGDesat')));
+			bg = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image('menus/menuBGDesat')));
 			bg.scrollFactor.set();
 			add(bg);
 

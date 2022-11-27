@@ -1,5 +1,5 @@
 <!DOCTYPE plasma-character >
-<character spritesheet="spritesheet" is_player="false" antialiasing="true" sing_duration="4" icon="pico" flip_x="true" dance_steps="idle" >
+<character icon="pico" flip_x="true" >
     <animations>
         <animation name="idle" anim="Pico Idle Dance" indices="" fps="24" looped="false" offsetX="0" offsetY="0" />
 

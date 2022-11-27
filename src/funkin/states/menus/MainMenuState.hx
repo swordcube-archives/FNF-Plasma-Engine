@@ -54,14 +54,14 @@ class MainMenuState extends FNFState {
 		var event = script.event("onStateCreation", new StateCreationEvent(this));
 
 		if(!event.cancelled) {
-			var bg = new FNFSprite(-80).load(IMAGE, Paths.image('menuBG'));
+			var bg = new FNFSprite(-80).load(IMAGE, Paths.image('menus/menuBG'));
 			bg.scrollFactor.set(0, 0.17);
 			bg.scale.set(1.1, 1.1);
 			bg.updateHitbox();
 			bg.screenCenter();
 			add(bg);
 
-			magenta = new FNFSprite(-80).load(IMAGE, Paths.image('menuBGDesat'));
+			magenta = new FNFSprite(-80).load(IMAGE, Paths.image('menus/menuBGDesat'));
 			magenta.scrollFactor.copyFrom(bg.scrollFactor);
 			magenta.scale.copyFrom(bg.scale);
 			magenta.updateHitbox();

@@ -41,7 +41,7 @@ class PauseSubState extends FNFSubState {
 		script = Script.load(Paths.script('data/substates/PauseSubState'));
 		var event = script.event("onSubStateCreation", new SubStateCreationEvent(this));
 
-		if(PlayState.current.startingSong)
+		if(PlayState.current.startingSong || !PlayState.current.canSkipIntro || PlayState.current.unsortedNotes.length < 1)
 			menuItems.remove('Skip Intro');
 
 		FlxG.sound.music.pause();
@@ -139,6 +139,27 @@ class PauseSubState extends FNFSubState {
 						FlxG.resetState();
 
 					case "Skip Intro":
+						PlayState.current.canSkipIntro = false;
+
+						//resume all tweens and timers
+						FlxTimer.globalManager.forEach(function(tmr:FlxTimer) {
+							if (!tmr.finished)
+								tmr.active = true;
+						});
+						FlxTween.globalManager.forEach(function(twn:FlxTween) {
+							if (!twn.finished)
+								twn.active = true;
+						});
+						var game = PlayState.current;
+						PlayState.paused = false;
+
+						FlxG.sound.music.time = game.unsortedNotes[0].strumTime - 1500.0;
+						game.vocals.time = FlxG.sound.music.time;
+						Conductor.position = FlxG.sound.music.time;
+
+						FlxG.sound.music.play();
+						game.vocals.play();
+						close();
 
 					case "Exit to menu":
 						FlxG.sound.playMusic(Assets.load(SOUND, Paths.music("menuMusic")));

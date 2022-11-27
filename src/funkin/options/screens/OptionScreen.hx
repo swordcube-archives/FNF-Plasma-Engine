@@ -47,7 +47,7 @@ class OptionScreen extends FNFSubState {
         FlxG.state.persistentUpdate = false;
         FlxG.state.persistentDraw = true;
         
-		bg = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image('menuBGDesat')));
+		bg = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image('menus/menuBGDesat')));
         bg.color = 0xFFea71fd;
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
 		bg.updateHitbox();

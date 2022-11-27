@@ -1,5 +1,5 @@
 <!DOCTYPE plasma-character >
-<character spritesheet="../senpai/spritesheet" antialiasing="false" sing_duration="4" icon="senpai-angry" flip_x="false" dance_steps="idle" >
+<character spritesheet="../senpai/spritesheet" antialiasing="false" icon="senpai-angry" flip_x="false" >
     <animations>
         <!-- All offsets are the Week 7 ones divided by 6. -->
         <animation name="idle" anim="Angry Senpai Idle" indices="" fps="24" looped="false" offsetX="1" offsetY="0" />

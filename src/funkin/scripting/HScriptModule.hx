@@ -68,11 +68,12 @@ class HScriptModule extends ScriptModule {
         addClasses([FlxG, flixel.FlxSprite, flixel.text.FlxText, flixel.math.FlxMath, flixel.util.FlxTimer, flixel.tweens.FlxTween, flixel.tweens.FlxEase]);
         addClasses([Paths, Assets, funkin.system.FNFSprite, CoolUtil, PlayerSettings, funkin.scripting.Script]);
         addClasses([Conductor, funkin.game.StrumLine, funkin.game.StrumLine.Receptor, funkin.game.Note, funkin.shaders.CustomShader]);
-        addClasses([PlayerSettings, funkin.states.ScriptableState, funkin.substates.ScriptableSubState]);
+        addClasses([PlayerSettings, funkin.game.ScriptedSprite, funkin.states.ScriptableState, funkin.substates.ScriptableSubState]);
         set("prefs", PlayerSettings.prefs);
         set("controls", PlayerSettings.controls);
         set("PlayState", PlayState.current);
         set("PlayState_", PlayState);
+        set("global", PlayState.current != null ? PlayState.current.global : cast([], Map<String, Dynamic>));
 	    set("Array", Array);
         set("Float", Float);
         set("Int", Int);

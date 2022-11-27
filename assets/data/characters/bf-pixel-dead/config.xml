@@ -1,0 +1,17 @@
+<!DOCTYPE plasma-character >
+<character is_player="true" antialiasing="false" icon="bf-pixel" flip_x="true" >
+    <animations>
+        <!-- All offsets are the Week 7 ones divided by 6. -->
+        <animation name="firstDeath" anim="BF Dies pixel0" indices="" fps="24" looped="false" offsetX="0" offsetY="0" />
+        <animation name="deathLoop" anim="Retry Loop0" indices="" fps="24" looped="true" offsetX="-4.3" offsetY="-2" />
+        <animation name="deathConfirm" anim="RETRY CONFIRM0" indices="" fps="24" looped="false" offsetX="-4.3" offsetY="-2" />
+    </animations>
+
+    <global_pos offsetX="0" offsetY="350" />
+    <scale x="6" y="6" />
+    <scroll x="1" y="1" />
+
+    <color r="123" g="214" b="246" hex="" />
+
+    <camera offsetX="0" offsetY="0" />
+</character>

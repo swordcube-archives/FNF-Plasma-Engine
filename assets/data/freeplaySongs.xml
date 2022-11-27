@@ -28,4 +28,8 @@
     <song name="Senpai"            difficulties="easy,normal,hard" character="senpai"            bgColor="#FF78BF" chartType="VANILLA"/>
     <song name="Roses"             difficulties="easy,normal,hard" character="senpai-angry"      bgColor="#FF78BF" chartType="VANILLA"/>
     <song name="Thorns"            difficulties="easy,normal,hard" character="spirit"            bgColor="#FF78BF" chartType="VANILLA"/>
+    <!-- tank dude insults you for your lack of skill -->
+    <song name="Ugh"               difficulties="easy,normal,hard" character="tankman"           bgColor="#F6B604" chartType="VANILLA"/>
+    <song name="Guns"              difficulties="easy,normal,hard" character="tankman"           bgColor="#F6B604" chartType="VANILLA"/>
+    <song name="Stress"            difficulties="easy,normal,hard" character="tankman"           bgColor="#F6B604" chartType="VANILLA"/>
 </songs>
