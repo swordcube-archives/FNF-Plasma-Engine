@@ -206,7 +206,8 @@ class FreeplayMenu extends FunkinState {
 		if(!defaultBehavior) return;
 		speedTimer += FlxG.elapsed;
 		if ((Controls.getP("ui_left") || Controls.getP("ui_right")) || speedTimer > 0.5) {
-			curSpeed = FlxMath.bound(FlxMath.roundDecimal(curSpeed + mult, 2), 0.05, 10);
+			// overrated 10x thingy, what is a point of it if there is 5x
+			curSpeed = FlxMath.bound(FlxMath.roundDecimal(curSpeed + mult, 2), 0.5, 10);
 			FlxG.sound.music.pitch = curSpeed;
 			if(speedTimer > 0.5) speedTimer = 0.425;
 		}
