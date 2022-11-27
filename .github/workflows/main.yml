@@ -38,8 +38,8 @@ jobs:
 #           haxelib install hxcpp > /dev/null
 #           haxelib install lime
 #           haxelib install openfl
-#           haxelib --never git flixel https://github.com/YoshiCrafter29/flixel
-#           haxelib run lime setup flixel
+#           haxelib --never git flixel-yc29 https://github.com/YoshiCrafter29/flixel
+#           haxelib run lime setup flixel-yc29
 #           haxelib run lime setup
 #           haxelib install flixel-tools
 #           haxelib git hscript-improved https://github.com/YoshiCrafter29/hscript-improved
@@ -73,8 +73,8 @@ jobs:
           haxelib install hxcpp > nul
           haxelib install lime
           haxelib install openfl
-          haxelib --never git flixel https://github.com/YoshiCrafter29/flixel
-          haxelib run lime setup flixel
+          haxelib --never git flixel-yc29 https://github.com/YoshiCrafter29/flixel
+          haxelib run lime setup flixel-yc29
           haxelib run lime setup
           haxelib install flixel-tools
           haxelib git hscript-improved https://github.com/YoshiCrafter29/hscript-improved
@@ -109,8 +109,8 @@ jobs:
           haxelib install hxcpp > /dev/null
           haxelib install lime
           haxelib install openfl
-          haxelib --never git flixel https://github.com/YoshiCrafter29/flixel
-          haxelib run lime setup flixel
+          haxelib --never git flixel-yc29 https://github.com/YoshiCrafter29/flixel
+          haxelib run lime setup flixel-yc29
           haxelib run lime setup
           haxelib install flixel-tools
           haxelib git hscript-improved https://github.com/YoshiCrafter29/hscript-improved
