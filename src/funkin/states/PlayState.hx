@@ -214,6 +214,7 @@ class PlayState extends FNFState {
 							if(!susEvent.cancelled) {
 								dunceNote.sustainPieces.push(susNote);
 								parent.notes.add(susNote);
+								parent.sustainGroup.add(susNote);
 							} else {
 								susNote.destroy();
 								susNote = null;
@@ -225,6 +226,7 @@ class PlayState extends FNFState {
 					if(!event.cancelled) {
 						unsortedNotes.push(dunceNote);
 						parent.notes.add(dunceNote);
+						parent.noteGroup.add(dunceNote);
 					} else {
 						dunceNote.destroy();
 						dunceNote = null;
@@ -324,6 +326,36 @@ class PlayState extends FNFState {
 			if(dad == null) return;
 			var pos = dad.getCameraPosition();
 			camFollow.setPosition(pos.x, pos.y);
+		}
+	}
+
+	public function clearNotesBefore(time:Float) {
+		var i:Int = UI.opponentStrums.notes.length - 1;
+		while (i >= 0) {
+			var daNote:Note = UI.opponentStrums.notes.members[i];
+			if(daNote.strumTime - 350 < time) {
+				daNote.active = false;
+				daNote.visible = false;
+
+				daNote.kill();
+				UI.opponentStrums.notes.remove(daNote, true);
+				daNote.destroy();
+			}
+			--i;
+		}
+
+		i = UI.playerStrums.notes.length - 1;
+		while (i >= 0) {
+			var daNote:Note = UI.playerStrums.notes.members[i];
+			if(daNote.strumTime - 350 < time) {
+				daNote.active = false;
+				daNote.visible = false;
+
+				daNote.kill();
+				UI.playerStrums.notes.remove(daNote, true);
+				daNote.destroy();
+			}
+			--i;
 		}
 	}
 

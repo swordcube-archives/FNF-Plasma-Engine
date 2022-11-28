@@ -16,7 +16,14 @@ class StrumLine extends FlxSpriteGroup {
     public var isOpponent:Bool = false;
     public var input:NoteInput;
     public var receptors:FlxTypedSpriteGroup<Receptor>;
+
+    // All notes
     public var notes:NoteGroup;
+    // Sustains only
+    public var sustainGroup:NoteGroup;
+    // Notes only
+    public var noteGroup:NoteGroup;
+
     public var noteSplashes:FlxTypedSpriteGroup<NoteSplash>;
 
     public var noteSpeed:Float = 0;
@@ -61,24 +68,33 @@ class StrumLine extends FlxSpriteGroup {
 
         noteSpeed = PlayState.SONG.scrollSpeed;
         
-        switch(PlayerSettings.prefs.get("Scroll Type")) {
+        var prefs = PlayerSettings.prefs;
+        switch(prefs.get("Scroll Type")) {
             case "Multiplier":
-                if(PlayerSettings.prefs.get("Scroll Speed") > 0)
-                    noteSpeed *= PlayerSettings.prefs.get("Scroll Speed");
+                if(prefs.get("Scroll Speed") > 0)
+                    noteSpeed *= prefs.get("Scroll Speed");
 
             default:
-                if(PlayerSettings.prefs.get("Scroll Speed") > 0)
-                    noteSpeed = PlayerSettings.prefs.get("Scroll Speed");
+                if(prefs.get("Scroll Speed") > 0)
+                    noteSpeed = prefs.get("Scroll Speed");
         }
 
+        notes = new NoteGroup();
+
+        if(prefs.get("Sustain Layering") == "Behind") addSustains();
         add(receptors = new FlxTypedSpriteGroup<Receptor>());
-        add(notes = new NoteGroup());
+        if(prefs.get("Sustain Layering") == "Above") addSustains();
+        add(noteGroup = new NoteGroup());
         add(noteSplashes = new FlxTypedSpriteGroup<NoteSplash>());
 
         input = new NoteInput(this);
         
         this.skin = skin;
         this.keyAmount = keyAmount;
+    }
+
+    function addSustains() {
+        add(sustainGroup = new NoteGroup());
     }
 
     override function update(elapsed:Float) {

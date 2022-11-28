@@ -1,5 +1,6 @@
 package funkin.substates;
 
+import flixel.util.FlxStringUtil;
 import funkin.scripting.events.SubStateCreationEvent;
 import funkin.scripting.Script;
 import flixel.util.FlxTimer;
@@ -24,7 +25,8 @@ class PauseSubState extends FNFSubState {
 	public var menuItems:Array<String> = [
 		'Resume', 
 		'Restart Song', 
-		'Skip Intro', 
+		'Skip Intro',
+		'Skip Time',
 		'Exit to menu'
 	];
 
@@ -34,6 +36,9 @@ class PauseSubState extends FNFSubState {
 
 	public var script:ScriptModule;
 	public var runDefaultCode:Bool = true;
+
+	public var timeTxt:FlxText;
+	public var curTime:Float = Conductor.position;
 
 	var oldFollowLerp:Float = 0.0;
 
@@ -50,6 +55,8 @@ class PauseSubState extends FNFSubState {
 
 		FlxG.sound.music.pause();
 		PlayState.current.vocals.pause();
+
+		if(curTime < 0) curTime = 0;
 
 		if(!event.cancelled) {
 			FlxG.camera.followLerp = 0;
@@ -86,6 +93,17 @@ class PauseSubState extends FNFSubState {
 			FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 			FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
 
+			timeTxt = new FlxText(0, 0, 0, "0:00 / 0:00", 64);
+			timeTxt.scrollFactor.set();
+			timeTxt.setFormat(Paths.font('vcr.ttf'), 64);
+			timeTxt.updateHitbox();
+			timeTxt.screenCenter();
+			timeTxt.x += 150;
+			timeTxt.y += 20;
+			timeTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 5);
+			timeTxt.visible = false;
+			add(timeTxt);
+
 			grpMenuShit = new FlxTypedGroup<Alphabet>();
 			add(grpMenuShit);
 
@@ -103,6 +121,8 @@ class PauseSubState extends FNFSubState {
 		script.event("onSubStateCreationPost", new SubStateCreationEvent(this));
 	}
 
+	var holdTimer:Float = 0.0;
+
 	override function update(elapsed:Float) {
 		for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
 		super.update(elapsed);
@@ -115,6 +135,23 @@ class PauseSubState extends FNFSubState {
 		if (runDefaultCode) {
 			if (pauseMusic.volume < 0.5)
 				pauseMusic.volume += 0.01 * elapsed;
+
+			if(menuItems[curSelected] == "Skip Time") {
+				timeTxt.setPosition(grpMenuShit.members[curSelected].x + 500, grpMenuShit.members[curSelected].y);
+				if(controls.get("UI_LEFT") || controls.get("UI_RIGHT"))
+					holdTimer += elapsed;
+				else
+					holdTimer = 0.0;
+		
+				if(controls.getP("UI_LEFT") || controls.getP("UI_RIGHT") || holdTimer > 0.5) {
+					curTime = FlxMath.bound(curTime + (controls.get("UI_LEFT") ? -500 : 500), 0, FlxG.sound.music.length);
+					timeTxt.text = FlxStringUtil.formatTime(curTime/1000.0) + " / " + FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0);
+		
+					if(holdTimer > 0.6) holdTimer = 0.5;
+				}
+			} else {
+				holdTimer = 0.0;
+			}
 
 			if (controls.getP("UI_UP")) changeSelection(-1);
 			if (controls.getP("UI_DOWN")) changeSelection(1);
@@ -143,6 +180,43 @@ class PauseSubState extends FNFSubState {
 					case "Restart Song":
 						PlayState.paused = false;
 						FlxG.resetState();
+
+					case "Skip Time":
+						if(curTime != Conductor.position) {
+							PlayState.current.clearNotesBefore(curTime);
+	
+							if(PlayState.current.startingSong)
+								PlayState.current.startSong();
+	
+							if(PlayState.current.countdownTimer != null)
+								PlayState.current.countdownTimer.cancel();
+					
+							FlxG.sound.music.time = curTime;
+							FlxG.sound.music.play();
+					
+							if(Conductor.position <= PlayState.current.vocals.length)
+								PlayState.current.vocals.time = curTime;
+							
+							PlayState.current.vocals.play();
+							Conductor.position = curTime;
+	
+							if(curTime >= FlxG.sound.music.length)
+								PlayState.current.endSong();
+	
+							Conductor.update();
+						}
+
+						//resume all tweens and timers
+						FlxTimer.globalManager.forEach(function(tmr:FlxTimer) {
+							if (!tmr.finished)
+								tmr.active = true;
+						});
+						FlxTween.globalManager.forEach(function(twn:FlxTween) {
+							if (!twn.finished)
+								twn.active = true;
+						});
+						PlayState.paused = false;
+						close();
 
 					case "Skip Intro":
 						PlayState.current.canSkipIntro = false;
@@ -198,6 +272,9 @@ class PauseSubState extends FNFSubState {
 			bullShit++;
 		}
 
+		timeTxt.visible = menuItems[curSelected] == "Skip Time";
+		timeTxt.text = FlxStringUtil.formatTime(curTime/1000.0) + " / " + FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0);
+		
 		FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/scrollMenu")));
 	}
 }

@@ -33,7 +33,7 @@ class NoteGroup extends FlxTypedSpriteGroup<Note> {
                 i++;
                 continue;
             }
-            if (__loopSprite.strumTime - Conductor.position > ((1500 / __loopSprite.parent.noteSpeed) * FlxG.sound.music.pitch))
+            if (__loopSprite.strumTime - Conductor.position > ((2000 / __loopSprite.parent.noteSpeed) * FlxG.sound.music.pitch))
                 break;
             if(FlxG.state == PlayState.current && __loopSprite.script != null && !PlayState.current.scripts.containsScript(__loopSprite.script)) {
                 PlayState.current.scripts.addScript(__loopSprite.script);
@@ -60,7 +60,7 @@ class NoteGroup extends FlxTypedSpriteGroup<Note> {
                 i++;
                 continue;
             }
-            if (__loopSprite.strumTime - Conductor.position > ((1500 / __loopSprite.parent.noteSpeed) * FlxG.sound.music.pitch))
+            if (__loopSprite.strumTime - Conductor.position > ((2000 / __loopSprite.parent.noteSpeed) * FlxG.sound.music.pitch))
                 break;
             __loopSprite.draw();
             i++;
@@ -83,7 +83,7 @@ class NoteGroup extends FlxTypedSpriteGroup<Note> {
                 i++;
                 continue;
             }
-            if (__loopSprite.strumTime - Conductor.position > ((1500 / __loopSprite.parent.noteSpeed) * FlxG.sound.music.pitch))
+            if (__loopSprite.strumTime - Conductor.position > ((2000 / __loopSprite.parent.noteSpeed) * FlxG.sound.music.pitch))
                 break;
             noteFunc(__loopSprite);
             i++;
