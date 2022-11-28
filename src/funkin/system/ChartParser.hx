@@ -10,7 +10,7 @@ import flixel.util.typeLimit.OneOfThree;
 }
 
 class ChartParser {
-    public static function loadFromText(text:String):Song {
+    public inline static function loadFromText(text:String):Song {
         return cast Json.parse(text).song;
     }
     public static function loadSong(type:ChartType, name:String, diff:String = "normal"):Song {

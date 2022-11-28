@@ -6,7 +6,7 @@ class Paths {
 	public static var currentMod:String = "Friday Night Funkin'";
 	public static var fallbackMod:String = currentMod;
 
-	public static function file(path:String) {
+	public inline static function file(path:String) {
 		return '${Sys.getCwd()}$path';
 	}
 
@@ -43,45 +43,45 @@ class Paths {
 		return asset('$path.hx', mod);
 	}
 
-	public static function image(path:String, useRootFolder:Bool = true, ?mod:Null<String>) {
+	public inline static function image(path:String, useRootFolder:Bool = true, ?mod:Null<String>) {
 		var root:String = useRootFolder ? 'images/' : '';
 		return asset('$root$path.png', mod);
 	}
 
-	public static function json(path:String, ?mod:Null<String>) {
+	public inline static function json(path:String, ?mod:Null<String>) {
 		return asset('$path.json', mod);
 	}
 
-	public static function txt(path:String, ?mod:Null<String>) {
+	public inline static function txt(path:String, ?mod:Null<String>) {
 		return asset('$path.txt', mod);
 	}
 
-	public static function xml(path:String, ?mod:Null<String>) {
+	public inline static function xml(path:String, ?mod:Null<String>) {
 		return asset('$path.xml', mod);
 	}
 
-	public static function music(path:String, ?mod:Null<String>) {
+	public inline static function music(path:String, ?mod:Null<String>) {
 		return sound('music/$path', false, mod);
 	}
 
-	public static function sound(path:String, useRootFolder:Bool = true, ?mod:Null<String>) {
+	public inline static function sound(path:String, useRootFolder:Bool = true, ?mod:Null<String>) {
 		var root:String = useRootFolder ? 'sounds/' : '';
 		return asset('$root$path.ogg', mod);
 	}
 
-	public static function randomSound(key:String, min:Int, max:Int, ?mod:Null<String>) {
+	public inline static function randomSound(key:String, min:Int, max:Int, ?mod:Null<String>) {
 		return sound(key + FlxG.random.int(min, max), mod);
 	}
 
-	public static function inst(song:String, ?mod:Null<String>) {
+	public inline static function inst(song:String, ?mod:Null<String>) {
 		return sound('songs/${song.toLowerCase()}/Inst', false, mod);
 	}
 
-	public static function voices(song:String, ?mod:Null<String>) {
+	public inline static function voices(song:String, ?mod:Null<String>) {
 		return sound('songs/${song.toLowerCase()}/Voices', false, mod);
 	}
 
-	public static function font(path:String, ?mod:Null<String>) {
+	public inline static function font(path:String, ?mod:Null<String>) {
 		return asset('fonts/$path', mod);
 	}
 }

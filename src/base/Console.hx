@@ -24,34 +24,34 @@ class Console {
 		}
 	}
 
-	public static function log(v:Dynamic) {
+	public inline static function log(v:Dynamic) {
 		Sys.println('${colors['grey']}[   Trace   ] ${colors['reset']}${v}');
 		//LogsOverlay.trace(v, WHITE);
 	}
 
-	public static function info(v:Dynamic) {
+	public inline static function info(v:Dynamic) {
 		Sys.println('${colors['cyan']}[   Info    ] ${colors['reset']}${v}');
 		//LogsOverlay.trace(v, CYAN);
 	}
 
-	public static function debug(v:Dynamic) {
+	public inline static function debug(v:Dynamic) {
 		FlxG.log.notice(v);
 		Sys.println('${colors['orange']}[   Debug   ] ${colors['reset']}${v}');
 		//LogsOverlay.trace(v, YELLOW);
 	}
 
-	public static function error(v:Dynamic) {
+	public inline static function error(v:Dynamic) {
 		FlxG.log.error(v);
 		Sys.println('${colors['red']}[   Error   ] ${colors['reset']}${v}');
 		//LogsOverlay.error(v);
 	}
 
-	public static function warn(v:Dynamic) {
+	public inline static function warn(v:Dynamic) {
 		FlxG.log.warn(v);
 		Sys.println('${colors['yellow']}[   Warn    ] ${colors['reset']}${v}');
 		//LogsOverlay.error(v, YELLOW);
 	}
 
-	public static function printRaw(v:Dynamic)
+	public inline static function printRaw(v:Dynamic)
 		Sys.println(Std.string(v));
 }

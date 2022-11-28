@@ -25,7 +25,7 @@ class CoolUtil {
 	 * @param num The bytes to convert.
 	 * @return String
 	 */
-	 public static function getSizeLabel(num:Int):String {
+	 public inline static function getSizeLabel(num:Int):String {
 		var size:Float = Math.abs(num) != num ? Math.abs(num) + 2147483648 : num;
 		var data = 0;
 		var dataTexts = ["b", "kb", "mb", "gb", "tb", "pb"];
@@ -54,7 +54,7 @@ class CoolUtil {
 	 * fixedLerp(5, 15, -1) = -5
 	 * ```
 	 */
-	public static function fixedLerp(a:Float, b:Float, ratio:Float) {
+	public inline static function fixedLerp(a:Float, b:Float, ratio:Float) {
 		return FlxMath.lerp(a, b, FlxMath.bound(FlxG.elapsed * 60 * ratio, 0, 1));
 	}
 
@@ -63,7 +63,7 @@ class CoolUtil {
 		@param text    The string to split
 		@author swordcube
 	**/
-	public static function listFromText(text:String):Array<String> {
+	public inline static function listFromText(text:String):Array<String> {
 		var daList:Array<String> = text.trim().split('\n');
 		for (i in 0...daList.length) daList[i] = daList[i].trim();
 		return daList;
@@ -75,7 +75,7 @@ class CoolUtil {
 	 * @param min The minimum number in the range.
 	 * @return Array<Int>
 	 */
-	public static function range(max:Int, ?min = 0):Array<Int> {
+	public inline static function range(max:Int, ?min = 0):Array<Int> {
 		var dumbArray:Array<Int> = [];
 		for (i in min...max) dumbArray.push(i);
 		return dumbArray;
@@ -86,7 +86,7 @@ class CoolUtil {
 	 * @param a The array to modify.
 	 * @return Array<String>
 	 */
-	 public static function trimArray(a:Array<String>):Array<String> {
+	 public inline static function trimArray(a:Array<String>):Array<String> {
 		var f:Array<String> = [];
 		for(i in a) f.push(i.trim());
 		return f;
@@ -96,7 +96,7 @@ class CoolUtil {
 	 * Opens a instance of your default browser and navigates to `url`.
 	 * @param url The URL to open.
 	 */
-	public static function openURL(url:String) {
+	public inline static function openURL(url:String) {
 		#if linux
 		Sys.command('/usr/bin/xdg-open', [url, "&"]);
 		#else
@@ -111,14 +111,14 @@ class CoolUtil {
 	 * @return Array<Int>
 	 * @author Leather128
 	 */
-	 public static function splitInt(string:String, delimeter:String):Array<Int> {
+	public inline static function splitInt(string:String, delimeter:String):Array<Int> {
 		var splitString:Array<String> = string.split(delimeter);
 		var splitReturn:Array<Int> = [];
 		for (string in splitString) splitReturn.push(Std.parseInt(string));
 		return splitReturn;
 	}
 
-	public static function switchAnimFrames(anim1:FlxAnimation, anim2:FlxAnimation) {
+	public inline static function switchAnimFrames(anim1:FlxAnimation, anim2:FlxAnimation) {
 		if (anim1 == null || anim2 == null) return;
 		var old = anim1.frames;
 		anim1.frames = anim2.frames;
@@ -130,7 +130,7 @@ class CoolUtil {
 		@param s       The string to modify
 		@author swordcube
 	**/
-	public static function firstLetterUppercase(s:String):String {
+	public inline static function firstLetterUppercase(s:String):String {
 		var strArray:Array<String> = s.split(' ');
 		var newArray:Array<String> = [];
 		
@@ -146,7 +146,7 @@ class CoolUtil {
 	 * @param name The name of the song to load.
 	 * @param diff The difficulty to load.
 	 */
-	function loadSong(chartType:ChartType, name:String, diff:String) {
+	public static function loadSong(chartType:ChartType, name:String, diff:String) {
 		if(!FileSystem.exists(Paths.json('songs/${name.toLowerCase()}/$diff')))
 			return Console.error('The chart for $name on $diff difficulty doesn\'t exist!');
 		
@@ -162,7 +162,7 @@ class CoolUtil {
 	 * @param key The key to convert.
 	 * @return String
 	 */
-	public static function keyToString(key:Null<FlxKey>):String {
+	public inline static function keyToString(key:Null<FlxKey>):String {
 		return switch(key) {
 			case null | 0 | NONE:	"---";
 			case LEFT: 				"←";
@@ -209,7 +209,7 @@ class CoolUtil {
 	 * @param ratingAntialiasing The antialiasing for the rating images.
 	 * @param comboAntialiasing The antialiasing for the combo images.
 	 */
-	public static function loadUISkin(generalSkin:String, noteSkin:String, countdownScale:Array<Float>, judgementScale:Array<Float>, countdownAntialiasing:Bool = true, ratingAntialiasing:Bool = true, comboAntialiasing:Bool = true) {
+	public inline static function loadUISkin(generalSkin:String, noteSkin:String, countdownScale:Array<Float>, judgementScale:Array<Float>, countdownAntialiasing:Bool = true, ratingAntialiasing:Bool = true, comboAntialiasing:Bool = true) {
 		var game = PlayState.current;
 
 		game.countdownSkin = generalSkin;
@@ -244,7 +244,7 @@ class CoolUtil {
 	 * @param ratingAntialiasing The antialiasing for the rating images.
 	 * @param comboAntialiasing The antialiasing for the combo images.
 	 */
-	public static function loadUISkinVariant(generalSkin:String, noteSkin:String, countdownScale:Array<Float>, judgementScale:Array<Float>, countdownAntialiasing:Bool = true, ratingAntialiasing:Bool = true, comboAntialiasing:Bool = true) {
+	public inline static function loadUISkinVariant(generalSkin:String, noteSkin:String, countdownScale:Array<Float>, judgementScale:Array<Float>, countdownAntialiasing:Bool = true, ratingAntialiasing:Bool = true, comboAntialiasing:Bool = true) {
 		var game = PlayState.current;
 
 		game.countdownSkin = generalSkin;
@@ -269,7 +269,7 @@ class CoolUtil {
 		}
 	}
 
-	public static function readDirectory(dir:String, ?mod:Null<String>) {
+	public inline static function readDirectory(dir:String, ?mod:Null<String>) {
 		var arrayToReturn:Array<String> = [];
 		var basePath:String = '${Sys.getCwd()}mods/';
 		if(mod != null) {
@@ -324,7 +324,7 @@ class CoolUtil {
 		return arrayToReturn;
 	}
 
-	public static function readDirectoryFoldersOnly(dir:String, ?mod:Null<String>) {
+	public inline static function readDirectoryFoldersOnly(dir:String, ?mod:Null<String>) {
 		var arrayToReturn:Array<String> = [];
 		var basePath:String = '${Sys.getCwd()}mods/';
 		if(mod != null) {
