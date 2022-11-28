@@ -50,6 +50,8 @@ class NoteInput implements IFlxDestroyable {
 				break;
 			}
 		}
+
+		var dontHit:Array<Bool> = [for(i in 0...parent.keyAmount) false];
 		if (data == -1 || pressed[data]) return;
 		pressed[data] = true;
 		var receptor = parent.receptors.members[data];
@@ -60,8 +62,10 @@ class NoteInput implements IFlxDestroyable {
 		closestNotes = [];
 
 		parent.notes.forEachAlive(function(daNote:Note) {
-			if (!daNote.tooLate && daNote.canBeHit && daNote.mustPress && !daNote.wasGoodHit)
+			if (!dontHit[daNote.direction] && !daNote.tooLate && daNote.canBeHit && daNote.mustPress && !daNote.wasGoodHit) {
+				dontHit[daNote.direction] = true;
 				closestNotes.push(daNote);
+			}
 		});
 
 		closestNotes.sort(noteSorting);

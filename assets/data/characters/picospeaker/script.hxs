@@ -1,0 +1,22 @@
+var animationNotes = [];
+
+function onCreate() {
+    character.loadXML();
+    character.playAnim("shoot1");
+    character.canDance = false;
+    animationNotes = global["animationNotes"].copy();
+}
+
+function updatePost() {
+    if (animationNotes.length > 0 && Conductor.position >= animationNotes[0].strumTime) {
+        var shotDirection:Int = 1;
+        if (animationNotes[0].direction >= 2)
+            shotDirection = 3;
+        shotDirection += FlxG.random.int(0, 1);
+        
+        character.playAnim('shoot' + shotDirection, true);
+        animationNotes.shift();
+    }
+    if(character.animation.curAnim.finished)
+        character.playAnim(character.animation.curAnim.name, false, false, character.animation.curAnim.frames.length - 3);
+}

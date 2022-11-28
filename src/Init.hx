@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxSprite;
 import flixel.math.FlxRect;
 import flixel.math.FlxPoint;
 import flixel.addons.transition.TransitionData;
@@ -17,6 +18,8 @@ class Init extends FlxState {
     override function create() {
         super.create();
 
+		// Exclusive to Leather128 flixel (and maybe Yoshi flixel soon) because fuck you 😎️
+		FlxSprite.defaultAntialiasing = true;
 		FlxG.save.bind('plasmaengine', 'swordcube');
 
 		var playerID:Int = -1;

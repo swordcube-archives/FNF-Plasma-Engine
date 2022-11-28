@@ -35,8 +35,12 @@ class PauseSubState extends FNFSubState {
 	public var script:ScriptModule;
 	public var runDefaultCode:Bool = true;
 
+	var oldFollowLerp:Float = 0.0;
+
 	public function new() {
 		super();
+
+		oldFollowLerp = FlxG.camera.followLerp;
 
 		script = Script.load(Paths.script('data/substates/PauseSubState'));
 		var event = script.event("onSubStateCreation", new SubStateCreationEvent(this));
@@ -48,6 +52,7 @@ class PauseSubState extends FNFSubState {
 		PlayState.current.vocals.pause();
 
 		if(!event.cancelled) {
+			FlxG.camera.followLerp = 0;
 			pauseMusic = new FlxSound().loadEmbedded(Assets.load(SOUND, Paths.music('pauseMusic')), true, true);
 			pauseMusic.volume = 0;
 			pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
@@ -115,6 +120,7 @@ class PauseSubState extends FNFSubState {
 			if (controls.getP("UI_DOWN")) changeSelection(1);
 
 			if (controls.getP("ACCEPT")) {
+				FlxG.camera.followLerp = oldFollowLerp;
 				switch (menuItems[curSelected]) {
 					case "Resume":
 						//resume all tweens and timers

@@ -1,0 +1,16 @@
+import funkin.system.ChartParser;
+import flixel.util.FlxSort;
+
+function onCreate() {
+    global["animationNotes"] = [];
+    var chart:Song = ChartParser.loadSong("AUTO", "stress", "picospeaker");
+    for(section in chart.sections) {
+        for(note in section.notes)
+            global["animationNotes"].push(note);
+    }
+    global["animationNotes"].sort(sortByShit);
+}
+
+function sortByShit(x, y) {
+    return x.strumTime < y.strumTime ? -1 : x.strumTime > y.strumTime ? 1 : 0;
+}

@@ -1,12 +1,12 @@
 package funkin.game;
 
+import funkin.scripting.Script;
 import haxe.xml.Access;
 import flixel.math.FlxPoint;
 import flixel.FlxCamera;
 import flixel.math.FlxRect;
 import funkin.system.FNFSprite;
 import flixel.FlxG;
-import flixel.FlxSprite;
 
 using StringTools;
 
@@ -79,6 +79,11 @@ class Character extends FNFSprite {
 
 	public var playerOffsets:Bool = false;
 
+	/**
+	 * The character's script.
+	 */
+	public var script:ScriptModule;
+
 	var __baseFlipped:Bool = false;
 
 	public function new(x:Float, y:Float, ?isPlayer:Bool = false) {
@@ -98,80 +103,16 @@ class Character extends FNFSprite {
 	public function loadCharacter(name:String) {
 		curCharacter = name;
 
-		while(true) {
-			switch (name) {
-				// case "your-char": if you wanna hardcode
-				default:
-					// Load the intial XML Data.
-					var xml:Xml = Xml.parse(Assets.load(TEXT, Paths.xml('data/characters/$name/config'))).firstElement();
-					if(xml == null) {
-						Console.error('Occured on character: $name | Either the XML doesn\'t exist or the "character" node is missing!');
-						break;
-					}
-					var data:Access = new Access(xml);
-
-					var atlasType:String = "SPARROW";
-					if(data.has.atlasType) atlasType = data.att.atlasType;
-					var spritesheetName:String = data.has.spritesheet ? data.att.spritesheet : "spritesheet";
-					switch(atlasType.toLowerCase()) {
-						case "packer":
-							frames = Assets.load(PACKER, Paths.image('data/characters/$curCharacter/$spritesheetName', false));
-						default:
-							frames = Assets.load(SPARROW, Paths.image('data/characters/$curCharacter/$spritesheetName', false));
-					}
-					antialiasing = data.has.antialiasing ? (data.att.antialiasing == 'true' ? PlayerSettings.prefs.get("Antialiasing") : false) : PlayerSettings.prefs.get("Antialiasing");
-					singDuration = data.has.sing_duration ? Std.parseFloat(data.att.sing_duration) : 4.0;
-					healthIcon = data.has.icon ? data.att.icon : curCharacter;
-					flipX = data.att.flip_x == "true";
-					playerOffsets = data.has.is_player && data.att.is_player == "true";
-
-					deathCharacter = data.has.death_character ? data.att.death_character : "bf-dead";
-
-					// Load animations
-					var animations_node:Access = data.node.animations; // <- This is done to make the code look cleaner (aka instead of data.node.animations.nodes.animation)
-
-					for (anim in animations_node.nodes.animation) {
-						// Add the animation
-						if (anim.has.indices && anim.att.indices.split(",").length > 1)
-							animation.addByIndices(anim.att.name, anim.att.anim, CoolUtil.splitInt(anim.att.indices, ","), "", Std.parseInt(anim.att.fps),
-								anim.att.looped == "true");
-						else
-							animation.addByPrefix(anim.att.name, anim.att.anim, Std.parseInt(anim.att.fps), anim.att.looped == "true");
-
-						setOffset(anim.att.name, -Std.parseFloat(anim.att.offsetX), -Std.parseFloat(anim.att.offsetY));
-					}
-
-					// Load miscellaneous attributes
-
-					// Create variables for cleaner code first
-					var global_pos:Access = data.node.global_pos;
-					var scale:Access = data.node.scale;
-					var scroll:Access = data.node.scroll;
-					var icon_color:Access = data.node.color;
-					var camera:Access = data.node.camera;
-
-					// Set the actual properties
-					positionOffset.set(Std.parseFloat(global_pos.att.offsetX), Std.parseFloat(global_pos.att.offsetY));
-					cameraOffset.set(Std.parseFloat(camera.att.offsetX), Std.parseFloat(camera.att.offsetY));
-
-					this.scale.set(Std.parseFloat(scale.att.x), Std.parseFloat(scale.att.y));
-					ogScale.set(this.scale.x, this.scale.y);
-					updateHitbox();
-
-					scrollFactor.set(Std.parseFloat(scroll.att.x), Std.parseFloat(scroll.att.y));
-
-					if (icon_color.has.hex && icon_color.att.hex != "")
-						healthBarColor = FlxColor.fromString(icon_color.att.hex);
-					else
-						healthBarColor = FlxColor.fromRGB(Std.parseInt(icon_color.att.r), Std.parseInt(icon_color.att.g), Std.parseInt(icon_color.att.b));
-
-					// Dance Steps moment
-					danceSteps = data.has.dance_steps ? data.att.dance_steps.split(",") : ["idle"];
-					for (i in 0...danceSteps.length) danceSteps[i] = danceSteps[i].trim();
-			}
-			break;
+		// Loading the character's script
+		if(script != null) {
+			script.destroy();
+			script = null;
 		}
+		script = Script.load(Paths.script('data/characters/$curCharacter/script'));
+		script.set("character", this);
+		script.run();
 
+		// Player offset shit, don't worry bout it
 		if (isPlayer != playerOffsets) {
 			// Swap left and right animations
 			CoolUtil.switchAnimFrames(animation.getByName('singRIGHT'), animation.getByName('singLEFT'));
@@ -187,6 +128,78 @@ class Character extends FNFSprite {
 		dance();
 
 		return this;
+	}
+
+	public function loadXML(?mod:Null<String>) {
+		switch (curCharacter) {
+			// case "your-char": if you wanna hardcode
+			default:
+				// Load the intial XML Data.
+				var xml:Xml = Xml.parse(Assets.load(TEXT, Paths.xml('data/characters/$curCharacter/config'))).firstElement();
+				if(xml == null)
+					return Console.error('Occured on character: $curCharacter | Either the XML doesn\'t exist or the "character" node is missing!');
+
+				var data:Access = new Access(xml);
+
+				var atlasType:String = "SPARROW";
+				if(data.has.atlasType) atlasType = data.att.atlasType;
+				var spritesheetName:String = data.has.spritesheet ? data.att.spritesheet : "spritesheet";
+				switch(atlasType.toLowerCase()) {
+					case "packer":
+						frames = Assets.load(PACKER, Paths.image('data/characters/$curCharacter/$spritesheetName', false));
+					default:
+						frames = Assets.load(SPARROW, Paths.image('data/characters/$curCharacter/$spritesheetName', false));
+				}
+				antialiasing = data.has.antialiasing ? (data.att.antialiasing == 'true' ? PlayerSettings.prefs.get("Antialiasing") : false) : PlayerSettings.prefs.get("Antialiasing");
+				singDuration = data.has.sing_duration ? Std.parseFloat(data.att.sing_duration) : 4.0;
+				healthIcon = data.has.icon ? data.att.icon : curCharacter;
+				flipX = data.att.flip_x == "true";
+				playerOffsets = data.has.is_player && data.att.is_player == "true";
+
+				deathCharacter = data.has.death_character ? data.att.death_character : "bf-dead";
+
+				// Load animations
+				var animations_node:Access = data.node.animations; // <- This is done to make the code look cleaner (aka instead of data.node.animations.nodes.animation)
+
+				for (anim in animations_node.nodes.animation) {
+					// Add the animation
+					if (anim.has.indices && anim.att.indices.split(",").length > 1)
+						animation.addByIndices(anim.att.name, anim.att.anim, CoolUtil.splitInt(anim.att.indices, ","), "", Std.parseInt(anim.att.fps),
+							anim.att.looped == "true");
+					else
+						animation.addByPrefix(anim.att.name, anim.att.anim, Std.parseInt(anim.att.fps), anim.att.looped == "true");
+
+					setOffset(anim.att.name, -Std.parseFloat(anim.att.offsetX), -Std.parseFloat(anim.att.offsetY));
+				}
+
+				// Load miscellaneous attributes
+
+				// Create variables for cleaner code first
+				var global_pos:Access = data.node.global_pos;
+				var scale:Access = data.node.scale;
+				var scroll:Access = data.node.scroll;
+				var icon_color:Access = data.node.color;
+				var camera:Access = data.node.camera;
+
+				// Set the actual properties
+				positionOffset.set(Std.parseFloat(global_pos.att.offsetX), Std.parseFloat(global_pos.att.offsetY));
+				cameraOffset.set(Std.parseFloat(camera.att.offsetX), Std.parseFloat(camera.att.offsetY));
+
+				this.scale.set(Std.parseFloat(scale.att.x), Std.parseFloat(scale.att.y));
+				ogScale.set(this.scale.x, this.scale.y);
+				updateHitbox();
+
+				scrollFactor.set(Std.parseFloat(scroll.att.x), Std.parseFloat(scroll.att.y));
+
+				if (icon_color.has.hex && icon_color.att.hex != "")
+					healthBarColor = FlxColor.fromString(icon_color.att.hex);
+				else
+					healthBarColor = FlxColor.fromRGB(Std.parseInt(icon_color.att.r), Std.parseInt(icon_color.att.g), Std.parseInt(icon_color.att.b));
+
+				// Dance Steps moment
+				danceSteps = data.has.dance_steps ? data.att.dance_steps.split(",") : ["idle"];
+				for (i in 0...danceSteps.length) danceSteps[i] = danceSteps[i].trim();
+		}
 	}
 
 	public function switchOffset(anim1:String, anim2:String) {
@@ -241,6 +254,9 @@ class Character extends FNFSprite {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
+		script.call("onUpdate", [elapsed]);
+		script.call("update", [elapsed]);
+
 		if (animTimer > 0) {
 			animTimer -= elapsed;
 			if (animTimer <= 0) {
@@ -279,6 +295,9 @@ class Character extends FNFSprite {
 
 		if (danceSteps.length > 1 && animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
 			playAnim(danceSteps[1]);
+
+		script.call("onUpdatePost", [elapsed]);
+		script.call("updatePost", [elapsed]);
 	}
 
 	override function playAnim(anim:String, force:Bool = false, reversed:Bool = false, frame:Int = 0) {
@@ -307,7 +326,8 @@ class Character extends FNFSprite {
 				playAnim(danceSteps[curDanceStep]);
 				curDanceStep++;
 			} else {
-				playAnim(danceSteps[0]);
+				if(danceSteps.length > 0)
+					playAnim(danceSteps[0]);
 			}
 		}
 	}

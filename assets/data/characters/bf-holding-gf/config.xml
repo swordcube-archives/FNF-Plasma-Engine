@@ -1,0 +1,26 @@
+<!DOCTYPE plasma-character >
+<character is_player="true" death_character="bf-holding-gf-dead" icon="bf" flip_x="true" >
+    <animations>
+        <animation name="idle" anim="BF idle dance w gf" fps="24" looped="false" offsetX="0" offsetY="0" />
+
+        <animation name="singLEFT" anim="BF NOTE LEFT0" fps="24" looped="false" offsetX="12" offsetY="7" />
+        <animation name="singDOWN" anim="BF NOTE DOWN0" fps="24" looped="false" offsetX="-10" offsetY="-10" />
+        <animation name="singUP" anim="BF NOTE UP0" fps="24" looped="false" offsetX="-29" offsetY="10" />
+        <animation name="singRIGHT" anim="BF NOTE RIGHT0" fps="24" looped="false" offsetX="-41" offsetY="23" />
+
+        <animation name="singLEFTmiss" anim="BF NOTE LEFT MISS" fps="24" looped="false" offsetX="12" offsetY="7" />
+        <animation name="singDOWNmiss" anim="BF NOTE DOWN MISS" fps="24" looped="false" offsetX="-10" offsetY="-10" />
+        <animation name="singUPmiss" anim="BF NOTE UP MISS" fps="24" looped="false" offsetX="-29" offsetY="10" />
+        <animation name="singRIGHTmiss" anim="BF NOTE RIGHT MISS" fps="24" looped="false" offsetX="-41" offsetY="23" />
+
+        <animation name="bfCatch" anim="BF catches GF" fps="24" looped="false" offsetX="0" offsetY="0" />
+    </animations>
+
+    <global_pos offsetX="0" offsetY="350" />
+    <scale x="1" y="1" />
+    <scroll x="1" y="1" />
+
+    <color r="49" g="176" b="209" hex="" />
+
+    <camera offsetX="0" offsetY="0" />
+</character>

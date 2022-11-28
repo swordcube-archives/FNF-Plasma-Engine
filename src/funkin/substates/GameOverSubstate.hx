@@ -89,13 +89,13 @@ class GameOverSubstate extends FNFSubState {
 					FlxG.switchState(new funkin.states.menus.FreeplayState());
 			}
 
-			if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.curFrame == 12) {
+			if (bf.animation.curAnim != null && bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.curFrame == 12) {
 				camFollow.setPosition(bf.getGraphicMidpoint().x + bf.positionOffset.x, bf.getGraphicMidpoint().y + bf.positionOffset.y);
 				FlxG.camera.follow(camFollow, LOCKON, 0.01);
 			}
 
 			if(week7Songs.contains(PlayState.SONG.name.toLowerCase())) {
-				if(bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.finished && !playingDeathSound) {
+				if(bf.animation.curAnim != null && bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.finished && !playingDeathSound) {
 					bf.playAnim('deathLoop');
 					playingDeathSound = true;
 					coolStartDeath(0.2);
@@ -103,7 +103,7 @@ class GameOverSubstate extends FNFSubState {
 						FlxG.sound.music.fadeIn(4, 0.2, 1);
 					});
 				}
-			} else if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.finished) {
+			} else if (bf.animation.curAnim != null && bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.finished) {
 				bf.playAnim('deathLoop');
 				coolStartDeath();
 			}

@@ -14,9 +14,9 @@ class ScriptedSprite extends FNFSprite {
      * @param script The path to the script.
      */
     public function new(x:Float, y:Float, script:String, ?args:Array<Dynamic>) {
-        super();
+        super(x, y);
 
-        this.script = Script.load(Paths.script(script));
+        this.script = Script.load(Paths.script('data/scripts/sprites/$script'));
         this.script.setParent(this);
 
         if(args == null) args = [];
@@ -29,8 +29,8 @@ class ScriptedSprite extends FNFSprite {
      * @param elapsed The time between frames.
      */
     override function update(elapsed:Float) {
-        for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
 		super.update(elapsed);
+        for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
         for(func in ["onUpdatePost", "updatePost"]) script.call(func, [elapsed]);
 	}
 

@@ -1,0 +1,17 @@
+<!DOCTYPE plasma-character >
+<character icon="pico" flip_x="false" dance_steps="" >
+    <animations>
+        <animation name="shoot1" anim="Pico shoot 1" fps="24" looped="false" offsetX="0" offsetY="0" />
+        <animation name="shoot2" anim="Pico shoot 2" fps="24" looped="false" offsetX="-1" offsetY="-128" />
+        <animation name="shoot3" anim="Pico shoot 3" fps="24" looped="false" offsetX="412" offsetY="-64" />
+        <animation name="shoot4" anim="Pico shoot 4" fps="24" looped="false" offsetX="439" offsetY="-19" />
+    </animations>
+
+    <global_pos offsetX="120" offsetY="-125" />
+    <scale x="1" y="1" />
+    <scroll x="0.95" y="0.95" />
+
+    <color r="183" g="216" b="85" hex="" />
+
+    <camera offsetX="0" offsetY="0" />
+</character>

@@ -1,0 +1,16 @@
+<!DOCTYPE plasma-character >
+<character is_player="true" icon="bf" flip_x="true" >
+    <animations>
+        <animation name="firstDeath" anim="BF Dies with GF" indices="" fps="24" looped="false" offsetX="37" offsetY="14" />
+        <animation name="deathLoop" anim="BF Dead with GF Loop" indices="" fps="24" looped="true" offsetX="37" offsetY="-3" />
+        <animation name="deathConfirm" anim="RETRY confirm holding gf" indices="" fps="24" looped="false" offsetX="37" offsetY="28" />
+    </animations>
+
+    <global_pos offsetX="0" offsetY="350" />
+    <scale x="1" y="1" />
+    <scroll x="1" y="1" />
+
+    <color r="49" g="176" b="209" hex="" />
+
+    <camera offsetX="0" offsetY="0" />
+</character>

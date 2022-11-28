@@ -1,0 +1,53 @@
+var strumTime:Float = 0;
+var goingRight:Bool = false;
+var tankSpeed:Float = 0.7;
+
+var endingOffset:Float;
+
+function new(balls:Float, uhh:Bool) {
+    load("SPARROW", Paths.image(stageImage("tankmanKilled1")));
+    animation.addByPrefix('run', 'tankman running', 24, true);
+    animation.addByPrefix('shot', 'John Shot ' + FlxG.random.int(1, 2), 24, false);
+    animation.play('run');
+    animation.curAnim.curFrame = FlxG.random.int(0, animation.curAnim.frames.length - 1);
+    scale.set(0.8, 0.8);
+    updateHitbox();
+
+    strumTime = balls;
+    goingRight = uhh;
+    endingOffset = FlxG.random.float(50, 200);
+    tankSpeed = FlxG.random.float(0.6, 1);
+    if(!goingRight) flipX = true;
+}
+
+function update(elapsed) {
+    if (x >= FlxG.width * 1.2 || x <= FlxG.width * -0.5)
+        visible = false;
+    else
+        visible = true;
+
+    if (animation.curAnim.name == 'run') {
+        var wackyShit:Float = FlxG.width * 0.74 + endingOffset;
+        if (goingRight) {
+            wackyShit = FlxG.width * 0.02 - endingOffset;
+            x = wackyShit + (Conductor.position - strumTime) * tankSpeed;
+        }
+        else
+            x = wackyShit - (Conductor.position - strumTime) * tankSpeed;
+    }
+    
+    if (Conductor.position > strumTime) {
+        animation.play('shot');
+        if (goingRight) {
+            offset.y = 200;
+            offset.x = 300;
+        }
+    }
+    
+    if (animation.curAnim.name == 'shot' && animation.curAnim.curFrame >= animation.curAnim.frames.length - 1)
+        destroy();
+}
+
+function stageImage(p:String) {
+    return "stages/tank/"+p;
+}

@@ -4,6 +4,7 @@ var tankGround:BGSprite;
 var tankWatchtower:BGSprite;
 
 var tankers:FlxGroup;
+var tankmanRun:FlxGroup;
 
 function create() {
     stage.characterPositions["dad"].set(20, 100);
@@ -47,15 +48,20 @@ function create() {
     tankGround = new BGSprite(stageImage('tankRolling'), 300, 300, 0.5, 0.5, ['BG tank w lighting'], true);
     add(tankGround);
 
-    //
-    // INSERT TANKMEN BG SHIT HERE!
-    //
+    tankmanRun = new FlxGroup();
+    add(tankmanRun);
 
     var ground = new BGSprite(stageImage('tankGround'), -420, -150);
     ground.setGraphicSize(Std.int(ground.width * 1.15));
     ground.updateHitbox();
     add(ground);
     moveTank();
+
+    switch(PlayState_.SONG.name.toLowerCase()) {
+        case "stress":
+            var tankmen = new ScriptedSprite(20, 600, "TankmenBG", [10, true]);
+			tankmanRun.add(tankmen);
+    }
 
     tankers = new FlxGroup();
 
@@ -94,6 +100,17 @@ function beatHit() {bopGuys();}
 function update(elapsed) {
     if(!PlayState.inCutscene)
         moveTank();
+
+    switch(PlayState_.SONG.name.toLowerCase()) {
+        case "stress":
+            while(global["animationNotes"][0].strumTime <= Conductor.position - 1500) {
+                if(FlxG.random.bool(16)) {
+                    var man = new ScriptedSprite(500, 200 + FlxG.random.int(50, 100), "TankmenBG", [global["animationNotes"][0].strumTime, global["animationNotes"][0].direction < 2]);
+                    tankmanRun.add(man);
+                }
+                global["animationNotes"].shift();
+            }
+    }
 }
 
 var tankAngle:Float = FlxG.random.int(-90, 45);
