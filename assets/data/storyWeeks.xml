@@ -1,13 +1,13 @@
 <!DOCTYPE plasma-story-weeks >
 <weeks>
-    <week name="" chars="none,bf,gf" texture="tutorial">
-        <song name="Tutorial" chartType="VANILLA" />
+    <week name="HOW TO RAP 101" chars="none,bf,gf" texture="tutorial">
+        <song name="Tutorial"          chartType="VANILLA" />
     </week>
 
     <week name="DADDY DEAREST" chars="dad,bf,gf" texture="week1">
-        <song name="Bopeebo" chartType="VANILLA" />
-        <song name="Fresh" chartType="VANILLA" />
-        <song name="Dad Battle" chartType="VANILLA" />
+        <song name="Bopeebo"           chartType="VANILLA" />
+        <song name="Fresh"             chartType="VANILLA" />
+        <song name="Dad Battle"        chartType="VANILLA" />
     </week>
 
     <week name="SPOOKY MONTH" chars="spooky,bf,gf" texture="week2">
