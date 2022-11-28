@@ -140,7 +140,8 @@ class StrumLine extends FlxSpriteGroup {
                     if(!event.cancelled) {
                         PlayState.current.vocals.volume = 1;
                         if(note.doSingAnim) {
-                            for(c in PlayState.current.dads) {
+                            var chars:Array<Character> = PlayerSettings.prefs.get("Play As Opponent") ? PlayState.current.bfs : PlayState.current.dads;
+                            for(c in chars) {
                                 if(c != null && !c.specialAnim) {
                                     c.holdTimer = 0;
                                     var suffix:String = note.altAnim ? "-alt" : "";
@@ -185,7 +186,8 @@ class StrumLine extends FlxSpriteGroup {
                         note.wasGoodHit = true;
                         PlayState.current.vocals.volume = 1;
                         if(note.doSingAnim) {
-                            for(c in PlayState.current.bfs) {
+                            var chars:Array<Character> = PlayerSettings.prefs.get("Play As Opponent") ? PlayState.current.dads : PlayState.current.bfs;
+                            for(c in chars) {
                                 if(c != null && !c.specialAnim) {
                                     c.holdTimer = 0;
                                     var suffix:String = note.altAnim ? "-alt" : "";
@@ -215,7 +217,8 @@ class StrumLine extends FlxSpriteGroup {
                     if(!note.isSustainTail) {
                         PlayState.current.vocals.volume = 0;
                         if(note.doSingAnim) {
-                            for(c in PlayState.current.bfs) {
+                            var chars:Array<Character> = PlayerSettings.prefs.get("Play As Opponent") ? PlayState.current.dads : PlayState.current.bfs;
+                            for(c in chars) {
                                 if(c != null && !c.specialAnim) {
                                     c.holdTimer = 0;
                                     c.playAnim(c.getSingAnim(keyAmount, note.direction)+"miss", true);

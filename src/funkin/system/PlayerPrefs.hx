@@ -100,6 +100,10 @@ class PlayerPrefs {
                 name: "Botplay",
                 value: false
             },
+            {
+                name: "Play As Opponent",
+                value: false
+            }
         ]
     ];
     public var list:Map<String, Dynamic> = [];

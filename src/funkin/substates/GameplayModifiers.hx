@@ -44,6 +44,11 @@ class GameplayModifiers extends OptionScreen {
                     "Botplay",
                     "Choose whether or not you want the game to hit every note for you.\nUseful for showcases!",
                     null
+                ),
+                new BoolOption(
+                    "Play As Opponent",
+                    "Choose whether or not you want to kick boyfriend's ass instead of the opposite.",
+                    null
                 )
             ]
         ];

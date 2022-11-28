@@ -86,6 +86,8 @@ class Character extends FNFSprite {
 
 	var __baseFlipped:Bool = false;
 
+	public var specialAnims:Array<String> = [];
+
 	public function new(x:Float, y:Float, ?isPlayer:Bool = false) {
 		super(x, y);
 		this.isPlayer = isPlayer;
@@ -168,6 +170,9 @@ class Character extends FNFSprite {
 							anim.att.looped == "true");
 					else
 						animation.addByPrefix(anim.att.name, anim.att.anim, Std.parseInt(anim.att.fps), anim.att.looped == "true");
+
+					if(anim.has.specialAnim && anim.att.specialAnim == "true")
+						specialAnims.push(anim.att.name);
 
 					setOffset(anim.att.name, -Std.parseFloat(anim.att.offsetX), -Std.parseFloat(anim.att.offsetY));
 				}
@@ -303,7 +308,7 @@ class Character extends FNFSprite {
 	override function playAnim(anim:String, force:Bool = false, reversed:Bool = false, frame:Int = 0) {
 		super.playAnim(anim, force, reversed, frame);
 
-		specialAnim = false;
+		specialAnim = specialAnims.contains(anim);
 
 		var daOffset = offsets.get(anim);
 		if (daOffset != null)

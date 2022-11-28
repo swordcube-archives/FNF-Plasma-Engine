@@ -8,8 +8,8 @@
         <animation name="singUP" anim="Tankman UP note0" fps="24" looped="false" offsetX="24" offsetY="56" />
         <animation name="singLEFT" anim="Tankman Note Left0" fps="24" looped="false" offsetX="100" offsetY="-14" />
 
-        <animation name="singDOWN-alt" anim="PRETTY GOOD tankman0" fps="24" looped="false" offsetX="0" offsetY="0" />
-        <animation name="singUP-alt" anim="TANKMAN UGH0" fps="24" looped="false" offsetX="0" offsetY="0" />
+        <animation name="singDOWN-alt" anim="PRETTY GOOD tankman0" fps="24" looped="false" offsetX="103" offsetY="15" specialAnim="true"/>
+        <animation name="singUP-alt" anim="TANKMAN UGH0" fps="24" looped="false" offsetX="-15" offsetY="-8" />
     </animations>
 
     <global_pos offsetX="100" offsetY="240" />

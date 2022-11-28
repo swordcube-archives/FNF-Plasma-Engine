@@ -182,6 +182,9 @@ class PlayState extends FNFState {
 					var gottaHitNote:Bool = section.playerSection;
 					if (note.direction > (SONG.keyAmount - 1)) gottaHitNote = !section.playerSection;
 
+					if(prefs.get("Play As Opponent"))
+						gottaHitNote = !gottaHitNote;
+
 					var parent:StrumLine = gottaHitNote ? UI.playerStrums : UI.opponentStrums;
 					var fixedStrumTime:Float = note.strumTime + (prefs.get("Note Offset") * FlxG.sound.music.pitch);
 		
@@ -198,7 +201,7 @@ class PlayState extends FNFState {
 							var susTime:Float = fixedStrumTime + (Conductor.stepCrochet * sus) + (Conductor.stepCrochet / Math.abs(parent.noteSpeed / Conductor.rate));
 							var susNote = new Note(susTime, parent.keyAmount, note.direction % SONG.keyAmount, dunceNote, true, note.type);
 							susNote.setPosition(-9999, -9999);
-							susNote.mustPress = gottaHitNote;
+							susNote.mustPress = dunceNote.mustPress;
 							susNote.altAnim = note.altAnim;
 							susNote.parent = parent;
 							susNote.stepCrochet = Conductor.stepCrochet;

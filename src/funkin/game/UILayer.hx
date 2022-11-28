@@ -37,17 +37,33 @@ class UILayer extends FlxGroup {
 		opponentStrums.screenCenter(X);
 		opponentStrums.x -= strumSpacing;
 		opponentStrums.isOpponent = true;
-		add(opponentStrums);
 
 		playerStrums = new StrumLine(0, strumY, PlayState.SONG.keyAmount, noteSkin);
 		playerStrums.screenCenter(X);
 		playerStrums.x += strumSpacing;
-		add(playerStrums);
 
-		if(prefs.get("Centered Notes")) {
-			opponentStrums.x -= 9999;
-			playerStrums.screenCenter(X);
+		if(prefs.get("Play As Opponent")) {
+			// opponentStrums.isOpponent = false;
+			// playerStrums.isOpponent = true;
+
+			if(prefs.get("Centered Notes")) {
+				opponentStrums.screenCenter(X);
+				playerStrums.x -= 9999;
+			} else {
+				var old = [opponentStrums.x, opponentStrums.y];
+				var old2 = [playerStrums.x, playerStrums.y];
+				opponentStrums.setPosition(old2[0], old2[1]);
+				playerStrums.setPosition(old[0], old[1]);
+			}
+		} else {
+			if(prefs.get("Centered Notes")) {
+				opponentStrums.x -= 9999;
+				playerStrums.screenCenter(X);
+			}
 		}
+
+		add(opponentStrums);
+		add(playerStrums);
 	}
 
 	public function initHealthBar() {
