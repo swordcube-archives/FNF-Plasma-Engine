@@ -43,12 +43,9 @@ class UILayer extends FlxGroup {
 		playerStrums.x += strumSpacing;
 
 		if(prefs.get("Play As Opponent")) {
-			// opponentStrums.isOpponent = false;
-			// playerStrums.isOpponent = true;
-
 			if(prefs.get("Centered Notes")) {
-				opponentStrums.screenCenter(X);
-				playerStrums.x -= 9999;
+				opponentStrums.x -= 9999;
+				playerStrums.screenCenter(X);
 			} else {
 				var old = [opponentStrums.x, opponentStrums.y];
 				var old2 = [playerStrums.x, playerStrums.y];
