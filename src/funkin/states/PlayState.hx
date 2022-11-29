@@ -235,8 +235,11 @@ class PlayState extends FNFState {
 				}
 			}
 		}
-		for(line in [UI.opponentStrums, UI.playerStrums])
+		for(line in [UI.opponentStrums, UI.playerStrums]) {
 			line.notes.sortNotes();
+			line.noteGroup.sortNotes();
+			line.sustainGroup.sortNotes();
+		}
 
 		// Initialize and add stage
 		stage = new Stage().load(SONG.stage);
