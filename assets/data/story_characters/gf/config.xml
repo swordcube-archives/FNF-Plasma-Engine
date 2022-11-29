@@ -6,5 +6,5 @@
     </animations>
 
     <global_pos offsetX="30" offsetY="50" />
-    <scale x="0.85" y="0.85" />
+    <scale x="0.95" y="0.95" />
 </character>

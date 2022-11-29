@@ -1,0 +1,9 @@
+<!DOCTYPE plasma-story-character >
+<character flip_x="false" dance_steps="idle" >
+    <animations>
+        <animation name="idle" anim="tank guy" fps="24" looped="false" offsetX="0" offsetY="0" />
+    </animations>
+
+    <global_pos offsetX="-40" offsetY="50" />
+    <scale x="1.2" y="1.2" />
+</character>

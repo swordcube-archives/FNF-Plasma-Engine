@@ -85,6 +85,7 @@ class FreeplayState extends FNFState {
 				songText.isMenuItem = true;
 				songText.targetY = i;
 				songText.scrollFactor.set();
+				songText.alpha = 0.6;
 				grpSongs.add(songText);
 
 				var icon:HealthIcon = new HealthIcon().loadIcon(songs[i].songCharacter);
@@ -229,15 +230,16 @@ class FreeplayState extends FNFState {
 	function changeSelection(change:Int = 0) {
 		FlxG.sound.play(Assets.load(SOUND, Paths.sound('menus/scrollMenu')));
 
+		grpSongs.members[curSelected].alpha = 0.6;
 		curSelected = FlxMath.wrap(curSelected + change, 0, songs.length-1);
+		grpSongs.members[curSelected].alpha = 1;
 
 		intendedScore = Highscore.getScore(songs[curSelected].songName, songs[curSelected].difficulties[curDifficulty]);
 
-		var bullShit:Int = 0;
+		var i:Int = 0;
 		for (item in grpSongs.members) {
-			item.targetY = bullShit - curSelected;
-			item.alpha = curSelected == bullShit ? 1 : 0.6;
-			bullShit++;
+			item.targetY = i - curSelected;
+			i++;
 		}
 
 		if(colorTween != null) colorTween.cancel();

@@ -1,0 +1,10 @@
+<!DOCTYPE plasma-story-character >
+<character flip_x="false" dance_steps="danceLeft,danceRight" >
+    <animations>
+        <animation name="danceLeft" anim="spooky dance idle BLACK LINES" indices="0,2,4,6" fps="12" looped="false" offsetX="0" offsetY="0" />
+        <animation name="danceRight" anim="spooky dance idle BLACK LINES" indices="8,10,12,14" fps="12" looped="false" offsetX="0" offsetY="0" />
+    </animations>
+
+    <global_pos offsetX="-70" offsetY="20" />
+    <scale x="0.9" y="0.9" />
+</character>

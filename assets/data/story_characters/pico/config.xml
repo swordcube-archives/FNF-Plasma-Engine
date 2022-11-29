@@ -1,0 +1,9 @@
+<!DOCTYPE plasma-story-character >
+<character flip_x="false" dance_steps="idle" >
+    <animations>
+        <animation name="idle" anim="Pico menu asset" fps="24" looped="false" offsetX="0" offsetY="0" />
+    </animations>
+
+    <global_pos offsetX="-80" offsetY="20" />
+    <scale x="0.9" y="0.9" />
+</character>

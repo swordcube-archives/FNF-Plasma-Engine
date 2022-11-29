@@ -1,7 +1,7 @@
 <!DOCTYPE plasma-character >
 <character icon="spooky" flip_x="false" dance_steps="danceLeft,danceRight" >
     <animations>
-        <animation name="danceLeft" anim="spooky dance idle" indices="0,2,6" fps="12" looped="false" offsetX="0" offsetY="0" />
+        <animation name="danceLeft" anim="spooky dance idle" indices="0,2,4,6" fps="12" looped="false" offsetX="0" offsetY="0" />
         <animation name="danceRight" anim="spooky dance idle" indices="8,10,12,14" fps="12" looped="false" offsetX="0" offsetY="0" />
 
         <animation name="singLEFT" anim="note sing left" indices="" fps="24" looped="false" offsetX="130" offsetY="-10" />
