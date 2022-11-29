@@ -335,51 +335,59 @@ class CoolUtil {
 	public inline static function readDirectoryFoldersOnly(dir:String, ?mod:Null<String>) {
 		var arrayToReturn:Array<String> = [];
 		var basePath:String = '${Sys.getCwd()}mods/';
-		if(mod != null) {
-			if(FileSystem.isDirectory(basePath+mod) && FileSystem.exists(basePath+mod+"/"+dir)) {
-				for(item in FileSystem.readDirectory(basePath+mod+"/"+dir)) {
-					if(!arrayToReturn.contains(item) && FileSystem.isDirectory(basePath+mod+"/"+dir+"/"+item))
-						arrayToReturn.push(item);
-				}
-			}
-		} else {
-			for(folder in FileSystem.readDirectory(basePath)) {
-				if(FileSystem.isDirectory(basePath+folder) && FileSystem.exists(basePath+folder+"/"+dir)) {
-					for(item in FileSystem.readDirectory(basePath+folder+"/"+dir)) {
-						if(!arrayToReturn.contains(item) && FileSystem.isDirectory(basePath+folder+"/"+dir+"/"+item))
+		if(FileSystem.exists(basePath)) {
+			if(mod != null) {
+				if(FileSystem.isDirectory(basePath+mod) && FileSystem.exists(basePath+mod+"/"+dir)) {
+					for(item in FileSystem.readDirectory(basePath+mod+"/"+dir)) {
+						if(!arrayToReturn.contains(item) && FileSystem.isDirectory(basePath+mod+"/"+dir+"/"+item))
 							arrayToReturn.push(item);
+					}
+				}
+			} else {
+				for(folder in FileSystem.readDirectory(basePath)) {
+					if(FileSystem.isDirectory(basePath+folder) && FileSystem.exists(basePath+folder+"/"+dir)) {
+						for(item in FileSystem.readDirectory(basePath+folder+"/"+dir)) {
+							if(!arrayToReturn.contains(item) && FileSystem.isDirectory(basePath+folder+"/"+dir+"/"+item))
+								arrayToReturn.push(item);
+						}
 					}
 				}
 			}
 		}
 		var basePath:String = '${Sys.getCwd()}assets/';
-		if(FileSystem.exists(basePath+dir) && FileSystem.isDirectory(basePath+dir)) {
-			for(item in FileSystem.readDirectory(basePath+dir)) {
-				if(!arrayToReturn.contains(item) && FileSystem.isDirectory(basePath+dir+"/"+item))
-					arrayToReturn.push(item);
-			}
-		}
-		var basePath:String = '${Sys.getCwd()}../../../../assets/';
-		if(FileSystem.exists(basePath+dir) && FileSystem.isDirectory(basePath+dir)) {
-			for(item in FileSystem.readDirectory(basePath+dir)) {
-				if(!arrayToReturn.contains(item) && FileSystem.isDirectory(basePath+dir+"/"+item))
-					arrayToReturn.push(item);
-			}
-		}
-		var basePath:String = '${Sys.getCwd()}../../../../mods/';
-		if(mod != null) {
-			if(FileSystem.isDirectory(basePath+mod) && FileSystem.exists(basePath+mod+"/"+dir)) {
-				for(item in FileSystem.readDirectory(basePath+mod+"/"+dir)) {
-					if(!arrayToReturn.contains(item) && FileSystem.isDirectory(basePath+mod+"/"+dir+"/"+item))
+		if(FileSystem.exists(basePath)) {
+			if(FileSystem.exists(basePath+dir) && FileSystem.isDirectory(basePath+dir)) {
+				for(item in FileSystem.readDirectory(basePath+dir)) {
+					if(!arrayToReturn.contains(item) && FileSystem.isDirectory(basePath+dir+"/"+item))
 						arrayToReturn.push(item);
 				}
 			}
-		} else {
-			for(folder in FileSystem.readDirectory(basePath)) {
-				if(FileSystem.isDirectory(basePath+folder) && FileSystem.exists(basePath+folder+"/"+dir)) {
-					for(item in FileSystem.readDirectory(basePath+folder+"/"+dir)) {
-						if(!arrayToReturn.contains(item) && FileSystem.isDirectory(basePath+folder+"/"+dir+"/"+item))
+		}
+		var basePath:String = '${Sys.getCwd()}../../../../assets/';
+		if(FileSystem.exists(basePath)) {
+			if(FileSystem.exists(basePath+dir) && FileSystem.isDirectory(basePath+dir)) {
+				for(item in FileSystem.readDirectory(basePath+dir)) {
+					if(!arrayToReturn.contains(item) && FileSystem.isDirectory(basePath+dir+"/"+item))
+						arrayToReturn.push(item);
+				}
+			}
+		}
+		var basePath:String = '${Sys.getCwd()}../../../../mods/';
+		if(FileSystem.exists(basePath)) {
+			if(mod != null) {
+				if(FileSystem.isDirectory(basePath+mod) && FileSystem.exists(basePath+mod+"/"+dir)) {
+					for(item in FileSystem.readDirectory(basePath+mod+"/"+dir)) {
+						if(!arrayToReturn.contains(item) && FileSystem.isDirectory(basePath+mod+"/"+dir+"/"+item))
 							arrayToReturn.push(item);
+					}
+				}
+			} else {
+				for(folder in FileSystem.readDirectory(basePath)) {
+					if(FileSystem.isDirectory(basePath+folder) && FileSystem.exists(basePath+folder+"/"+dir)) {
+						for(item in FileSystem.readDirectory(basePath+folder+"/"+dir)) {
+							if(!arrayToReturn.contains(item) && FileSystem.isDirectory(basePath+folder+"/"+dir+"/"+item))
+								arrayToReturn.push(item);
+						}
 					}
 				}
 			}
