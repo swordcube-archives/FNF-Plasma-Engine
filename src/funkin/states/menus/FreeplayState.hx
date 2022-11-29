@@ -52,8 +52,10 @@ class FreeplayState extends FNFState {
 		super.create();
 
 		script = Script.load(Paths.script('data/states/FreeplayState'));
-		if (FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
+		if (FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing)) {
 			FlxG.sound.playMusic(Assets.load(SOUND, Paths.music('menuMusic')));
+		}
+		Conductor.bpm = 102;
 		script.run(false);
 		var event = script.event("onStateCreation", new StateCreationEvent(this));
 

@@ -18,8 +18,6 @@ class Init extends FlxState {
     override function create() {
         super.create();
 
-		// Exclusive to Leather128 flixel (and maybe Yoshi flixel soon) because fuck you 😎️
-		FlxSprite.defaultAntialiasing = true;
 		FlxG.save.bind('plasmaengine', 'swordcube');
 
 		var playerID:Int = -1;
@@ -45,6 +43,9 @@ class Init extends FlxState {
     	Conductor.init();
 		AudioSwitchFix.init();
 		WindowsAPI.setDarkMode(true);
+
+		// Exclusive to Leather128 flixel (and maybe Yoshi flixel soon) because fuck you 😎️
+		FlxSprite.defaultAntialiasing = PlayerSettings.prefs.get("Antialiasing");
 
 		FlxG.stage.frameRate = PlayerSettings.prefs.get("Framerate Cap");
 		FlxG.autoPause = PlayerSettings.prefs.get("Auto Pause");

@@ -73,7 +73,7 @@ class UILayer extends FlxGroup {
 
 		var game = PlayState.current;
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8),
-			PlayState.current, 'health', game.minHealth, game.maxHealth);
+			PlayState.current, prefs.get("Play As Opponent") ? 'opponentHealth' : 'health', game.minHealth, game.maxHealth);
 		healthBar.createFilledBar(
 			game.dad != null ? game.dad.healthBarColor : 0xFFFF0000, 
 			game.bf != null ? game.bf.healthBarColor : 0xFF66FF33

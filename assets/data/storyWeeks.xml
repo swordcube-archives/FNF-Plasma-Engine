@@ -1,42 +1,48 @@
 <!DOCTYPE plasma-story-weeks >
 <weeks>
-    <week name="HOW TO RAP 101" chars="none,bf,gf" texture="tutorial">
+    <week name="HOW TO RAP 101" chars=",bf,gf" texture="tutorial" difficulties="easy,normal,hard" >
         <song name="Tutorial"          chartType="VANILLA" />
     </week>
 
-    <week name="DADDY DEAREST" chars="dad,bf,gf" texture="week1">
+    <week name="DADDY DEAREST" chars="dad,bf,gf" texture="week1" difficulties="easy,normal,hard" >
         <song name="Bopeebo"           chartType="VANILLA" />
         <song name="Fresh"             chartType="VANILLA" />
         <song name="Dad Battle"        chartType="VANILLA" />
     </week>
 
-    <week name="SPOOKY MONTH" chars="spooky,bf,gf" texture="week2">
+    <week name="SPOOKY MONTH" chars="spooky,bf,gf" texture="week2" difficulties="easy,normal,hard" >
         <song name="Spookeez"          chartType="VANILLA" />
         <song name="South"             chartType="VANILLA" />
         <song name="Monster"           chartType="VANILLA" />
     </week>
 
-    <week name="PICO" chars="pico,bf,gf" texture="week3">
+    <week name="PICO" chars="pico,bf,gf" texture="week3" difficulties="easy,normal,hard" >
         <song name="Pico"              chartType="VANILLA" />
         <song name="Philly Nice"       chartType="VANILLA" />
         <song name="Blammed"           chartType="VANILLA" />
     </week>
 
-    <week name="MOMMY MUST MURDER" chars="mom,bf,gf" texture="week4">
+    <week name="MOMMY MUST MURDER" chars="mom,bf,gf" texture="week4" difficulties="easy,normal,hard" >
         <song name="Satin Panties"     chartType="VANILLA" />
         <song name="High"              chartType="VANILLA" />
         <song name="M.I.L.F"           chartType="VANILLA" />
     </week>
 
-    <week name="RED SNOW" chars="parents-christmas,bf,gf" texture="week5">
+    <week name="RED SNOW" chars="parents-christmas,bf,gf" texture="week5" difficulties="easy,normal,hard" >
         <song name="Cocoa"             chartType="VANILLA" />
         <song name="Eggnog"            chartType="VANILLA" />
         <song name="Winter Horrorland" chartType="VANILLA" />
     </week>
 
-    <week name="HATING SIMULATOR FT. MOAWLING" chars="senpai,bf,gf" texture="week6">
+    <week name="HATING SIMULATOR FT. MOAWLING" chars="senpai,bf,gf" texture="week6" difficulties="easy,normal,hard" >
         <song name="Senpai"            chartType="VANILLA" />
         <song name="Roses"             chartType="VANILLA" />
         <song name="Thorns"            chartType="VANILLA" />
+    </week>
+
+    <week name="TANKMAN" chars="tankman,bf,gf" texture="week7" difficulties="easy,normal,hard" >
+        <song name="Ugh"               chartType="VANILLA" />
+        <song name="Guns"              chartType="VANILLA" />
+        <song name="Stress"            chartType="VANILLA" />
     </week>
 </weeks>

@@ -216,7 +216,7 @@ class Character extends FNFSprite {
 
 	public function getCameraPosition() {
 		var midpoint = getMidpoint();
-		return new FlxPoint(midpoint.x
+		return FlxPoint.get(midpoint.x
 			+ (isPlayer ? -100 : 150)
 			+ positionOffset.x
 			+ cameraOffset.x, midpoint.y
@@ -308,13 +308,12 @@ class Character extends FNFSprite {
 	override function playAnim(anim:String, force:Bool = false, reversed:Bool = false, frame:Int = 0) {
 		super.playAnim(anim, force, reversed, frame);
 
-		specialAnim = specialAnims.contains(anim);
+		if(animation.exists(anim) && offsets.exists(anim)) {
+			specialAnim = specialAnims.contains(anim);
 
-		var daOffset = offsets.get(anim);
-		if (daOffset != null)
+			var daOffset = offsets.get(anim);
 			rotOffset.set(daOffset.x, daOffset.y);
-		else
-			rotOffset.set(0, 0);
+		}
 
 		offset.set(positionOffset.x * (isPlayer != playerOffsets ? 1 : -1), -positionOffset.y);
 	}

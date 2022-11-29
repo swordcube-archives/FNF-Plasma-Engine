@@ -1,5 +1,6 @@
 package funkin.states;
 
+import funkin.states.menus.StoryMenuState.StorySong;
 import funkin.substates.GameOverSubstate;
 import funkin.game.Ranking;
 import flixel.FlxObject;
@@ -28,15 +29,9 @@ import funkin.system.FNFSprite;
 
 using StringTools;
 
-typedef StorySong = {
-	var name:String;
-	var chartType:ChartType;
-}
-
 /**
 	The class that handles gameplay.
 **/
-@:dox(hide)
 class PlayState extends FNFState {
 	public static var paused:Bool = false;
 	public static var SONG:Song = ChartParser.loadSong(BASE, "tutorial");
@@ -66,6 +61,12 @@ class PlayState extends FNFState {
 	public var health:Float = 1;
 	public var minHealth:Float = 0;
 	public var maxHealth:Float = 2;
+
+	public var opponentHealth(get, null):Float;
+
+	function get_opponentHealth() {
+		return maxHealth - health;
+	}
 
 	public var healthGain:Float = 0.023;
 	public var healthLoss:Float = 0.0475;

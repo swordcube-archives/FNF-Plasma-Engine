@@ -1,0 +1,9 @@
+<!DOCTYPE plasma-story-character >
+<character flip_x="false" dance_steps="idle" >
+    <animations>
+        <animation name="idle" anim="Dad idle dance BLACK LINE" fps="24" looped="false" offsetX="0" offsetY="0" />
+    </animations>
+
+    <global_pos offsetX="-50" offsetY="-10" />
+    <scale x="0.5" y="0.5" />
+</character>

@@ -1,5 +1,6 @@
 package funkin.options.screens;
 
+import flixel.FlxSprite;
 import funkin.options.types.NumberOption;
 import funkin.options.types.BoolOption;
 import funkin.options.types.ListOption;
@@ -54,7 +55,10 @@ class AppearanceMenu extends OptionScreen {
                 new BoolOption(
                     "Enable Antialiasing",
                     "Choose whether or not to enable Antialiasing. Helps performance on low-end PCs.",
-                    "Antialiasing"
+                    "Antialiasing",
+                    function(value:Bool) {
+                        FlxSprite.defaultAntialiasing = value;
+                    }
                 ),
             ]
         ];

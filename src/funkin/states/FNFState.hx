@@ -1,5 +1,6 @@
 package funkin.states;
 
+import flixel.addons.transition.FlxTransitionableState;
 import haxe.io.Path;
 import flixel.FlxBasic;
 import flixel.FlxSprite;
@@ -24,6 +25,13 @@ class FNFState extends FlxUIState {
 	public var prefs(get, null):PlayerPrefs;
 	function get_prefs() {
 		return PlayerSettings.prefs;
+	}
+
+	// convienience function
+	// use in create!
+	function enableTransitions() {
+		transIn = FlxTransitionableState.defaultTransIn;
+		transOut = FlxTransitionableState.defaultTransOut;
 	}
 
 	override function create() {

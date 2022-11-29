@@ -2,22 +2,19 @@ package funkin.ui;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
 
-class WeekItem extends FlxSpriteGroup {
+class WeekItem extends FlxSprite {
 	public var targetY:Float = 0;
-	public var week:FlxSprite;
 	public var flashingInt:Int = 0;
 
-	public function new(x:Float, y:Float, weekNum:Int = 0) {
+	public function new(x:Float, y:Float, texture:String) {
 		super(x, y);
-		week = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image('ui/weeks/week' + weekNum)));
-		add(week);
+		loadGraphic(Assets.load(IMAGE, Paths.image('ui/weeks/$texture')));
 	}
 
-	private var isFlashing:Bool = false;
+	public var isFlashing:Bool = false;
 
 	public function startFlashing():Void {
 		isFlashing = true;
@@ -31,14 +28,14 @@ class WeekItem extends FlxSpriteGroup {
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-		y = FlxMath.lerp(y, (targetY * 120) + 480, elapsed * 60 * 0.17);
 
-		if (isFlashing)
-			flashingInt += 1;
+		y = FlxMath.lerp(y, (targetY * 120) + 480, elapsed * 60 * 0.16);
 
-		if (flashingInt % fakeFramerate >= Math.floor(fakeFramerate / 2))
-			week.color = 0xFF33ffff;
+		if(isFlashing) flashingInt += 1;
+
+		if(flashingInt % fakeFramerate >= Math.floor(fakeFramerate / 2))
+			color = 0xFF33ffff;
 		else
-			week.color = FlxColor.WHITE;
+			color = FlxColor.WHITE;
 	}
 }
