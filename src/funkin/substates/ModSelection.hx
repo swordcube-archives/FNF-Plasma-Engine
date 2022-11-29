@@ -39,9 +39,9 @@ class ModSelection extends FNFSubState {
         add(card);
 
         var paths:Array<String> = [
-            '${Sys.getCwd()}mods/',
-            '${Sys.getCwd()}../../../../mods/' 
+            '${Sys.getCwd()}mods/'
         ];
+        if(Main.developerMode) paths.push('${Sys.getCwd()}../../../../mods/');
         for(basePath in paths) {
             for(mod in FileSystem.readDirectory(basePath)) {
                 if(FileSystem.isDirectory(basePath+mod) && FileSystem.exists(Paths.json('pack', mod)) && !modNames.contains(mod)) {
