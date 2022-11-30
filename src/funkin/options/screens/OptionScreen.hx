@@ -1,5 +1,6 @@
 package funkin.options.screens;
 
+import flixel.text.FlxText;
 import funkin.scripting.Script;
 import funkin.system.MathUtil;
 import funkin.ui.UIArrow;
@@ -44,6 +45,9 @@ class OptionScreen extends FNFSubState {
     public var canInteract:Bool = true;
 
     public var script:ScriptModule;
+
+    public var descBox:FlxSprite;
+    public var descText:FlxText;
 
     override function create() {
         super.create();
@@ -167,6 +171,16 @@ class OptionScreen extends FNFSubState {
             }
         }
 
+        descBox = new FlxSprite(30, FlxG.height - 65).makeGraphic(FlxG.width - 60, 1, FlxColor.BLACK);
+        descBox.alpha = 0.8;
+        descBox.scrollFactor.set();
+        add(descBox);
+    
+        descText = new FlxText(descBox.x + 5, descBox.y + 5, descBox.width - 10, "Description goes here lim foaw\nsdfhusufdhhAWslkjfhjsdlkjsfdhjlkjlk");
+        descText.setFormat(Paths.font("funkin.ttf"), 25, FlxColor.WHITE, FlxTextAlign.CENTER);
+        descText.scrollFactor.set();
+        add(descText);
+
         camFollow = new FlxObject(0,0,1,1);
         add(camFollow);
         FlxG.camera.follow(camFollow, null, 0.16);
@@ -277,6 +291,13 @@ class OptionScreen extends FNFSubState {
                 camFollow.setPosition(0, a.y + 85);
         });
         camFollow.screenCenter(X);
+
+        descText.text = generalOptions[curSelected].description;
+        descBox.scale.y = descText.height + 10;
+        descBox.updateHitbox();
+        descBox.y = FlxG.height - (descBox.height + 15);
+        descText.y = descBox.y + 3;
+        descText.text += "\n     ";
 
         FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/scrollMenu")));
     }
