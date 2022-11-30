@@ -1,14 +1,21 @@
 package funkin.options.screens;
 
+import funkin.scripting.Script;
+import funkin.scripting.events.SubStateCreationEvent;
 import funkin.options.types.NumberOption;
 import funkin.options.types.BoolOption;
 
 class PreferencesMenu extends OptionScreen {
     override function create() {
+        script = Script.load(Paths.script('data/substates/PreferencesMenu'));
+		script.setParent(this);
+		script.run(false);
+		script.event("onSubStateCreation", new SubStateCreationEvent(this));
         categories = [
             "Game Settings",
             "Meta Settings"
         ];
+        script.call("onAddCategories");
         options = [
             "Game Settings" => [
                 new BoolOption(
@@ -77,6 +84,14 @@ class PreferencesMenu extends OptionScreen {
                 ),
             ],
         ];
+        script.call("onAddOptions");
         super.create();
+        script.event("onSubStateCreationPost", new SubStateCreationEvent(this));
+    }
+
+    override function update(elapsed:Float) {
+        for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
+        super.update(elapsed);
+        for(func in ["onUpdate", "update"]) script.call(func+"Post", [elapsed]);
     }
 }

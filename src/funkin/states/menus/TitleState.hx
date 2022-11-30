@@ -41,6 +41,7 @@ class TitleState extends FNFState {
 		super.create();
 
 		script = Script.load(Paths.script('data/states/TitleState'));
+		script.setParent(this);
 		script.run(false);
 		var event = script.event("onStateCreation", new StateCreationEvent(this));
 
@@ -48,7 +49,6 @@ class TitleState extends FNFState {
 		// YOOO IS THAT SASTICLES/?!!?!@?!@?!@?!@?
 
 		if(!event.cancelled) {
-			runDefaultCode = true;
 			freakyMenu = Assets.load(SOUND, Paths.music('menuMusic'));
 			
 			logoBl = new FlxSprite(-150, -100);
@@ -146,30 +146,34 @@ class TitleState extends FNFState {
 	var transitioning:Bool = false;
 
 	override function update(elapsed:Float) {
+		for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
+
 		super.update(elapsed);
 
-		if(!runDefaultCode) return;
+		if(runDefaultCode) {
+			if (FlxG.sound.music != null)
+				Conductor.position = FlxG.sound.music.time;
 
-		if (FlxG.sound.music != null)
-			Conductor.position = FlxG.sound.music.time;
+			var pressedEnter:Bool = FlxG.keys.justPressed.ENTER;
+			if (pressedEnter && startedIntro && !transitioning && skippedIntro) {
+				if (titleText != null && prefs.get("Flashing Lights"))
+					titleText.animation.play('press');
 
-		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER;
-		if (pressedEnter && startedIntro && !transitioning && skippedIntro) {
-			if (titleText != null && prefs.get("Flashing Lights"))
-				titleText.animation.play('press');
+				FlxG.camera.flash(FlxColor.WHITE, 1);
+				FlxG.sound.play(Assets.load(SOUND, Paths.sound('menus/confirmMenu')), 0.7);
 
-			FlxG.camera.flash(FlxColor.WHITE, 1);
-			FlxG.sound.play(Assets.load(SOUND, Paths.sound('menus/confirmMenu')), 0.7);
+				transitioning = true;
 
-			transitioning = true;
+				new FlxTimer().start(2, function(tmr:FlxTimer) {
+					FlxG.switchState(new MainMenuState());
+				});
+			}
 
-			new FlxTimer().start(2, function(tmr:FlxTimer) {
-				FlxG.switchState(new MainMenuState());
-			});
+			if (pressedEnter && startedIntro && !skippedIntro)
+				skipIntro();
 		}
 
-		if (pressedEnter && startedIntro && !skippedIntro)
-			skipIntro();
+		for(func in ["onUpdate", "update"]) script.call(func+"Post", [elapsed]);
 	}
 
 	function createCoolText(textArray:Array<String>) {

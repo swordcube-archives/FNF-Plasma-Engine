@@ -183,7 +183,7 @@ class PlayState extends FNFState {
 					var gottaHitNote:Bool = section.playerSection;
 					if (note.direction > (SONG.keyAmount - 1)) gottaHitNote = !section.playerSection;
 
-					if(prefs.get("Play As Opponent"))
+					if((prefs.get("Play As Opponent") && !PlayState.isStoryMode))
 						gottaHitNote = !gottaHitNote;
 
 					var parent:StrumLine = gottaHitNote ? UI.playerStrums : UI.opponentStrums;
@@ -299,9 +299,13 @@ class PlayState extends FNFState {
 
 		// Make the camera follow the opponent or player
 		camFollow = new FlxObject(0, 0, 1, 1);
-		add(camFollow);
 		var posCamera:Bool = SONG.sections[0] != null ? SONG.sections[0].playerSection : false;
 		moveCamera(!posCamera);
+		if (prevCamFollow != null) {
+			camFollow = prevCamFollow;
+			prevCamFollow = null;
+		}
+		add(camFollow);
 		FlxG.camera.follow(camFollow, LOCKON, 0.04);
 		moveCamera(posCamera);
 
@@ -593,9 +597,6 @@ class PlayState extends FNFState {
             if(vocals != null)
                 vocals.stop();
 
-            FlxG.sound.playMusic(cachedSounds["menuMusic"]);
-            FlxG.sound.music.time = 0;
-
             for(note in UI.opponentStrums.notes.members) {
 				note.kill();
                 UI.opponentStrums.notes.remove(note, true);
@@ -614,17 +615,24 @@ class PlayState extends FNFState {
                 storyScore += score;
 
                 if(storyPlaylist.length > 0) {
+					disableTransitions();
+					prevCamFollow = camFollow;
                     SONG = ChartParser.loadSong(storyPlaylist[0].chartType, storyPlaylist[0].name, curDifficulty);
                     FlxG.switchState(new PlayState());
                 } else {
                     if(storyScore > Highscore.getScore(weekName, curDifficulty))
                         Highscore.saveScore(weekName, storyScore, curDifficulty);
                     
-                    FlxG.switchState(new funkin.states.menus.StoryMenuState()); //REPLACE WITH STORY MENU!!!
+					enableTransitions();
+					FlxG.sound.playMusic(cachedSounds["menuMusic"]);
+					FlxG.sound.music.time = 0;
+                    FlxG.switchState(new funkin.states.menus.StoryMenuState());
                 }
-            }
-            else
+            } else {
+				FlxG.sound.playMusic(cachedSounds["menuMusic"]);
+				FlxG.sound.music.time = 0;
                 FlxG.switchState(new funkin.states.menus.FreeplayState());
+			}
         }
 
         scripts.call("onEndSongPost", [SONG.name]);

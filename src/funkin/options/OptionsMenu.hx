@@ -1,5 +1,9 @@
 package funkin.options;
 
+import funkin.scripting.HScriptModule;
+import funkin.options.screens.CustomScreen;
+import funkin.scripting.events.StateCreationEvent;
+import funkin.scripting.Script;
 import funkin.options.screens.ControlsMenu;
 import funkin.options.screens.AppearanceMenu;
 import funkin.options.screens.PreferencesMenu;
@@ -15,10 +19,23 @@ class OptionsMenu extends FNFState {
 
 	public var bg:FlxSprite;
 
+	public var script:ScriptModule;
+
 	override function create() {
         super.create();
 
 		allowSwitchingMods = false;
+
+		script = Script.load(Paths.script('data/states/OptionsMenu'));
+		script.setParent(this);
+        switch(script.scriptType) {
+            case HScript:
+                var casted:HScriptModule = cast script;
+                casted.addClass(CustomScreen);
+            default: // add more here yourself
+        }
+		script.run(false);
+		script.event("onStateCreation", new StateCreationEvent(this));
         
 		bg = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image('menus/menuBGDesat')));
 		bg.color = 0xFFea71fd;
@@ -32,6 +49,8 @@ class OptionsMenu extends FNFState {
 		add(categories);
 
 		// Adding categories
+		script.event("onAddCategories", new StateCreationEvent(this));
+
 		categories.addCategory("Preferences", function() {
 			openSubState(new PreferencesMenu());
 		});
@@ -41,6 +60,9 @@ class OptionsMenu extends FNFState {
 		categories.addCategory("Controls", function() {
 			openSubState(new ControlsMenu());
 		});
+
+		script.event("onAddCategoriesPost", new StateCreationEvent(this));
+		
 		categories.addCategory("Exit", function() {
 			FlxG.switchState(new MainMenuState());
 		});
@@ -50,6 +72,8 @@ class OptionsMenu extends FNFState {
 			text.y -= 90 * (categories.length / 2);
 		});
 		categories.changeSelection();
+
+		script.event("onStateCreationPost", new StateCreationEvent(this));
 	}
 
 	override function update(elapsed:Float) {

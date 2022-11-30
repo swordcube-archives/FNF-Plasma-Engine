@@ -42,7 +42,7 @@ class UILayer extends FlxGroup {
 		playerStrums.screenCenter(X);
 		playerStrums.x += strumSpacing;
 
-		if(prefs.get("Play As Opponent")) {
+		if((prefs.get("Play As Opponent") && !PlayState.isStoryMode)) {
 			if(prefs.get("Centered Notes")) {
 				opponentStrums.x -= 9999;
 				playerStrums.screenCenter(X);
@@ -73,7 +73,7 @@ class UILayer extends FlxGroup {
 
 		var game = PlayState.current;
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8),
-			PlayState.current, prefs.get("Play As Opponent") ? 'opponentHealth' : 'health', game.minHealth, game.maxHealth);
+			PlayState.current, (prefs.get("Play As Opponent") && !PlayState.isStoryMode) ? 'opponentHealth' : 'health', game.minHealth, game.maxHealth);
 		healthBar.createFilledBar(
 			game.dad != null ? game.dad.healthBarColor : 0xFFFF0000, 
 			game.bf != null ? game.bf.healthBarColor : 0xFF66FF33

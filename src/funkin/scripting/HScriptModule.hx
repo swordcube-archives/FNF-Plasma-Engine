@@ -156,21 +156,21 @@ class HScriptModule extends ScriptModule {
         parser = null;
     }
 
-    function addClass(c:Class<Dynamic>) {
+    public function addClass(c:Class<Dynamic>) {
         var array = Type.getClassName(c).split(".");
         set(array[array.length-1], c);
     }
 
-    function addClasses(a:Array<Class<Dynamic>>) {
+    public function addClasses(a:Array<Class<Dynamic>>) {
         for(c in a) addClass(c);
     }
 
-    function addClassAsNull(c:Class<Dynamic>) {
+    public function addClassAsNull(c:Class<Dynamic>) {
         var array = Type.getClassName(c).split(".");
         set(array[array.length-1], null);
     }
 
-    function addClassesAsNull(a:Array<Class<Dynamic>>) {
+    public function addClassesAsNull(a:Array<Class<Dynamic>>) {
         for(c in a) addClassAsNull(c);
     }
 }

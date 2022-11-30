@@ -127,6 +127,29 @@ class PlayerPrefs {
                 }
             }
         }
+        // Load from defaultSaveData json file
+        var items:Array<PrefData> = [];
+        try {
+            if(FileSystem.exists(Paths.json("data/defaultSaveData"))) {
+                var json:Dynamic = Json.parse(Assets.load(TEXT, Paths.json("data/defaultSaveData")));
+                items = json.items;
+            }
+        } catch(e) {
+            Console.error(e.details());
+        }
+
+        for(pref in items) {
+            var stupidAss:String = '${Paths.currentMod}:${pref.name}';
+            var saveDataSettingName:String = 'player${playerID}_SETTING_$stupidAss';
+            var saveData:Dynamic = Reflect.getProperty(FlxG.save.data, saveDataSettingName);
+            if(saveData != null) list[stupidAss] = saveData;
+            else {
+                flush = true;
+                list[stupidAss] = pref.value;
+                Reflect.setProperty(FlxG.save.data, saveDataSettingName, pref.value);
+            }
+        }
+
         if(flush) FlxG.save.flush();
     }
 

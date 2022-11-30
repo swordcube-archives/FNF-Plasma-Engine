@@ -54,8 +54,9 @@ class FreeplayState extends FNFState {
 		script = Script.load(Paths.script('data/states/FreeplayState'));
 		if (FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing)) {
 			FlxG.sound.playMusic(Assets.load(SOUND, Paths.music('menuMusic')));
+			Conductor.bpm = 102;
 		}
-		Conductor.bpm = 102;
+		script.setParent(this);
 		script.run(false);
 		var event = script.event("onStateCreation", new StateCreationEvent(this));
 
@@ -139,51 +140,56 @@ class FreeplayState extends FNFState {
 	}
 
 	override function update(elapsed:Float) {
+		for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
+
 		super.update(elapsed);
 
-		if(!runDefaultCode) return;
-		Conductor.position = FlxG.sound.music.time;
+		if(runDefaultCode) {
+			Conductor.position = FlxG.sound.music.time;
 
-		if (FlxG.sound.music.volume < 0.7) FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
-		lerpScore = CoolUtil.fixedLerp(lerpScore, intendedScore, 0.4);
+			if (FlxG.sound.music.volume < 0.7) FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
+			lerpScore = CoolUtil.fixedLerp(lerpScore, intendedScore, 0.4);
 
-		if (curSongPlaying > -1) {
-			var lerp = FlxMath.lerp(1.15, 1, FlxEase.cubeOut(Conductor.curBeatFloat % 1));
-			iconArray[curSongPlaying].scale.set(lerp, lerp);
+			if (curSongPlaying > -1) {
+				var lerp = FlxMath.lerp(1.15, 1, FlxEase.cubeOut(Conductor.curBeatFloat % 1));
+				iconArray[curSongPlaying].scale.set(lerp, lerp);
+			}
+
+			scoreText.text = "PERSONAL BEST:" + Math.round(lerpScore);
+			positionHighscore();
+
+			if (FlxG.keys.justPressed.SHIFT)
+				openSubState(new funkin.substates.GameplayModifiers());
+
+			if (controls.getP("UI_UP")) changeSelection(-1);
+			if (controls.getP("UI_DOWN")) changeSelection(1);
+
+			if (controls.getP("UI_LEFT")) changeDiff(-1);
+			if (controls.getP("UI_RIGHT")) changeDiff(1);
+
+			if (controls.getP("BACK")) {
+				threadActive = false;
+				FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/cancelMenu")));
+				FlxG.switchState(new MainMenuState());
+			}
+
+			if (controls.getP("ACCEPT"))
+				loadSong(songs[curSelected].chartType, songs[curSelected].songName, songs[curSelected].difficulties[curDifficulty]);
+
+			mutex.acquire();
+			if (songToPlay != null) {
+				FlxG.sound.playMusic(songToPlay);
+				if (FlxG.sound.music.fadeTween != null) FlxG.sound.music.fadeTween.cancel();
+				FlxG.sound.music.volume = 0.0;
+				FlxG.sound.music.fadeIn(1.0, 0.0, 1.0);
+				FlxG.sound.music.pitch = PlayerSettings.prefs.get("Playback Rate");
+				Conductor.bpm = songs[curSelected].bpm;
+				songToPlay = null;
+			}
+			mutex.release();
 		}
 
-		scoreText.text = "PERSONAL BEST:" + Math.round(lerpScore);
-		positionHighscore();
-
-		if (FlxG.keys.justPressed.SHIFT)
-			openSubState(new funkin.substates.GameplayModifiers());
-
-		if (controls.getP("UI_UP")) changeSelection(-1);
-		if (controls.getP("UI_DOWN")) changeSelection(1);
-
-		if (controls.getP("UI_LEFT")) changeDiff(-1);
-		if (controls.getP("UI_RIGHT")) changeDiff(1);
-
-		if (controls.getP("BACK")) {
-			threadActive = false;
-			FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/cancelMenu")));
-			FlxG.switchState(new MainMenuState());
-		}
-
-		if (controls.getP("ACCEPT"))
-			loadSong(songs[curSelected].chartType, songs[curSelected].songName, songs[curSelected].difficulties[curDifficulty]);
-
-		mutex.acquire();
-		if (songToPlay != null) {
-			FlxG.sound.playMusic(songToPlay);
-			if (FlxG.sound.music.fadeTween != null) FlxG.sound.music.fadeTween.cancel();
-			FlxG.sound.music.volume = 0.0;
-			FlxG.sound.music.fadeIn(1.0, 0.0, 1.0);
-			FlxG.sound.music.pitch = PlayerSettings.prefs.get("Playback Rate");
-			Conductor.bpm = songs[curSelected].bpm;
-			songToPlay = null;
-		}
-		mutex.release();
+		for(func in ["onUpdate", "update"]) script.call(func+"Post", [elapsed]);
 	}
 
 	function positionHighscore() {

@@ -52,6 +52,7 @@ class MainMenuState extends FNFState {
 			FlxG.sound.playMusic(Assets.load(SOUND, Paths.music('menuMusic')));
 			Conductor.bpm = 102;
 		}
+		script.setParent(this);
 		script.run(false);
 		var event = script.event("onStateCreation", new StateCreationEvent(this));
 
@@ -131,10 +132,14 @@ class MainMenuState extends FNFState {
 	}
 
 	override function update(elapsed:Float) {
+		for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
+
 		super.update(elapsed);
 
-		if(controls.getP("BACK"))
+		if(controls.getP("BACK") && runDefaultCode)
 			FlxG.switchState(new TitleState());
+
+		for(func in ["onUpdate", "update"]) script.call(func+"Post", [elapsed]);
 	}
 
 	function beatHit(beat:Int) {

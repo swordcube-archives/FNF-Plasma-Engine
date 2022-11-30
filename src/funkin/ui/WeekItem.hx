@@ -11,7 +11,7 @@ class WeekItem extends FlxSprite {
 
 	public function new(x:Float, y:Float, texture:String) {
 		super(x, y);
-		loadGraphic(Assets.load(IMAGE, Paths.image('ui/weeks/$texture')));
+		loadGraphic(Assets.load(IMAGE, Paths.image('menus/story/weeks/$texture')));
 	}
 
 	public var isFlashing:Bool = false;

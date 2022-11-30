@@ -113,7 +113,7 @@ class NoteInput implements IFlxDestroyable {
         receptor.playAnim("confirm");
 		PlayState.current.vocals.volume = 1;
 		if(note.doSingAnim) {
-			var chars:Array<Character> = PlayerSettings.prefs.get("Play As Opponent") ? PlayState.current.dads : PlayState.current.bfs;
+			var chars:Array<Character> = (PlayerSettings.prefs.get("Play As Opponent") && !PlayState.isStoryMode) ? PlayState.current.dads : PlayState.current.bfs;
 			for(c in chars) {
 				if(c != null && !c.specialAnim) {
 					c.holdTimer = 0;

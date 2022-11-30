@@ -1,5 +1,6 @@
 package funkin.options.screens;
 
+import funkin.scripting.Script;
 import funkin.system.MathUtil;
 import funkin.ui.UIArrow;
 import flixel.effects.FlxFlicker;
@@ -41,6 +42,8 @@ class OptionScreen extends FNFSubState {
 
     public var bindSelected:Int = 0;
     public var canInteract:Bool = true;
+
+    public var script:ScriptModule;
 
     override function create() {
         super.create();
