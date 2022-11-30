@@ -85,8 +85,8 @@ class Note extends FNFSprite {
 		5  => {
             directions: ["left", "down", "middle", "up", "right"],
             colors: [[194, 75, 153], [0, 255, 255], [204, 204, 204], [18, 250, 5], [249, 57, 63]],
-            scale: 1,
-            spacing: 1
+            scale: 0.9,
+            spacing: 0.95
         },
 		6  => {
             directions: ["left", "down", "right", "left", "up", "right"],
@@ -94,7 +94,26 @@ class Note extends FNFSprite {
             scale: 0.8,
             spacing: 0.85
         },
+		7  => {
+            directions: ["left", "down", "right", "middle", "left", "up", "right"],
+            colors: [[194, 75, 153], [18, 250, 5], [249, 57, 63], [204, 204, 204], [255, 253, 16], [0, 255, 255], [5, 44, 246]],
+            scale: 0.8,
+            spacing: 0.85
+        },
+		8  => {
+            directions: ["left", "down", "up", "right", "left", "down", "up", "right"],
+            colors: [[194, 75, 153], [0, 255, 255], [18, 250, 5], [249, 57, 63], [255, 253, 16], [133, 56, 248], [233, 0, 3], [5, 44, 246]],
+            scale: 0.7,
+            spacing: 0.85
+        },
+		9  => {
+            directions: ["left", "down", "up", "right", "middle", "left", "down", "up", "right"],
+            colors: [[194, 75, 153], [0, 255, 255], [18, 250, 5], [249, 57, 63], [204, 204, 204], [255, 253, 16], [133, 56, 248], [233, 0, 3], [5, 44, 246]],
+            scale: 0.7,
+            spacing: 0.85
+        },
     ];
+	public static final default_keyInfo:Map<Int, NoteInfo> = keyInfo.copy();
 
 	public static var splashSkinJSONs:Map<String, NoteSplashSkin> = [];
 	public static var skinJSONs:Map<String, NoteSkin> = [];
@@ -178,13 +197,13 @@ class Note extends FNFSprite {
 		// Crash prevention?!?! Psych take notes
 		if(skinJSON == null) skinJSON = skinJSONs["Default"];
 
-		noteScale = skinJSON.noteScale;
+		noteScale = skinJSON.noteScale * Note.keyInfo[keyAmount].scale;
 		this.load(SPARROW, Paths.image(skinJSON.noteTextures));
 		animation.addByPrefix("normal", directionName+"0", skinJSON.noteFrameRate);
 		animation.addByPrefix("hold", directionName+" hold0", skinJSON.noteFrameRate);
 		animation.addByPrefix("tail", directionName+" tail0", skinJSON.noteFrameRate);
 		ogHeight = height;
-		scale.set(skinJSON.noteScale, skinJSON.noteScale);
+		scale.set(noteScale, noteScale);
 		updateHitbox();
 		playCorrectAnim();
 

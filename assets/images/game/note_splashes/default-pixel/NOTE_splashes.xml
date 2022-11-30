@@ -34,22 +34,22 @@
 	<SubTexture name="down splash 20005" x="431" y="852" width="411" height="411"/>
 	<SubTexture name="down splash 20006" x="431" y="1273" width="411" height="411"/>
 	<SubTexture name="down splash 20007" x="431" y="1273" width="411" height="411"/>
-	<SubTexture name="space splash 10000" x="10" y="10" width="411" height="411"/>
-	<SubTexture name="space splash 10001" x="10" y="10" width="411" height="411"/>
-	<SubTexture name="space splash 10002" x="10" y="431" width="411" height="411"/>
-	<SubTexture name="space splash 10003" x="10" y="431" width="411" height="411"/>
-	<SubTexture name="space splash 10004" x="10" y="852" width="411" height="411"/>
-	<SubTexture name="space splash 10005" x="10" y="852" width="411" height="411"/>
-	<SubTexture name="space splash 10006" x="10" y="1273" width="411" height="411"/>
-	<SubTexture name="space splash 10007" x="10" y="1273" width="411" height="411"/>
-	<SubTexture name="space splash 20000" x="431" y="10" width="411" height="411"/>
-	<SubTexture name="space splash 20001" x="431" y="10" width="411" height="411"/>
-	<SubTexture name="space splash 20002" x="431" y="431" width="411" height="411"/>
-	<SubTexture name="space splash 20003" x="431" y="431" width="411" height="411"/>
-	<SubTexture name="space splash 20004" x="431" y="852" width="411" height="411"/>
-	<SubTexture name="space splash 20005" x="431" y="852" width="411" height="411"/>
-	<SubTexture name="space splash 20006" x="431" y="1273" width="411" height="411"/>
-	<SubTexture name="space splash 20007" x="431" y="1273" width="411" height="411"/>
+	<SubTexture name="middle splash 10000" x="10" y="10" width="411" height="411"/>
+	<SubTexture name="middle splash 10001" x="10" y="10" width="411" height="411"/>
+	<SubTexture name="middle splash 10002" x="10" y="431" width="411" height="411"/>
+	<SubTexture name="middle splash 10003" x="10" y="431" width="411" height="411"/>
+	<SubTexture name="middle splash 10004" x="10" y="852" width="411" height="411"/>
+	<SubTexture name="middle splash 10005" x="10" y="852" width="411" height="411"/>
+	<SubTexture name="middle splash 10006" x="10" y="1273" width="411" height="411"/>
+	<SubTexture name="middle splash 10007" x="10" y="1273" width="411" height="411"/>
+	<SubTexture name="middle splash 20000" x="431" y="10" width="411" height="411"/>
+	<SubTexture name="middle splash 20001" x="431" y="10" width="411" height="411"/>
+	<SubTexture name="middle splash 20002" x="431" y="431" width="411" height="411"/>
+	<SubTexture name="middle splash 20003" x="431" y="431" width="411" height="411"/>
+	<SubTexture name="middle splash 20004" x="431" y="852" width="411" height="411"/>
+	<SubTexture name="middle splash 20005" x="431" y="852" width="411" height="411"/>
+	<SubTexture name="middle splash 20006" x="431" y="1273" width="411" height="411"/>
+	<SubTexture name="middle splash 20007" x="431" y="1273" width="411" height="411"/>
 	<SubTexture name="up splash 10000" x="10" y="10" width="411" height="411"/>
 	<SubTexture name="up splash 10001" x="10" y="10" width="411" height="411"/>
 	<SubTexture name="up splash 10002" x="10" y="431" width="411" height="411"/>

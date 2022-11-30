@@ -54,7 +54,7 @@ class StrumLine extends FlxSpriteGroup {
 
         // Generates the new receptors
         for(i in 0...keyAmount) {
-            var receptor = new Receptor((Note.spacing * i) * Note.keyInfo[keyAmount].spacing, -10, keyAmount, i, skin);
+            var receptor = new Receptor(((Note.spacing * Note.keyInfo[keyAmount].scale) * i) * Note.keyInfo[keyAmount].spacing, -10, keyAmount, i, skin);
             receptor.alpha = 0;
             FlxTween.tween(receptor, {y: y + 10, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * i)});
             receptors.add(receptor);
@@ -119,8 +119,8 @@ class StrumLine extends FlxSpriteGroup {
                     if(note.skinJSON.isPixel)
                         note.y += 8 + (6 - note.ogHeight) * 6;
                 }
-                note.y += (Note.spacing / 2) - (60.5 * (adjustedSpeed - 1));
-                note.y += 27.5 * ((PlayState.SONG.bpm / 100) - 1) * (adjustedSpeed - 1);
+                note.y += ((Note.spacing) / 2) - (60.5 * (adjustedSpeed - 1));
+                note.y += 27.5 * ((PlayState.SONG.bpm / 100) - 1) * (adjustedSpeed - 1) * Note.keyInfo[keyAmount].scale;
             }
 
             // Clip rect bull shit
@@ -299,12 +299,12 @@ class Receptor extends FNFSprite {
                 // Crash prevention?!?! Psych take notes
                 if(skinJSON == null) skinJSON = Note.skinJSONs["Default"];
 
-                noteScale = skinJSON.strumScale;
+                noteScale = skinJSON.strumScale * Note.keyInfo[keyAmount].scale;
                 this.load(SPARROW, Paths.image(skinJSON.strumTextures));
                 animation.addByPrefix("static", directionName+" static0", skinJSON.staticFrameRate);
                 animation.addByPrefix("press", directionName+" press0", skinJSON.pressedFrameRate, false);
                 animation.addByPrefix("confirm", directionName+" confirm0", skinJSON.confirmFrameRate, false);
-                scale.set(skinJSON.strumScale, skinJSON.strumScale);
+                scale.set(noteScale, noteScale);
                 updateHitbox();
                 playAnim("static");
 

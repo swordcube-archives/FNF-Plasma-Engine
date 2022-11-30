@@ -21,7 +21,7 @@ class ChartParser {
                     var chart:Dynamic = Json.parse(Assets.load(TEXT, Paths.json('songs/${name.toLowerCase()}/$diff'))).song;
                     if(chart.sections != null && chart.scrollSpeed != null) {
                         // Guessed "BASE"!
-                        return cast chart;
+                        return loadSong(BASE, name, diff);
                     }
                     var assNuts:Array<Dynamic> = chart.notes;
                     if(assNuts != null) {

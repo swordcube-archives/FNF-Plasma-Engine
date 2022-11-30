@@ -43,13 +43,15 @@ class ModSelection extends FNFSubState {
         ];
         if(Main.developerMode) paths.push('${Sys.getCwd()}../../../../mods/');
         for(basePath in paths) {
-            for(mod in FileSystem.readDirectory(basePath)) {
-                if(FileSystem.isDirectory(basePath+mod) && FileSystem.exists(Paths.json('pack', mod)) && !modNames.contains(mod)) {
-                    var data:PackData = Json.parse(Assets.load(TEXT, Paths.json('pack', mod)));
-                    modNames.push(mod);
-                    availableMods[mod] = data;
+            if(FileSystem.exists(basePath)) {
+                for(mod in FileSystem.readDirectory(basePath)) {
+                    if(FileSystem.exists(Paths.json('pack', mod)) && FileSystem.isDirectory(basePath+mod) && !modNames.contains(mod)) {
+                        var data:PackData = Json.parse(Assets.load(TEXT, Paths.json('pack', mod)));
+                        modNames.push(mod);
+                        availableMods[mod] = data;
+                    }
                 }
-            }
+            } else continue;
         }
         modNames.insert(0, Paths.fallbackMod);
         availableMods[Paths.fallbackMod] = Json.parse(Assets.load(TEXT, Paths.json('pack', Paths.fallbackMod)));

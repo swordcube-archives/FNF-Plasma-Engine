@@ -25,6 +25,9 @@ class PlayerControls {
         "GAME_4"    => [D, F, J, K],
         "GAME_5"    => [D, F, SPACE, J, K],
         "GAME_6"    => [S, D, F, J, K, L],
+        "GAME_7"    => [S, D, F, SPACE, J, K, L],
+        "GAME_8"    => [A, S, D, F, H, J, K, L],
+        "GAME_9"    => [A, S, D, F, SPACE, H, J, K, L],
     ];
     public var list:Map<String, Array<Null<FlxKey>>> = [];
     
