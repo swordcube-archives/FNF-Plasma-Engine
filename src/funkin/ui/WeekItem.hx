@@ -5,6 +5,7 @@ import flixel.FlxSprite;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
 
+@:dox(hide)
 class WeekItem extends FlxSprite {
 	public var targetY:Float = 0;
 	public var flashingInt:Int = 0;

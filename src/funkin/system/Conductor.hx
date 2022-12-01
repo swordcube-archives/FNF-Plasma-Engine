@@ -3,6 +3,7 @@ package funkin.system;
 import flixel.system.FlxSound;
 import flixel.util.FlxSignal.FlxTypedSignal;
 
+@:dox(hide)
 typedef BPMChangeEvent = {
 	var stepTime:Int;
 	var songTime:Float;

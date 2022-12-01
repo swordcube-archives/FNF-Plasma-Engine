@@ -6,6 +6,7 @@ import openfl.text.TextFormat;
 import openfl.text.TextField;
 import openfl.display.Sprite;
 
+@:dox(hide)
 class LogsOverlay extends Sprite {
     var titleText:TextField;
     var info:TextField;

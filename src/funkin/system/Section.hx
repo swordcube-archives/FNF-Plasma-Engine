@@ -18,6 +18,7 @@ typedef Section = {
 }
 
 // Base Game
+@:dox(hide)
 typedef LegacySection = {
 	var sectionNotes:Array<Dynamic>;
 	var lengthInSteps:Int;
@@ -28,6 +29,7 @@ typedef LegacySection = {
 }
 
 // Psych
+@:dox(hide)
 typedef PsychSection = {
 	var sectionNotes:Array<Dynamic>;
 	var sectionBeats:Float;

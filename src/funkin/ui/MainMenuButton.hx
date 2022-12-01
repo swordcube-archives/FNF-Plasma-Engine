@@ -3,6 +3,7 @@ package funkin.ui;
 import flixel.util.FlxSignal.FlxTypedSignal;
 import funkin.system.FNFSprite;
 
+@:dox(hide)
 class MainMenuButton extends FNFSprite {
     public var name:String = "";
 

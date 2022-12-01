@@ -65,6 +65,7 @@ class AudioSwitchFix {
     }
 }
 
+@:dox(hide)
 typedef PlayingSound = {
 	var sound:FlxSound;
 	var time:Float;

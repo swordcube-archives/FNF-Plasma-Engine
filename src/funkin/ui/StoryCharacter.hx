@@ -6,6 +6,7 @@ import funkin.system.FNFSprite;
 
 using StringTools;
 
+@:dox(hide)
 class StoryCharacter extends FNFSprite {
 	public var character:String;
 

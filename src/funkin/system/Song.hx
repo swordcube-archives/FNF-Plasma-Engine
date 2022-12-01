@@ -29,6 +29,7 @@ typedef Song = {
 }
 
 // Base Game
+@:dox(hide)
 typedef LegacySong = {
 	var song:String;
 	var notes:Array<LegacySection>;
@@ -49,6 +50,7 @@ typedef LegacySong = {
 }
 
 // Psych
+@:dox(hide)
 typedef PsychSong = {
 	var song:String;
 	var notes:Array<PsychSection>;
@@ -67,6 +69,7 @@ typedef PsychSong = {
 	var validScore:Bool;
 }
 
+@:dox(hide)
 typedef PsychEvent = {
 	var strumTime:Float;
 	var event:String;

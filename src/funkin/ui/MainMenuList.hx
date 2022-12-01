@@ -5,6 +5,7 @@ import flixel.util.FlxSignal.FlxTypedSignal;
 import flixel.math.FlxMath;
 import flixel.group.FlxGroup.FlxTypedGroup;
 
+@:dox(hide)
 class MainMenuList extends FlxTypedGroup<MainMenuButton> {
     public var enabled:Bool = true;
     public var curSelected:Int = 0;
