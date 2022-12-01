@@ -3,6 +3,8 @@ function onNoteCreation(event) {
     event.note.altAnim = true;
 
     // Destroy the script because it's not needed to be constantly updating
-    if(PlayState != null)
+    if(PlayState != null) {
         PlayState.scripts.removeScript(event.note.script);
+        event.note.script.destroy();
+    }
 }

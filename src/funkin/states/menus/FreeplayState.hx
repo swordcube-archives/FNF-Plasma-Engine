@@ -20,6 +20,8 @@ import flixel.util.FlxColor;
 using StringTools;
 
 class FreeplayState extends FNFState {
+	public static var current:FreeplayState;
+
 	public var songs:Array<SongMetadata> = [];
 
 	public var curSelected:Int = 0;
@@ -48,8 +50,14 @@ class FreeplayState extends FNFState {
 	public var scoreBG:FlxSprite;
 	public var bg:FlxSprite;
 
+	public function new() {
+		super();
+		current = this;
+	}
+
 	override function create() {
 		super.create();
+		current = this;
 
 		script = Script.load(Paths.script('data/states/FreeplayState'));
 		if (FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing)) {
@@ -219,7 +227,11 @@ class FreeplayState extends FNFState {
 
 	function changeDiff(change:Int = 0) {
 		curDifficulty = FlxMath.wrap(curDifficulty + change, 0, songs[curSelected].difficulties.length-1);
-		intendedScore = Highscore.getScore(songs[curSelected].songName, songs[curSelected].difficulties[curDifficulty]);
+
+		var highscoreSong:String = songs[curSelected].songName;
+		if(prefs.get("Play As Opponent")) highscoreSong += "-OPPONENT";
+
+		intendedScore = Highscore.getScore(highscoreSong, songs[curSelected].difficulties[curDifficulty]);
 
 		var arrowThings:Array<String> = songs[curSelected].difficulties.length > 1 ? ["< ", " >"] : ["", ""];
 		diffText.text = arrowThings[0]+songs[curSelected].difficulties[curDifficulty].toUpperCase()+arrowThings[1];
@@ -239,8 +251,6 @@ class FreeplayState extends FNFState {
 		grpSongs.members[curSelected].alpha = 0.6;
 		curSelected = FlxMath.wrap(curSelected + change, 0, songs.length-1);
 		grpSongs.members[curSelected].alpha = 1;
-
-		intendedScore = Highscore.getScore(songs[curSelected].songName, songs[curSelected].difficulties[curDifficulty]);
 
 		var i:Int = 0;
 		for (item in grpSongs.members) {
@@ -277,6 +287,14 @@ class FreeplayState extends FNFState {
 			});
 		}
 		songThread.sendMessage(curSelected);
+	}
+
+	override public function destroy() {
+		current = null;
+		script.call("onDestroy");
+		script.call("destroy");
+		script.destroy();
+		super.destroy();
 	}
 }
 

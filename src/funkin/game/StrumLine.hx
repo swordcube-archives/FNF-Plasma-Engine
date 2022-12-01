@@ -111,16 +111,18 @@ class StrumLine extends FlxSpriteGroup {
             // sustain positioning copy pasted from psych
             // why psych? well before i copied from kade and that worked
             // but sometimes it still broke, but psych has it perfect so uhhhhhh fhwkje
+            // just realized this looks a bit weird on EK
+            // i need help with that
             if(PlayerSettings.prefs.get("Downscroll") && noteSpeed == Math.abs(noteSpeed) && note.isSustainNote) {
                 var adjustedSpeed:Float = noteSpeed / FlxG.sound.music.pitch;
                 if (note.isSustainTail) {
                     note.y += 10.5 * (fakeCrochet / 400) * 1.5 * adjustedSpeed + (46 * (adjustedSpeed - 1));
-                    note.y -= 46 * (1 - (fakeCrochet / 600)) * adjustedSpeed;
+                    note.y -= (46 * (1 - (fakeCrochet / 600)) * adjustedSpeed) * Note.keyInfo[keyAmount].scale;
                     if(note.skinJSON.isPixel)
                         note.y += 8 + (6 - note.ogHeight) * 6;
                 }
                 note.y += ((Note.spacing) / 2) - (60.5 * (adjustedSpeed - 1));
-                note.y += 27.5 * ((PlayState.SONG.bpm / 100) - 1) * (adjustedSpeed - 1) * Note.keyInfo[keyAmount].scale;
+                note.y += 27.5 * ((PlayState.SONG.bpm / 100) - 1) * (adjustedSpeed - 1);
             }
 
             // Clip rect bull shit

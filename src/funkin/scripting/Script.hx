@@ -1,8 +1,8 @@
 package funkin.scripting;
 
+import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 import funkin.scripting.events.CancellableEvent;
 import haxe.io.Path;
-import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 
 /**
  * The type a script can have. EmptyScript is used for scripts that couldn't load.
@@ -70,7 +70,7 @@ class ScriptModule implements IFlxDestroyable {
         return event;
     }
 
-	public function destroy() {}
+    public function destroy() {}
 }
 
 
@@ -93,7 +93,6 @@ class ScriptGroup {
 
     public function removeScript(script:ScriptModule) {
         scripts.remove(script);
-        script.destroy();
     }
 
     public function call(name:String, ?args:Array<Dynamic>, ?defaultReturnVal:Any) {

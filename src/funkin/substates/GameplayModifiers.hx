@@ -1,5 +1,6 @@
 package funkin.substates;
 
+import funkin.states.menus.FreeplayState;
 import funkin.options.types.NumberOption;
 import funkin.options.types.BoolOption;
 import funkin.options.types.ListOption;
@@ -48,7 +49,13 @@ class GameplayModifiers extends OptionScreen {
                 new BoolOption(
                     "Play As Opponent",
                     "Choose whether or not you want to kick boyfriend's ass instead of the opposite.",
-                    null
+                    null,
+                    function(value:Bool) {
+                        if(FlxG.state == FreeplayState.current) {
+                            @:privateAccess
+                            FreeplayState.current.changeDiff();
+                        }
+                    }
                 )
             ]
         ];

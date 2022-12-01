@@ -168,4 +168,11 @@ class MainMenuState extends FNFState {
 			FlxG.switchState(nextState);
 		});
 	}
+
+	override public function destroy() {
+		script.call("onDestroy");
+		script.call("destroy");
+		script.destroy();
+		super.destroy();
+	}
 }

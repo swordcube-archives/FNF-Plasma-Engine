@@ -175,6 +175,7 @@ class PauseSubState extends FNFSubState {
 							FlxG.sound.music.play();
 							game.vocals.play();
 						}
+						game.resyncSong();
 						close();
 
 					case "Restart Song":

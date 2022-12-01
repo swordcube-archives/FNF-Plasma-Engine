@@ -589,8 +589,11 @@ class PlayState extends FNFState {
 		if(PlayerSettings.prefs.get("Botplay"))
 			score = 0;
         
-        if(score > Highscore.getScore(SONG.name, curDifficulty))
-            Highscore.saveScore(SONG.name, score, curDifficulty);
+		var highscoreSong:String = SONG.name;
+		if(prefs.get("Play As Opponent") && !isStoryMode) highscoreSong += "-OPPONENT";
+		
+        if(score > Highscore.getScore(highscoreSong, curDifficulty))
+            Highscore.saveScore(highscoreSong, score, curDifficulty);
 
 		var ret:Dynamic = scripts.call("onEndSong", [SONG.name], true);
         if(ret != false) {

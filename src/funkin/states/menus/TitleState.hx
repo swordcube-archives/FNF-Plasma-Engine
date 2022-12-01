@@ -259,6 +259,13 @@ class TitleState extends FNFState {
 		}
 	}
 
+	override public function destroy() {
+		script.call("onDestroy");
+		script.call("destroy");
+		script.destroy();
+		super.destroy();
+	}
+
 	var skippedIntro:Bool = false;
 
 	function skipIntro():Void {

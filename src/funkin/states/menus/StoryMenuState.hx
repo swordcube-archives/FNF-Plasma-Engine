@@ -314,4 +314,11 @@ class StoryMenuState extends FNFState {
 
 		return returnList;
 	}
+
+	override public function destroy() {
+		script.call("onDestroy");
+		script.call("destroy");
+		script.destroy();
+		super.destroy();
+	}
 }
