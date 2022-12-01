@@ -2,6 +2,9 @@ package base;
 
 import flixel.FlxG;
 
+/**
+ * A class to get file paths.
+ */
 class Paths {
 	public static var currentMod:String = "Friday Night Funkin'";
 	public static var fallbackMod:String = currentMod;

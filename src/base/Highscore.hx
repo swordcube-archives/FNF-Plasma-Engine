@@ -2,6 +2,9 @@ package base;
 
 import flixel.FlxG;
 
+/**
+ * A class to get high scores.
+ */
 class Highscore {
 	public static var songScores:Map<String, Int> = [];
 

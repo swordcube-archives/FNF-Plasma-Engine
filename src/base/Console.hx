@@ -2,6 +2,9 @@ package base;
 
 import funkin.ui.LogsOverlay;
 
+/**
+ * A class for printing stuff to the console in a more readable way.
+ */
 class Console {
 	public static var colors:Map<String, String> = [
 		'black'		=> '\033[0;30m',
