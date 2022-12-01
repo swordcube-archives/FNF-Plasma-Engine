@@ -52,9 +52,10 @@ class Init extends FlxState {
 
 		FlxG.mouse.visible = false;
         FlxG.fixedTimestep = false;
+		
 		// why does flixel not automatically do this bro 💀
         if(FlxG.save.data.volume != null) FlxG.sound.volume = FlxG.save.data.volume;
-		if(FlxG.save.data.muted != null) FlxG.sound.volume = FlxG.save.data.muted;
+		if(FlxG.save.data.mute != null) FlxG.sound.volume = FlxG.save.data.mute;
 
 		#if debug
 		if(Sys.args().contains("-updatebuild")) {

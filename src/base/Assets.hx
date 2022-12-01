@@ -56,7 +56,7 @@ class Assets {
                     var json:Dynamic = Json.parse(load(TEXT, path));
                     return json;
                 } catch(e) {
-                    trace("Error occured while loading JSON: "+e);
+                    Console.error("Occured while loading JSON: "+e);
                     return errorResult;
                 }
                 return errorResult;

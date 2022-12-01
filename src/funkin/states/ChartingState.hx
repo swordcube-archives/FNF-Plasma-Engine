@@ -393,6 +393,7 @@ class ChartingState extends FNFState {
 			if(Paths.scriptExtensions.contains("."+Path.extension(item)))
 				noteTypes.push(item.split("."+Path.extension(item))[0]);
 		}
+		noteTypes.insert(0, "Default");
 
 		var noteTypeDropDown = new FlxUIDropDownMenu(noteTypeText.x, noteTypeText.y + 15, FlxUIDropDownMenu.makeStrIdLabelArray(noteTypes, true), function(type:String) {
 			currentNoteType = noteTypes[Std.parseInt(type)];
