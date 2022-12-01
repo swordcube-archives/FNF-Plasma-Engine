@@ -103,12 +103,14 @@ function update(elapsed) {
 
     switch(PlayState_.SONG.name.toLowerCase()) {
         case "stress":
-            while(global["animationNotes"][0].strumTime <= Conductor.position - 1500) {
-                if(FlxG.random.bool(16)) {
-                    var man = new ScriptedSprite(500, 200 + FlxG.random.int(50, 100), "TankmenBG", [global["animationNotes"][0].strumTime, global["animationNotes"][0].direction < 2]);
-                    tankmanRun.add(man);
+            if(global["animationNotes"] != null) {
+                while(global["animationNotes"][0].strumTime <= Conductor.position - 1500) {
+                    if(FlxG.random.bool(16)) {
+                        var man = new ScriptedSprite(500, 200 + FlxG.random.int(50, 100), "TankmenBG", [global["animationNotes"][0].strumTime, global["animationNotes"][0].direction < 2]);
+                        tankmanRun.add(man);
+                    }
+                    global["animationNotes"].shift();
                 }
-                global["animationNotes"].shift();
             }
     }
 }

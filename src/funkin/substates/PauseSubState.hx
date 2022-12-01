@@ -180,6 +180,8 @@ class PauseSubState extends FNFSubState {
 
 					case "Restart Song":
 						PlayState.paused = false;
+						FlxTransitionableState.skipNextTransIn = false;
+						FlxTransitionableState.skipNextTransOut = false;
 						FlxG.resetState();
 
 					case "Skip Time":
@@ -245,6 +247,8 @@ class PauseSubState extends FNFSubState {
 					case "Exit to menu":
 						FlxG.sound.playMusic(Assets.load(SOUND, Paths.music("menuMusic")));
 						PlayState.paused = false;
+						FlxTransitionableState.skipNextTransIn = false;
+						FlxTransitionableState.skipNextTransOut = false;
 						if(PlayState.isStoryMode)
 							FlxG.switchState(new funkin.states.menus.StoryMenuState());
 						else

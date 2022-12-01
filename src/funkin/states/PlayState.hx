@@ -1,5 +1,6 @@
 package funkin.states;
 
+import flixel.addons.transition.FlxTransitionableState;
 import funkin.states.menus.StoryMenuState.StorySong;
 import funkin.substates.GameOverSubstate;
 import funkin.game.Ranking;
@@ -139,6 +140,8 @@ class PlayState extends FNFState {
 	override function create() {
 		super.create();
 		current = this;
+
+		enableTransitions();
 
 		GameOverSubstate.reset();
 
@@ -618,7 +621,8 @@ class PlayState extends FNFState {
                 storyScore += score;
 
                 if(storyPlaylist.length > 0) {
-					disableTransitions();
+					FlxTransitionableState.skipNextTransIn = true;
+					FlxTransitionableState.skipNextTransOut = true;
 					prevCamFollow = camFollow;
                     SONG = ChartParser.loadSong(storyPlaylist[0].chartType, storyPlaylist[0].name, curDifficulty);
                     FlxG.switchState(new PlayState());
@@ -626,7 +630,8 @@ class PlayState extends FNFState {
                     if(storyScore > Highscore.getScore(weekName, curDifficulty))
                         Highscore.saveScore(weekName, storyScore, curDifficulty);
                     
-					enableTransitions();
+					FlxTransitionableState.skipNextTransIn = false;
+					FlxTransitionableState.skipNextTransOut = false;
 					FlxG.sound.playMusic(cachedSounds["menuMusic"]);
 					FlxG.sound.music.time = 0;
                     FlxG.switchState(new funkin.states.menus.StoryMenuState());

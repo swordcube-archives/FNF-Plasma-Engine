@@ -34,11 +34,6 @@ class FNFState extends FlxUIState {
 		transOut = FlxTransitionableState.defaultTransOut;
 	}
 
-	function disableTransitions() {
-		transIn = null;
-		transOut = null;
-	}
-
 	override function create() {
 		super.create();
 
