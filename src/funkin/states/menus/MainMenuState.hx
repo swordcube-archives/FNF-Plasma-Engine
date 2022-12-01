@@ -1,5 +1,6 @@
 package funkin.states.menus;
 
+import funkin.states.editors.CharacterEditor;
 import funkin.scripting.events.StateCreationEvent;
 import funkin.scripting.Script;
 import flixel.FlxState;
@@ -136,8 +137,13 @@ class MainMenuState extends FNFState {
 
 		super.update(elapsed);
 
-		if(controls.getP("BACK") && runDefaultCode)
-			FlxG.switchState(new TitleState());
+		if(runDefaultCode) {
+			if(controls.getP("BACK"))
+				FlxG.switchState(new TitleState());
+
+			if(FlxG.keys.justPressed.SEVEN)
+				FlxG.switchState(new CharacterEditor());
+		}
 
 		for(func in ["onUpdate", "update"]) script.call(func+"Post", [elapsed]);
 	}

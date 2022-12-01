@@ -1,4 +1,4 @@
-package funkin.states;
+package funkin.states.editors;
 
 import funkin.scripting.events.SimpleNoteEvent;
 import flixel.util.FlxStringUtil;

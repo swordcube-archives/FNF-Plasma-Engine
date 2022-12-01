@@ -416,7 +416,7 @@ class PlayState extends FNFState {
 			FlxG.sound.music.stop();
 			vocals.stop();
 			if(rpcTimer != null) rpcTimer.cancel();
-			FlxG.switchState(new funkin.states.ChartingState());
+			FlxG.switchState(new funkin.states.editors.ChartingState());
 		}
 
 		if(!endingSong && !paused) Conductor.position += (elapsed * 1000) * FlxG.sound.music.pitch;

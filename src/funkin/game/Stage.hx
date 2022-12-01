@@ -24,7 +24,8 @@ class Stage extends FlxGroup {
 
 	public function removePrevious() {
 		if(script != null) {
-			PlayState.current.scripts.removeScript(script);
+			if(FlxG.state == PlayState.current)
+				PlayState.current.scripts.removeScript(script);
 			script.destroy();
 		}
 		for (i in [this, dadLayer, gfLayer, bfLayer]) {
@@ -50,14 +51,17 @@ class Stage extends FlxGroup {
 		switch(name) {
 			default:
 				script = Script.load(Paths.script('data/stages/$name'));
-				script.setParent(PlayState.current);
+				if(FlxG.state == PlayState.current)
+					script.setParent(PlayState.current);
 				script.run(false);
 				// Check if the script failed to load and load fallback if so
 				// EmptyScript is the fallback type
 				if(script.scriptType == EmptyScript) {
-					PlayState.current.scripts.removeScript(script);
-					script.destroy();
-					script = null;
+					if(FlxG.state == PlayState.current) {
+						PlayState.current.scripts.removeScript(script);
+						script.destroy();
+						script = null;
+					}
 					removePrevious();
 					loadFallback();
 				} else {
@@ -79,15 +83,18 @@ class Stage extends FlxGroup {
 							}
 						}
 					});
-					PlayState.current.scripts.addScript(script);
+					if(FlxG.state == PlayState.current)
+						PlayState.current.scripts.addScript(script);
 				}
 				if(script != null) {
 					script.createCall();
 					// For if the script dies after create is ran
 					if(script.scriptType == EmptyScript) {
-						PlayState.current.scripts.removeScript(script);
-						script.destroy();
-						script = null;
+						if(FlxG.state == PlayState.current) {
+							PlayState.current.scripts.removeScript(script);
+							script.destroy();
+							script = null;
+						}
 						removePrevious();
 						loadFallback();
 					}
