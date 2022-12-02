@@ -6,7 +6,7 @@ package funkin.macros;
 // hlep
 class BuildCounterMacro {
     public static macro function getBuildNumber() {
-        #if !display
+        #if (!display && debug)
         var buildNum:Int = Std.parseInt(File.getContent('./buildNumber.txt'));
         File.saveContent('./buildNumber.txt', Std.string(buildNum+1));
         return macro $v{buildNum+1};
