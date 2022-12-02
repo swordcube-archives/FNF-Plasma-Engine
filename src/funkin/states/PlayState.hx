@@ -162,6 +162,8 @@ class PlayState extends FNFState {
 
 		// Setup song
 		Conductor.bpm = SONG.bpm;
+		Conductor.mapBPMChanges(SONG); // i deadass forgot to add this what 💀️
+
 		Conductor.position = Conductor.crochet * -5;
 
 		// Setup cameras
@@ -592,8 +594,9 @@ class PlayState extends FNFState {
 		if(PlayerSettings.prefs.get("Botplay"))
 			score = 0;
         
-		var highscoreSong:String = SONG.name;
+		var highscoreSong:String = SONG.name.toLowerCase();
 		if(prefs.get("Play As Opponent") && !isStoryMode) highscoreSong += "-OPPONENT";
+		highscoreSong += '-${Paths.currentMod}';
 		
         if(score > Highscore.getScore(highscoreSong, curDifficulty))
             Highscore.saveScore(highscoreSong, score, curDifficulty);

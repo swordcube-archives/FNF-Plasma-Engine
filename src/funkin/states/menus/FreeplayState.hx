@@ -228,8 +228,9 @@ class FreeplayState extends FNFState {
 	function changeDiff(change:Int = 0) {
 		curDifficulty = FlxMath.wrap(curDifficulty + change, 0, songs[curSelected].difficulties.length-1);
 
-		var highscoreSong:String = songs[curSelected].songName;
+		var highscoreSong:String = songs[curSelected].songName.toLowerCase();
 		if(prefs.get("Play As Opponent")) highscoreSong += "-OPPONENT";
+		highscoreSong += '-${Paths.currentMod}';
 
 		intendedScore = Highscore.getScore(highscoreSong, songs[curSelected].difficulties[curDifficulty]);
 

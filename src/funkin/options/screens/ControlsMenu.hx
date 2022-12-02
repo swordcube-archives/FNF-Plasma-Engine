@@ -68,6 +68,10 @@ class ControlsMenu extends OptionScreen {
             i--;
         }
         super.create();
+        descBox.visible = false;
+        descText.visible = false;
+        descBox.kill();
+        descText.kill();
         script.event("onSubStateCreationPost", new SubStateCreationEvent(this));
     }
 

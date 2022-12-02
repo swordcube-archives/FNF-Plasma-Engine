@@ -66,6 +66,8 @@ class Init extends FlxState {
 		#end
 
 		Application.current.onExit.add(function(exitCode) {
+			FlxG.save.data.volume = FlxG.sound.volume;
+			FlxG.save.data.mute = FlxG.sound.muted;
 			PlayerSettings.controls.flush();
 			PlayerSettings.prefs.flush();
 			#if discord_rpc
