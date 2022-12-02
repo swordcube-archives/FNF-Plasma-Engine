@@ -58,11 +58,6 @@ class Init extends FlxState {
 		if(FlxG.save.data.mute != null) FlxG.sound.volume = FlxG.save.data.mute;
 
 		#if debug
-		if(Sys.args().contains("-updatebuild")) {
-			var path:String = '${Sys.getCwd()}../../../../buildNumber.txt';
-			Main.buildNumber = Std.parseInt(File.getContent('$path'))+1;
-			File.saveContent(path, Main.buildNumber+"");
-		}
 		if(Sys.args().contains("-livereload")) Main.developerMode = true;
 		#end
 

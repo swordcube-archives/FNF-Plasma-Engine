@@ -1,5 +1,6 @@
 package;
 
+import funkin.macros.BuildCounterMacro;
 import funkin.ui.LogsOverlay;
 import flixel.FlxGame;
 import flixel.FlxState;
@@ -8,7 +9,7 @@ import openfl.display.FPS;
 import openfl.display.Sprite;
 
 class Main extends Sprite {
-	public static var buildNumber:Int = -1; // Doesn't work on release builds because fuck you!
+	public static var buildNumber:Int = #if debug BuildCounterMacro.getBuildNumber() #else -1 #end; // Doesn't work on release builds because fuck you!
 	public static var developerMode:Bool = false; // Doesn't work on release builds because fuck you!
 
 	/**
