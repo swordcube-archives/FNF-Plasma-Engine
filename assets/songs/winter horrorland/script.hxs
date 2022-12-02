@@ -1,32 +1,31 @@
 function create() {
     // we do the story mode cutscene shit if we're in story moide
-    if(PlayState.isStoryMode) {
-        inCutscene = true;
+    if(!PlayState.isStoryMode) return;
 
-        camGame.visible = false;
-        camHUD.visible = false;
+    inCutscene = true;
 
-        new FlxTimer().start(0.1, function(tmr:FlxTimer) {
-            camGame.visible = true;
-            FlxG.sound.play(FNFAssets.getSound(AssetPaths.sound('Lights_Turn_On')));
-            camFollow.y = -2050;
-            camFollow.x += 200;
-            camFollowPos.setPosition(camFollow.x, camFollow.y);
-            camZooming = false;
-            FlxG.camera.zoom = 1.5;
+    camGame.visible = false;
+    camHUD.visible = false;
 
-            new FlxTimer().start(0.8, function(tmr:FlxTimer)
-            {
-                camHUD.visible = true;
-                FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 2.5, {
-                    ease: FlxEase.quadInOut,
-                    onComplete: function(twn:FlxTween) {
-                        camZooming = true;
-                        inCutscene = false;
-                        startCountdown();
-                    }
-                });
+    new FlxTimer().start(0.1, function(tmr:FlxTimer) {
+        camGame.visible = true;
+        FlxG.sound.play(Assets.load("SOUND", Paths.sound('game/cutscenes/week5/Lights_Turn_On')));
+        camFollow.y = -2050;
+        camFollow.x += 200;
+        FlxG.camera.focusOn(camFollow.getPosition());
+        camZooming = false;
+        FlxG.camera.zoom = 1.5;
+
+        new FlxTimer().start(0.8, function(tmr:FlxTimer) {
+            camHUD.visible = true;
+            FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 2.5, {
+                ease: FlxEase.quadInOut,
+                onComplete: function(twn:FlxTween) {
+                    camZooming = true;
+                    inCutscene = false;
+                    startCountdown();
+                }
             });
         });
-    }
+    });
 }

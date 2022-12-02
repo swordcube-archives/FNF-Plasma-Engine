@@ -24,12 +24,17 @@
 	
 	<assets path='mods' rename='mods' embed='false'/>
 
+	<!-- ________________________________ Defines _______________________________ -->
+
+	<define name="VIDEOS_ALLOWED" if="desktop || android"/>
+
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel-yc29" rename="flixel" /> <!-- https://github.com/Leather128/flixel -->
 	<haxelib name="hscript-improved" /> <!-- https://github.com/YoshiCrafter29/hscript-improved -->
 	<haxelib name="tjson" />
 	<haxelib name="discord_rpc" if="desktop cpp"/> <!-- https://github.com/Aidan63/linc_discord-rpc -->
+	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/> <!-- https://github.com/polybiusproxy/hxCodec -->
 
 	<haxelib name="hxcpp-debug-server" if="debug cpp" />
 

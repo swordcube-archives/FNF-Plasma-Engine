@@ -137,6 +137,7 @@ class Stage extends FlxGroup {
 	}
 }
 
+@:dox(hide)
 class StageLayer extends FlxGroup {
 	override public function add(obj:FlxBasic) {
 		if (obj is FlxSprite && cast(obj, FlxSprite).antialiasing && !PlayerSettings.prefs.get("Antialiasing"))

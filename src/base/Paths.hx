@@ -63,6 +63,10 @@ class Paths {
 		return asset('$path.xml', mod);
 	}
 
+	public inline static function video(path:String, ?mod:Null<String>) {
+		return asset('videos/$path', mod);
+	}
+
 	public inline static function music(path:String, ?mod:Null<String>) {
 		return sound('music/$path', false, mod);
 	}

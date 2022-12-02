@@ -13,6 +13,7 @@ import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 /**
  * A class for handling note input.
  */
+@:dox(hide)
 class NoteInput implements IFlxDestroyable {
 	var closestNotes:Array<Note> = [];
 	var parent:StrumLine;

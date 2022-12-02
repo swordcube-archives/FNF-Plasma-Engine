@@ -9,6 +9,7 @@ import funkin.system.Conductor;
 /**
  * A group for rendering and updating notes in more efficent way.
  */
+@:dox(hide)
 class NoteGroup extends FlxTypedSpriteGroup<Note> {
     var __loopSprite:Note;
     var i:Int = 0;

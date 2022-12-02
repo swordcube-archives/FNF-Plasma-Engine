@@ -8,6 +8,7 @@ package external.memory;
  */
 @:buildXml('<include name="../../../../src/external/memory/build.xml" />')
 @:include("memory.h")
+@:dox(hide)
 extern class Memory
 {
     @:native("getPeakRSS")
@@ -21,6 +22,7 @@ extern class Memory
  * If you are not running on a CPP Platform, the code just will not work properly, sorry!
  * @author Leather128
  */
+@:dox(hide)
 class Memory
 {
     public static function getPeakUsage():Int { return 0; };

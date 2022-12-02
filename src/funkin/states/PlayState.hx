@@ -422,7 +422,7 @@ class PlayState extends FNFState {
 			FlxG.switchState(new funkin.states.editors.ChartingState());
 		}
 
-		if(!endingSong && !paused) Conductor.position += (elapsed * 1000) * FlxG.sound.music.pitch;
+		if(!endingSong && !paused && !inCutscene) Conductor.position += (elapsed * 1000) * FlxG.sound.music.pitch;
 		if(Conductor.position >= 0 && startingSong) startSong();
 		var bruj = cachedSounds.exists("voices") ? Conductor.isAudioSynced(vocals) : Conductor.isAudioSynced(FlxG.sound.music);
 		if(!paused && !bruj) 

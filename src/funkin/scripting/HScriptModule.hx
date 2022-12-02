@@ -66,7 +66,7 @@ class HScriptModule extends ScriptModule {
         set("FlxTextAlign", HScriptClasses.get_FlxTextAlign());
         set("FlxTextBorderStyle", HScriptClasses.get_FlxTextBorderStyle());
         addClasses([FlxG, flixel.FlxSprite, flixel.text.FlxText, flixel.math.FlxMath, flixel.util.FlxTimer, flixel.tweens.FlxTween, flixel.tweens.FlxEase]);
-        addClasses([Paths, Assets, funkin.system.FNFSprite, CoolUtil, PlayerSettings, funkin.scripting.Script]);
+        addClasses([Paths, Assets, funkin.system.FNFSprite, CoolUtil, PlayerSettings, funkin.scripting.Script, funkin.system.VideoHelper]);
         addClasses([Conductor, funkin.game.StrumLine, funkin.game.StrumLine.Receptor, funkin.game.Note, funkin.shaders.CustomShader]);
         addClasses([PlayerSettings, funkin.game.ScriptedSprite, funkin.states.ScriptableState, funkin.substates.ScriptableSubState]);
         set("prefs", PlayerSettings.prefs);
