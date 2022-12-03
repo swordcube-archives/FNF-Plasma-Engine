@@ -93,6 +93,16 @@ class Character extends FNFSprite {
 		this.isPlayer = isPlayer;
 	}
 
+	/**
+	 * Preloads a character called `name`.
+	 * @param name The character to preload.
+	 */
+	public static function preloadCharacter(name:String) {
+		var cachedGuyPerson = new Character(0,0,false).loadCharacter(name);
+		FlxG.state.add(cachedGuyPerson);
+		cachedGuyPerson.destroy();
+	}
+
 	public function getSingAnim(keyAmount:Int = 4, direction:Int = 0) {
 		var dir:String = Note.keyInfo[keyAmount].directions[direction].toUpperCase();
 		switch(dir) {
