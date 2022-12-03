@@ -231,7 +231,7 @@ class StrumLine extends FlxSpriteGroup {
         if (note.strumTime < Conductor.position - 244) {
             if(note.mustPress && !note.wasGoodHit) {
                 var event = game.scripts.event("onPlayerMiss", new SimpleNoteEvent(note));
-                if(note.shouldHit) {
+                if(note.shouldHit && !PlayerSettings.prefs.get("Botplay")) {
                     if(!note.isSustainTail) {
                         PlayState.current.vocals.volume = 0;
                         if(note.doSingAnim) {

@@ -1,7 +1,5 @@
 <!DOCTYPE plasma-freeplay >
 <songs>
-    <!-- testicles -->
-    <song name="Test"              difficulties="normal"           character="bf-pixel"          bgColor="#75b9f0" chartType="VANILLA"/>
     <!-- tutaroll -->
     <song name="Tutorial"          difficulties="easy,normal,hard" character="gf"                bgColor="#9271FD" chartType="VANILLA"/>
     <!-- boring but not as much as week 5 -->

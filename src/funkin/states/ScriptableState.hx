@@ -23,8 +23,8 @@ class ScriptableState extends FNFState {
      * Starts the script and calls `create` on it.
      */
     override function create() {
-        super.create();
         script.run();
+        super.create();
         for(func in ["onCreatePost", "createPost"]) script.call(func);
         Conductor.onBeat.add(beatHit);
         Conductor.onStep.add(stepHit);
