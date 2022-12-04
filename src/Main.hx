@@ -4,7 +4,6 @@ import funkin.macros.BuildCounterMacro;
 import funkin.ui.LogsOverlay;
 import flixel.FlxGame;
 import flixel.FlxState;
-import openfl.Lib;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 
