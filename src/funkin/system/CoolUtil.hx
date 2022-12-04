@@ -21,6 +21,15 @@ class CoolUtil {
 	}
 
 	/**
+	 * Gets the last item in `array` and returns it.
+	 * @param array The array to get the item from.
+	 */
+	public static function lastInArray(array:Array<Dynamic>):Dynamic {
+		if(array.length < 1) return null;
+		return array[array.length-1];
+	}
+
+	/**
 	 * Converts bytes into a human-readable format `(Examples: 1b, 256kb, 1024mb, 2048gb, 4096tb)
 	 * @param num The bytes to convert.
 	 * @return String

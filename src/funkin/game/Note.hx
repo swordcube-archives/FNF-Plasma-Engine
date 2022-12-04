@@ -145,6 +145,8 @@ class Note extends FNFSprite {
 
 	public var sustainPieces:Array<Note> = [];
 
+	public var charterParentSustain:FlxSprite;
+
 	function set_isColorable(v:Bool) {
 		if(v && skinJSON.noteColorsAllowed) {
 			shader = colorShader;
@@ -256,7 +258,7 @@ class Note extends FNFSprite {
             }
 		}
 
-		if (mustPress) {
+		if (mustPress && parent != null) {
 			var hitMults:Array<Float> = shouldHit ? [1.5, 1.5] : [0.5, 0.5];
 			if (strumTime > Conductor.position - Conductor.safeZoneOffset * hitMults[0]
 				&& strumTime < Conductor.position + Conductor.safeZoneOffset * hitMults[1])

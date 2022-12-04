@@ -16,7 +16,7 @@ class CustomScreen extends OptionScreen {
     }
 
     override function create() {
-        script = Script.load(Paths.script('data/substates/$menuName'));
+        script = Script.load(Paths.script('data/substates/options/$menuName'));
 		script.setParent(this);
         switch(script.scriptType) {
             case HScript:

@@ -57,10 +57,11 @@ class Conductor {
 		onStep.removeAll();
 	}
 
-	public static function update() {
-		var oldStep:Int = curStep;
-		var oldBeat:Int = curBeat;
+	static var oldStep:Int = 0;
+	static var storedSteps:Array<Int> = [];
+	static var skippedSteps:Array<Int> = [];
 
+	public static function update() {
 		var lastChange:BPMChangeEvent = {
 			stepTime: 0,
 			songTime: 0,
@@ -72,13 +73,41 @@ class Conductor {
 		}
 
 		curStep = lastChange.stepTime + Math.floor((Conductor.position - lastChange.songTime) / Conductor.stepCrochet);
-		curBeat = Math.floor(curStep / 4);
-
 		curStepFloat = lastChange.stepTime + ((Conductor.position - lastChange.songTime) / Conductor.stepCrochet);
+
+		curBeat = Math.floor(curStepFloat / 4.0);
 		curBeatFloat = curStepFloat / 4.0;
 
-		if (oldStep != curStep && curStep > 0) onStep.dispatch(curStep);
-		if (oldBeat != curBeat && curBeat > 0) onBeat.dispatch(curBeat);
+		var trueStep:Int = curStep;
+		for (i in storedSteps)
+			if (i < oldStep)
+				storedSteps.remove(i);
+
+		for (i in oldStep...trueStep) {
+			if (!storedSteps.contains(i) && i > 0) {
+				curStep = i;
+				stepHit();
+				skippedSteps.push(i);
+			}
+		}
+		if (skippedSteps.length > 0) 
+			skippedSteps = [];
+
+		curStep = trueStep;
+
+		if (oldStep != curStep && curStep > 0 && !storedSteps.contains(curStep))
+			stepHit();
+
+		oldStep = curStep;
+	}
+
+	static function stepHit() {
+		onStep.dispatch(curStep);
+		if (curStep % 4 == 0)
+			onBeat.dispatch(Math.floor(curStep / 4.0));
+
+		if (!storedSteps.contains(curStep))
+			storedSteps.push(curStep);
 	}
 
 	public static function mapBPMChanges(song:Song) {
@@ -105,6 +134,6 @@ class Conductor {
 	}
 
 	public static function isAudioSynced(sound:FlxSound) {
-        return !(sound.time > position + 20 || sound.time < position - 20);
-    }
+		return !(sound.time > position + 20 || sound.time < position - 20);
+	}
 }

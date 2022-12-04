@@ -55,7 +55,7 @@ class Init extends FlxState {
 		
 		// why does flixel not automatically do this bro 💀
         if(FlxG.save.data.volume != null) FlxG.sound.volume = FlxG.save.data.volume;
-		if(FlxG.save.data.mute != null) FlxG.sound.volume = FlxG.save.data.mute;
+		if(FlxG.save.data.muted != null) FlxG.sound.volume = FlxG.save.data.muted;
 
 		#if debug
 		if(Sys.args().contains("-livereload")) Main.developerMode = true;
@@ -67,7 +67,7 @@ class Init extends FlxState {
 
 		Application.current.onExit.add(function(exitCode) {
 			FlxG.save.data.volume = FlxG.sound.volume;
-			FlxG.save.data.mute = FlxG.sound.muted;
+			FlxG.save.data.muted = FlxG.sound.muted;
 			PlayerSettings.controls.flush();
 			PlayerSettings.prefs.flush();
 			#if discord_rpc
