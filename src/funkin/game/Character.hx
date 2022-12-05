@@ -231,7 +231,7 @@ class Character extends FNFSprite {
 		singDuration = data.sing_duration;
 		healthIcon = data.healthicon;
 		flipX = data.flip_x;
-		playerOffsets = false;
+		playerOffsets = isPlayer;
 
 		deathCharacter = curCharacter + "-dead";
 		if (!charExists(deathCharacter))
@@ -283,7 +283,7 @@ class Character extends FNFSprite {
 		singDuration = 4;
 		healthIcon = curCharacter;
 		flipX = data.flipX;
-		playerOffsets = false;
+		playerOffsets = isPlayer;
 
 		deathCharacter = curCharacter + "-dead";
 		if (!charExists(deathCharacter))
