@@ -72,8 +72,7 @@ class GameOverSubstate extends FNFSubState {
 	}
 
 	override function update(elapsed:Float) {
-		script.call("onUpdate", [elapsed]);
-		script.call("update", [elapsed]);
+		script.updateCall(elapsed);
 
 		super.update(elapsed);
 
@@ -111,8 +110,7 @@ class GameOverSubstate extends FNFSubState {
 			if (FlxG.sound.music.playing) Conductor.position = FlxG.sound.music.time;
 		}
 
-		script.call("onUpdatePost", [elapsed]);
-		script.call("updatePost", [elapsed]);
+		script.updatePostCall(elapsed);
 	}
 
 	function coolStartDeath(?startVol:Float = 1) {

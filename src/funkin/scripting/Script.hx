@@ -64,6 +64,9 @@ class ScriptModule implements IFlxDestroyable {
     public function run(callCreate:Bool = true, ?args:Array<Dynamic>):Void {}
     public function setParent(parent:Dynamic):Void {}
     public function createCall(?args:Array<Dynamic>):Void {}
+    public function updateCall(delta:Float):Void {}
+    public function createPostCall(?args:Array<Dynamic>):Void {}
+    public function updatePostCall(delta:Float):Void {}
 
     public function event(func:String, event:CancellableEvent) {
         this.call(func, [event]);
@@ -95,7 +98,7 @@ class ScriptGroup {
         scripts.remove(script);
     }
 
-    public function call(name:String, ?args:Array<Dynamic>, ?defaultReturnVal:Any) {
+    public function call(name:String, ?args:Array<Dynamic>, ?defaultReturnVal:Any, ?isNotBuiltIn:Bool = false) {
         var a = args;
         if (a == null) a = [];
         for (script in scripts) {
@@ -103,6 +106,23 @@ class ScriptGroup {
             if (returnVal != defaultReturnVal && defaultReturnVal != null) return returnVal;
         }
         return defaultReturnVal;
+    }
+
+    public function createCall() {
+        for(script in scripts)
+            script.createCall();
+    }
+    public function createPostCall() {
+        for(script in scripts)
+            script.createPostCall();
+    }
+    public function updateCall(delta:Float) {
+        for(script in scripts)
+            script.updateCall(delta);
+    }
+    public function updatePostCall(delta:Float) {
+        for(script in scripts)
+            script.updatePostCall(delta);
     }
 
     public function event(func:String, event:CancellableEvent) {

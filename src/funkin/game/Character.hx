@@ -440,8 +440,7 @@ class Character extends FNFSprite {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		script.call("onUpdate", [elapsed]);
-		script.call("update", [elapsed]);
+		script.updateCall(elapsed);
 
 		if (animTimer > 0) {
 			animTimer -= elapsed;
@@ -481,8 +480,7 @@ class Character extends FNFSprite {
 		if (danceSteps.length > 1 && animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
 			playAnim(danceSteps[1]);
 
-		script.call("onUpdatePost", [elapsed]);
-		script.call("updatePost", [elapsed]);
+		script.updatePostCall(elapsed);
 	}
 
 	override function playAnim(anim:String, force:Bool = false, reversed:Bool = false, frame:Int = 0) {

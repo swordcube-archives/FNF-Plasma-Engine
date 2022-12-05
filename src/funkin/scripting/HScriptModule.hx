@@ -1,5 +1,6 @@
 package funkin.scripting;
 
+import funkin.scripting.hscript.HScriptClasses;
 import sys.io.Process;
 import funkin.system.ModData;
 import funkin.states.PlayState;
@@ -102,14 +103,23 @@ class HScriptModule extends ScriptModule {
         }
     }
 
-    /**
-     * A function to call `create` on scripts.
-     * @param args The arguments for the `create` function, Defaults to an empty array if not specified or null.
-     */
     override public function createCall(?args:Array<Dynamic>) {
         call("onCreate", args);
         call("create", args);
         call("new", args);
+    }
+    override public function createPostCall(?args:Array<Dynamic>) {
+        call("onCreatePost", args);
+        call("createPost", args);
+        call("newPost", args);
+    }
+    override public function updateCall(delta:Float) {
+        call("onUpdate", [delta]);
+        call("update", [delta]);
+    }
+    override public function updatePostCall(delta:Float) {
+        call("onUpdatePost", [delta]);
+        call("updatePost", [delta]);
     }
 
     /**

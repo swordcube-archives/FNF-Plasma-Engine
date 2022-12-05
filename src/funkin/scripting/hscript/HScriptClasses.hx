@@ -1,4 +1,4 @@
-package funkin.scripting;
+package funkin.scripting.hscript;
 
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText.FlxTextBorderStyle;

@@ -135,7 +135,9 @@ class PlayState extends FNFState {
 	public var canSkipIntro:Bool = true;
 
 	public var unsortedNotes:Array<Note> = [];
+
 	public var global:Map<String, Dynamic> = [];
+	public var luaGlobal:Map<String, Dynamic> = [];
 
 	override function create() {
 		super.create();
@@ -322,8 +324,7 @@ class PlayState extends FNFState {
 		Conductor.onStep.add(stepHit);
 
 		// Call createPost on scripts
-		scripts.call("onCreatePost");
-		scripts.call("createPost");
+		scripts.createPostCall();
 	}
 
 	/**
@@ -373,8 +374,7 @@ class PlayState extends FNFState {
 	}
 
 	override function update(elapsed:Float) {
-		scripts.call("onUpdate", [elapsed]);
-		scripts.call("update", [elapsed]);
+		scripts.updateCall(elapsed);
 
 		super.update(elapsed);
 
@@ -455,8 +455,7 @@ class PlayState extends FNFState {
 			FlxG.switchState(new funkin.states.menus.FreeplayState());
 		}
 
-		scripts.call("onUpdatePost", [elapsed]);
-		scripts.call("updatePost", [elapsed]);
+		scripts.updatePostCall(elapsed);
 	}
 
 	public function resyncSong() {
