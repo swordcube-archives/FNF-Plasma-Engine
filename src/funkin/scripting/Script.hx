@@ -1,5 +1,7 @@
 package funkin.scripting;
 
+import funkin.scripting.events.SimpleNoteEvent;
+import funkin.scripting.events.NoteHitEvent;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
 import funkin.scripting.events.CancellableEvent;
 import haxe.io.Path;
@@ -26,6 +28,8 @@ class Script {
             switch(ext) {
                 case 'hx', 'hxs', 'hsc', 'hscript':
                     return new HScriptModule(path, forcefulCode);
+                case 'lua':
+                    return new LuaModule(path, forcefulCode);
             }
         }
         // Oops! The script couldn't load so we just load an empty one instead!
@@ -69,7 +73,35 @@ class ScriptModule implements IFlxDestroyable {
     public function updatePostCall(delta:Float):Void {}
 
     public function event(func:String, event:CancellableEvent) {
-        this.call(func, [event]);
+        switch(this.scriptType) {
+            case HScript:
+                this.call(func, [event]);
+            case LuaScript:
+                // this is dumb as hell but lua is mental pain on whole new levels
+                var args:Array<Dynamic> = [];
+                switch(Type.getClass(event)) {
+                    case NoteHitEvent:
+                        var event:NoteHitEvent = cast event;
+                        args = [
+                            event.cancelled,
+                            event.note.strumTime, event.note.direction, event.note.isSustainNote, event.note.mustPress,
+                            event.note.parent.notes.members.indexOf(event.note), event.rating, 
+                            event.note.type
+                        ];
+                    case SimpleNoteEvent:
+                        var event:SimpleNoteEvent = cast event;
+                        args = [
+                            event.cancelled,
+                            event.note.strumTime, event.note.direction, event.note.isSustainNote, event.note.mustPress,
+                            event.note.parent.notes.members.indexOf(event.note), 
+                            event.note.type
+                        ];
+                }
+                var ret:Dynamic = this.call(func, args);
+                if(ret != null && ret == false)
+                    event.cancel();
+            default: // gah
+        }
         return event;
     }
 
@@ -125,9 +157,10 @@ class ScriptGroup {
             script.updatePostCall(delta);
     }
 
-    public function event(func:String, event:CancellableEvent) {
+    public function event(func:String, event:CancellableEvent, ?excludeScripts:Array<ScriptModule>) {
+        if(excludeScripts == null) excludeScripts = [];
         for(e in scripts) {
-            e.call(func, [event]);
+            if(!excludeScripts.contains(e)) e.event(func, event);
             if (event.cancelled) break;
         }
         return event;

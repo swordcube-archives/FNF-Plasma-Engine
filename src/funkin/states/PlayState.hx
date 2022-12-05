@@ -98,6 +98,12 @@ class PlayState extends FNFState {
 
 	public var score:Int = 0;
 	public var misses:Int = 0;
+	public var rank(get, null):String;
+
+	function get_rank() {
+		return Ranking.getRank(accuracy * 100.0);
+	}
+
 	public var totalNotes:Int = 0;
 	public var totalHit:Float = 0.0;
 	public var combo:Int = 0;
@@ -137,7 +143,7 @@ class PlayState extends FNFState {
 	public var unsortedNotes:Array<Note> = [];
 
 	public var global:Map<String, Dynamic> = [];
-	public var luaGlobal:Map<String, Dynamic> = [];
+	public var luaVars:Map<String, Dynamic> = [];
 
 	override function create() {
 		super.create();

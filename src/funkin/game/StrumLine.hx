@@ -180,7 +180,6 @@ class StrumLine extends FlxSpriteGroup {
                             }
                         }
                         receptor.playAnim("confirm", true);
-                        PlayState.current.scripts.call("onNoteDelete", [note]);
                         if(!note.isSustainNote) {
                             note.kill();
                             notes.remove(note, true);
@@ -220,7 +219,6 @@ class StrumLine extends FlxSpriteGroup {
                         var rgb = Note.keyInfo[keyAmount].colors[note.direction];
                         receptor.colorShader.setColors(rgb[0], rgb[1], rgb[2]);
                         receptor.playAnim("confirm", true);
-                        PlayState.current.scripts.call("onNoteDelete", [note]);
                     }
                 }
                 deleteLateNote(note);
