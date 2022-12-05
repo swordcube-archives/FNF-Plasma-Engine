@@ -239,11 +239,11 @@ class Character extends FNFSprite {
 
 		for (anim in data.animations) {
 			if (anim.indices != null && anim.indices.length > 1)
-				animation.addByIndices(anim.name, anim.anim, anim.indices, "", anim.fps, anim.loop);
+				animation.addByIndices(anim.anim, anim.name, anim.indices, "", anim.fps, anim.loop);
 			else
-				animation.addByPrefix(anim.name, anim.anim, anim.fps, anim.loop);
+				animation.addByPrefix(anim.anim, anim.name, anim.fps, anim.loop);
 
-			setOffset(anim.name, -anim.offsets[0], -anim.offsets[1]);
+			setOffset(anim.anim, -anim.offsets[0], -anim.offsets[1]);
 		}
 
 		positionOffset.set(data.position[0], data.position[1]);
