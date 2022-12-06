@@ -1,5 +1,8 @@
 package funkin.game;
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import funkin.system.FNFSprite;
 import flixel.FlxBasic;
 import flixel.math.FlxMath;
 import funkin.system.MathUtil;
@@ -9,6 +12,7 @@ import funkin.ui.HealthIcon;
 import flixel.ui.FlxBar;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
+import flixel.util.FlxStringUtil;
 
 using StringTools;
 
@@ -23,6 +27,9 @@ class UILayer extends FlxGroup {
 	public var playerStrums:StrumLine;
 
 	public var scoreTxt:FlxText;
+
+	public var timeTxt:FlxText;
+	public var timeIcon:FNFSprite;
 
     public function new() {
 		super();
@@ -61,6 +68,26 @@ class UILayer extends FlxGroup {
 
 		add(opponentStrums);
 		add(playerStrums);
+
+		timeTxt = new FlxText(0, 0, 0, "0:00 / 0:00", 24);
+		timeTxt.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
+		timeTxt.borderSize = 1.25;
+		timeTxt.screenCenter(X);
+		timeTxt.y = prefs.get("Downscroll") ? FlxG.height - (timeTxt.height + 10) : 10;
+		timeTxt.alpha = 0.001;
+		add(timeTxt);
+	
+		timeIcon = new FNFSprite(0, timeTxt.y).load("IMAGE", Paths.image("ui/clockIcon"));
+		timeIcon.setGraphicSize(30);
+		timeIcon.updateHitbox();
+		timeIcon.alpha = 0.001;
+		add(timeIcon);
+	}
+
+	public function onStartSong() {
+		var list = [timeTxt, timeIcon];
+		for(item in list)
+			FlxTween.tween(item, {alpha: 1}, 1, {ease: FlxEase.cubeOut});
 	}
 
 	public function initHealthBar() {
@@ -134,9 +161,23 @@ class UILayer extends FlxGroup {
 		iconP1.scale.set(CoolUtil.fixedLerp(iconP1.scale.x, 1, iconLerp), CoolUtil.fixedLerp(iconP1.scale.y, 1, iconLerp));
 		iconP1.updateHitbox();
 		updateIcons();
+		updateTime();
 	}
 
-	function updateIcons() {
+	public function updateTime() {
+		var prefs = PlayerSettings.prefs;
+		var game = PlayState.current;
+
+		if(game.startingSong) return;
+
+		timeTxt.text = FlxStringUtil.formatTime((FlxG.sound.music.time / 1000.0) / FlxG.sound.music.pitch)+" / "+FlxStringUtil.formatTime((FlxG.sound.music.length / 1000.0) / FlxG.sound.music.pitch);
+		if(prefs.get("Botplay")) timeTxt.text += " [BOT]";
+		timeTxt.screenCenter(X);
+		timeTxt.x += 20;
+		timeIcon.x = timeTxt.x - 40;
+	}
+
+	public function updateIcons() {
 		var iconOffset:Int = 26;
 		iconP1.iconHealth = healthBar.percent;
 		iconP2.iconHealth = 100 - healthBar.percent;

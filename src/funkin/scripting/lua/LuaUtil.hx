@@ -35,6 +35,9 @@ class LuaUtil {
 			script.set("playerReceptorPosY"+i, receptor.y+10);
 		}
 
+		script.setFunc("print", function(v:Dynamic) {
+			Console.log(v);
+		});
 		script.setFunc("get", function(variable:String) {
 			var result:Dynamic = null;
 			var split:Array<String> = variable.split('.');
@@ -84,6 +87,7 @@ class LuaUtil {
 			}
 		});
 
+		// Sprite utilities
 		script.setFunc("screenCenter", function(object:String, axes:String = "xy") {
 			var spr:FlxSprite = getLuaObject(object);
 
@@ -120,6 +124,7 @@ class LuaUtil {
 			} else Console.error('Occured on LUA file: ${script.path} | Sprite/text named $object doesn\'t exist!');
 		});
 
+		// Tweening & Timers
 		script.setFunc("cancelTween", function(tag:String) {
 			var gotten:Dynamic = game.luaVars[tag];
 			if(gotten != null && gotten is FlxTween) {
@@ -181,6 +186,44 @@ class LuaUtil {
 				PlayState.current.scripts.call("onTimerTick", [tag, tmr.loopsLeft]);
 				PlayState.current.scripts.call("timerTick", [tag, tmr.loopsLeft]);
 			}, loops);
+		});
+
+		// Controls
+		script.setFunc("arrowJustPressed", function(direction:Int, ?keyAmount:Null<Int>) {
+			if(keyAmount == null) keyAmount = PlayState.SONG.keyAmount;
+			return PlayerSettings.controls.getP('GAME_$keyAmount', direction);
+		});
+		script.setFunc("arrowPressed", function(direction:Int, ?keyAmount:Null<Int>) {
+			if(keyAmount == null) keyAmount = PlayState.SONG.keyAmount;
+			return PlayerSettings.controls.get('GAME_$keyAmount', direction);
+		});
+		script.setFunc("arrowJustReleased", function(direction:Int, ?keyAmount:Null<Int>) {
+			if(keyAmount == null) keyAmount = PlayState.SONG.keyAmount;
+			return PlayerSettings.controls.getR('GAME_$keyAmount', direction);
+		});
+
+		script.setFunc("controlJustPressed", function(name:String) {
+			return PlayerSettings.controls.getP(name);
+		});
+		script.setFunc("controlPressed", function(name:String) {
+			return PlayerSettings.controls.get(name);
+		});
+		script.setFunc("controlJustReleased", function(name:String) {
+			return PlayerSettings.controls.getR(name);
+		});
+
+		// Options
+		script.setFunc("getOption", function(name:String) {
+			return PlayerSettings.prefs.get(name);
+		});
+		script.setFunc("setOption", function(name:String, value:Dynamic) {
+			return PlayerSettings.prefs.set(name, value);
+		});
+		script.setFunc("flushOptions", function() {
+			return PlayerSettings.prefs.flush();
+		});
+		script.setFunc("reloadOptions", function() {
+			return PlayerSettings.prefs.reload();
 		});
     }
 

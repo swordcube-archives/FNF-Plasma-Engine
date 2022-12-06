@@ -533,7 +533,9 @@ class PlayState extends FNFState {
 	public var rpcTimer:FlxTimer;
 
 	public function startSong() {
+		UI.onStartSong();
 		scripts.call("onStartSong");
+		
 		startingSong = false;
 		Conductor.position = 0;
 
