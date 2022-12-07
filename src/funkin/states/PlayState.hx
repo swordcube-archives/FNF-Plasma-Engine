@@ -10,7 +10,6 @@ import funkin.scripting.events.SimpleNoteEvent;
 import flixel.util.FlxStringUtil;
 import funkin.game.Note;
 import funkin.game.StrumLine;
-import flixel.util.FlxSort;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
@@ -289,11 +288,13 @@ class PlayState extends FNFState {
         } else {
             var point:FlxPoint = stage.characterPositions["gf"];
             gf = new Character(point.x, point.y).loadCharacter(SONG.gf);
+			if(gf.trail != null) add(gf.trail);
             add(gf);
 			add(stage.gfLayer);
         }
 
 		// Add dad
+		if(dad.trail != null) add(dad.trail);
 		add(dad);
 		add(stage.dadLayer);
 		dads.push(dad);
@@ -301,6 +302,7 @@ class PlayState extends FNFState {
 		// Initialize and add bf
 		var point:FlxPoint = stage.characterPositions["bf"];
 		bf = new Character(point.x, point.y, true).loadCharacter(SONG.bf);
+		if(bf.trail != null) add(bf.trail);
 		add(bf);
 		add(stage.bfLayer);
 		bfs.push(bf);

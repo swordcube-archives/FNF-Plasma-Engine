@@ -1,5 +1,6 @@
 package funkin.ui;
 
+import flixel.util.FlxTimer;
 import flixel.effects.FlxFlicker;
 import flixel.util.FlxSignal.FlxTypedSignal;
 import flixel.math.FlxMath;
@@ -36,6 +37,7 @@ class MainMenuList extends FlxTypedGroup<MainMenuButton> {
 
         if(!enabled) return;
 
+        var prefs = PlayerSettings.prefs;
         var controls = PlayerSettings.controls;
 
         if(controls.getP("UI_UP")) changeSelection(-1);
@@ -44,9 +46,15 @@ class MainMenuList extends FlxTypedGroup<MainMenuButton> {
             enabled = false;
             onAccept.dispatch();
             var button:MainMenuButton = members[curSelected];
-            FlxFlicker.flicker(button, 1, 0.06, false, false, function(flick) {
-                button.onAccept.dispatch();
-            });
+            if(prefs.get("Flashing Lights")) {
+                FlxFlicker.flicker(button, 1, 0.06, false, false, function(flick) {
+                    button.onAccept.dispatch();
+                });
+            } else {
+                new FlxTimer().start(1, function(tmr:FlxTimer) {
+                    button.onAccept.dispatch();
+                });
+            }         
         }
     }
 

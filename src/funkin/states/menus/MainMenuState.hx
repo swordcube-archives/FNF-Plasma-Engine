@@ -114,7 +114,7 @@ class MainMenuState extends FNFState {
 			});
 			list.onAccept.add(function() {
 				var button:MainMenuButton = list.members[list.curSelected];
-				if(button.flickerBG) FlxFlicker.flicker(magenta, 1.1, 0.15, false);
+				if(button.flickerBG && prefs.get("Flashing Lights")) FlxFlicker.flicker(magenta, 1.1, 0.15, false);
 				FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/confirmMenu")));
 			});
 			list.changeSelection();

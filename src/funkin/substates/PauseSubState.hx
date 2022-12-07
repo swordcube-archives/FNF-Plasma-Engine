@@ -207,6 +207,9 @@ class PauseSubState extends FNFSubState {
 								PlayState.current.endSong();
 	
 							Conductor.update();
+						} else {
+							FlxG.sound.music.play();
+							PlayState.current.vocals.play();
 						}
 
 						//resume all tweens and timers

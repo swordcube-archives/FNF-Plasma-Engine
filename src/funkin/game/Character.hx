@@ -1,5 +1,6 @@
 package funkin.game;
 
+import flixel.addons.effects.FlxTrail;
 import funkin.scripting.Script;
 import haxe.xml.Access;
 import flixel.math.FlxPoint;
@@ -137,6 +138,11 @@ class Character extends FNFSprite {
 		The character's original scale from when it was loaded.
 	**/
 	public var ogScale:FlxPoint = new FlxPoint(0, 0);
+
+	/**
+	 * The trail that goes behind this character.
+	 */
+	public var trail:FlxTrail;
 
 	public var playerOffsets:Bool = false;
 
