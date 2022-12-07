@@ -38,7 +38,7 @@ jobs:
           haxelib install hxcpp > /dev/null
           haxelib install lime
           haxelib install openfl
-          haxelib git flixel-yc29 https://github.com/Leather128/flixel.git
+          haxelib git flixel-leather https://github.com/Leather128/flixel.git
           haxelib run lime setup flixel
           haxelib run lime setup
           haxelib install flixel-tools
