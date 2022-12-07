@@ -58,6 +58,7 @@ class HScriptModule extends ScriptModule {
             "stringify": function(data:Dynamic, thing:String = "\t") {return Json.encode(data, thing == "\t" ? "fancy" : null);}
         });
         set("scriptModule", this);
+	set("mod", Paths.currentMod);
         set("FlxColor", HScriptClasses.get_FlxColor());
         set("FlxKey", HScriptClasses.get_FlxKey());
         set("FlxAxes", flixel.util.FlxAxes);
