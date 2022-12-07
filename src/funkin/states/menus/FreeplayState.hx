@@ -76,8 +76,9 @@ class FreeplayState extends FNFState {
 		if(!event.cancelled) {
 			var data = new haxe.xml.Access(Xml.parse(Assets.load(TEXT, Paths.xml("data/freeplaySongs"))).firstElement());
 			for (song in data.nodes.song) {
+				var chartType:ChartType = song.has.chartType ? song.att.chartType : AUTO;
 				var bpm:Null<Float> = song.has.bpm ? Std.parseFloat(song.att.bpm) : null;
-				addSong(song.att.name, CoolUtil.trimArray(song.att.difficulties.split(",")), song.att.character, FlxColor.fromString(song.att.bgColor), song.att.chartType, bpm);
+				addSong(song.att.name, CoolUtil.trimArray(song.att.difficulties.split(",")), song.att.character, FlxColor.fromString(song.att.bgColor), chartType, bpm);
 			}
 
 			mutex = new Mutex();
