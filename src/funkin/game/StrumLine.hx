@@ -299,7 +299,7 @@ class Receptor extends FNFSprite {
                 skinJSON = Note.skinJSONs[v];
 
                 // Crash prevention?!?! Psych take notes
-                if(skinJSON == null) skinJSON = Note.skinJSONs["Default"];
+                if(skinJSON == null) skinJSON = Note.skinJSONs["Arrows"];
 
                 noteScale = skinJSON.strumScale * Note.keyInfo[keyAmount].scale;
                 this.load(SPARROW, Paths.image(skinJSON.strumTextures));

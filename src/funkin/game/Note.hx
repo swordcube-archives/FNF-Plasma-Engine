@@ -197,7 +197,7 @@ class Note extends FNFSprite {
 
 		skinJSON = skinJSONs[FlxG.state == PlayState.current ? PlayState.current.noteSkin.replace("Default", PlayerSettings.prefs.get("Note Skin")) : PlayerSettings.prefs.get("Note Skin")];
 		// Crash prevention?!?! Psych take notes
-		if(skinJSON == null) skinJSON = skinJSONs["Default"];
+		if(skinJSON == null) skinJSON = skinJSONs["Arrows"];
 
 		noteScale = skinJSON.noteScale * Note.keyInfo[keyAmount].scale;
 		this.load(SPARROW, Paths.image(skinJSON.noteTextures));
