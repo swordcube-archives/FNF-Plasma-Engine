@@ -1,9 +1,9 @@
 package funkin.states.editors.charter;
 
+import funkin.ui.HealthIcon;
 import flixel.math.FlxMath;
 import funkin.system.FNFSprite;
 import funkin.system.ChartParser;
-import flixel.FlxSprite;
 
 using StringTools;
 
@@ -12,7 +12,10 @@ class ChartingState extends Editor {
 
 	final gridSize:Int = 40;
 
-	var gridGroup:CharterGrid;
+	public var gridGroup:CharterGrid;
+
+	public var iconP2:HealthIcon;
+	public var iconP1:HealthIcon;
 
 	public var curSection:Int = 0;
 	public var currentNoteType:String = "Default";
@@ -39,6 +42,22 @@ class ChartingState extends Editor {
 		// Create grid
 		gridGroup = new CharterGrid(SONG.keyAmount, SONG.sections[0].lengthInSteps);
 		add(gridGroup);
+
+		// UI
+		add(iconP2 = new HealthIcon(0, 70).loadIcon(SONG.dad));
+		add(iconP1 = new HealthIcon(0, 70).loadIcon(SONG.bf));
+
+		iconP2.scale.set(0.65, 0.65);
+		iconP1.scale.set(0.65, 0.65);
+
+		iconP2.screenCenter(X);
+		iconP1.screenCenter(X);
+
+		iconP2.x -= (gridGroup.grid.width-gridGroup.gridSize) / 2;
+		iconP1.x += (gridGroup.grid.width-gridGroup.gridSize) / 2;
+
+		iconP2.x += gridGroup.gridSize;
+		iconP1.x += gridGroup.gridSize;
 	}
 
 	override function update(elapsed:Float) {

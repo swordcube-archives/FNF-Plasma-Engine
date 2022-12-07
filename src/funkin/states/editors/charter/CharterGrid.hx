@@ -51,17 +51,17 @@ class CharterGrid extends FlxTypedGroup<Dynamic> {
     public var stepLength:Int = 16;
 
     // Grid variables
-    var grid:FlxSprite;
-    var strumLine:FlxSprite;
+    public var grid:FlxSprite;
+    public var strumLine:FlxSprite;
 
-    var selectedSquare:FlxSprite;
+    public var selectedSquare:FlxSprite;
 
-    var notes:FlxTypedGroup<Note>;
-    var sustains:FlxTypedGroup<FlxSprite>;
+    public var notes:FlxTypedGroup<Note>;
+    public var sustains:FlxTypedGroup<FlxSprite>;
 
-    var currentNote:SectionNote;
+    public var currentNote:SectionNote;
 
-    var selectedPos:FlxPoint = new FlxPoint();
+    public var selectedPos:FlxPoint = new FlxPoint();
 
     public function new(keyAmount:Int, stepLength:Int) {
         super();

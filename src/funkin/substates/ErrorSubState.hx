@@ -30,17 +30,16 @@ class ErrorSubState extends FNFSubState {
         icon.animation.add("frames", [1, 0, 2, 3], 0, false);
         icon.animation.play("frames");
         icon.animation.frameIndex = debugCode;
+        icon.antialiasing = false;
         add(icon);
 
         var text = new FlxText(icon.x + (icon.width + 10), icon.y, 0, title+"\n  ", 48);
         text.setFormat(Paths.font("funkin.ttf"), 48);
         text.y += text.height / 4;
-        text.antialiasing = PlayerSettings.prefs.get("Antialiasing");
         add(text);
 
         var text = new FlxText(icon.x, icon.y + (icon.height + 10), box.width - 10, description+"\n  ", 24);
         text.setFormat(Paths.font("funkin.ttf"), 24);
-        text.antialiasing = PlayerSettings.prefs.get("Antialiasing");
         add(text);
     }
 
