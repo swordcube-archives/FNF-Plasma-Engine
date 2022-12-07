@@ -30,7 +30,7 @@
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
-	<haxelib name="flixel-yc29" rename="flixel" /> <!-- https://github.com/Leather128/flixel -->
+	<haxelib name="flixel-leather" rename="flixel" /> <!-- https://github.com/Leather128/flixel -->
 	<haxelib name="hscript-improved" /> <!-- https://github.com/YoshiCrafter29/hscript-improved -->
 	<haxelib name="linc_luajit" if="LUA_ALLOWED"/> <!-- https://github.com/swordcube/linc_luajit -->
 	<haxelib name="tjson" />
