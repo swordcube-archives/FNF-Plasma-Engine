@@ -64,7 +64,7 @@ class OptionsMenu extends FNFState {
 		script.event("onAddCategoriesPost", new StateCreationEvent(this));
 		
 		categories.addCategory("Exit", function() {
-			FlxG.switchState(new MainMenuState());
+			goBack();
 		});
 
 		// Correcting the appearance of the categories
@@ -79,11 +79,13 @@ class OptionsMenu extends FNFState {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (controls.getP("BACK")) {
-			PlayerSettings.prefs.flush();
-			PlayerSettings.controls.flush();
-			FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/cancelMenu")));
-			FlxG.switchState(new MainMenuState());
-		}
+		if (controls.getP("BACK")) goBack();
+	}
+
+	function goBack() {
+		PlayerSettings.prefs.flush();
+		PlayerSettings.controls.flush();
+		FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/cancelMenu")));
+		FlxG.switchState(new MainMenuState());
 	}
 }
