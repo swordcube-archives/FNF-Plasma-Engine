@@ -109,13 +109,14 @@ class ChartParser {
                     var sections:Array<Section> = [];
                     for(section in psychChart.notes) {
                         if(section != null) {
+                            var secBeats:Null<Int> = Std.int(section.sectionBeats != null ? section.sectionBeats : 4.0);
                             var coolSex:Section = {
                                 notes: [],
                                 playerSection: section.mustHitSection,
                                 altAnim: section.altAnim,
                                 bpm: section.bpm,
                                 changeBPM: section.changeBPM,
-                                lengthInSteps: Std.int(section.sectionBeats) * 4 // section beats is a float!!! what the fuck!!!
+                                lengthInSteps: secBeats * 4 // section beats is a float!!! what the fuck!!!
                             }
                             for(note in section.sectionNotes) {
                                 var altAnim:Bool = section.altAnim;
