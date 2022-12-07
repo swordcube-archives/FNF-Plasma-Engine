@@ -31,7 +31,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Install Haxelib
         run: |
-          sudo apt-get install idn idn-dbgsym libidn11-dbgsym libidn11-dev
+          sudo apt-get install idn libidn11-dev
           sudo apt-get install libvlc-dev libvlccore-dev vlc-bin
           haxelib setup ~/haxelib
           haxelib install hxcpp > /dev/null
