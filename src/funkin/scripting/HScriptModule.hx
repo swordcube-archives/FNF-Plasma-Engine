@@ -128,6 +128,7 @@ class HScriptModule extends ScriptModule {
      * @return Dynamic
      */
     override public function get(name:String):Dynamic {
+        if(!running) return null;
         return interp.variables.get(name);
     }
 
@@ -137,10 +138,12 @@ class HScriptModule extends ScriptModule {
      * @param value 
      */
     override public function set(name:String, value:Dynamic):Void {
+        if(!running) return;
         interp.variables.set(name, value);
     }
 
     override public function setParent(value:Dynamic):Void {
+        if(!running) return;        
         interp.scriptObject = value;
     }
 
