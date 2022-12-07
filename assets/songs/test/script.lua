@@ -6,8 +6,6 @@ end
 
 -- script
 local dumbassSin = 0
-local songName = ""
-local difficulty = ""
 
 function createPost()
     set("UI.scoreTxt.size", 18)
@@ -17,9 +15,6 @@ function createPost()
     tweenObject("bfTween", "bf", {x = get("bf.x") + 300}, 10, "cubeIn", function()
         print("NO FORUCKING WYA")
     end)
-
-    songName = getFromClass("funkin.states.PlayState", "SONG.name")
-    difficulty = getFromClass("funkin.states.PlayState", "curDifficulty")
 end
 
 local scoreDivider = " • "
@@ -30,6 +25,7 @@ function updatePost(delta)
         -- kinda weird ik but the engine wasn't really designed for lua so um
         local receptorList = "UI.playerStrums.receptors.members"
         set(receptorList.."["..id.."].y", _G["playerReceptorPosY"..id]+(math.sin(dumbassSin + id)*60))
+
         if arrowJustPressed(id) and not getOption("Botplay") then
             squash(id)
         end
@@ -40,7 +36,7 @@ function updatePost(delta)
     local misses = get("misses")
     local rank = get("rank")
     set("UI.scoreTxt.text", "Score: "..score..scoreDivider.."Accuracy: "..accuracy.."%"..scoreDivider.." Combo Breaks: "..misses..scoreDivider.."Rank: "..rank)
-    set("UI.timeTxt.text", "- "..songName.." ["..string.upper(difficulty).."] -")
+    set("UI.timeTxt.text", "- "..song.name.." ["..string.upper(song.difficulty).."] -")
 
     screenCenter("UI.scoreTxt", "X")
     screenCenter("UI.timeTxt", "X")

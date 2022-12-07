@@ -1,5 +1,6 @@
 package funkin.scripting;
 
+#if LUA_ALLOWED
 import funkin.scripting.lua.LuaUtil;
 import llua.Convert;
 import funkin.scripting.Script.ScriptModule;
@@ -73,9 +74,9 @@ class LuaModule extends ScriptModule {
 			Lua.getglobal(lua, func);
             var type:Int = Lua.type(lua, -1);
             if (type != Lua.LUA_TFUNCTION) {
-                if (functions[func] != null)
-                    if (Reflect.isFunction(functions[func]))
-                        return Reflect.callMethod(null, functions[func], args);
+                if (functions[func] != null && Reflect.isFunction(functions[func]))
+                    return Reflect.callMethod(null, functions[func], args);
+
                 return true; // No function!! get fucked right up the ass
             }
             
@@ -102,8 +103,10 @@ class LuaModule extends ScriptModule {
             
             if (Lua.pcall(lua, args.length, 1, 0) != 0) {
                 var err = LuaUtil.getErrorMessage(lua);
-                if(err != null) Console.error('Occured on LUA file: $path | $err');
-                return true;
+                if(err != null) {
+                    Console.error('Occured on LUA file: $path | $err');
+                    return true;
+                }
             }
     
             var value = Convert.fromLua(lua, Lua.gettop(lua));
@@ -141,3 +144,4 @@ class LuaModule extends ScriptModule {
         lua = null;
     }
 }
+#end

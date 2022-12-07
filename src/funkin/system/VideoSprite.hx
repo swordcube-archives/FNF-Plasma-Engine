@@ -1,5 +1,6 @@
 package funkin.system;
 
+#if VIDEOS_ALLOWED
 import flixel.FlxSprite;
 
 /**
@@ -43,3 +44,4 @@ class VideoSprite extends FlxSprite {
 		bitmap.playVideo(Path, Loop, Haccelerated, PauseMusic);
 	}
 }
+#end

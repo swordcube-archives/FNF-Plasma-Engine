@@ -159,7 +159,7 @@ class FreeplayState extends FNFState {
 			lerpScore = CoolUtil.fixedLerp(lerpScore, intendedScore, 0.4);
 
 			if (curSongPlaying > -1) {
-				var lerp = FlxMath.lerp(1.15, 1, FlxEase.cubeOut(Conductor.curBeatFloat % 1));
+				var lerp = FlxMath.lerp(1.15, 1, FlxEase.cubeOut(Conductor.curDecBeat % 1));
 				iconArray[curSongPlaying].scale.set(lerp, lerp);
 			}
 

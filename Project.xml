@@ -26,13 +26,14 @@
 
 	<!-- ________________________________ Defines _______________________________ -->
 
+	<define name="LUA_ALLOWED" if="desktop"/>
 	<define name="VIDEOS_ALLOWED" if="desktop || android"/>
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel-yc29" rename="flixel" /> <!-- https://github.com/Leather128/flixel -->
 	<haxelib name="hscript-improved" /> <!-- https://github.com/YoshiCrafter29/hscript-improved -->
-	<haxelib name="linc_luajit" /> <!-- https://github.com/swordcube/linc_luajit -->
+	<haxelib name="linc_luajit" if="LUA_ALLOWED"/> <!-- https://github.com/swordcube/linc_luajit -->
 	<haxelib name="tjson" />
 	<haxelib name="discord_rpc" if="desktop cpp"/> <!-- https://github.com/Aidan63/linc_discord-rpc -->
 	<haxelib name="hxCodec" if="VIDEOS_ALLOWED"/> <!-- https://github.com/polybiusproxy/hxCodec -->

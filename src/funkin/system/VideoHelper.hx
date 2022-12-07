@@ -26,7 +26,7 @@ class VideoHelper {
      * The first argument is null so you gotta handle that yourself!!
      */
     #end
-    public static function play(path:String, ?finishCallback:#if VIDEOS_ALLOWED VideoHandler #else Dynamic #end->Void):#if VIDEOS_ALLOWED VideoHandler #else Void #end {
+    public static function play(path:String, ?finishCallback:#if VIDEOS_ALLOWED VideoHandler #else Dynamic #end->Void):#if VIDEOS_ALLOWED VideoHandler #else Dynamic #end {
         #if VIDEOS_ALLOWED
         var video:VideoHandler = new VideoHandler();
         video.finishCallback = function() {
@@ -65,7 +65,7 @@ class VideoHelper {
      * The first argument is null so you gotta handle that yourself!!
      */
     #end
-    public static function playOnSprite(path:String, ?finishCallback:#if VIDEOS_ALLOWED VideoSprite #else Dynamic #end->Void):#if VIDEOS_ALLOWED VideoSprite #else Void #end {
+    public static function playOnSprite(path:String, ?finishCallback:#if VIDEOS_ALLOWED VideoSprite #else Dynamic #end->Void):#if VIDEOS_ALLOWED VideoSprite #else Dynamic #end {
         #if VIDEOS_ALLOWED
         var video:VideoSprite = new VideoSprite();
         video.finishCallback = function() {

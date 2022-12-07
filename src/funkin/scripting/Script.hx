@@ -28,8 +28,10 @@ class Script {
             switch(ext) {
                 case 'hx', 'hxs', 'hsc', 'hscript':
                     return new HScriptModule(path, forcefulCode);
+                #if LUA_ALLOWED
                 case 'lua':
                     return new LuaModule(path, forcefulCode);
+                #end
             }
         }
         // Oops! The script couldn't load so we just load an empty one instead!

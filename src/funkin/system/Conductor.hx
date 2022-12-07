@@ -44,8 +44,8 @@ class Conductor {
 	public static var curStep:Int = 0;
 	public static var curBeat:Int = 0;
 
-	public static var curStepFloat:Float = 0;
-	public static var curBeatFloat:Float = 0;
+	public static var curDecStep:Float = 0;
+	public static var curDecBeat:Float = 0;
 
 	public static function init() {
 		FlxG.signals.preUpdate.add(update);
@@ -73,10 +73,10 @@ class Conductor {
 		}
 
 		curStep = lastChange.stepTime + Math.floor((Conductor.position - lastChange.songTime) / Conductor.stepCrochet);
-		curStepFloat = lastChange.stepTime + ((Conductor.position - lastChange.songTime) / Conductor.stepCrochet);
+		curDecStep = lastChange.stepTime + ((Conductor.position - lastChange.songTime) / Conductor.stepCrochet);
 
-		curBeat = Math.floor(curStepFloat / 4.0);
-		curBeatFloat = curStepFloat / 4.0;
+		curBeat = Math.floor(curDecStep / 4.0);
+		curDecBeat = curDecStep / 4.0;
 
 		var trueStep:Int = curStep;
 		for (i in storedSteps)

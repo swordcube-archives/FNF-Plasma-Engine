@@ -1,5 +1,6 @@
 package funkin.scripting.lua;
 
+#if LUA_ALLOWED
 import flixel.util.FlxTimer;
 import openfl.display.BlendMode;
 import flixel.tweens.FlxEase;
@@ -13,17 +14,31 @@ using StringTools;
 
 /**
  * A big sloppy mess of functions and/or variables for `LuaModule`.
+ * 
+ * When i say sloppy, ***i mean sloppy***
  */
 class LuaUtil {
     public static function setScriptDefaults(script:LuaModule) {
+		var game = PlayState.current;
+
 		// Variables
         script.set("engine", {
             "name": "Plasma Engine",
             "version": Main.engineVersion
         });
 
+		if(game != null) {
+			script.set("song", {
+				"name": PlayState.SONG.name,
+				"difficulty": PlayState.curDifficulty
+			});
+			script.set("curBeat", 0);
+			script.set("curStep", 0);
+			script.set("curDecBeat", 0);
+			script.set("curDecStep", 0);
+		}
+
 		// Functions
-		var game = PlayState.current;
 		for(i in 0...game.UI.opponentStrums.receptors.members.length) {
 			var receptor = game.UI.opponentStrums.receptors.members[i];
 			script.set("opponentReceptorPosX"+i, receptor.x);
@@ -392,3 +407,4 @@ class LuaUtil {
 		return true;
 	}
 }
+#end

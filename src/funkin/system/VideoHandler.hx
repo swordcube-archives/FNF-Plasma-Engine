@@ -1,5 +1,6 @@
 package funkin.system;
 
+#if VIDEOS_ALLOWED
 import flixel.FlxG;
 import openfl.Lib;
 import openfl.events.Event;
@@ -144,3 +145,4 @@ class VideoHandler extends VLCBitmap {
 		return 0;
 	}
 }
+#end

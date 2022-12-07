@@ -380,6 +380,11 @@ class PlayState extends FNFState {
 	}
 
 	override function update(elapsed:Float) {
+		scripts.set("curBeat", Conductor.curBeat);
+		scripts.set("curStep", Conductor.curStep);
+		scripts.set("curDecBeat", Conductor.curDecBeat);
+		scripts.set("curDecStep", Conductor.curDecStep);
+
 		scripts.updateCall(elapsed);
 
 		super.update(elapsed);
