@@ -32,7 +32,7 @@ typedef LegacySection = {
 @:dox(hide)
 typedef PsychSection = {
 	var sectionNotes:Array<Dynamic>;
-	var sectionBeats:Float;
+	var sectionBeats:Null<Float>;
 	var typeOfSection:Int;
 	var mustHitSection:Bool;
 	var gfSection:Bool;
