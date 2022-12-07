@@ -7,7 +7,7 @@ import funkin.options.types.BoolOption;
 
 class PreferencesMenu extends OptionScreen {
     override function create() {
-        script = Script.load(Paths.script('data/substates/PreferencesMenu'));
+        script = Script.load(Paths.script('data/substates/options/PreferencesMenu'));
 		script.setParent(this);
 		script.run(false);
 		script.event("onSubStateCreation", new SubStateCreationEvent(this));

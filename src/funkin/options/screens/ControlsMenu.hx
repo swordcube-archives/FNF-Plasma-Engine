@@ -11,7 +11,7 @@ class ControlsMenu extends OptionScreen {
     public var changingBind:Bool = false;
 
     override function create() {
-        script = Script.load(Paths.script('data/substates/ControlsMenu'));
+        script = Script.load(Paths.script('data/substates/options/ControlsMenu'));
 		script.setParent(this);
 		script.run(false);
 		script.event("onSubStateCreation", new SubStateCreationEvent(this));

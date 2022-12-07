@@ -21,7 +21,6 @@
 	<source name="src" />
 
 	<assets path="assets" />
-	
 	<assets path='mods' rename='mods' embed='false'/>
 
 	<!-- ________________________________ Defines _______________________________ -->

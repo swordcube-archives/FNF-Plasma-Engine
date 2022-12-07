@@ -9,7 +9,7 @@ import funkin.options.types.ListOption;
 
 class AppearanceMenu extends OptionScreen {
     override function create() {
-        script = Script.load(Paths.script('data/substates/AppearanceMenu'));
+        script = Script.load(Paths.script('data/substates/options/AppearanceMenu'));
 		script.setParent(this);
 		script.run(false);
 		script.event("onSubStateCreation", new SubStateCreationEvent(this));

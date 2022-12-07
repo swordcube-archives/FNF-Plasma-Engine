@@ -13,6 +13,7 @@ using StringTools;
 // Typedefs
 // Psych
 
+@:dox(hide)
 typedef PsychCharacter = {
 	var animations:Array<PsychCharacterAnimation>;
 	var no_antialiasing:Bool;
@@ -26,6 +27,7 @@ typedef PsychCharacter = {
 	var scale:Float;
 };
 
+@:dox(hide)
 typedef PsychCharacterAnimation = {
 	var offsets:Array<Float>;
 	var loop:Bool;
@@ -37,6 +39,7 @@ typedef PsychCharacterAnimation = {
 
 // Yoshi
 
+@:dox(hide)
 typedef YoshiCharacter = {
 	var arrowColors:Array<String>; // Unused
 	var camOffset:YoshiCharPosShit;
@@ -51,11 +54,13 @@ typedef YoshiCharacter = {
 	var scale:Float;
 };
 
+@:dox(hide)
 typedef YoshiCharPosShit = {
 	var x:Float;
 	var y:Float;
 };
 
+@:dox(hide)
 typedef YoshiCharacterAnimation = {
 	var indices:Null<Array<Int>>;
 	var x:Float;
