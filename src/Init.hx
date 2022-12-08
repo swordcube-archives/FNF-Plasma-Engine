@@ -44,6 +44,8 @@ class Init extends FlxState {
 		AudioSwitchFix.init();
 		WindowsAPI.setDarkMode(true);
 
+		Console.fancyText = PlayerSettings.prefs.get("Fancy Console");
+
 		// Exclusive to Leather128 flixel (and maybe Yoshi flixel soon) because fuck you 😎️
 		FlxSprite.defaultAntialiasing = PlayerSettings.prefs.get("Antialiasing");
 

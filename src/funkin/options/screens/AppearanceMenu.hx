@@ -67,6 +67,14 @@ class AppearanceMenu extends OptionScreen {
                         FlxSprite.defaultAntialiasing = value;
                     }
                 ),
+                new BoolOption(
+                    "Fancy Console",
+                    "Choose whether or not the console should have emojis and color.\nUseful for terminals that don't support emoji or color.",
+                    null,
+                    function(value:Bool) {
+                        Console.fancyText = value;
+                    }
+                )
             ]
         ];
         script.call("onAddOptions");

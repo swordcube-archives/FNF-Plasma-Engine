@@ -79,6 +79,10 @@ class PlayerPrefs {
                 name: "Flashing Lights",
                 value: true
             },
+            {
+                name: "Fancy Console",
+                value: true
+            },
         ],
 
         // gameplay modifiers only appear in freeplay by
