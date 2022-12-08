@@ -87,7 +87,7 @@ class NoteInput implements IFlxDestroyable {
 					if (i == 0) continue;
 					var note = dataNotes[i];
                     // stacked notes
-					if (!note.isSustainNote && ((note.strumTime - coolNote.strumTime) < 5) && note.direction == data) {
+					if (!note.isSustainNote && ((note.strumTime - coolNote.strumTime) < 5) && note.direction % parent.keyAmount == data) {
 						note.kill();
 						parent.notes.remove(note, true);
 						note.destroy();
