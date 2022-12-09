@@ -42,7 +42,6 @@ class PlayState extends FNFState {
 	public static var storyPlaylist:Array<StorySong> = [];
 	public static var current:PlayState;
 
-	public var script:ScriptModule;
 	public var scripts:ScriptGroup = new ScriptGroup();
 	public var stage:Stage;
 
@@ -264,15 +263,17 @@ class PlayState extends FNFState {
 		add(stage);
 		FlxG.camera.zoom = defaultCamZoom;
 
-		// Initialize and start song script
-		script = Script.load(Paths.script('songs/${SONG.name.toLowerCase()}/script'));
-		script.setParent(this);
-		script.run();
-		scripts.addScript(script);
+		// Initialize and start song scripts
+		for(item in CoolUtil.readDirectory('songs/${SONG.name.toLowerCase()}')) {
+			var script = Script.load(Paths.script('songs/${SONG.name.toLowerCase()}/${item.split("."+Path.extension(item))[0]}'));
+			script.setParent(this);
+			script.run();
+			scripts.addScript(script);
+		}
 
 		// Initialize and start global scripts
-		for(item in CoolUtil.readDirectory('data/scripts/global')) {
-            var script = Script.load(Paths.script("data/scripts/global/"+item.split("."+Path.extension(item))[0]));
+		for(item in CoolUtil.readDirectory('data/scripts/game')) {
+            var script = Script.load(Paths.script("data/scripts/game/"+item.split("."+Path.extension(item))[0]));
             script.setParent(this);
             script.run();
             scripts.addScript(script);
