@@ -50,6 +50,11 @@ class PauseSubState extends FNFSubState {
 		script = Script.load(Paths.script('data/substates/PauseSubState'));
 		var event = script.event("onSubStateCreation", new SubStateCreationEvent(this));
 
+		DiscordRPC.changePresence(
+			"Paused",
+			'${PlayState.SONG.name} - ${PlayState.curDifficulty}'
+		);
+
 		if(PlayState.current.startingSong || !PlayState.current.canSkipIntro || PlayState.current.unsortedNotes.length < 1)
 			menuItems.remove('Skip Intro');
 
@@ -176,6 +181,7 @@ class PauseSubState extends FNFSubState {
 							game.vocals.play();
 						}
 						game.resyncSong();
+						game.updateRPC();
 						close();
 
 					case "Restart Song":

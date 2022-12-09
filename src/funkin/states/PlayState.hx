@@ -576,15 +576,19 @@ class PlayState extends FNFState {
             'Time remaining: ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)} / ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)}'
         );
         rpcTimer = new FlxTimer().start(1, function(tmr:FlxTimer) {
-            if(!startingSong && !endingSong) {
-                DiscordRPC.changePresence(
-                    "Playing "+SONG.name,
-                    'Time remaining: ${FlxStringUtil.formatTime((FlxG.sound.music.length-FlxG.sound.music.time)/1000.0)} / ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)}'
-                );
-            }
+            updateRPC();
         }, 0);
 		#end
 		scripts.call("onStartSongPost");
+	}
+
+	public function updateRPC() {
+		if(!startingSong && !endingSong) {
+			DiscordRPC.changePresence(
+				"Playing "+SONG.name,
+				'Time remaining: ${FlxStringUtil.formatTime((FlxG.sound.music.length-FlxG.sound.music.time)/1000.0)} / ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)}'
+			);
+		}
 	}
 
 	public function finishSong(?ignoreNoteOffset:Bool = false) {
