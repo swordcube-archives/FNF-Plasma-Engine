@@ -276,7 +276,7 @@ class FreeplayState extends FNFState {
 					if (index != null) {
 						if (index == curSelected && index != curSongPlaying) {
 							var inst:Sound = Assets.load(SOUND, Paths.inst(songs[curSelected].songName));
-							if (index == curSelected && threadActive) {
+							if (index == curSelected && threadActive && FileSystem.exists(Paths.inst(songs[curSelected].songName))) {
 								if(curSongPlaying > -1) iconArray[curSongPlaying].scale.set(1,1);
 								mutex.acquire();
 								songToPlay = inst;

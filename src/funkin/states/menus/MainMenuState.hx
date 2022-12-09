@@ -1,5 +1,6 @@
 package funkin.states.menus;
 
+import funkin.system.ModData.PackData;
 import funkin.states.editors.CharacterEditor;
 import funkin.scripting.events.StateCreationEvent;
 import funkin.scripting.Script;
@@ -120,7 +121,8 @@ class MainMenuState extends FNFState {
 			list.changeSelection();
 
 			var versionStr:String = 'Plasma Engine v${Main.engineVersion} (Funkin\' v0.2.7.1)';
-			versionStr += '\nSelected Mod: ${Paths.currentMod} (Press TAB to switch)';
+			var modJSON:PackData = Json.parse(Assets.load(TEXT, Paths.json('pack')));
+			versionStr += '\nSelected Mod: ${modJSON.title} (Press TAB to switch)';
 			
 			var versionText:FlxText = new FlxText(5, 0, 0, versionStr, 12);
 			versionText.scrollFactor.set();
