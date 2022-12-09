@@ -31,6 +31,8 @@ class UILayer extends FlxGroup {
 	public var timeTxt:FlxText;
 	public var timeIcon:FNFSprite;
 
+	public var judgementTxt:FlxText;
+
     public function new() {
 		super();
 
@@ -82,6 +84,39 @@ class UILayer extends FlxGroup {
 		timeIcon.updateHitbox();
 		timeIcon.alpha = 0.001;
 		add(timeIcon);
+
+		judgementTxt = new FlxText(0, 0, 0, "", 17);
+		judgementTxt.setFormat(Paths.font("vcr.ttf"), 17, FlxColor.WHITE, LEFT, OUTLINE, FlxColor.BLACK);
+		judgementTxt.borderSize = 1.25;
+		judgementTxt.screenCenter(Y);
+		add(judgementTxt);
+
+		updateJudgementText();
+	}
+
+	public function updateJudgementText() {
+		var prefs = PlayerSettings.prefs;
+		var game = PlayState.current;
+		
+		judgementTxt.text = ('Sicks: ${game.sicks}\n' +
+			'Goods: ${game.goods}\n' +
+			'Bads: ${game.bads}\n' +
+			'Shits: ${game.shits}\n' +
+			'Misses: ${game.misses}'
+		);
+		judgementTxt.screenCenter(Y);
+		judgementTxt.visible = true;
+
+		switch(prefs.get("Judgement Counter")) {
+			case "Left":
+				judgementTxt.alignment = LEFT;
+				judgementTxt.x = 5;
+			case "Right":
+				judgementTxt.alignment = RIGHT;
+				judgementTxt.x = FlxG.width - (judgementTxt.width + 5);
+			case "None":
+				judgementTxt.visible = false;
+		}
 	}
 
 	public function onStartSong() {

@@ -150,7 +150,13 @@ class NoteInput implements IFlxDestroyable {
 		if(game.health > game.maxHealth) game.health = game.maxHealth;
 		game.UI.updateScoreText();
 
-		var game = PlayState.current;
+		switch(judgement) {
+			case "sick": game.sicks++;
+			case "good": game.goods++;
+			case "bad":  game.bads++;
+			case "shit": game.shits++;
+		}
+		game.UI.updateJudgementText();
 
 		var coolText = new FlxText(0, 0, 0, placement, 32);
 		coolText.screenCenter();

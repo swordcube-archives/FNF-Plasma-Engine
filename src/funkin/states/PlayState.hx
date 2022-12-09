@@ -112,6 +112,11 @@ class PlayState extends FNFState {
 		if(totalNotes == 0 || totalHit == 0) return 0.0;
 		return totalHit / (totalNotes+misses);
 	}
+	
+	public var sicks:Int = 0;
+	public var goods:Int = 0;
+	public var bads:Int = 0;
+	public var shits:Int = 0;
 
 	public var inCutscene:Bool = false;
 

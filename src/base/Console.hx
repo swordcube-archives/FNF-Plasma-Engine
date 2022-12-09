@@ -73,12 +73,12 @@ class Console {
     public static inline function info(v:Dynamic) {
 		FlxG.log.notice(v);
         var color:String = colors["blue"];
-        log(v, "INFO", color, {regularSymbol: '🔵️', fallBackSymbol: '/!\\'});
+        log(v, "INFO", color, {regularSymbol: '🔵️', fallBackSymbol: '(i)'});
     }
 
     public static inline function debug(v:Dynamic) {
 		FlxG.log.notice(v);
         var color:String = colors["green"];
-        log(v, "DEBUG", color, {regularSymbol: '🟢️', fallBackSymbol: '/!\\'});
+        log(v, "DEBUG", color, {regularSymbol: '🟢️', fallBackSymbol: '(i)'});
     }
 }
