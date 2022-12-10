@@ -1,5 +1,7 @@
 package funkin.system;
 
+import funkin.game.Note;
+
 typedef PrefData = {
     var name:String;
     var value:Dynamic;
@@ -151,6 +153,18 @@ class PlayerPrefs {
                 flush = true;
                 list[stupidAss] = pref.value;
                 Reflect.setProperty(FlxG.save.data, saveDataSettingName, pref.value);
+            }
+        }
+
+        // Load note colors!!!
+        for(key => value in Note.keyInfo) {
+            var saveDataSettingName:String = 'player${playerID}_SETTING_NOTE_COLORS_$key';
+            var saveData:Array<Array<Int>> = Reflect.getProperty(FlxG.save.data, saveDataSettingName);
+            if(saveData != null) list['NOTE_COLORS_$key'] = saveData;
+            else {
+                flush = true;
+                list['NOTE_COLORS_$key'] = value.colors;
+                Reflect.setProperty(FlxG.save.data, saveDataSettingName, value.colors);
             }
         }
 

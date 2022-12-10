@@ -171,7 +171,7 @@ class StrumLine extends FlxSpriteGroup {
                         }
                         note.wasGoodHit = true;
                         var receptor:Receptor = receptors.members[note.direction];
-                        var rgb = Note.keyInfo[keyAmount].colors[note.direction];
+                        var rgb = PlayerSettings.prefs.get('NOTE_COLORS_$keyAmount')[note.direction];
                         receptor.colorShader.setColors(rgb[0], rgb[1], rgb[2]);
                         receptor.animation.finishCallback = function(name:String) {
                             if(name == "confirm") {
@@ -216,7 +216,7 @@ class StrumLine extends FlxSpriteGroup {
                             }
                         }
                         var receptor:Receptor = receptors.members[note.direction];
-                        var rgb = Note.keyInfo[keyAmount].colors[note.direction];
+                        var rgb = PlayerSettings.prefs.get('NOTE_COLORS_$keyAmount')[note.direction];
                         receptor.colorShader.setColors(rgb[0], rgb[1], rgb[2]);
                         receptor.playAnim("confirm", true);
                     }

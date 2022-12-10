@@ -1,5 +1,6 @@
 package funkin.options.screens;
 
+import funkin.options.types.MenuOption;
 import funkin.scripting.events.SubStateCreationEvent;
 import funkin.scripting.Script;
 import flixel.FlxSprite;
@@ -52,6 +53,12 @@ class AppearanceMenu extends OptionScreen {
                     "Choose whether you want note splashes on or not, Useful if you find these distracting.",
                     null
                 ),
+                new MenuOption(
+                    "Adjust Note Colors",
+                    "Change the colors of your notes during gameplay.",
+                    NoteColoringMenu,
+                    []
+                )
             ],
             "Accessibility" => [
                 new BoolOption(

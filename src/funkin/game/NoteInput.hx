@@ -56,7 +56,7 @@ class NoteInput implements IFlxDestroyable {
 		if (data == -1 || pressed[data]) return;
 		pressed[data] = true;
 		var receptor = parent.receptors.members[data];
-		var rgb = Note.keyInfo[parent.keyAmount].colors[data];
+		var rgb = PlayerSettings.prefs.get('NOTE_COLORS_${parent.keyAmount}')[data];
 		receptor.colorShader.setColors(rgb[0], rgb[1], rgb[2]);
 		receptor.playAnim("press");
 
@@ -101,7 +101,7 @@ class NoteInput implements IFlxDestroyable {
 	public function goodNoteHit(note:Note) {
 		note.wasGoodHit = true;
 		var receptor = parent.receptors.members[note.direction];
-		var rgb = Note.keyInfo[parent.keyAmount].colors[note.direction];
+		var rgb = PlayerSettings.prefs.get('NOTE_COLORS_${parent.keyAmount}')[note.direction];
 		receptor.colorShader.setColors(rgb[0], rgb[1], rgb[2]);
 		if(PlayerSettings.prefs.get("Botplay")) {
 			receptor.animation.finishCallback = function(name:String) {

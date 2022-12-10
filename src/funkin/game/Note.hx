@@ -185,7 +185,7 @@ class Note extends FNFSprite {
 				script.set("this", this);
 				script.run();
 
-				var rgb = direction < 0 ? [255, 0, 0] : keyInfo[keyAmount].colors[direction];
+				var rgb = direction < 0 ? [255, 0, 0] : PlayerSettings.prefs.get('NOTE_COLORS_$keyAmount')[direction];
 				colorShader.setColors(rgb[0], rgb[1], rgb[2]);
 				shader = (isColorable && skinJSON.noteColorsAllowed) ? colorShader : null;
 		}

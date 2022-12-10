@@ -1,5 +1,6 @@
 package funkin.options.screens;
 
+import funkin.options.types.MenuOption;
 import flixel.text.FlxText;
 import funkin.scripting.Script;
 import funkin.system.MathUtil;
@@ -53,6 +54,8 @@ class OptionScreen extends FNFSubState {
         super.create();
         FlxG.state.persistentUpdate = false;
         FlxG.state.persistentDraw = true;
+
+        persistentUpdate = persistentDraw = false;
         
 		bg = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image('menus/menuBGDesat')));
         bg.color = 0xFFea71fd;
@@ -163,6 +166,9 @@ class OptionScreen extends FNFSubState {
                         add(control2);
 
                         controlTextMap[optionID] = [control1, control2];
+
+                    case MenuOption:
+                        alphabet.x += 30;
                 }
                 generalOptions.push(item);
                 amountOfOptions++;
@@ -253,6 +259,11 @@ class OptionScreen extends FNFSubState {
                             FlxFlicker.flicker(grpTitles.members[curSelected], 0.5, 0.06, true, false);
                         if(casted.updateCallback != null) casted.updateCallback(cast prefs.get(saveData));
                         FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/confirmMenu")));
+
+                    case MenuOption:
+                        var casted:MenuOption = cast option;
+                        // i find it funny that you can open substates in substates
+                        openSubState(Type.createInstance(casted.menu, casted.args));
                 }
             }
             if(controls.getP("BACK")) {
@@ -270,6 +281,8 @@ class OptionScreen extends FNFSubState {
     }
 
     function changeSelection(change:Int = 0) {
+        if(amountOfOptions <= 0) return;
+
         curSelected = FlxMath.wrap(curSelected + change, 0, amountOfOptions-1);
 
         if(generalOptions[curSelected] is GameplayControl)

@@ -25,7 +25,12 @@ class ChartingState extends Editor {
 
 		// Controls what happens when you press enter or space.
 		onAccept.add(function() {
-			FlxG.switchState(new PlayState());
+			if(FlxG.keys.justPressed.SPACE) {
+				// i'll put stuff here later
+			} else {
+				FlxG.mouse.visible = false;
+				FlxG.switchState(new PlayState());
+			}
 		});
 
 		// Load the song data
@@ -61,6 +66,8 @@ class ChartingState extends Editor {
 	}
 
 	override function update(elapsed:Float) {
+		FlxG.mouse.visible = true;
+
 		super.update(elapsed);
 
 		if(controls.getP("UI_LEFT")) {
