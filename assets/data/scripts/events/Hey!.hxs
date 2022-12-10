@@ -1,0 +1,33 @@
+/*
+    Plays the "Hey!" animation from Bopeebo.
+    Value 1: The character to play the animation on.
+
+    "0", "dad", or "opponent" = The opponent
+    "1", "gf", or "girlfriend" = The opponent
+    "2", "bf", or "boyfriend" = The player
+*/
+// ^^^^ Make descriptions for your events like this!
+
+function event(char:String, ?duration:String) {
+    if(duration == null) duration = 0.6;
+    else duration = Std.parseFloat(duration);
+
+    var character:Character = null;
+    switch(char.toLowerCase()) {
+        case "0", "dad", "opponent": character = dad;
+        case "1", "gf", "girlfriend": character = gf;
+        default: character = bf;
+    }
+
+    // If the character is null, don't try to do anything else
+    if(character == null) return;
+
+    if(character.animation.exists("hey"))
+        character.playAnim("hey");
+    else
+        character.playAnim("cheer");
+
+    character.specialAnim = true;
+    if(duration > 0)
+        character.animTimer = duration;
+}

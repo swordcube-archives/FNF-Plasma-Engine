@@ -1,6 +1,5 @@
 package base;
 
-#if discord_rpc
 import Sys.sleep;
 import discord_rpc.DiscordRpc;
 
@@ -8,6 +7,7 @@ using StringTools;
 
 class DiscordRPC {
 	public function new() {
+		#if discord_rpc
 		trace("Discord Client starting...");
 		DiscordRpc.start({
 			clientID: "969729521341329449",
@@ -24,19 +24,24 @@ class DiscordRPC {
 		}
 
 		DiscordRpc.shutdown();
+		#end
 	}
 
 	public static function shutdown() {
+		#if discord_rpc
 		DiscordRpc.shutdown();
+		#end
 	}
 
 	static function onReady() {
+		#if discord_rpc
 		DiscordRpc.presence({
 			details: "In the Menus",
 			state: null,
 			largeImageKey: 'icon',
 			largeImageText: "Plasma Engine"
 		});
+		#end
 	}
 
 	static function onError(_code:Int, _message:String) {
@@ -51,15 +56,13 @@ class DiscordRPC {
 		var DiscordDaemon = sys.thread.Thread.create(() -> {
 			new DiscordRPC();
 		});
-		trace("Discord Client initialized");
 	}
 
 	public static function changePresence(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float) {
+		#if discord_rpc
 		var startTimestamp:Float = if (hasStartTimestamp) Date.now().getTime() else 0;
 
-		if (endTimestamp > 0) {
-			endTimestamp = startTimestamp + endTimestamp;
-		}
+		if (endTimestamp > 0) endTimestamp = startTimestamp + endTimestamp;
 
 		DiscordRpc.presence({
 			details: details,
@@ -71,8 +74,6 @@ class DiscordRPC {
 			startTimestamp: Std.int(startTimestamp / 1000),
 			endTimestamp: Std.int(endTimestamp / 1000)
 		});
-
-		// trace('Discord RPC Updated. Arguments: $details, $state, $smallImageKey, $hasStartTimestamp, $endTimestamp');
+		#end
 	}
 }
-#end

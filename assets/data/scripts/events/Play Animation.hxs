@@ -1,0 +1,26 @@
+/*
+    Plays an animation on a Character,
+    once the animation is completed,
+    the animation changes to Idle
+    
+    Value 1: Animation to play.
+    Value 2: Character (Dad, BF, GF)
+    Value 3 (Optional): The duration of the animation. (If not specified, defaults to the full length of the animation)
+*/
+
+function event(anim:String, char:String, ?timer:String) {
+    var character:Character = null;
+    switch(char.toLowerCase()) {
+        case "0", "dad", "opponent": character = dad;
+        case "1", "gf", "girlfriend": character = gf;
+        default: character = bf;
+    }
+
+    // If the character is null, don't try to do anything else
+    if(character == null) return;
+
+    character.playAnim(anim);
+    character.specialAnim = true;
+    if(timer != null)
+        character.animTimer = Std.parseFloat(timer);
+}

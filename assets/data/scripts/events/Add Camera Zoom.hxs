@@ -1,0 +1,17 @@
+/*
+    Used on MILF on that one \"hard\" part
+    Value 1: Camera zoom add (Default: 0.015)
+    Value 2: UI zoom add (Default: 0.03)
+    Leave the values blank if you want to use Default.
+*/
+
+function event(game:String, hud:String) {
+    game = Std.parseFloat(game);
+    hud = Std.parseFloat(hud);
+
+    if(Math.isNaN(game)) game = 0.015;
+    if(Math.isNaN(hud)) hud = 0.03;
+
+    camGame.zoom += game;
+	camHUD.zoom += hud;
+}

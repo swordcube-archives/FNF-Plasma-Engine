@@ -462,7 +462,7 @@ class Character extends FNFSprite {
 				}
 				animTimer = 0;
 			}
-		} else if (specialAnim && animation.curAnim.finished) {
+		} else if (specialAnim && ((animation.curAnim != null && animation.curAnim.finished) || (animation.curAnim == null))) {
 			specialAnim = false;
 			dance();
 		}

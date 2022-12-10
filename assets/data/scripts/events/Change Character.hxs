@@ -1,0 +1,18 @@
+/*
+    Value 1: Character to change (Dad, BF, GF)
+    Value 2: New character's name
+*/
+
+function event(fromChar:String, toChar:String) {
+    var character:Character = null;
+    switch(fromChar.toLowerCase()) {
+        case "0", "dad", "opponent": character = dad;
+        case "1", "gf", "girlfriend": character = gf;
+        default: character = bf;
+    }
+
+    // If the character is null, don't try to do anything else
+    if(character == null) return;
+
+    character.loadCharacter(toChar);
+}

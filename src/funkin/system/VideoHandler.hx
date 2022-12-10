@@ -114,7 +114,7 @@ class VideoHandler extends VLCBitmap {
 		else if (canUseSound)
 			volume = FlxG.sound.volume;
 
-		playFile(Path, Loop, hwAccelerated);
+		play(Path, Loop, hwAccelerated);
 
 		FlxG.stage.addEventListener(Event.ENTER_FRAME, update);
 		FlxG.stage.addEventListener(Event.RESIZE, resize);

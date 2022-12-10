@@ -1,0 +1,27 @@
+/*
+    Shakes one of the cameras.
+
+    Value 1: The camera to shake. (Can be "game", "hud", or "other")
+    Value 2: The duration of the shake.
+    Value 3: The intensity of the shake.
+*/
+
+function event(camera:String, duration:String, intensity:String) {
+    duration = Std.parseFloat(duration);
+    if(duration == null) duration = 0.0;
+
+    intensity = Std.parseFloat(intensity);
+    if(intensity == null) intensity = 0.0;
+    
+    var cameraObj:FlxCamera = null;
+    switch(camera.toLowerCase()) {
+        case "hud": cameraObj = camHUD;
+        case "other": cameraObj = camOther;
+        default: cameraObj = camGame;
+    }
+
+    // If the camera is null, don't try to do anything else
+    if(cameraObj == null) return;
+
+    cameraObj.shake(intensity, duration);
+}

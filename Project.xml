@@ -52,10 +52,14 @@
 	<haxedef name="hscriptPos" />
 	<haxeflag name="-dce no" />
 
-	<haxeflag name="--macro" value="include('funkin')" /> <!-- Compiles the entirety of the "funkin" folder into the exe-->
-	<haxeflag name="--macro" value="include('flixel')" /> <!-- Compiles the entirety of "flixel" into the exe-->
-	<haxeflag name="--macro" value="include('sys')" if="sys" /> <!-- Compiles the entirety of sys into the exe -->
+	<haxeflag name="--macro" value="include('funkin')" />
+	<haxeflag name="--macro" value="include('flixel')" />
+	<haxeflag name="--macro" value="include('sys')" if="sys" />
 	<haxeflag name="--macro" value="include('DateTools')" />
+	<haxeflag name="--macro" value="include('EReg')" />
+	<haxeflag name="--macro" value="include('Lambda')" />
+	<haxeflag name="--macro" value="include('StringBuf')" />
+	<haxeflag name="--macro" value="include('haxe.crypto')" />
 
 	<!-- _________________________________ Custom _______________________________ -->
 	

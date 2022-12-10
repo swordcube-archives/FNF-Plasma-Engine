@@ -1,0 +1,41 @@
+/*
+    Changes the scroll speed of a strum line.
+
+    Value 1: The strum line to affect. (Can be "opponent" or "player")
+    Value 2: Scroll Speed Multiplier. (1 is default)
+    Value 3: Time it takes to change fully in seconds.
+*/
+
+var speedTweens = [
+    null,
+    null
+];
+
+function event(strumline:String, mult:String, duration:Float) {
+    // If you set the scroll speed type to be constant, don't run the event
+    if(prefs.get("Scroll Type").toLowerCase() == "constant") return;
+
+    var tweenID:Int = 0;
+    var strums:StrumLine;
+    switch(strumline.toLowerCase()) {
+        case "opponent": strums = UI.opponentStrums; tweenID = 0;
+        default: strums = UI.playerStrums; tweenID = 1;
+    }
+
+    // If the strum line is null, don't try to do anything else
+    if(strums == null) return;
+
+    var val1:Float = Std.parseFloat(value1);
+    var val2:Float = Std.parseFloat(value2);
+    if(val1 == null) val1 = 1;
+    if(val2 == null) val2 = 0;
+
+    var newValue:Float = SONG.scrollSpeed * prefs.get("Scroll Speed") * val1;
+
+    if(speedTweens[tweenID] != null) speedTweens[tweenID].cancel();
+    speedTweens[tweenID] = FlxTween.tween(strums, {noteSpeed: newValue}, val2, {ease: FlxEase.linear, onComplete:
+        function (twn:FlxTween) {
+            speedTweens[tweenID] = null;
+        }
+    });
+}

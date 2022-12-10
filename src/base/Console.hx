@@ -55,7 +55,7 @@ class Console {
         var resetColor:String = colors["reset"];
         var beginning:String = fancyText ? '$color[ $symbol $typeThing ]' : '[ $symbol $typeThing ]';
         var end:String = fancyText ? '${resetColor}$v' : '$v';
-        Sys.println('$beginning • $end');
+        Sys.println('$beginning - $end');
     }
 
     public static inline function error(v:Dynamic) {

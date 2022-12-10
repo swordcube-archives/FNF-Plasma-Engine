@@ -15,8 +15,8 @@ class NoteSplash extends FNFSprite {
     public function new(x:Float = 0, y:Float = 0, rgb:Array<Int>, keyAmount:Int = 4, direction:String = "left", skin:String = "Default") {
         super(x, y);
 
-        skinJSON = Assets.load(JSON, Paths.json('data/note_splashes/$skin'));
-        if(skinJSON == null) skinJSON = Assets.load(JSON, Paths.json('data/note_splashes/Default'));
+        skinJSON = Note.splashSkinJSONs[skin];
+        if(skinJSON == null) skinJSON = Note.splashSkinJSONs["Default"];
         load(SPARROW, Paths.image(skinJSON.texturePath));
 
         addAnim("splash1", direction+" splash 1", skinJSON.frameRate);

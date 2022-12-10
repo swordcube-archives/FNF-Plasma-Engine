@@ -148,6 +148,9 @@ class PlayState extends FNFState {
 	public var global:Map<String, Dynamic> = [];
 	public var luaVars:Map<String, Dynamic> = [];
 
+	public var events:Array<EventGroup> = [];
+	public var eventScriptMap:Map<String, ScriptModule> = [];
+
 	override function create() {
 		super.create();
 		current = this;
@@ -258,6 +261,20 @@ class PlayState extends FNFState {
 			line.sustainGroup.sortNotes();
 		}
 
+		// Load the events
+		if(SONG.events != null && SONG.events.length > 1) {
+			for(eventGroup in SONG.events) {
+				events.push({
+					strumTime: eventGroup.strumTime,
+					events: eventGroup.events.copy()
+				});
+				for(event in eventGroup.events) {
+					if(!eventScriptMap.exists(event.name))
+						loadEvent(event.name, Paths.script('data/scripts/events/${event.name}'));
+				}
+			}
+		}
+
 		// Initialize and add stage
 		stage = new Stage().load(SONG.stage);
 		add(stage);
@@ -357,6 +374,12 @@ class PlayState extends FNFState {
 		}
 	}
 
+	public function loadEvent(name:String, eventPath:String) {
+		eventScriptMap[name] = Script.load(eventPath);
+		eventScriptMap[name].setParent(this);
+		eventScriptMap[name].run();
+	}
+
 	public function clearNotesBefore(time:Float) {
 		var i:Int = UI.opponentStrums.notes.length - 1;
 		while (i >= 0) {
@@ -387,6 +410,19 @@ class PlayState extends FNFState {
 		}
 	}
 
+	public function executeEvent(name:String, ?args:Array<String>) {
+		if(args == null) args = [];
+
+		var eventScript:ScriptModule = eventScriptMap[name];
+
+		// If the event is null, don't continue
+		if(eventScript == null) return;
+
+		// Otherwise, do continue
+		eventScript.call("onEvent", args);
+		eventScript.call("event", args);
+	}
+
 	override function update(elapsed:Float) {
 		scripts.set("curBeat", Conductor.curBeat);
 		scripts.set("curStep", Conductor.curStep);
@@ -400,6 +436,12 @@ class PlayState extends FNFState {
 		if(!startingSong) {
 			var curSection:Int = Std.int(FlxMath.bound(Conductor.curStep / 16, 0, SONG.sections.length-1));
 			moveCamera(SONG.sections[curSection] != null ? SONG.sections[curSection].playerSection : false);
+		}
+
+		if(events[0] != null && events[0].strumTime <= Conductor.position) {
+			for(data in events[0].events)
+				executeEvent(data.name, data.values);
+			events.remove(events[0]);
 		}
 
 		if(health <= minHealth) {
@@ -571,24 +613,20 @@ class PlayState extends FNFState {
 		FlxG.sound.list.add(vocals);
 
 		#if discord_rpc
-        DiscordRPC.changePresence(
-            "Playing "+SONG.name,
-            'Time remaining: ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)} / ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)}'
-        );
+		updateRPC();
         rpcTimer = new FlxTimer().start(1, function(tmr:FlxTimer) {
-            updateRPC();
+			if(!startingSong && !endingSong)
+            	updateRPC();
         }, 0);
 		#end
 		scripts.call("onStartSongPost");
 	}
 
 	public function updateRPC() {
-		if(!startingSong && !endingSong) {
-			DiscordRPC.changePresence(
-				"Playing "+SONG.name,
-				'Time remaining: ${FlxStringUtil.formatTime((FlxG.sound.music.length-FlxG.sound.music.time)/1000.0)} / ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)}'
-			);
-		}
+		DiscordRPC.changePresence(
+			"Playing "+SONG.name,
+			'Time remaining: ${FlxStringUtil.formatTime((FlxG.sound.music.length-FlxG.sound.music.time)/1000.0)} / ${FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0)}'
+		);
 	}
 
 	public function finishSong(?ignoreNoteOffset:Bool = false) {

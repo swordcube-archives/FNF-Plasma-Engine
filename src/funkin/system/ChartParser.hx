@@ -1,6 +1,6 @@
 package funkin.system;
 
-import flixel.util.typeLimit.OneOfThree;
+using StringTools;
 
 @:enum abstract ChartType(String) from String to String {
     var VANILLA = "VANILLA"; // For regular FNF charts
@@ -106,6 +106,7 @@ class ChartParser {
                     var psychChart:PsychSong = cast Json.parse(Assets.load(TEXT, Paths.json('songs/${name.toLowerCase()}/$diff'))).song;
                     if(psychChart.stage == null || psychChart.stage == "stage") psychChart.stage = "default";
 
+                    var eventList:Array<EventGroup> = [];
                     var sections:Array<Section> = [];
                     for(section in psychChart.notes) {
                         if(section != null) {
@@ -137,12 +138,53 @@ class ChartParser {
                     var gfVersion:String = "gf";
                     if(psychChart.player3 != null) gfVersion = psychChart.player3;
                     if(psychChart.gfVersion != null) gfVersion = psychChart.gfVersion;
+                    for(event in psychChart.events) {
+                        var convertedEventGroup:EventGroup = {
+                            strumTime: event[0],
+                            events: []
+                        };
+                        for (i in 0...event[1].length) {
+                            var eventData:Array<Dynamic> = [event[0], event[1][i][0], event[1][i][1], event[1][i][2]];
+                            switch(eventData[1]) {
+                                case "Screen Shake":
+                                    // Lazy fix
+                                    var shit1:Array<String> = eventData[2].split(",");
+                                    var shit2:Array<String> = eventData[3].split(",");
+                                    convertedEventGroup.events.push({
+                                        name: eventData[1],
+                                        values: ["game", shit1[0].trim(), shit1[1].trim()]
+                                    });
+                                    convertedEventGroup.events.push({
+                                        name: eventData[1],
+                                        values: ["hud", shit2[0].trim(), shit2[1].trim()]
+                                    });
+
+                                case "Change Scroll Speed":
+                                    // Lazy fix (again)
+                                    convertedEventGroup.events.push({
+                                        name: eventData[1],
+                                        values: ["opponent", eventData[2], eventData[3]]
+                                    });
+                                    convertedEventGroup.events.push({
+                                        name: eventData[1],
+                                        values: ["player", eventData[2], eventData[3]]
+                                    });
+
+                                default:
+                                    convertedEventGroup.events.push({
+                                        name: eventData[1],
+                                        values: [eventData[2], eventData[3]]
+                                    });
+                            }
+                        }
+                        eventList.push(convertedEventGroup);
+                    }
                     return {
                         name: psychChart.song,
                         bpm: psychChart.bpm,
                         scrollSpeed: psychChart.speed,
                         sections: sections,
-                        events: [],
+                        events: eventList,
                         needsVoices: psychChart.needsVoices,
 
                         keyAmount: 4,
