@@ -103,8 +103,6 @@ class ColorPicker extends FlxSpriteGroup {
         copyButton = new FlxButton(w+10, 10, "Copy", function() {
             var clipboardText = Clipboard.generalClipboard.setData(TEXT_FORMAT, '#'+StringTools.hex(curColor-0xFF000000, 6));
         });
-        copyButton.setGraphicSize(50, 24);
-        copyButton.updateHitbox();
 
         pasteButton = new FlxButton(w+10, 44, "Paste", function() {
             var clipboardText = Clipboard.generalClipboard.getData(TEXT_FORMAT, CLONE_PREFERRED);
@@ -117,12 +115,8 @@ class ColorPicker extends FlxSpriteGroup {
                 }
             }
         });
-        pasteButton.setGraphicSize(50, 24);
-        pasteButton.updateHitbox();
 
         resetButton = new FlxButton(w+10, 78, "Reset", onReset);
-        resetButton.setGraphicSize(50, 24);
-        resetButton.updateHitbox();
 
         add(hueSprite);
         add(gradientSprite);
@@ -154,14 +148,13 @@ class ColorPicker extends FlxSpriteGroup {
                 onChange(hue,sat/100,bri/100);
         } else if (slidingSB) {
             sat = (FlxG.mouse.x-x)/size.x*100;
-            bri = 100-((FlxG.mouse.y-y)/size.y*100);
+            bri = (100-((FlxG.mouse.y-y)/size.y*100))+(y - 20);
             updateSB();
             if (onChange != null)
                 onChange(hue,sat/100,bri/100);
         }
     
         if (slidingHue || slidingSB) {
-            trace(hue+", "+sat+", "+", "+bri);
             curColor = FlxColor.fromHSB(hue, sat/100, bri/100);
         }
     }
@@ -175,7 +168,7 @@ class ColorPicker extends FlxSpriteGroup {
         bri = maxOf3(fRGB.r, fRGB.g, fRGB.b)/255*100;
         updateHue();
         updateSB();
-        color = FlxColor.fromHSB(hue, sat/100, bri/100);
+        curColor = FlxColor.fromHSB(hue, sat/100, bri/100);
     }
     
     function updateHue() {
