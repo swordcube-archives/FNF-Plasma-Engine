@@ -44,24 +44,6 @@ class FNFState extends FlxUIState {
 
 		Conductor.reset();
 
-		// Clear the cache!!!
-		FlxG.sound.list.forEach(function(sound:FlxSound) {
-			FlxG.sound.list.remove(sound, true);
-			sound.stop();
-			sound.destroy();
-		});
-		FlxG.sound.list.clear();
-
-		FlxG.bitmap.dumpCache();
-		FlxG.bitmap.clearCache();
-
-		OpenFLAssets.cache.clear();
-		LimeAssets.cache.clear();
-
-		Assets.cache.clear();
-
-		System.gc();
-
 		// Load note skins because heheheha
 		Note.skinJSONs = [];
 		for(json in CoolUtil.readDirectory("data/note_skins")) {
@@ -109,5 +91,28 @@ class FNFState extends FlxUIState {
 		if (obj is FlxSprite && cast(obj, FlxSprite).antialiasing && !PlayerSettings.prefs.get("Antialiasing"))
 			cast(obj, FlxSprite).antialiasing = false;
 		return super.insert(pos, obj);
+	}
+
+	override public function destroy() {
+		// Clear the cache!!!
+		FlxG.sound.list.forEach(function(sound:FlxSound) {
+			FlxG.sound.list.remove(sound, true);
+			sound.stop();
+			sound.destroy();
+		});
+		FlxG.sound.list.clear();
+
+		FlxG.bitmap.dumpCache();
+		FlxG.bitmap.clearCache();
+
+		OpenFLAssets.cache.clear();
+		LimeAssets.cache.clear();
+
+		Assets.cache.clear();
+
+		System.gc();
+		
+		// bals
+		super.destroy();
 	}
 }
