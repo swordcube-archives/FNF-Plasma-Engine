@@ -1,5 +1,7 @@
 package funkin.options.screens;
 
+import flixel.math.FlxMath;
+import flixel.text.FlxText;
 import flixel.FlxSprite;
 import funkin.substates.FNFSubState;
 import funkin.ui.ColorPicker;
@@ -19,6 +21,8 @@ class NoteColoringMenu extends FNFSubState {
 
     public var bg:FlxSprite;
     public var script:ScriptModule;
+
+    public var selectedText:FlxText;
     
     override function create() {
         var balls:Array<Array<Int>> = cast PlayerSettings.prefs.get('NOTE_COLORS_$keyAmount');
@@ -47,7 +51,7 @@ class NoteColoringMenu extends FNFSubState {
         add(notes = new FlxTypedSpriteGroup<Note>());
         for(i in 0...keyAmount) {
             var note:Note = new Note(0, keyAmount, i);
-            note.setPosition(((Note.spacing * Note.keyInfo[keyAmount].scale) * i) * Note.keyInfo[keyAmount].spacing, 50);
+            note.setPosition(((Note.spacing * Note.keyInfo[keyAmount].scale) * i) * Note.keyInfo[keyAmount].spacing, 70);
             notes.add(note);
 
             var coolScale:Float = note.noteScale;
@@ -96,6 +100,14 @@ class NoteColoringMenu extends FNFSubState {
         colorPicker.scrollFactor.set();
         add(colorPicker);
 
+        selectedText = new FlxText(0,FlxG.height - 90,0,'< $keyAmount >');
+        selectedText.size = 32;
+        selectedText.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
+        selectedText.scrollFactor.set();
+        selectedText.antialiasing = prefs.get("Antialiasing");
+        selectedText.screenCenter(X);
+        add(selectedText);
+
         script.event("onSubStateCreationPost", new SubStateCreationEvent(this));
     }
 
@@ -117,6 +129,8 @@ class NoteColoringMenu extends FNFSubState {
             prefs.flush();
             goBack();
         }
+        if(controls.getP("UI_LEFT")) changeKeyAmount(-1);
+        if(controls.getP("UI_RIGHT")) changeKeyAmount(1);
 
         if(FlxG.mouse.justPressed) {
             for (i in 0...notes.members.length) {
@@ -139,5 +153,51 @@ class NoteColoringMenu extends FNFSubState {
         }
 
         for(func in ["onUpdate", "update"]) script.call(func+"Post", [elapsed]);
+    }
+
+    function changeKeyAmount(change:Int = 0) {
+        // Save the colors for the current key amount
+        prefs.set('NOTE_COLORS_$keyAmount', noteColors);
+        prefs.flush();
+
+        // Change the key amount
+        keyAmount = Std.int(FlxMath.wrap(keyAmount + change, 1, Lambda.count(Note.keyInfo)));
+        selected = 0;
+
+        // Reset the colors
+        var balls:Array<Array<Int>> = cast PlayerSettings.prefs.get('NOTE_COLORS_$keyAmount');
+        noteColors = balls.copy();
+
+        // Remove previously displayed notes
+        for(note in notes.members) {
+            note.kill();
+            note.destroy();
+            notes.remove(note, true);
+        }
+        notes.clear();
+
+        // Display the notes for the current key count
+        for(i in 0...keyAmount) {
+            var note:Note = new Note(0, keyAmount, i);
+            note.setPosition(((Note.spacing * Note.keyInfo[keyAmount].scale) * i) * Note.keyInfo[keyAmount].spacing, 70);
+            notes.add(note);
+
+            var coolScale:Float = note.noteScale;
+            if (selected == i)
+                note.scale.set(coolScale,coolScale);
+            else
+                note.scale.set(coolScale * 0.9, coolScale * 0.9);
+        }
+        notes.screenCenter(X);
+
+        // Set the color picker's color
+        colorPicker.setColor({
+            'r': noteColors[selected][0],
+            'g': noteColors[selected][1],
+            'b': noteColors[selected][2]
+        }, false);
+
+        selectedText.text = '< $keyAmount >';
+        selectedText.screenCenter(X);
     }
 }

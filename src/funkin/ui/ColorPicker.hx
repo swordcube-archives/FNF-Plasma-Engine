@@ -148,7 +148,7 @@ class ColorPicker extends FlxSpriteGroup {
                 onChange(hue,sat/100,bri/100);
         } else if (slidingSB) {
             sat = (FlxG.mouse.x-x)/size.x*100;
-            bri = (100-((FlxG.mouse.y-y)/size.y*100))+(y - 20);
+            bri = (100-((FlxG.mouse.y-y)/size.y*100))+283;
             updateSB();
             if (onChange != null)
                 onChange(hue,sat/100,bri/100);

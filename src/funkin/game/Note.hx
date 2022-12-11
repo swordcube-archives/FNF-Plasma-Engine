@@ -60,7 +60,7 @@ class Note extends FNFSprite {
 	public static final keyInfo:Map<Int, NoteInfo> = [
         1  => {
             directions: ["middle"],
-            colors: [[0, -100, 0]],
+            colors: [[204, 204, 204]],
             scale: 1,
             spacing: 1
         },
