@@ -748,12 +748,14 @@ class PlayState extends FNFState {
 	function characterBop(curBeat:Int) {
 		for(c in dads) {
 			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing") && !c.stunned)
-				c.dance();
+				c.beatHit(curBeat);
 		}
-		if(gf != null && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("hair") && curBeat % gfSpeed == 0 && !gf.stunned) gf.dance();
+		if(gf != null && gf.animation.curAnim != null && !gf.animation.curAnim.name.startsWith("hair") && curBeat % gfSpeed == 0 && !gf.stunned)
+			gf.beatHit(curBeat);
+
 		for(c in bfs) {
 			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing") && !c.stunned)
-				c.dance();
+				c.beatHit(curBeat);
 		}
 	}
 

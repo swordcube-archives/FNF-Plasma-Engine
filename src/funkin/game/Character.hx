@@ -214,6 +214,8 @@ class Character extends FNFSprite {
 		__baseFlipped = flipX;
 		dance();
 
+		Conductor.onStep.add(stepHit);
+
 		return this;
 	}
 
@@ -509,6 +511,23 @@ class Character extends FNFSprite {
 
 	var danced:Bool = false;
 
+	public function beatHit(beat:Int) {
+		if(!alive) return;
+		script.call("onBeatHit", [beat]);
+		script.call("beatHit", [beat]);
+		dance();
+		script.call("onBeatHitPost", [beat]);
+		script.call("beatHitPost", [beat]);
+	}
+
+	public function stepHit(step:Int) {
+		if(!alive) return;
+		script.call("onStepHit", [step]);
+		script.call("stepHit", [step]);
+		script.call("onStepHitPost", [step]);
+		script.call("stepHitPost", [step]);
+	}
+
 	public function dance() {
 		if (specialAnim || !canDance)
 			return;
@@ -525,5 +544,10 @@ class Character extends FNFSprite {
 					playAnim(danceSteps[0]);
 			}
 		}
+	}
+
+	override public function destroy() {
+		Conductor.onStep.remove(stepHit);
+		super.destroy();
 	}
 }
