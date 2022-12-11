@@ -149,7 +149,9 @@ class PlayState extends FNFState {
 	public var luaVars:Map<String, Dynamic> = [];
 
 	public var events:Array<EventGroup> = [];
+
 	public var eventScriptMap:Map<String, ScriptModule> = [];
+	public var noteScriptMap:Map<String, ScriptModule> = [];
 
 	override function create() {
 		super.create();
@@ -199,6 +201,12 @@ class PlayState extends FNFState {
 		for(section in SONG.sections) {
 			if(section != null) {
 				for(note in section.notes) {
+					if(!noteScriptMap.exists(note.type)) {
+						noteScriptMap[note.type] = Script.load(Paths.script('data/scripts/note_types/${note.type}'));
+						noteScriptMap[note.type].setParent(this);
+						noteScriptMap[note.type].set("this", this);
+						noteScriptMap[note.type].run();
+					}
 					var gottaHitNote:Bool = section.playerSection;
 					if (note.direction > (SONG.keyAmount - 1)) gottaHitNote = !section.playerSection;
 
@@ -213,7 +221,7 @@ class PlayState extends FNFState {
 					dunceNote.mustPress = gottaHitNote;
 					dunceNote.altAnim = note.altAnim;
 					dunceNote.parent = parent;
-					var event = dunceNote.script.event("onNoteCreation", new SimpleNoteEvent(dunceNote));
+					var event = noteScriptMap[note.type].event("onNoteCreation", new SimpleNoteEvent(dunceNote));
 		
 					var length:Int = Math.floor(note.sustainLength / Conductor.stepCrochet);
 					if(length > 0) {
@@ -230,7 +238,7 @@ class PlayState extends FNFState {
 								susNote.isSustainTail = true;
 								susNote.playAnim("tail");
 							}
-							var susEvent = susNote.script.event("onNoteCreation", new SimpleNoteEvent(susNote));
+							var susEvent = noteScriptMap[note.type].event("onNoteCreation", new SimpleNoteEvent(susNote));
 							if(!susEvent.cancelled) {
 								dunceNote.sustainPieces.push(susNote);
 								parent.notes.add(susNote);
@@ -269,8 +277,11 @@ class PlayState extends FNFState {
 					events: eventGroup.events.copy()
 				});
 				for(event in eventGroup.events) {
-					if(!eventScriptMap.exists(event.name))
-						loadEvent(event.name, Paths.script('data/scripts/events/${event.name}'));
+					if(!eventScriptMap.exists(event.name)) {
+						eventScriptMap[event.name] = Script.load(Paths.script('data/scripts/events/${event.name}'));
+						eventScriptMap[event.name].setParent(this);
+						eventScriptMap[event.name].run();
+					}
 				}
 			}
 		}
@@ -372,12 +383,6 @@ class PlayState extends FNFState {
 			var pos = dad.getCameraPosition();
 			camFollow.setPosition(pos.x, pos.y);
 		}
-	}
-
-	public function loadEvent(name:String, eventPath:String) {
-		eventScriptMap[name] = Script.load(eventPath);
-		eventScriptMap[name].setParent(this);
-		eventScriptMap[name].run();
 	}
 
 	public function clearNotesBefore(time:Float) {

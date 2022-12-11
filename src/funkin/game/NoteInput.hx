@@ -129,14 +129,8 @@ class NoteInput implements IFlxDestroyable {
 		PlayState.current.combo++;
 		popUpScore(note, PlayState.current.combo);
 
-		// Call the "onPlayerHit" on every global script
-		var excludeList:Array<ScriptModule> = [];
-		parent.notes.forEach(function(note:Note) {
-			excludeList.push(note.script);
-		});
-
-		var eventGlobal = PlayState.current.scripts.event("onPlayerHit", new NoteHitEvent(note, Ranking.judgeNote(note.strumTime)), excludeList);
-		var event = note.script.event("onPlayerHit", new NoteHitEvent(note, Ranking.judgeNote(note.strumTime)));
+		var eventGlobal = PlayState.current.scripts.event("onPlayerHit", new NoteHitEvent(note, Ranking.judgeNote(note.strumTime)));
+		var event = PlayState.current.noteScriptMap[note.type].event("onPlayerHit", new NoteHitEvent(note, Ranking.judgeNote(note.strumTime)));
 
 		if(!event.cancelled && !eventGlobal.cancelled) {
 			note.kill();

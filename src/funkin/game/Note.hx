@@ -50,12 +50,6 @@ typedef NoteSplashSkin = {
 	var alpha:Float;
 };
 
-@:dox(hide)
-typedef NoteTypeScript = {
-	var code:String;
-	var ext:String;
-}
-
 class Note extends FNFSprite {
 	public static final keyInfo:Map<Int, NoteInfo> = [
         1  => {
@@ -117,7 +111,6 @@ class Note extends FNFSprite {
 
 	public static var splashSkinJSONs:Map<String, NoteSplashSkin> = [];
 	public static var skinJSONs:Map<String, NoteSkin> = [];
-	public static var noteTypeScripts:Map<String, NoteTypeScript> = [];
 
 	public var rawStrumTime:Float = 0;
 	public var strumTime:Float = 0;
@@ -164,7 +157,6 @@ class Note extends FNFSprite {
 	public var splashSkin:String = "Default";
 	public var type(default, set):String = "Default";
 
-	public var script:ScriptModule;
 	public var colorShader:ColorShader = new ColorShader(255, 0, 0);
 	public var noteScale:Float = 0.7;
 
@@ -176,14 +168,6 @@ class Note extends FNFSprite {
 		switch(v) {
 			default:
 				reloadSkin();
-
-				if(noteTypeScripts[v] != null)
-					script = Script.load(noteTypeScripts[v].ext, noteTypeScripts[v].code);
-				else 
-					script = new ScriptModule("");
-				
-				script.set("this", this);
-				script.run();
 
 				var rgb = direction < 0 ? [255, 0, 0] : PlayerSettings.prefs.get('NOTE_COLORS_$keyAmount')[direction];
 				colorShader.setColors(rgb[0], rgb[1], rgb[2]);
@@ -293,11 +277,5 @@ class Note extends FNFSprite {
 			offset.x = frameWidth / 2;
 			offset.x -= 156 * (noteScale / 2);
 		} else offset.x = (frameWidth - width) * 0.5;
-	}
-
-	override public function destroy() {
-		if(PlayState.current != null) PlayState.current.scripts.removeScript(script);
-		script.destroy();
-		super.destroy();
 	}
 }

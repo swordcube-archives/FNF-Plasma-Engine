@@ -57,16 +57,6 @@ class FNFState extends FlxUIState {
 			if(FileSystem.exists(Paths.asset("data/note_splashes/"+json)) && json.endsWith(".json"))
 				Note.splashSkinJSONs[json.split(".json")[0]] = Json.parse(Assets.load(TEXT, Paths.asset("data/note_splashes/"+json)));
 		}
-
-		// Load note type scripts because3 hgnz,fiybriugf8yugbr ivfufd
-		Note.noteTypeScripts = [];
-		for(file in CoolUtil.readDirectory("data/scripts/note_types")) {
-			if(FileSystem.exists(Paths.asset("data/scripts/note_types/"+file)) && Paths.scriptExtensions.contains("."+Path.extension(file)))
-				Note.noteTypeScripts[file.split("."+Path.extension(file))[0]] = {
-					code: Assets.load(TEXT, Paths.asset("data/scripts/note_types/"+file)),
-					ext: Path.extension(file)
-				};
-		}
 	}
 
 	override function update(elapsed:Float) {

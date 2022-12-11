@@ -50,6 +50,8 @@ class GameOverSubstate extends FNFSubState {
 			insultSound = Assets.load(SOUND, Paths.sound('game/week7/jeffGameover/jeffGameover-' + randomGameover));
 
 		script = Script.load(Paths.script('data/substates/GameOverSubstate'));
+		script.setParent(this);
+		script.run(false);
 		var event = script.event("onSubStateCreation", new SubStateCreationEvent(this));
 
 		if(!event.cancelled) {
@@ -69,6 +71,8 @@ class GameOverSubstate extends FNFSubState {
 
 			bf.playAnim('firstDeath');
 		} else runDefaultCode = false;
+
+		script.event("onSubStateCreationPost", new SubStateCreationEvent(this));
 	}
 
 	override function update(elapsed:Float) {

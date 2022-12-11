@@ -25,6 +25,9 @@ class NoteGroup extends FlxTypedSpriteGroup<Note> {
             return FlxSort.byValues(FlxSort.ASCENDING, n1.strumTime, n2.strumTime);
         });
     }
+
+    var dumbList:Array<Note> = [];
+
     public override function update(elapsed:Float) {
         i = 0;
         __loopSprite = null;
@@ -36,8 +39,8 @@ class NoteGroup extends FlxTypedSpriteGroup<Note> {
             }
             if (__loopSprite.strumTime - Conductor.position > ((2000 / __loopSprite.parent.noteSpeed) * FlxG.sound.music.pitch))
                 break;
-            if(FlxG.state == PlayState.current && __loopSprite.script != null && !PlayState.current.scripts.containsScript(__loopSprite.script)) {
-                PlayState.current.scripts.addScript(__loopSprite.script);
+            if(FlxG.state == PlayState.current && !dumbList.contains(__loopSprite)) {
+                dumbList.push(__loopSprite);
                 __loopSprite.reloadSkin();
                 PlayState.current.canSkipIntro = false;
             }

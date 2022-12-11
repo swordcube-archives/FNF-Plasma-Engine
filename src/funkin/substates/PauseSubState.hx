@@ -48,6 +48,8 @@ class PauseSubState extends FNFSubState {
 		oldFollowLerp = FlxG.camera.followLerp;
 
 		script = Script.load(Paths.script('data/substates/PauseSubState'));
+		script.setParent(this);
+		script.run(false);
 		var event = script.event("onSubStateCreation", new SubStateCreationEvent(this));
 
 		DiscordRPC.changePresence(
