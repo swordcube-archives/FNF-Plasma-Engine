@@ -1,7 +1,6 @@
 package funkin.substates;
 
 import openfl.media.Sound;
-import funkin.scripting.events.SubStateCreationEvent;
 import funkin.scripting.Script;
 import funkin.states.PlayState;
 import funkin.game.Character;
@@ -51,10 +50,9 @@ class GameOverSubstate extends FNFSubState {
 
 		script = Script.load(Paths.script('data/substates/GameOverSubstate'));
 		script.setParent(this);
-		script.run(false);
-		var event = script.event("onSubStateCreation", new SubStateCreationEvent(this));
+		script.run();
 
-		if(!event.cancelled) {
+		if(runDefaultCode) {
 			Conductor.position = 0;
 
 			bf = new Character(x, y, true).loadCharacter(char);
@@ -70,9 +68,9 @@ class GameOverSubstate extends FNFSubState {
 			FlxG.camera.scroll.set();
 
 			bf.playAnim('firstDeath');
-		} else runDefaultCode = false;
+		}
 
-		script.event("onSubStateCreationPost", new SubStateCreationEvent(this));
+		script.createPostCall();
 	}
 
 	override function update(elapsed:Float) {

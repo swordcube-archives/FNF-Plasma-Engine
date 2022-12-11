@@ -1,7 +1,7 @@
 package funkin.options.screens;
 
+import funkin.options.types.MenuOption;
 import funkin.scripting.HScriptModule;
-import funkin.scripting.events.SubStateCreationEvent;
 import funkin.scripting.Script;
 import funkin.options.types.NumberOption;
 import funkin.options.types.BoolOption;
@@ -21,22 +21,21 @@ class CustomScreen extends OptionScreen {
         switch(script.scriptType) {
             case HScript:
                 var casted:HScriptModule = cast script;
-                casted.addClasses([BoolOption, NumberOption, ListOption]);
+                casted.addClasses([BoolOption, NumberOption, ListOption, MenuOption]);
             default: // add more here yourself
         }
-		script.run(false);
-		script.event("onSubStateCreation", new SubStateCreationEvent(this));
+		script.run();
         categories = [];
         script.call("onAddCategories");
         options = [];
         script.call("onAddOptions");
         super.create();
-        script.event("onSubStateCreationPost", new SubStateCreationEvent(this));
+        script.createPostCall();
     }
 
     override function update(elapsed:Float) {
-        for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
+        script.updateCall(elapsed);
         super.update(elapsed);
-        for(func in ["onUpdate", "update"]) script.call(func+"Post", [elapsed]);
+        script.updatePostCall(elapsed);
     }
 }

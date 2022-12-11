@@ -21,7 +21,7 @@ class ScriptedSprite extends FNFSprite {
 
         if(args == null) args = [];
         this.script.run(true, args);
-        for(func in ["onCreatePost", "createPost"]) this.script.call(func, args);
+        this.script.createPostCall(args);
     }
 
     /**
@@ -29,9 +29,9 @@ class ScriptedSprite extends FNFSprite {
      * @param elapsed The time between frames.
      */
     override function update(elapsed:Float) {
+        script.updateCall(elapsed);
 		super.update(elapsed);
-        for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
-        for(func in ["onUpdatePost", "updatePost"]) script.call(func, [elapsed]);
+        script.updatePostCall(elapsed);
 	}
 
     /**

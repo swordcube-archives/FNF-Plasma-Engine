@@ -6,7 +6,6 @@ import flixel.FlxSprite;
 import funkin.substates.FNFSubState;
 import funkin.ui.ColorPicker;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
-import funkin.scripting.events.SubStateCreationEvent;
 import funkin.scripting.Script;
 import funkin.game.Note;
 
@@ -29,8 +28,7 @@ class NoteColoringMenu extends FNFSubState {
         noteColors = balls.copy();
         script = Script.load(Paths.script('data/substates/options/NoteColoringMenu'));
 		script.setParent(this);
-		script.run(false);
-		script.event("onSubStateCreation", new SubStateCreationEvent(this));
+		script.run();
 
         super.create();
 
@@ -108,7 +106,7 @@ class NoteColoringMenu extends FNFSubState {
         selectedText.screenCenter(X);
         add(selectedText);
 
-        script.event("onSubStateCreationPost", new SubStateCreationEvent(this));
+        script.createPostCall();
     }
 
     public function goBack() {
@@ -117,8 +115,7 @@ class NoteColoringMenu extends FNFSubState {
     }
 
     override function update(elapsed:Float) {
-        for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
-
+        script.updateCall(elapsed);
         super.update(elapsed);
 
         FlxG.mouse.visible = true;
@@ -152,7 +149,7 @@ class NoteColoringMenu extends FNFSubState {
             }
         }
 
-        for(func in ["onUpdate", "update"]) script.call(func+"Post", [elapsed]);
+        script.updatePostCall(elapsed);
     }
 
     function changeKeyAmount(change:Int = 0) {

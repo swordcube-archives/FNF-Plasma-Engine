@@ -1,6 +1,5 @@
 package funkin.states.menus;
 
-import funkin.scripting.events.StateCreationEvent;
 import funkin.scripting.Script;
 import funkin.system.ChartParser;
 import flixel.util.FlxTimer;
@@ -77,10 +76,9 @@ class StoryMenuState extends FNFState {
 			Conductor.bpm = 102;
 		}
 		script.setParent(this);
-		script.run(false);
-		var event = script.event("onStateCreation", new StateCreationEvent(this));
+		script.run();
 
-		if(!event.cancelled) {
+		if(runDefaultCode) {
 			scoreText = new FlxText(10, 10, 0, "PLACEHOLDER SCORE", 32);
 			scoreText.setFormat(Paths.font("vcr.ttf"), 32);
 
@@ -146,12 +144,12 @@ class StoryMenuState extends FNFState {
 			add(arrow);
 
 			changeSelection();
-		} else runDefaultCode = false;
+		}
 
 		Conductor.onBeat.add(beatHit);
 		Conductor.onStep.add(stepHit);
 
-		script.event("onStateCreationPost", new StateCreationEvent(this));
+		script.createPostCall();
 	}
 
 	inline function changeSelection(?change:Int = 0) {

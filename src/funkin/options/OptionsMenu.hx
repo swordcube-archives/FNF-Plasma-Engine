@@ -2,7 +2,6 @@ package funkin.options;
 
 import funkin.scripting.HScriptModule;
 import funkin.options.screens.CustomScreen;
-import funkin.scripting.events.StateCreationEvent;
 import funkin.scripting.Script;
 import funkin.options.screens.ControlsMenu;
 import funkin.options.screens.AppearanceMenu;
@@ -34,8 +33,7 @@ class OptionsMenu extends FNFState {
                 casted.addClass(CustomScreen);
             default: // add more here yourself
         }
-		script.run(false);
-		script.event("onStateCreation", new StateCreationEvent(this));
+		script.run();
         
 		bg = new FlxSprite().loadGraphic(Assets.load(IMAGE, Paths.image('menus/menuBGDesat')));
 		bg.color = 0xFFea71fd;
@@ -49,7 +47,7 @@ class OptionsMenu extends FNFState {
 		add(categories);
 
 		// Adding categories
-		script.event("onAddCategories", new StateCreationEvent(this));
+		script.call("onAddCategories");
 
 		categories.addCategory("Preferences", function() {
 			openSubState(new PreferencesMenu());
@@ -61,7 +59,7 @@ class OptionsMenu extends FNFState {
 			openSubState(new ControlsMenu());
 		});
 
-		script.event("onAddCategoriesPost", new StateCreationEvent(this));
+		script.call("onAddCategoriesPost");
 		
 		categories.addCategory("Exit", function() {
 			goBack();
@@ -73,7 +71,7 @@ class OptionsMenu extends FNFState {
 		});
 		categories.changeSelection();
 
-		script.event("onStateCreationPost", new StateCreationEvent(this));
+		script.createPostCall();
 	}
 
 	override function update(elapsed:Float) {

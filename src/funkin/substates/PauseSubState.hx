@@ -1,7 +1,6 @@
 package funkin.substates;
 
 import flixel.util.FlxStringUtil;
-import funkin.scripting.events.SubStateCreationEvent;
 import funkin.scripting.Script;
 import flixel.util.FlxTimer;
 import funkin.ui.Alphabet;
@@ -49,8 +48,7 @@ class PauseSubState extends FNFSubState {
 
 		script = Script.load(Paths.script('data/substates/PauseSubState'));
 		script.setParent(this);
-		script.run(false);
-		var event = script.event("onSubStateCreation", new SubStateCreationEvent(this));
+		script.run();
 
 		DiscordRPC.changePresence(
 			"Paused",
@@ -65,7 +63,7 @@ class PauseSubState extends FNFSubState {
 
 		if(curTime < 0) curTime = 0;
 
-		if(!event.cancelled) {
+		if(runDefaultCode) {
 			FlxG.camera.followLerp = 0;
 			pauseMusic = new FlxSound().loadEmbedded(Assets.load(SOUND, Paths.music('pauseMusic')), true, true);
 			pauseMusic.volume = 0;
@@ -125,14 +123,14 @@ class PauseSubState extends FNFSubState {
 		}
 
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
-		script.event("onSubStateCreationPost", new SubStateCreationEvent(this));
+		script.createPostCall();
 	}
 
 	var holdTimer:Float = 0.0;
 
 	override function update(elapsed:Float) {
-		for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
-		super.update(elapsed);
+        script.updateCall(elapsed);
+        super.update(elapsed);
 
 		// don't ask why i'm doing this on update
 		// flixel is being a shit head
@@ -268,7 +266,7 @@ class PauseSubState extends FNFSubState {
 			}
 		}
 
-		for(func in ["onUpdatePost", "updatePost"]) script.call(func, [elapsed]);
+        script.updatePostCall(elapsed);
 	}
 
 	override function destroy() {

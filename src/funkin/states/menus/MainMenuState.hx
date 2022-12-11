@@ -2,7 +2,6 @@ package funkin.states.menus;
 
 import funkin.system.ModData.PackData;
 import funkin.states.editors.CharacterEditor;
-import funkin.scripting.events.StateCreationEvent;
 import funkin.scripting.Script;
 import flixel.FlxState;
 import funkin.ui.MainMenuButton;
@@ -55,10 +54,9 @@ class MainMenuState extends FNFState {
 			Conductor.bpm = 102;
 		}
 		script.setParent(this);
-		script.run(false);
-		var event = script.event("onStateCreation", new StateCreationEvent(this));
+		script.run();
 
-		if(!event.cancelled) {
+		if(runDefaultCode) {
 			var bg = new FNFSprite(-80).load(IMAGE, Paths.image('menus/menuBG'));
 			bg.scrollFactor.set(0, 0.17);
 			bg.scale.set(1.1, 1.1);
@@ -129,15 +127,14 @@ class MainMenuState extends FNFState {
 			versionText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			versionText.y = FlxG.height - (versionText.height + 5);
 			add(versionText);
-		} else runDefaultCode = false;
+		}
 
-		script.event("onStateCreationPost", new StateCreationEvent(this));
+		script.createPostCall();
 	}
 
 	override function update(elapsed:Float) {
-		for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
-
-		super.update(elapsed);
+        script.updateCall(elapsed);
+        super.update(elapsed);
 
 		if(runDefaultCode) {
 			if(controls.getP("BACK"))
@@ -147,7 +144,7 @@ class MainMenuState extends FNFState {
 				FlxG.switchState(new CharacterEditor());
 		}
 
-		for(func in ["onUpdate", "update"]) script.call(func+"Post", [elapsed]);
+        script.updatePostCall(elapsed);
 	}
 
 	function beatHit(beat:Int) {

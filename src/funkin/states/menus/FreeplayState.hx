@@ -1,6 +1,5 @@
 package funkin.states.menus;
 
-import funkin.scripting.events.StateCreationEvent;
 import funkin.scripting.Script;
 import flixel.tweens.FlxEase;
 import openfl.media.Sound;
@@ -65,15 +64,14 @@ class FreeplayState extends FNFState {
 			Conductor.bpm = 102;
 		}
 		script.setParent(this);
-		script.run(false);
-		var event = script.event("onStateCreation", new StateCreationEvent(this));
+		script.run();
 
 		#if discord_rpc
 		// Updating Discord Rich Presence
 		DiscordRPC.changePresence("In the Freeplay Menu", null);
 		#end
 
-		if(!event.cancelled) {
+		if(runDefaultCode) {
 			var data = new haxe.xml.Access(Xml.parse(Assets.load(TEXT, Paths.xml("data/freeplaySongs"))).firstElement());
 			for (song in data.nodes.song) {
 				var chartType:ChartType = song.has.chartType ? song.att.chartType : AUTO;
@@ -139,9 +137,9 @@ class FreeplayState extends FNFState {
 
 			changeSelection();
 			changeDiff();
-		} else runDefaultCode = false;
+		}
 
-		var event = script.event("onStateCreationPost", new StateCreationEvent(this));
+		script.createPostCall();
 	}
 
 	public function addSong(songName:String, difficulties:Array<String>, songCharacter:String, bgColor:Null<FlxColor>, ?chartType:Null<ChartType>, ?bpm:Null<Float>) {
@@ -149,9 +147,8 @@ class FreeplayState extends FNFState {
 	}
 
 	override function update(elapsed:Float) {
-		for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
-
-		super.update(elapsed);
+        script.updateCall(elapsed);
+        super.update(elapsed);
 
 		if(runDefaultCode) {
 			Conductor.position = FlxG.sound.music.time;
@@ -198,7 +195,7 @@ class FreeplayState extends FNFState {
 			mutex.release();
 		}
 
-		for(func in ["onUpdate", "update"]) script.call(func+"Post", [elapsed]);
+        script.updatePostCall(elapsed);
 	}
 
 	function positionHighscore() {

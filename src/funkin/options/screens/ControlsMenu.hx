@@ -1,6 +1,5 @@
 package funkin.options.screens;
 
-import funkin.scripting.events.SubStateCreationEvent;
 import funkin.scripting.Script;
 import flixel.input.keyboard.FlxKey;
 import funkin.game.Note;
@@ -13,8 +12,7 @@ class ControlsMenu extends OptionScreen {
     override function create() {
         script = Script.load(Paths.script('data/substates/options/ControlsMenu'));
 		script.setParent(this);
-		script.run(false);
-		script.event("onSubStateCreation", new SubStateCreationEvent(this));
+		script.run();
         categories = [
             "UI"
         ];
@@ -72,11 +70,11 @@ class ControlsMenu extends OptionScreen {
         descText.visible = false;
         descBox.kill();
         descText.kill();
-        script.event("onSubStateCreationPost", new SubStateCreationEvent(this));
+        script.createPostCall();
     }
 
     override function update(elapsed:Float) {
-        for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
+        script.updateCall(elapsed);
         super.update(elapsed);
 
         if(changingBind && FlxG.keys.justPressed.ANY) {
@@ -113,6 +111,6 @@ class ControlsMenu extends OptionScreen {
                 }
             }
         }
-        for(func in ["onUpdate", "update"]) script.call(func+"Post", [elapsed]);
+        script.updatePostCall(elapsed);
     }
 }

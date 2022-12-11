@@ -25,9 +25,9 @@ class ScriptableState extends FNFState {
     override function create() {
         script.run();
         super.create();
-        for(func in ["onCreatePost", "createPost"]) script.call(func);
         Conductor.onBeat.add(beatHit);
         Conductor.onStep.add(stepHit);
+        script.createPostCall();
     }
 
     /**
@@ -35,9 +35,9 @@ class ScriptableState extends FNFState {
      * @param elapsed The time between frames.
      */
     override function update(elapsed:Float) {
-        for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
-		super.update(elapsed);
-        for(func in ["onUpdatePost", "updatePost"]) script.call(func, [elapsed]);
+        script.updateCall(elapsed);
+        super.update(elapsed);
+        script.updatePostCall(elapsed);
 	}
 
     /**

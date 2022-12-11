@@ -1,7 +1,6 @@
 package funkin.options.screens;
 
 import funkin.options.types.MenuOption;
-import funkin.scripting.events.SubStateCreationEvent;
 import funkin.scripting.Script;
 import flixel.FlxSprite;
 import funkin.options.types.NumberOption;
@@ -12,8 +11,7 @@ class AppearanceMenu extends OptionScreen {
     override function create() {
         script = Script.load(Paths.script('data/substates/options/AppearanceMenu'));
 		script.setParent(this);
-		script.run(false);
-		script.event("onSubStateCreation", new SubStateCreationEvent(this));
+		script.run();
         categories = [
             "Judgements",
             "Notes",
@@ -86,12 +84,12 @@ class AppearanceMenu extends OptionScreen {
         ];
         script.call("onAddOptions");
         super.create();
-        script.event("onSubStateCreationPost", new SubStateCreationEvent(this));
+        script.createPostCall();
     }
 
     override function update(elapsed:Float) {
-        for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
+        script.updateCall(elapsed);
         super.update(elapsed);
-        for(func in ["onUpdate", "update"]) script.call(func+"Post", [elapsed]);
+        script.updatePostCall(elapsed);
     }
 }

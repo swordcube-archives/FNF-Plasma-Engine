@@ -1,6 +1,5 @@
 package funkin.states.menus;
 
-import funkin.scripting.events.StateCreationEvent;
 import openfl.media.Sound;
 import funkin.scripting.Script;
 import funkin.ui.Alphabet;
@@ -42,13 +41,12 @@ class TitleState extends FNFState {
 
 		script = Script.load(Paths.script('data/states/TitleState'));
 		script.setParent(this);
-		script.run(false);
-		var event = script.event("onStateCreation", new StateCreationEvent(this));
+		script.run();
 
 		// hey guys..  .  it's  me. . . . ..... saster
 		// YOOO IS THAT SASTICLES/?!!?!@?!@?!@?!@?
 
-		if(!event.cancelled) {
+		if(runDefaultCode) {
 			freakyMenu = Assets.load(SOUND, Paths.music('menuMusic'));
 			
 			logoBl = new FlxSprite(-150, -100);
@@ -87,12 +85,12 @@ class TitleState extends FNFState {
 			new FlxTimer().start(1, function(tmr:FlxTimer) {
 				startIntro();
 			});
-		} else runDefaultCode = false;
+		}
 
 		Conductor.onBeat.add(beatHit);
 		Conductor.onStep.add(stepHit);
 
-		script.event("onStateCreationPost", new StateCreationEvent(this));
+		script.createPostCall();
 	}
 
 	public var logoBl:FlxSprite;
@@ -146,9 +144,8 @@ class TitleState extends FNFState {
 	var transitioning:Bool = false;
 
 	override function update(elapsed:Float) {
-		for(func in ["onUpdate", "update"]) script.call(func, [elapsed]);
-
-		super.update(elapsed);
+        script.updateCall(elapsed);
+        super.update(elapsed);
 
 		if(runDefaultCode) {
 			if (FlxG.sound.music != null)
@@ -173,7 +170,7 @@ class TitleState extends FNFState {
 				skipIntro();
 		}
 
-		for(func in ["onUpdate", "update"]) script.call(func+"Post", [elapsed]);
+        script.updatePostCall(elapsed);
 	}
 
 	function createCoolText(textArray:Array<String>) {
