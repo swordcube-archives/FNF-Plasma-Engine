@@ -1,5 +1,6 @@
 package funkin.game;
 
+import funkin.scripting.Script;
 import flixel.text.FlxText;
 import funkin.system.FNFSprite;
 import flixel.tweens.FlxTween;
@@ -127,8 +128,17 @@ class NoteInput implements IFlxDestroyable {
 		}
 		PlayState.current.combo++;
 		popUpScore(note, PlayState.current.combo);
-		var event = PlayState.current.scripts.event("onPlayerHit", new NoteHitEvent(note, Ranking.judgeNote(note.strumTime)));
-		if(!event.cancelled) {
+
+		// Call the "onPlayerHit" on every global script
+		var excludeList:Array<ScriptModule> = [];
+		parent.notes.forEach(function(note:Note) {
+			excludeList.push(note.script);
+		});
+
+		var eventGlobal = PlayState.current.scripts.event("onPlayerHit", new NoteHitEvent(note, Ranking.judgeNote(note.strumTime)), excludeList);
+		var event = note.script.event("onPlayerHit", new NoteHitEvent(note, Ranking.judgeNote(note.strumTime)));
+
+		if(!event.cancelled && !eventGlobal.cancelled) {
 			note.kill();
 			parent.notes.remove(note, true);
 			note.destroy();

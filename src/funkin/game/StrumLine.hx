@@ -1,5 +1,6 @@
 package funkin.game;
 
+import funkin.scripting.Script;
 import openfl.display.Bitmap;
 import flixel.math.FlxRect;
 import funkin.scripting.events.SimpleNoteEvent;
@@ -101,7 +102,13 @@ class StrumLine extends FlxSpriteGroup {
         super.update(elapsed);
 
         var fakeCrochet:Float = (60 / PlayState.SONG.bpm) * 1000;
-        notes.forEachAlive(function(note:Note) {
+
+        var excludeList:Array<ScriptModule> = [];
+        notes.forEach(function(note:Note) {
+            excludeList.push(note.script);
+        });
+        
+        notes.forEach(function(note:Note) {
             // Stop the function if the note has an invalid direction.
             if(note.direction < 0) return;
 
@@ -196,8 +203,9 @@ class StrumLine extends FlxSpriteGroup {
                     input.goodNoteHit(note);
 
                 if(note.isSustainNote && (input.pressed[note.direction] || (PlayerSettings.prefs.get("Botplay") && note.shouldHit)) && note.strumTime <= Conductor.position && !note.wasGoodHit && !note.tooLate) {
-                    var event = PlayState.current.scripts.event("onPlayerHit", new NoteHitEvent(note, Ranking.judgeNote(note.strumTime)));
-                    if(!event.cancelled) {
+                    var eventGlobal = PlayState.current.scripts.event("onPlayerHit", new NoteHitEvent(note, Ranking.judgeNote(note.strumTime)), excludeList);
+                    var event = note.script.event("onPlayerHit", new NoteHitEvent(note, Ranking.judgeNote(note.strumTime)));
+                    if(!event.cancelled && !eventGlobal.cancelled) {
                         PlayState.current.health += PlayState.current.healthGain;
                         if(PlayState.current.health > PlayState.current.maxHealth)
                             PlayState.current.health = PlayState.current.maxHealth;
