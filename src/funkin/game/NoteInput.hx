@@ -54,7 +54,7 @@ class NoteInput implements IFlxDestroyable {
 		}
 
 		var dontHit:Array<Bool> = [for(i in 0...parent.keyAmount) false];
-		if (data == -1) return;
+		if (data == -1 || pressed[data]) return;
 		pressed[data] = true;
 		var receptor = parent.receptors.members[data];
 		var rgb = PlayerSettings.prefs.get('NOTE_COLORS_${parent.keyAmount}')[data];
