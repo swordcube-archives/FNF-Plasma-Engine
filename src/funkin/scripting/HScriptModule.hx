@@ -134,7 +134,12 @@ class HScriptModule extends ScriptModule {
         if(!running) return true;
         try {
             var func:Dynamic = interp.variables.get(funcName);
-            if(func != null && Reflect.isFunction(func)) return Reflect.callMethod(null, func, args);
+            if(func != null && Reflect.isFunction(func)) {
+                if(args != null && args.length > 0)
+                    return Reflect.callMethod(null, func, args);
+                else
+                    return func();
+            }
         } catch(e) {
             Console.error(e.details());
         }
