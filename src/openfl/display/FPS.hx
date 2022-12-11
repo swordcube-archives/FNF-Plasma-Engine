@@ -66,11 +66,12 @@ class FPS extends TextField {
 				text += 'MEM Peak: ${CoolUtil.getSizeLabel(Memory.getPeakUsage())}\n';
 			}
 
-			if (prefs.get("Version Display"))
+			if (prefs.get("Version Display")) {
 				text += 'Plasma Engine ${Main.engineVersion}';
 				#if debug
 				text += ' [BUILD ${Main.buildNumber}]';
 				#end
+			}
 
 			text += '\n';
 		}
