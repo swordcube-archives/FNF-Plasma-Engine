@@ -54,7 +54,7 @@ class NoteInput implements IFlxDestroyable {
 		}
 
 		var dontHit:Array<Bool> = [for(i in 0...parent.keyAmount) false];
-		if (data == -1 || pressed[data]) return;
+		if (data == -1) return;
 		pressed[data] = true;
 		var receptor = parent.receptors.members[data];
 		var rgb = PlayerSettings.prefs.get('NOTE_COLORS_${parent.keyAmount}')[data];
@@ -64,12 +64,10 @@ class NoteInput implements IFlxDestroyable {
 		closestNotes = [];
 
 		parent.notes.forEachAlive(function(daNote:Note) {
-			if (!dontHit[daNote.direction] && !daNote.tooLate && daNote.canBeHit && daNote.mustPress && !daNote.wasGoodHit) {
-				dontHit[daNote.direction] = true;
+			if (!daNote.tooLate && daNote.canBeHit && daNote.mustPress && !daNote.wasGoodHit) {
 				closestNotes.push(daNote);
 			}
 		});
-
 		closestNotes.sort(noteSorting);
 
 		var dataNotes = [];
@@ -83,19 +81,32 @@ class NoteInput implements IFlxDestroyable {
 				coolNote = i;
 				break;
 			}
+			goodNoteHit(coolNote);
+			// fuck you stacked notes
+			// they can go kiss my juicy ass
 			if (dataNotes.length > 1) {
 				for (i in 0...dataNotes.length) {
 					if (i == 0) continue;
 					var note = dataNotes[i];
                     // stacked notes
-					if (!note.isSustainNote && ((note.strumTime - coolNote.strumTime) < 5) && note.direction % parent.keyAmount == data) {
+					if (Math.abs(note.strumTime - coolNote.strumTime) <= 5 && note.direction == data) {
 						note.kill();
 						parent.notes.remove(note, true);
 						note.destroy();
 					}
 				}
 			}
-			goodNoteHit(coolNote);
+		} else if(!PlayerSettings.prefs.get("Ghost Tapping")) {
+			var game = PlayState.current;
+			game.health -= 0.0475;
+			game.vocals.volume = 0;
+			var chars:Array<Character> = (PlayerSettings.prefs.get("Play As Opponent") && !PlayState.isStoryMode) ? game.dads : game.bfs;
+			for(c in chars) {
+				if(c != null && !c.specialAnim) {
+					c.holdTimer = 0;
+					c.playAnim(c.getSingAnim(parent.keyAmount, data)+"miss", true);
+				}
+			}
 		}
 	}
 
