@@ -61,7 +61,7 @@ class GameplayModifiers extends OptionScreen {
         ];
         super.create();
 
-        bg.makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+        bg.makeGraphic(Std.int(FlxG.width * 1.5), Std.int(FlxG.height * 1.5), FlxColor.BLACK);
         bg.screenCenter();
         bg.alpha = 0.6;
     }
