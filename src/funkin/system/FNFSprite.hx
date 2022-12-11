@@ -65,7 +65,7 @@ import flixel.math.FlxPoint;
     }
 
     public function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame:Int = 0) {
-        if(!animation.exists(name)) return #if debug Console.warn('Animation "$name" doesn\'t exist!') #end;
+        if(!animation.exists(name)) return Console.warn('Animation "$name" doesn\'t exist!');
         animation.play(name, force, reversed, frame);
         if(offsets.exists(name))
             offset.copyFrom(offsets[name]);

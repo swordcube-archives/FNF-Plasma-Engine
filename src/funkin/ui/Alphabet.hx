@@ -181,7 +181,9 @@ class AlphabetChar extends FNFSprite {
                         offsets.y += 14 * size;
                 }
                 addAnim("idle", anim+"0", 24, true, offsets);
-                playAnim("idle");
+
+                if(animation.exists("idle"))
+                    playAnim("idle");
 
                 scale.set(size, size);
                 updateHitbox();
@@ -260,7 +262,9 @@ class AlphabetChar extends FNFSprite {
                         offsets.y += 5 * size;
                 }
                 addAnim("idle", anim+"0", 24, true, offsets);
-                playAnim("idle");
+
+                if(animation.exists("idle"))
+                    playAnim("idle");
 
                 scale.set(size, size);
                 updateHitbox();
