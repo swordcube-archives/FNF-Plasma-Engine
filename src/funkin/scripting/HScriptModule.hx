@@ -29,8 +29,6 @@ class HScriptModule extends ScriptModule {
             #if debug
             Console.error(e);
             #end
-            this.scriptType = EmptyScript;
-            this.running = false;
             var posInfo = interp.posInfos();
             var lineNumber = Std.string(posInfo.lineNumber);
             var methodName = posInfo.methodName;
@@ -56,6 +54,15 @@ class HScriptModule extends ScriptModule {
 
         for(key => value in HScriptUtil.getDefaultImports())
             set(key, value);
+
+        try {
+            program = parser.parseString(code);
+        } catch(e) {
+            scriptType = EmptyScript;
+            Console.error(e.details());
+            running = false;
+            destroy();
+        } 
     }
 
     /**
@@ -65,14 +72,13 @@ class HScriptModule extends ScriptModule {
      */
     override public function run(callCreate:Bool = true, ?args:Array<Dynamic>) {
         try {
-            running = true;
-            program = parser.parseString(code);
             interp.execute(program);
         } catch(e) {
             scriptType = EmptyScript;
             callCreate = false;
             Console.error(e.details());
             running = false;
+            destroy();
         }
         if(callCreate) {
             createCall(args);
@@ -130,9 +136,7 @@ class HScriptModule extends ScriptModule {
             var func:Dynamic = interp.variables.get(funcName);
             if(func != null && Reflect.isFunction(func)) return Reflect.callMethod(null, func, args);
         } catch(e) {
-            scriptType = EmptyScript;
             Console.error(e.details());
-            running = false;
         }
         return true;
     }
