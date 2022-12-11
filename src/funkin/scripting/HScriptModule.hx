@@ -1,6 +1,6 @@
 package funkin.scripting;
 
-import funkin.scripting.hscript.HScriptClasses;
+import funkin.scripting.hscript.HScriptUtil;
 import sys.io.Process;
 import funkin.system.ModData;
 import funkin.states.PlayState;
@@ -37,8 +37,6 @@ class HScriptModule extends ScriptModule {
             Console.error('Exception occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'}\n\n${e}\n\nScript File: $path');
         }
 
-        addClasses([Type, Reflect, Main, Std, Math, String, StringTools]);
-
         // Allow unsafe shit to be imported depending on if
         // "Allow unsafe mods" is on in Settings.
         if(ModData.allowUnsafeScripts)
@@ -53,34 +51,11 @@ class HScriptModule extends ScriptModule {
             addClassesAsNull([Sys, File, FileSystem, Process]);
         }
         
-        set("Json", {
-            "parse": function(data:String) {return Json.parse(data);},
-            "stringify": function(data:Dynamic, thing:String = "\t") {return Json.encode(data, thing == "\t" ? "fancy" : null);}
-        });
+        // Default imports
         set("scriptModule", this);
-	set("mod", Paths.currentMod);
-        set("FlxColor", HScriptClasses.get_FlxColor());
-        set("FlxKey", HScriptClasses.get_FlxKey());
-        set("FlxAxes", flixel.util.FlxAxes);
-        set("FlxGroup", flixel.group.FlxGroup);
-        set("BlendMode", HScriptClasses.get_BlendMode());
-        set("FlxCameraFollowStyle", HScriptClasses.get_FlxCameraFollowStyle());
-        set("FlxTextAlign", HScriptClasses.get_FlxTextAlign());
-        set("FlxTextBorderStyle", HScriptClasses.get_FlxTextBorderStyle());
-        addClasses([FlxG, flixel.FlxSprite, flixel.text.FlxText, flixel.math.FlxMath, flixel.util.FlxTimer, flixel.tweens.FlxTween, flixel.tweens.FlxEase]);
-        addClasses([Paths, Assets, funkin.system.FNFSprite, CoolUtil, PlayerSettings, funkin.scripting.Script, funkin.system.VideoHelper]);
-        addClasses([Conductor, funkin.game.StrumLine, funkin.game.StrumLine.Receptor, funkin.game.Note, funkin.shaders.CustomShader]);
-        addClasses([PlayerSettings, funkin.game.ScriptedSprite, funkin.states.ScriptableState, funkin.substates.ScriptableSubState]);
-        set("prefs", PlayerSettings.prefs);
-        set("controls", PlayerSettings.controls);
-        set("PlayState", PlayState.current);
-        set("PlayState_", PlayState);
-        set("global", PlayState.current != null ? PlayState.current.global : cast([], Map<String, Dynamic>));
-	    set("Array", Array);
-        set("Float", Float);
-        set("Int", Int);
-        set("Bool", Bool);
-        set("Dynamic", Dynamic);
+
+        for(key => value in HScriptUtil.getDefaultImports())
+            set(key, value);
     }
 
     /**
