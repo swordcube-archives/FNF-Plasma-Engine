@@ -36,6 +36,11 @@ class PreferencesMenu extends OptionScreen {
                     "Allows mods with potentially unsafe scripts to be selected.\nKeep in mind the mod could just have fancy effects and no actual harm.",
                     null
                 ),
+                new BoolOption(
+                    "Miss Sounds",
+                    "Choose whether or not you want a sound to play when missing a note.",
+                    null
+                ),
                 new NumberOption(
                     "Note Offset",
                     "Change how early or late notes spawn. Useful if you have headphones with audio delay.",

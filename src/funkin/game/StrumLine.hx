@@ -273,9 +273,12 @@ class StrumLine extends FlxSpriteGroup {
             if(game.health < game.minHealth) game.health = game.minHealth;
         }
         game.combo = 0;
-        
+
         if(!note.isSustainNote) game.misses++;
         else game.sustainMisses++;
+
+        if(PlayerSettings.prefs.get("Miss Sounds"))
+			FlxG.sound.play(Assets.load(SOUND, Paths.sound('game/missnote${FlxG.random.int(1,3)}')), FlxG.random.float(0.1,0.2));
 
         game.UI.updateScoreText();
     }

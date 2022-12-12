@@ -158,6 +158,13 @@ class PlayState extends FNFState {
 	override function create() {
 		super.create();
 		current = this;
+		
+		// Preload miss sounds because kjcjgfuhgfr 8iyu
+		if(prefs.get("Miss Sounds")) {
+			Assets.load(SOUND, Paths.sound('game/missnote1'));
+			Assets.load(SOUND, Paths.sound('game/missnote2'));
+			Assets.load(SOUND, Paths.sound('game/missnote3'));
+		}
 
 		enableTransitions();
 

@@ -44,6 +44,10 @@ class PlayerPrefs {
                 value: true
             },
             {
+                name: "Miss Sounds",
+                value: true
+            },
+            {
                 name: "Framerate Cap",
                 value: 240
             },

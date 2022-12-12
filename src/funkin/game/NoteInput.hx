@@ -107,6 +107,10 @@ class NoteInput implements IFlxDestroyable {
 					c.playAnim(c.getSingAnim(parent.keyAmount, data)+"miss", true);
 				}
 			}
+			game.misses++;
+			game.UI.updateScoreText();
+			if(PlayerSettings.prefs.get("Miss Sounds"))
+				FlxG.sound.play(Assets.load(SOUND, Paths.sound('game/missnote${FlxG.random.int(1,3)}')), FlxG.random.float(0.1,0.2));
 		}
 	}
 
