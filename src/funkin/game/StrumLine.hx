@@ -156,8 +156,12 @@ class StrumLine extends FlxSpriteGroup {
             
             if(!note.mustPress) {
                 if(note.strumTime <= Conductor.position && !note.wasGoodHit) {
-                    var event = PlayState.current.scripts.event("onOpponentHit", new NoteHitEvent(note, Ranking.judgements[0].name));
-                    if(!event.cancelled) {
+                    var funcName:String = (PlayerSettings.prefs.get("Play As Opponent") && !PlayState.isStoryMode) ? "onPlayerHit" : "onOpponentHit";
+                    var eventGlobal = PlayState.current.scripts.event(funcName, new NoteHitEvent(note, Ranking.judgements[0].name));
+                    var event = PlayState.current.noteScriptMap[note.type].event("onOpponentHit", new NoteHitEvent(note, Ranking.judgements[0].name));
+                    var eventCock = PlayState.current.scripts.event("onNoteHit", new NoteHitEvent(note, Ranking.judgements[0].name));
+
+                    if(!eventGlobal.cancelled && !event.cancelled && !eventCock.cancelled) {
                         PlayState.current.vocals.volume = 1;
                         if(note.doSingAnim) {
                             var chars:Array<Character> = (PlayerSettings.prefs.get("Play As Opponent") && !PlayState.isStoryMode) ? PlayState.current.bfs : PlayState.current.dads;
@@ -198,7 +202,8 @@ class StrumLine extends FlxSpriteGroup {
                     input.goodNoteHit(note);
 
                 if(note.isSustainNote && (input.pressed[note.direction] || (PlayerSettings.prefs.get("Botplay") && note.shouldHit)) && note.strumTime <= Conductor.position && !note.wasGoodHit && !note.tooLate) {
-                    var eventGlobal = PlayState.current.scripts.event("onPlayerHit", new NoteHitEvent(note, Ranking.judgeNote(note.strumTime)));
+                    var funcName:String = !(PlayerSettings.prefs.get("Play As Opponent") && !PlayState.isStoryMode) ? "onPlayerHit" : "onOpponentHit";
+                    var eventGlobal = PlayState.current.scripts.event(funcName, new NoteHitEvent(note, Ranking.judgeNote(note.strumTime)));
                     var event = PlayState.current.noteScriptMap[note.type].event("onPlayerHit", new NoteHitEvent(note, Ranking.judgeNote(note.strumTime)));
                     if(!event.cancelled && !eventGlobal.cancelled) {
                         PlayState.current.health += PlayState.current.healthGain;
