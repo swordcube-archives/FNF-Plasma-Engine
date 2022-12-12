@@ -96,6 +96,8 @@ class PlayState extends FNFState {
 
 	public var score:Int = 0;
 	public var misses:Int = 0;
+	public var sustainMisses:Int = 0;
+
 	public var rank(get, null):String;
 
 	function get_rank() {
@@ -109,7 +111,7 @@ class PlayState extends FNFState {
 
 	function get_accuracy():Float {
 		if(totalNotes == 0 || totalHit == 0) return 0.0;
-		return totalHit / (totalNotes+misses);
+		return totalHit / (totalNotes+(misses+sustainMisses));
 	}
 	
 	public var sicks:Int = 0;

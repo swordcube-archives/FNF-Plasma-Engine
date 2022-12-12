@@ -247,13 +247,7 @@ class StrumLine extends FlxSpriteGroup {
                             }
                         }
                     }
-                    if(!note.isSustainTail) {
-                        game.health -= game.healthLoss;
-                        if(game.health < game.minHealth) game.health = game.minHealth;
-                    }
-                    game.combo = 0;
-                    if(!note.isSustainNote) game.misses++;
-                    game.UI.updateScoreText();
+                    noteMissShit(note);
 
                     if(note.sustainPieces.length > 0) {
                         for(piece in note.sustainPieces)
@@ -262,6 +256,7 @@ class StrumLine extends FlxSpriteGroup {
                 }
                 if(event.cancelled) return;
             }
+
             if(!note.mustPress)
                 game.scripts.event("onOpponentMiss", new SimpleNoteEvent(note));
 
@@ -269,6 +264,20 @@ class StrumLine extends FlxSpriteGroup {
             notes.remove(note, true);
             note.destroy();
         }
+    }
+
+    function noteMissShit(note:Note) {
+        var game = PlayState.current;
+        if(!note.isSustainTail) {
+            game.health -= game.healthLoss;
+            if(game.health < game.minHealth) game.health = game.minHealth;
+        }
+        game.combo = 0;
+        
+        if(!note.isSustainNote) game.misses++;
+        else game.sustainMisses++;
+
+        game.UI.updateScoreText();
     }
 
     override public function destroy() {
