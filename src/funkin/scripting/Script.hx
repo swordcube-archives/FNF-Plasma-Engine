@@ -163,7 +163,6 @@ class ScriptGroup {
         if(excludeScripts == null) excludeScripts = [];
         for(e in scripts) {
             if(!excludeScripts.contains(e)) e.event(func, event);
-            else continue;
             if (event.cancelled) break;
         }
         return event;

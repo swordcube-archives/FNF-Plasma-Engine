@@ -1,2 +1,3 @@
 #! /bin/sh
-lime test linux
+lime build linux
+lime test linux -livereload

@@ -1,2 +1,3 @@
 @echo off
-lime test windows
+lime build windows
+lime run windows -livereload

@@ -211,8 +211,6 @@ class PauseSubState extends FNFSubState {
 	
 							if(curTime >= FlxG.sound.music.length)
 								PlayState.current.endSong();
-	
-							Conductor.update();
 						} else {
 							FlxG.sound.music.play();
 							PlayState.current.vocals.play();
@@ -233,6 +231,20 @@ class PauseSubState extends FNFSubState {
 					case "Skip Intro":
 						PlayState.current.canSkipIntro = false;
 
+						var firstNoteTime:Float = PlayState.current.unsortedNotes[0].strumTime - 1500.0;
+				
+						FlxG.sound.music.time = firstNoteTime;
+						FlxG.sound.music.play();
+				
+						if(Conductor.position <= PlayState.current.vocals.length)
+							PlayState.current.vocals.time = firstNoteTime;
+						
+						PlayState.current.vocals.play();
+						Conductor.position = firstNoteTime;
+
+						if(firstNoteTime >= FlxG.sound.music.length)
+							PlayState.current.endSong();
+
 						//resume all tweens and timers
 						FlxTimer.globalManager.forEach(function(tmr:FlxTimer) {
 							if (!tmr.finished)
@@ -242,15 +254,7 @@ class PauseSubState extends FNFSubState {
 							if (!twn.finished)
 								twn.active = true;
 						});
-						var game = PlayState.current;
 						PlayState.paused = false;
-
-						FlxG.sound.music.time = game.unsortedNotes[0].strumTime - 1500.0;
-						game.vocals.time = FlxG.sound.music.time;
-						Conductor.position = FlxG.sound.music.time;
-
-						FlxG.sound.music.play();
-						game.vocals.play();
 						close();
 
 					case "Exit to menu":

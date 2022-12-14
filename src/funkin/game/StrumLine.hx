@@ -205,7 +205,9 @@ class StrumLine extends FlxSpriteGroup {
                     var funcName:String = !(PlayerSettings.prefs.get("Play As Opponent") && !PlayState.isStoryMode) ? "onPlayerHit" : "onOpponentHit";
                     var eventGlobal = PlayState.current.scripts.event(funcName, new NoteHitEvent(note, Ranking.judgeNote(note.strumTime)));
                     var event = PlayState.current.noteScriptMap[note.type].event("onPlayerHit", new NoteHitEvent(note, Ranking.judgeNote(note.strumTime)));
-                    if(!event.cancelled && !eventGlobal.cancelled) {
+                    var eventCock = PlayState.current.scripts.event("onNoteHit", new NoteHitEvent(note, Ranking.judgements[0].name));
+
+                    if(!event.cancelled && !eventGlobal.cancelled && !eventCock.cancelled) {
                         PlayState.current.health += PlayState.current.healthGain;
                         if(PlayState.current.health > PlayState.current.maxHealth)
                             PlayState.current.health = PlayState.current.maxHealth;

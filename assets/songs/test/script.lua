@@ -42,8 +42,10 @@ function updatePost(delta)
     screenCenter("UI.timeTxt", "X")
 end
 
-function onPlayerHit(cancelled, time, direction)
-    squash(direction)
+function onNoteHit(cancelled, time, direction, sus, mustPress)
+    if mustPress then
+        squash(direction)
+    end
 end
 
 function squash(direction)
