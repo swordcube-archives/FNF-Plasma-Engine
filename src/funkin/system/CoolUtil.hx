@@ -108,7 +108,7 @@ class CoolUtil {
 		PlayState.storyPlaylist = weekList[name].songs;
 		PlayState.isStoryMode = true;
 		PlayState.storyScore = 0;
-		PlayState.weekName = weekList[name].texture;
+		PlayState.weekName = weekList[name].name;
 		var diffNum:Int = weekList[name].difficulties.indexOf(difficulty);
 		if(diffNum < 0) diffNum = 0;
 		PlayState.curDifficulty = weekList[name].difficulties[diffNum];
