@@ -4,9 +4,7 @@ import base.Paths;
 import funkin.system.CoolUtil;
 import funkin.system.MathUtil;
 import flixel.FlxG;
-#if discord_rpc
 import base.DiscordRPC;
-#end
 import funkin.system.Song;
 import funkin.system.Section;
 import base.Console;

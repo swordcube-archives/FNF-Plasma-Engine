@@ -30,8 +30,10 @@ class FNFState extends FlxUIState {
 	// convienience function
 	// use in create!
 	function enableTransitions() {
+		#if !docs
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
+		#end
 	}
 
 	override function create() {

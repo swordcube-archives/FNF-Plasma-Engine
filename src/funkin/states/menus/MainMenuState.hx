@@ -43,8 +43,7 @@ class MainMenuState extends FNFState {
 		DiscordRPC.changePresence("In the Main Menu", null);
 		#end
 
-		transIn = FlxTransitionableState.defaultTransIn;
-		transOut = FlxTransitionableState.defaultTransOut;
+		enableTransitions();
 
 		persistentUpdate = persistentDraw = true;
 

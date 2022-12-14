@@ -102,8 +102,7 @@ class TitleState extends FNFState {
 		startedIntro = true;
 
 		if (!initialized) {
-			transIn = FlxTransitionableState.defaultTransIn;
-			transOut = FlxTransitionableState.defaultTransOut;
+			enableTransitions();
 
 			if (FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
 				FlxG.sound.playMusic(freakyMenu, 0);
