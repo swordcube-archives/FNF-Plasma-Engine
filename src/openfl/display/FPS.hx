@@ -54,6 +54,11 @@ class FPS extends TextField {
 		var currentCount = times.length;
 		currentFPS = Math.round((currentCount + cacheCount) / 2);
 
+		// Your framerate shouldn't be able to go above the cap!!
+		var cap:Int = Std.int(FlxG.stage.frameRate);
+		if(currentFPS > cap)
+			currentFPS = cap;
+
 		if (currentCount != cacheCount /*&& visible*/) {
 			text = "";
 
@@ -72,8 +77,6 @@ class FPS extends TextField {
 				text += ' [BUILD ${Main.buildNumber}]';
 				#end
 			}
-
-			text += '\n';
 		}
 
 		cacheCount = currentCount;
