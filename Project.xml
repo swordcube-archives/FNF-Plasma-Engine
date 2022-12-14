@@ -54,7 +54,7 @@
 
 	<haxeflag name="--macro" value="include('funkin')" />
 	<haxeflag name="--macro" value="include('flixel')" />
-	<haxeflag name="--macro" value="include('sys')" if="sys" />
+	<haxeflag name="--macro" value="include('sys')" unless="html5" />
 	<haxeflag name="--macro" value="include('DateTools')" />
 	<haxeflag name="--macro" value="include('EReg')" />
 	<haxeflag name="--macro" value="include('Lambda')" />
