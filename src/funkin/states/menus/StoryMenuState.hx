@@ -1,5 +1,6 @@
 package funkin.states.menus;
 
+import funkin.system.WeekUtil;
 import funkin.scripting.Script;
 import funkin.system.ChartParser;
 import flixel.util.FlxTimer;
@@ -26,8 +27,9 @@ typedef StorySong = {
 
 @:dox(hide)
 typedef StoryWeek = {
-	var texture:String;
 	var name:String;
+	var texture:String;
+	var title:String;
 	var characters:Array<String>;
 	var difficulties:Array<String>;
 	var songs:Array<StorySong>;
@@ -61,7 +63,7 @@ class StoryMenuState extends FNFState {
 		super.create();
 		enableTransitions();
 
-		weekList = getWeekList();
+		weekList = WeekUtil.getWeekList();
 
 		if (FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing)) {
 			FlxG.sound.playMusic(Assets.load(SOUND, Paths.music('menuMusic')));
@@ -159,7 +161,7 @@ class StoryMenuState extends FNFState {
 		curSelected = Std.int(FlxMath.wrap(curSelected + change, 0, grpWeeks.length-1));
 		grpWeeks.members[curSelected].alpha = 1;
 
-		titleText.text = weekList[curSelected].name;
+		titleText.text = weekList[curSelected].title;
 		titleText.x = FlxG.width - (titleText.width + 10);
 
 		var i:Int = 0;
@@ -180,7 +182,7 @@ class StoryMenuState extends FNFState {
 	var tweenDifficulty:FlxTween;
 	inline function changeDifficulty(?change:Int = 0) {
 		curDifficulty = FlxMath.wrap(curDifficulty + change, 0, weekList[curSelected].difficulties.length-1);
-		intendedScore = Highscore.getScore(weekList[curSelected].texture, weekList[curSelected].difficulties[curDifficulty]);
+		intendedScore = Highscore.getScore(weekList[curSelected].name, weekList[curSelected].difficulties[curDifficulty]);
 
 		var newImage:FlxGraphic = Assets.load(IMAGE, Paths.image('menus/story/difficulties/${weekList[curSelected].difficulties[curDifficulty]}'));
 		if(sprDifficulty.graphic != newImage) {
@@ -228,7 +230,7 @@ class StoryMenuState extends FNFState {
 		super.update(elapsed);
 
 		if(runDefaultCode) {
-			lerpScore = CoolUtil.fixedLerp(lerpScore, intendedScore, 0.4);
+			lerpScore = MathUtil.fixedLerp(lerpScore, intendedScore, 0.4);
 			scoreText.text = "WEEK SCORE:" + Math.round(lerpScore);
 	
 			if (FlxG.sound.music != null)
@@ -247,7 +249,7 @@ class StoryMenuState extends FNFState {
 				PlayState.storyPlaylist = weekList[curSelected].songs;
 				PlayState.isStoryMode = true;
 				PlayState.storyScore = 0;
-				PlayState.weekName = weekList[curSelected].texture;
+				PlayState.weekName = weekList[curSelected].name;
 				PlayState.curDifficulty = weekList[curSelected].difficulties[curDifficulty];
 				Conductor.rate = 1.0;
 				var initialSong = PlayState.storyPlaylist[0];
@@ -263,54 +265,6 @@ class StoryMenuState extends FNFState {
 		}
 
 		for(func in ["onUpdate", "update"]) script.call(func+"Post", [elapsed]);
-	}
-
-	function getWeekList() {
-		var returnList:Array<StoryWeek> = [];
-		while(true) {
-			// Load the intial XML Data.
-			var xml:Xml = Xml.parse(Assets.load(TEXT, Paths.xml('data/storyWeeks'))).firstElement();
-			if(xml == null) {
-				Console.error('Occured while trying to load story mode weeks. | Either the XML doesn\'t exist or the "weeks" node is missing!');
-				break;
-			}
-
-			var data:Access = new Access(xml);
-			for(week in data.nodes.week) {
-				var weekData:StoryWeek = {
-					texture: week.att.texture,
-					name: week.att.name,
-					songs: [],
-					difficulties: CoolUtil.trimArray(week.att.difficulties.split(",")),
-					characters: CoolUtil.trimArray(week.att.chars.split(","))
-				};
-				for(song in week.nodes.song) {
-					weekData.songs.push({
-						name: song.att.name,
-						chartType: song.att.chartType
-					});
-				}
-				returnList.push(weekData);
-			}
-
-			break;
-		}
-		if(returnList.length < 1) returnList = [
-			{
-				texture: "tutorial",
-				name: "ERROR LOADING WEEKS",
-				songs: [
-					{
-						name: "tutorial",
-						chartType: VANILLA
-					}
-				],
-				difficulties: ["easy", "normal", "hard"],
-				characters: ["", "bf", ""]
-			}
-		];
-
-		return returnList;
 	}
 
 	override public function destroy() {

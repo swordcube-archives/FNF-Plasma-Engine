@@ -48,11 +48,11 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
         if (isMenuItem) {
             var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
             var lerpVal:Float = 0.16;
-            y = CoolUtil.fixedLerp(y, (scaledY * yMult) + (FlxG.height * 0.48) + yAdd, lerpVal);
+            y = MathUtil.fixedLerp(y, (scaledY * yMult) + (FlxG.height * 0.48) + yAdd, lerpVal);
             if(forceX != Math.NEGATIVE_INFINITY)
                 x = forceX;
             else
-                x = CoolUtil.fixedLerp(x, (targetY * 20) + 90 + xAdd, lerpVal);
+                x = MathUtil.fixedLerp(x, (targetY * 20) + 90 + xAdd, lerpVal);
         }
         super.update(elapsed);
     }    

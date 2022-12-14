@@ -154,7 +154,7 @@ class FreeplayState extends FNFState {
 			Conductor.position = FlxG.sound.music.time;
 
 			if (FlxG.sound.music.volume < 0.7) FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
-			lerpScore = CoolUtil.fixedLerp(lerpScore, intendedScore, 0.4);
+			lerpScore = MathUtil.fixedLerp(lerpScore, intendedScore, 0.4);
 
 			if (curSongPlaying > -1) {
 				var lerp = FlxMath.lerp(1.15, 1, FlxEase.cubeOut(Conductor.curDecBeat % 1));

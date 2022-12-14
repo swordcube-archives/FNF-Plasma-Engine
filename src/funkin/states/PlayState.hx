@@ -516,8 +516,8 @@ class PlayState extends FNFState {
 		}
 
 		if(camZooming) {
-			camGame.zoom = CoolUtil.fixedLerp(camGame.zoom, defaultCamZoom, 0.05);
-			camHUD.zoom = CoolUtil.fixedLerp(camHUD.zoom, 1, 0.05);
+			camGame.zoom = MathUtil.fixedLerp(camGame.zoom, defaultCamZoom, 0.05);
+			camHUD.zoom = MathUtil.fixedLerp(camHUD.zoom, 1, 0.05);
 		}
 
 		if(controls.getP("BACK")) {

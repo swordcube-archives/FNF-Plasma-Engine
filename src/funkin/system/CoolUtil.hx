@@ -49,25 +49,6 @@ class CoolUtil {
 	}
 
 	/**
-	 * Returns the linear interpolation of two numbers if `ratio`
-	 * is between 0 and 1, and the linear extrapolation otherwise.
-	 * 
-	 * RATIO IS AFFECTED BY THE FRAMERATE WITH THIS FUNCTION BTW!!!
-	 *
-	 * Examples:
-	 *
-	 * ```haxe
-	 * fixedLerp(a, b, 0) = a
-	 * fixedLerp(a, b, 1) = b
-	 * fixedLerp(5, 15, 0.5) = 10
-	 * fixedLerp(5, 15, -1) = -5
-	 * ```
-	 */
-	public inline static function fixedLerp(a:Float, b:Float, ratio:Float) {
-		return FlxMath.lerp(a, b, FlxMath.bound(FlxG.elapsed * 60 * ratio, 0, 1));
-	}
-
-	/**
 		Splits `text` into an array of multiple strings.
 		@param text    The string to split
 		@author swordcube
@@ -76,18 +57,6 @@ class CoolUtil {
 		var daList:Array<String> = text.trim().split('\n');
 		for (i in 0...daList.length) daList[i] = daList[i].trim();
 		return daList;
-	}
-
-	/**
-	 * Generates an array of numbers from `min` to `max`.
-	 * @param max The maximum number in the range.
-	 * @param min The minimum number in the range.
-	 * @return Array<Int>
-	 */
-	public inline static function range(max:Int, ?min = 0):Array<Int> {
-		var dumbArray:Array<Int> = [];
-		for (i in min...max) dumbArray.push(i);
-		return dumbArray;
 	}
 
 	/**
@@ -125,6 +94,28 @@ class CoolUtil {
 		var splitReturn:Array<Int> = [];
 		for (string in splitString) splitReturn.push(Std.parseInt(string));
 		return splitReturn;
+	}
+
+	/**
+	 * Instantly loads a week and goes into gameplay.
+	 * @param name The name of the week to load.
+	 * @param difficulty The difficulty to load.
+	 */
+	public inline static function loadWeek(name:String, ?difficulty:String = "normal") {
+		var weekList = WeekUtil.getWeekListMap();
+
+		// copy pasted bullshit from StoryMenuState
+		PlayState.storyPlaylist = weekList[name].songs;
+		PlayState.isStoryMode = true;
+		PlayState.storyScore = 0;
+		PlayState.weekName = weekList[name].texture;
+		var diffNum:Int = weekList[name].difficulties.indexOf(difficulty);
+		if(diffNum < 0) diffNum = 0;
+		PlayState.curDifficulty = weekList[name].difficulties[diffNum];
+		Conductor.rate = 1.0;
+		var initialSong = PlayState.storyPlaylist[0];
+		PlayState.SONG = ChartParser.loadSong(initialSong.chartType, initialSong.name, PlayState.curDifficulty);
+		FlxG.switchState(new PlayState());
 	}
 
 	public inline static function switchAnimFrames(anim1:FlxAnimation, anim2:FlxAnimation) {

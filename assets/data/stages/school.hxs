@@ -61,11 +61,11 @@ function create() {
     bgGirls.antialiasing = false;
     switch(PlayState_.SONG.name.toLowerCase()) {
         case "roses":
-            bgGirls.animation.addByIndices('danceLeft', 'BG fangirls dissuaded', CoolUtil.range(14), "", 24, false);
-            bgGirls.animation.addByIndices('danceRight', 'BG fangirls dissuaded', CoolUtil.range(30, 15), "", 24, false);
+            bgGirls.animation.addByIndices('danceLeft', 'BG fangirls dissuaded', MathUtil.range(14), "", 24, false);
+            bgGirls.animation.addByIndices('danceRight', 'BG fangirls dissuaded', MathUtil.range(30, 15), "", 24, false);
         default:
-            bgGirls.animation.addByIndices('danceLeft', 'BG girls group', CoolUtil.range(14), "", 24, false);
-            bgGirls.animation.addByIndices('danceRight', 'BG girls group', CoolUtil.range(30, 15), "", 24, false);
+            bgGirls.animation.addByIndices('danceLeft', 'BG girls group', MathUtil.range(14), "", 24, false);
+            bgGirls.animation.addByIndices('danceRight', 'BG girls group', MathUtil.range(30, 15), "", 24, false);
     }
     bgGirls.dance();
 

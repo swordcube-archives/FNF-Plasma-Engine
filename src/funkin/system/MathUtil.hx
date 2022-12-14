@@ -1,5 +1,7 @@
 package funkin.system;
 
+import flixel.math.FlxMath;
+
 /**
  * A class full of math utilities.
  */
@@ -17,5 +19,36 @@ class MathUtil {
 	 */
 	public static function roundDecimal(Value:Float, Precision:Int):Float {
 		return Math.round(Value * Math.pow(10, Precision)) / Math.pow(10, Precision);
+	}
+
+	/**
+	 * Returns the linear interpolation of two numbers if `ratio`
+	 * is between 0 and 1, and the linear extrapolation otherwise.
+	 * 
+	 * RATIO IS AFFECTED BY THE FRAMERATE WITH THIS FUNCTION BTW!!!
+	 *
+	 * Examples:
+	 *
+	 * ```haxe
+	 * fixedLerp(a, b, 0) = a
+	 * fixedLerp(a, b, 1) = b
+	 * fixedLerp(5, 15, 0.5) = 10
+	 * fixedLerp(5, 15, -1) = -5
+	 * ```
+	 */
+	public inline static function fixedLerp(a:Float, b:Float, ratio:Float) {
+		return FlxMath.lerp(a, b, FlxMath.bound(FlxG.elapsed * 60 * ratio, 0, 1));
+	}
+
+	/**
+	 * Generates an array of numbers from `min` to `max`.
+	 * @param max The maximum number in the range.
+	 * @param min The minimum number in the range.
+	 * @return Array<Int>
+	 */
+	 public inline static function range(max:Int, ?min = 0):Array<Int> {
+		var dumbArray:Array<Int> = [];
+		for (i in min...max) dumbArray.push(i);
+		return dumbArray;
 	}
 }

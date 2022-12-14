@@ -190,10 +190,10 @@ class UILayer extends FlxGroup {
 		super.update(elapsed);
 		var iconLerp:Float = 0.25;
 
-		iconP2.scale.set(CoolUtil.fixedLerp(iconP2.scale.x, 1, iconLerp), CoolUtil.fixedLerp(iconP2.scale.y, 1, iconLerp));
+		iconP2.scale.set(MathUtil.fixedLerp(iconP2.scale.x, 1, iconLerp), MathUtil.fixedLerp(iconP2.scale.y, 1, iconLerp));
 		iconP2.updateHitbox();
 
-		iconP1.scale.set(CoolUtil.fixedLerp(iconP1.scale.x, 1, iconLerp), CoolUtil.fixedLerp(iconP1.scale.y, 1, iconLerp));
+		iconP1.scale.set(MathUtil.fixedLerp(iconP1.scale.x, 1, iconLerp), MathUtil.fixedLerp(iconP1.scale.y, 1, iconLerp));
 		iconP1.updateHitbox();
 		updateIcons();
 		updateTime();
