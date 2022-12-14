@@ -1,16 +1,11 @@
--D openfl=9.2.0
--D flixel-yc29=git
--D lime=8.0.0
--D hscript=2.5.0
--D flixel-addons=2.11.0
--D flixel-ui=2.4.0
--D hscript-improved=2.4.0
+-D openfl=git
+-D flixel-leather=git
 
 --define docs
 
 -L lime
 -L openfl
--L flixel-yc29
+-L flixel-leather
 -L hscript-improved
 -L tjson
 
@@ -22,9 +17,7 @@
 -cp src
 
 --macro include('base')
---macro include('external')
 --macro include('funkin')
---macro include('scripting')
 --macro keep('Main')
 
 --no-output
