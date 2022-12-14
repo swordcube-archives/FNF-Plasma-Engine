@@ -229,6 +229,7 @@ class HScriptUtil {
             "Assets" => Assets,
             "FNFSprite" => funkin.system.FNFSprite,
             "CoolUtil" => CoolUtil,
+            "MathUtil" => MathUtil,
             "PlayerSettings" => PlayerSettings,
             "Script" => funkin.scripting.Script,
             "VideoHelper" => funkin.system.VideoHelper,

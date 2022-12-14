@@ -170,6 +170,19 @@ class ChartParser {
                                         values: ["player", eventData[2], eventData[3]]
                                     });
 
+                                case "Change Character":
+                                    // because in psych 0 = bf and 1 = dad
+                                    // even though the charter says otherwise
+                                    if(eventData[2] == "0")
+                                        eventData[2] = "1";
+                                    else if(eventData[2] == "1")
+                                        eventData[2] = "0";
+                                    
+                                    convertedEventGroup.events.push({
+                                        name: eventData[1],
+                                        values: [eventData[2], eventData[3]]
+                                    });
+
                                 default:
                                     convertedEventGroup.events.push({
                                         name: eventData[1],
