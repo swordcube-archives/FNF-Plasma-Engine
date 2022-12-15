@@ -535,7 +535,7 @@ class PlayState extends FNFState {
 
 	public function resyncSong() {
         if(paused || startingSong || endingSong) return;
-		if(cachedSounds.exists("vocals") && SONG.needsVoices) {
+		if(cachedSounds.exists("voices") && SONG.needsVoices) {
             FlxG.sound.music.pause();
             vocals.pause();
             Conductor.position = FlxG.sound.music.time;
