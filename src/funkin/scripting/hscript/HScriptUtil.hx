@@ -211,6 +211,8 @@ class HScriptUtil {
             "Math" => Math,
             "String" => String,
             "StringTools" => StringTools,
+            "Date" => Date,
+            "DateTools" => DateTools,
 
             // Classes (Flixel)
             "FlxG" => flixel.FlxG,
