@@ -429,12 +429,14 @@ class PlayState extends FNFState {
 
 		var eventScript:ScriptModule = eventScriptMap[name];
 
-		// If the event is null, don't continue
-		if(eventScript == null) return;
+		if(eventScript != null) {
+			eventScript.call("onEvent", args);
+			eventScript.call("event", args);
+		}
 
-		// Otherwise, do continue
-		eventScript.call("onEvent", args);
-		eventScript.call("event", args);
+		var args2:Array<String> = args.copy();
+		scripts.call("onEvent", args2, [eventScript]);
+		scripts.call("event", args2, [eventScript]);
 	}
 
 	override function update(elapsed:Float) {
@@ -443,6 +445,8 @@ class PlayState extends FNFState {
 		scripts.set("curDecBeat", Conductor.curDecBeat);
 		scripts.set("curDecStep", Conductor.curDecStep);
 
+		for(s in noteScriptMap) s.updateCall(elapsed);
+		for(s in eventScriptMap) s.updateCall(elapsed);
 		scripts.updateCall(elapsed);
 
 		super.update(elapsed);
@@ -530,6 +534,8 @@ class PlayState extends FNFState {
 			FlxG.switchState(new funkin.states.menus.FreeplayState());
 		}
 
+		for(s in noteScriptMap) s.updatePostCall(elapsed);
+		for(s in eventScriptMap) s.updatePostCall(elapsed);
 		scripts.updatePostCall(elapsed);
 	}
 

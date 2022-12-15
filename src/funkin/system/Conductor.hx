@@ -53,6 +53,8 @@ class Conductor {
 	}
 
 	public static function reset() {
+		storedSteps = [];
+		skippedSteps = [];
 		onBeat.removeAll();
 		onStep.removeAll();
 	}
