@@ -24,13 +24,12 @@ class ErrorSubState extends FNFSubState {
         box.antialiasing = PlayerSettings.prefs.get("Antialiasing");
         add(box);
 
-        var icon = new FlxSprite(box.x + 10, box.y + 10).loadGraphic(Assets.load(IMAGE, Paths.image("ui/statusIcons")), true, 16, 16);
-        icon.scale.set(6, 6);
+        var icon = new FlxSprite(box.x + 10, box.y + 10).loadGraphic(Assets.load(IMAGE, Paths.image("ui/statusIcons")), true, 450, 450);
+        icon.setGraphicSize(100);
         icon.updateHitbox();
-        icon.animation.add("frames", [1, 0, 2, 3], 0, false);
+        icon.animation.add("frames", [0, 1, 2, 3], 0, false);
         icon.animation.play("frames");
         icon.animation.frameIndex = debugCode;
-        icon.antialiasing = false;
         add(icon);
 
         var text = new FlxText(icon.x + (icon.width + 10), icon.y, 0, title+"\n  ", 48);

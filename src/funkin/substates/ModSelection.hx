@@ -112,7 +112,7 @@ class ModSelection extends FNFSubState {
         add(arrowRight);
 
         selectedText = new FlxText(0,FlxG.height - 90,0,"?/?");
-        selectedText.size = 32;
+        selectedText.setFormat(Paths.font("funkin.ttf"), 32, FlxColor.WHITE, CENTER);
         selectedText.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
         selectedText.scrollFactor.set();
         selectedText.antialiasing = prefs.get("Antialiasing");
