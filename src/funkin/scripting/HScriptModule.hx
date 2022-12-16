@@ -25,16 +25,7 @@ class HScriptModule extends ScriptModule {
         parser.allowJSON = true;
         parser.allowMetadata = true;
 
-        interp.errorHandler = function(e:hscript.Error) {
-            #if debug
-            Console.error(e);
-            #end
-            var posInfo = interp.posInfos();
-            var lineNumber = Std.string(posInfo.lineNumber);
-            var methodName = posInfo.methodName;
-            Console.error('Exception occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'}\n\n${e}\n\nScript File: $path');
-            destroy();
-        }
+        interp.errorHandler = _errorHandler;
 
         // Allow unsafe shit to be imported depending on if
         // "Allow unsafe mods" is on in Settings.
@@ -58,12 +49,15 @@ class HScriptModule extends ScriptModule {
 
         try {
             program = parser.parseString(code);
+        } catch(e:Error) {
+            _errorHandler(e);
         } catch(e) {
-            scriptType = EmptyScript;
-            Console.error(e.details());
-            running = false;
-            destroy();
-        } 
+            _errorHandler(new Error(ECustom(e.toString()), 0, 0, path, 0));
+        }
+    }
+
+    function _errorHandler(error:Error) {
+        Console.error('$path - Line ${error.line}: ${error.toString()}');
     }
 
     /**
@@ -73,15 +67,14 @@ class HScriptModule extends ScriptModule {
      */
     override public function run(callCreate:Bool = true, ?args:Array<Dynamic>) {
         try {
-            interp.execute(program);
+            if(program != null)
+                interp.execute(program);
         } catch(e) {
-            scriptType = EmptyScript;
-            callCreate = false;
             Console.error(e.details());
             running = false;
             destroy();
         }
-        if(callCreate) {
+        if(callCreate && running) {
             createCall(args);
         }
     }
