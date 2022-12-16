@@ -100,7 +100,7 @@ class ScriptModule implements IFlxDestroyable {
                         ];
                 }
                 var ret:Dynamic = this.call(func, args);
-                if(ret != null && ret == false)
+                if(ret == false)
                     event.cancel();
             default: // gah
         }
