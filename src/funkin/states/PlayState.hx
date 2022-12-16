@@ -84,8 +84,7 @@ class PlayState extends FNFState {
 
 	public var cachedSounds:Map<String, Sound> = [
 		"menuMusic"  => Assets.load(SOUND, Paths.music("menuMusic")),
-		"inst"       => Assets.load(SOUND, Paths.inst(SONG.name)),
-		"voices"     => Assets.load(SOUND, Paths.voices(SONG.name))
+		"inst"       => Assets.load(SOUND, Paths.inst(SONG.name))
 	];
 	public var vocals:FlxSound = new FlxSound();
 
@@ -190,6 +189,9 @@ class PlayState extends FNFState {
 		Conductor.mapBPMChanges(SONG); // i deadass forgot to add this what 💀️
 
 		Conductor.position = Conductor.crochet * -5;
+
+		if(FileSystem.exists(Paths.voices(SONG.name)))
+			cachedSounds["voices"] = Assets.load(SOUND, Paths.voices(SONG.name));
 
 		// Setup cameras
 		camGame = FlxG.camera;
