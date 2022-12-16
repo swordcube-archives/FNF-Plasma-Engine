@@ -33,6 +33,7 @@ class HScriptModule extends ScriptModule {
             var lineNumber = Std.string(posInfo.lineNumber);
             var methodName = posInfo.methodName;
             Console.error('Exception occured at line $lineNumber ${methodName == null ? "" : 'in $methodName'}\n\n${e}\n\nScript File: $path');
+            destroy();
         }
 
         // Allow unsafe shit to be imported depending on if
