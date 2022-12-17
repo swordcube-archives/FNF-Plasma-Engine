@@ -16,7 +16,6 @@ import funkin.options.types.NumberOption;
 import funkin.options.types.BoolOption;
 import funkin.options.types.BaseOption;
 import funkin.options.types.ListOption;
-import funkin.options.types.GameplayControl;
 import funkin.options.types.GeneralControl;
 import flixel.FlxSprite;
 import funkin.substates.FNFSubState;
@@ -132,21 +131,6 @@ class OptionScreen extends FNFSubState {
                         valueTextMap[optionID] = valText;
                         add(valText);
 
-                    case GameplayControl:
-                        var itemData:GameplayControl = cast item;
-
-                        alphabet.x += 150;
-                        alphabet.font = Default;
-                        alphabet.text = itemData.title;
-                        alphabet.color = FlxColor.BLACK;
-
-                        var control = new Alphabet(alphabet.x + 400, alphabet.y, Default, CoolUtil.keyToString(controls.list[itemData.saveData][itemData.keyIndex]));
-                        control.ID = optionID;
-                        control.color = FlxColor.BLACK;
-                        add(control);
-
-                        controlTextMap[optionID] = [control];
-
                     case GeneralControl:
                         alphabet.x += 150;
                         alphabet.font = Default;
@@ -226,9 +210,6 @@ class OptionScreen extends FNFSubState {
                             valueTextMap[curSelected].text = option.values[index]+"";
                             if(option.updateCallback != null) option.updateCallback(option.values[index]);
 
-                        case GameplayControl:
-                            bindSelected = 0;
-
                         case GeneralControl:
                             var inc:Int = controls.get("UI_LEFT") ? -1 : 1;
                             bindSelected = Std.int(FlxMath.bound(bindSelected+inc, 0, 1));
@@ -284,9 +265,6 @@ class OptionScreen extends FNFSubState {
         if(amountOfOptions <= 0) return;
 
         curSelected = FlxMath.wrap(curSelected + change, 0, amountOfOptions-1);
-
-        if(generalOptions[curSelected] is GameplayControl)
-            bindSelected = 0;
 
         grpTitles.forEach(function(a:Alphabet) {
             a.alpha = curSelected == a.ID ? 1 : 0.6;

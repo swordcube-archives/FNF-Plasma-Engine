@@ -47,17 +47,6 @@ class NoteColoringMenu extends FNFSubState {
 		add(bg);
 
         add(notes = new FlxTypedSpriteGroup<Note>());
-        for(i in 0...keyAmount) {
-            var note:Note = new Note(0, keyAmount, i);
-            note.setPosition(((Note.spacing * Note.keyInfo[keyAmount].scale) * i) * Note.keyInfo[keyAmount].spacing, 70);
-            notes.add(note);
-
-            var coolScale:Float = note.noteScale;
-            if (selected == i)
-                note.scale.set(coolScale,coolScale);
-            else
-                note.scale.set(coolScale * 0.9, coolScale * 0.9);
-        }
         notes.scrollFactor.set();
         notes.screenCenter(X);
         colorPicker = new ColorPicker(
@@ -99,12 +88,14 @@ class NoteColoringMenu extends FNFSubState {
         add(colorPicker);
 
         selectedText = new FlxText(0,FlxG.height - 90,0,'< $keyAmount >');
-        selectedText.size = 32;
+        selectedText.setFormat(Paths.font("funkin.ttf"), 32, FlxColor.WHITE, CENTER);
         selectedText.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
         selectedText.scrollFactor.set();
         selectedText.antialiasing = prefs.get("Antialiasing");
         selectedText.screenCenter(X);
         add(selectedText);
+
+        changeKeyAmount(0);
 
         script.createPostCall();
     }
@@ -145,7 +136,9 @@ class NoteColoringMenu extends FNFSubState {
                 if (selected == i)
                     notes.members[i].scale.set(coolScale,coolScale);
                 else
-                    notes.members[i].scale.set(coolScale * 0.9, coolScale * 0.9);
+                    notes.members[i].scale.set(coolScale * 0.85, coolScale * 0.85);
+
+                notes.members[i].alpha = selected == i ? 1 : 0.6;
             }
         }
 
@@ -183,7 +176,9 @@ class NoteColoringMenu extends FNFSubState {
             if (selected == i)
                 note.scale.set(coolScale,coolScale);
             else
-                note.scale.set(coolScale * 0.9, coolScale * 0.9);
+                note.scale.set(coolScale * 0.85, coolScale * 0.85);
+
+            note.alpha = selected == i ? 1 : 0.6;
         }
         notes.screenCenter(X);
 
@@ -196,5 +191,7 @@ class NoteColoringMenu extends FNFSubState {
 
         selectedText.text = '< $keyAmount >';
         selectedText.screenCenter(X);
+
+        FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/scrollMenu")));
     }
 }

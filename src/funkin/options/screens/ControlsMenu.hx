@@ -1,9 +1,9 @@
 package funkin.options.screens;
 
+import funkin.options.types.MenuOption;
 import funkin.scripting.Script;
 import flixel.input.keyboard.FlxKey;
 import funkin.game.Note;
-import funkin.options.types.GameplayControl;
 import funkin.options.types.GeneralControl;
 
 class ControlsMenu extends OptionScreen {
@@ -14,9 +14,18 @@ class ControlsMenu extends OptionScreen {
 		script.setParent(this);
 		script.run();
         categories = [
+            "Gameplay",
             "UI"
         ];
         options = [
+            "Gameplay" => [
+                new MenuOption(
+                    "Change Gameplay Binds",
+                    "Change your keybinds for gameplay.",
+                    GameplayBindsMenu,
+                    []
+                )
+            ],
             "UI" => [
                 new GeneralControl(
                     "Up",
@@ -49,22 +58,6 @@ class ControlsMenu extends OptionScreen {
             ]
         ];
 
-        var i = Lambda.count(Note.keyInfo);
-        for(ass in 0...Lambda.count(Note.keyInfo)) {
-            var categoryName:String = i+"K Bind"+(i > 1 ? "s" : "");
-            categories.insert(0, categoryName);
-            options[categoryName] = [];
-            var keyIndex:Int = 0;
-            for(key in PlayerSettings.controls.default_list["GAME_"+i]) {
-                options[categoryName].push(new GameplayControl(
-                    "Bind "+CoolUtil.firstLetterUppercase(Note.keyInfo[i].directions[keyIndex].toLowerCase()),
-                    "GAME_"+i,
-                    keyIndex
-                ));
-                keyIndex++;
-            }
-            i--;
-        }
         super.create();
         descBox.visible = false;
         descText.visible = false;
@@ -80,10 +73,6 @@ class ControlsMenu extends OptionScreen {
         if(changingBind && FlxG.keys.justPressed.ANY) {
             var curKey:FlxKey = FlxG.keys.getIsDown()[0].ID;
             switch(Type.getClass(generalOptions[curSelected])) {
-                case GameplayControl:
-                    var option:GameplayControl = cast generalOptions[curSelected];
-                    controls.list[option.saveData][option.keyIndex] = curKey;
-
                 case GeneralControl:
                     var option:GeneralControl = cast generalOptions[curSelected];
                     controls.list[option.saveData][bindSelected] = curKey;
@@ -100,7 +89,7 @@ class ControlsMenu extends OptionScreen {
             if(controls.getP("ACCEPT")) {
                 var option:Dynamic = generalOptions[curSelected];
                 switch(Type.getClass(option)) {
-                    case GameplayControl, GeneralControl:
+                    case GeneralControl:
                         canInteract = false;
                         changingBind = true;
                         var val = controlTextMap[curSelected];

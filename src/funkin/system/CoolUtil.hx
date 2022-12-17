@@ -171,6 +171,7 @@ class CoolUtil {
 			case RIGHT:				"→";
 			case ESCAPE:			"ESC";
 			case BACKSPACE:			"[←]";
+			case SPACE:             "[_]";
 			case NUMPADZERO:		"#0";
 			case NUMPADONE:			"#1";
 			case NUMPADTWO:			"#2";
@@ -195,6 +196,7 @@ class CoolUtil {
 			case EIGHT:				"8";
 			case NINE:				"9";
 			case PERIOD:			".";
+			case SEMICOLON:         ";";
 			default:				key.toString();
 		}
 	}

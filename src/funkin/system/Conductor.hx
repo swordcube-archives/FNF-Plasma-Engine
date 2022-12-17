@@ -136,6 +136,7 @@ class Conductor {
 	}
 
 	public static function isAudioSynced(sound:FlxSound) {
-		return !(sound.time > position + 20 || sound.time < position - 20);
+		var resyncTime:Float = #if windows 30 #else 20 #end; // i hate windows
+		return !(sound.time > position + resyncTime || sound.time < position - resyncTime);
 	}
 }

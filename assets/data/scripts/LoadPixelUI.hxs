@@ -14,4 +14,9 @@ function create() {
     GameOverSubstate.deathSound = Paths.sound("game/deathSound-pixel");
     GameOverSubstate.deathMusic = Paths.music("death/default-pixel");
     GameOverSubstate.retrySound = Paths.sound("game/retrySound-pixel");
+
+    PlayState.UI.timeIcon.load("IMAGE", Paths.image("ui/clockIcon-pixel"));
+    PlayState.UI.timeIcon.setGraphicSize(30);
+    PlayState.UI.timeIcon.updateHitbox();
+    PlayState.UI.timeIcon.antialiasing = false;
 }
