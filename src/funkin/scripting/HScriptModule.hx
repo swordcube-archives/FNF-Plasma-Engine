@@ -18,6 +18,7 @@ class HScriptModule extends ScriptModule {
     var interp:Interp = new Interp();
 
     override function create() {
+        #if !docs
         this.scriptType = HScript;
         this.running = true;
 
@@ -54,11 +55,14 @@ class HScriptModule extends ScriptModule {
         } catch(e) {
             _errorHandler(new Error(ECustom(e.toString()), 0, 0, path, 0));
         }
+        #end
     }
 
+    #if !docs
     function _errorHandler(error:Error) {
         Console.error('$path - Line ${error.line}: ${error.toString()}');
     }
+    #end
 
     /**
      * Runs the script.
