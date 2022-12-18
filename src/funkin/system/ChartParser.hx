@@ -96,7 +96,9 @@ class ChartParser {
                         dad: vanillaChart.player2,
                         bf: vanillaChart.player1,
                         gf: gfVersion, // Ik base game charts don't have this but i am not hardcoding gfVersion
-                        stage: vanillaChart.stage
+                        stage: vanillaChart.stage,
+
+                        sustainLengthOffset: 0
                     };
                 }
             
@@ -205,7 +207,9 @@ class ChartParser {
                         dad: psychChart.player2,
                         bf: psychChart.player1,
                         gf: gfVersion,
-                        stage: psychChart.stage
+                        stage: psychChart.stage,
+
+                        sustainLengthOffset: 1 // because psych extends sustains by 1 for some reason!!!!
                     };
                 }
 
@@ -227,7 +231,9 @@ class ChartParser {
             dad: "dad",
             bf: "bf",
             gf: "gf",
-            stage: "default"
+            stage: "default",
+
+            sustainLengthOffset: 0
         };
     }
 }

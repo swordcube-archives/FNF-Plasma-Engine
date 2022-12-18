@@ -234,7 +234,7 @@ class PlayState extends FNFState {
 					dunceNote.parent = parent;
 					var event = noteScriptMap[note.type].event("onNoteCreation", new SimpleNoteEvent(dunceNote));
 		
-					var length:Int = Math.floor(note.sustainLength / Conductor.stepCrochet);
+					var length:Int = Math.floor(note.sustainLength / Conductor.stepCrochet)+SONG.sustainLengthOffset;
 					if(length > 0) {
 						for(sus in 0...length) {
 							var susTime:Float = fixedStrumTime + (Conductor.stepCrochet * sus) + (Conductor.stepCrochet / Math.abs(parent.noteSpeed / Conductor.rate));

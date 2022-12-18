@@ -26,6 +26,8 @@ typedef Song = {
 	var dad:String;
 	var gf:String;
 	var stage:Null<String>;
+
+	var sustainLengthOffset:Int;
 }
 
 // Base Game
