@@ -72,7 +72,7 @@ class StoryMenuState extends FNFState {
 
 		persistentUpdate = persistentDraw = true;
 
-		script = Script.load(Paths.script('data/states/MainMenuState'));
+		script = Script.load(Paths.script('data/states/StoryMenuState'));
 		if (FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing)) {
 			FlxG.sound.playMusic(Assets.load(SOUND, Paths.music('menuMusic')));
 			Conductor.bpm = 102;
