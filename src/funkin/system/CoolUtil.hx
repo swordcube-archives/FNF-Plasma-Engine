@@ -45,7 +45,7 @@ class CoolUtil {
 		}
 
 		size = Math.round(size * 100) / 100;
-		return size + dataTexts[data];
+		return size + dataTexts[data].toUpperCase();
 	}
 
 	/**
