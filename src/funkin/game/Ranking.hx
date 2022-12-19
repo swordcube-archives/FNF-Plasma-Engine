@@ -56,7 +56,8 @@ class Ranking {
 		60 => "C",
 		50 => "D",
 		40 => "E",
-		0 => "F"
+		20 => "F",
+		0 => "L"
 	];
 	public static final defaultRanks:Map<Int, String> = ranks.copy();
 
