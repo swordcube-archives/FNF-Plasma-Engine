@@ -107,6 +107,7 @@ class NoteInput implements IFlxDestroyable {
 					c.playAnim(c.getSingAnim(parent.keyAmount, data)+"miss", true);
 				}
 			}
+			game.score -= 10;
 			game.misses++;
 			game.UI.updateScoreText();
 			if(PlayerSettings.prefs.get("Miss Sounds"))
