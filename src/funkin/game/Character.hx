@@ -110,6 +110,8 @@ class Character extends FNFSprite {
 	 */
 	public var isPlayer:Bool = false;
 
+	public var isTruePlayer:Bool = false;
+
 	/**
 	 * Controls how long the character can hold down a note for before going back to idle.
 	 */
@@ -245,6 +247,7 @@ class Character extends FNFSprite {
 		healthIcon = data.healthicon;
 		flipX = data.flip_x;
 		playerOffsets = isPlayer;
+		isTruePlayer = false;
 
 		deathCharacter = curCharacter + "-dead";
 		if (!charExists(deathCharacter))
@@ -297,6 +300,7 @@ class Character extends FNFSprite {
 		healthIcon = curCharacter;
 		flipX = data.flipX;
 		playerOffsets = isPlayer;
+		isTruePlayer = false;
 
 		deathCharacter = curCharacter + "-dead";
 		if (!charExists(deathCharacter))
@@ -349,6 +353,7 @@ class Character extends FNFSprite {
 		healthIcon = data.has.icon ? data.att.icon : curCharacter;
 		flipX = data.att.flip_x == "true";
 		playerOffsets = data.has.is_player && data.att.is_player == "true";
+		isTruePlayer = playerOffsets;
 
 		deathCharacter = data.has.death_character ? data.att.death_character : "bf-dead";
 
@@ -455,43 +460,45 @@ class Character extends FNFSprite {
 
 		script.updateCall(elapsed);
 
-		if (animTimer > 0) {
-			animTimer -= elapsed;
-			if (animTimer <= 0) {
-				if (specialAnim && animation.curAnim.name == 'hey' || animation.curAnim.name == 'cheer') {
-					specialAnim = false;
-					dance();
+		if(!debugMode) {
+			if (animTimer > 0) {
+				animTimer -= elapsed;
+				if (animTimer <= 0) {
+					if (specialAnim && animation.curAnim.name == 'hey' || animation.curAnim.name == 'cheer') {
+						specialAnim = false;
+						dance();
+					}
+					animTimer = 0;
 				}
-				animTimer = 0;
-			}
-		} else if (specialAnim && ((animation.curAnim != null && animation.curAnim.finished) || (animation.curAnim == null))) {
-			specialAnim = false;
-			dance();
-		}
-
-		if (!isPlayer) {
-			if (animation.curAnim != null && animation.curAnim.name.startsWith('sing'))
-				holdTimer += elapsed * FlxG.sound.music.pitch;
-
-			if (holdTimer >= Conductor.stepCrochet * singDuration * 0.0011) {
+			} else if (specialAnim && ((animation.curAnim != null && animation.curAnim.finished) || (animation.curAnim == null))) {
+				specialAnim = false;
 				dance();
-				holdTimer = 0;
 			}
-		} else {
-			if (animation.curAnim != null && animation.curAnim.name.startsWith('sing'))
-				holdTimer += elapsed * FlxG.sound.music.pitch;
-			else
-				holdTimer = 0;
 
-			if (animation.curAnim != null && animation.curAnim.name.endsWith('miss') && animation.curAnim.finished && !debugMode)
-				playAnim('idle', true, false, 10);
+			if (!isPlayer) {
+				if (animation.curAnim != null && animation.curAnim.name.startsWith('sing'))
+					holdTimer += elapsed * FlxG.sound.music.pitch;
+
+				if (holdTimer >= Conductor.stepCrochet * singDuration * 0.0011) {
+					dance();
+					holdTimer = 0;
+				}
+			} else {
+				if (animation.curAnim != null && animation.curAnim.name.startsWith('sing'))
+					holdTimer += elapsed * FlxG.sound.music.pitch;
+				else
+					holdTimer = 0;
+
+				if (animation.curAnim != null && animation.curAnim.name.endsWith('miss') && animation.curAnim.finished && !debugMode)
+					playAnim('idle', true, false, 10);
+			}
+
+			if (animation.curAnim != null && animation.curAnim.finished && animation.exists(animation.curAnim.name + '-loop'))
+				playAnim(animation.curAnim.name + '-loop');
+
+			if (danceSteps.length > 1 && animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
+				playAnim(danceSteps[1]);
 		}
-
-		if (animation.curAnim != null && animation.curAnim.finished && animation.exists(animation.curAnim.name + '-loop'))
-			playAnim(animation.curAnim.name + '-loop');
-
-		if (danceSteps.length > 1 && animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
-			playAnim(danceSteps[1]);
 
 		script.updatePostCall(elapsed);
 	}

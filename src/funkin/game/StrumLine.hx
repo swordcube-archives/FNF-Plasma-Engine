@@ -281,6 +281,7 @@ class StrumLine extends FlxSpriteGroup {
         }
 
         if(!note.isSustainNote) {
+            game.score -= 10;
             game.combo = 0;
             game.misses++;
             if(PlayerSettings.prefs.get("Miss Sounds"))

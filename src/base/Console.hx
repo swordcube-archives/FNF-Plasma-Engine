@@ -77,8 +77,10 @@ class Console {
     }
 
     public static inline function debug(v:Dynamic) {
+        #if debug
 		FlxG.log.notice(v);
         var color:String = colors["green"];
         log(v, "DEBUG", color, {regularSymbol: '🟢️', fallBackSymbol: '(i)'});
+        #end
     }
 }

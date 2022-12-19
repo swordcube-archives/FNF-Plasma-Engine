@@ -38,10 +38,8 @@ class MainMenuState extends FNFState {
 	override function create() {
 		super.create();
 
-		#if discord_rpc
 		// Updating Discord Rich Presence
 		DiscordRPC.changePresence("In the Main Menu", null);
-		#end
 
 		enableTransitions();
 
@@ -103,12 +101,10 @@ class MainMenuState extends FNFState {
 				button.playAnim("select");
 				camFollow.y = button.y;
 
-				#if discord_rpc
 				DiscordRPC.changePresence(
 					"In the Main Menu",
 					"Selecting "+CoolUtil.firstLetterUppercase(button.name)
 				);
-				#end
 			});
 			list.onAccept.add(function() {
 				var button:MainMenuButton = list.members[list.curSelected];

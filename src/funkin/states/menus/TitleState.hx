@@ -39,6 +39,8 @@ class TitleState extends FNFState {
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 		super.create();
 
+		DiscordRPC.changePresence("In the Title Screen", null);
+
 		script = Script.load(Paths.script('data/states/TitleState'));
 		script.setParent(this);
 		script.run();

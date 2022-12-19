@@ -37,7 +37,16 @@ class MathUtil {
 	 * ```
 	 */
 	public inline static function fixedLerp(a:Float, b:Float, ratio:Float) {
-		return FlxMath.lerp(a, b, FlxMath.bound(FlxG.elapsed * 60 * ratio, 0, 1));
+		return FlxMath.lerp(a, b, FlxMath.bound(fpsAdjust(ratio), 0, 1));
+	}
+
+	/**
+	 * Adjusts a number to match the framerate.
+	 * Useful for lerp functions.
+	 * @param num The number to adjust.
+	 */
+	public inline static function fpsAdjust(num:Float) {
+		return FlxG.elapsed * 60 * num;
 	}
 
 	/**

@@ -62,17 +62,13 @@ class Init extends FlxState {
 		if(Sys.args().contains("-livereload")) Main.developerMode = true;
 		#end
 
-		#if discord_rpc
 		DiscordRPC.initialize();
-		#end
 
 		Application.current.onExit.add(function(exitCode) {
+			DiscordRPC.shutdown();
 			FlxG.save.data.volume = FlxG.sound.volume;
 			PlayerSettings.controls.flush();
 			PlayerSettings.prefs.flush();
-			#if discord_rpc
-			DiscordRPC.shutdown();
-			#end
 		});
 
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, function(e:KeyboardEvent) {
