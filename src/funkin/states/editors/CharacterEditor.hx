@@ -388,6 +388,13 @@ class CharacterEditor extends Editor {
                 var stageDropDown = new FlxUIDropDownMenu(10, 185, FlxUIDropDownMenu.makeStrIdLabelArray(stageList, true), function(id:String) {
                     stage.load(stageList[Std.parseInt(id)]);
 
+                    var funny:Array<String> = ["dad", "gf", "bf"];
+                    for(i in 0...referenceGroup.length) {
+                        var character = referenceGroup.members[i];
+                        var pos = stage.characterPositions[funny[i]];
+                        character.setPosition(pos.x, pos.y);
+                    }
+
                     var pos = character.isPlayer ? stage.characterPositions["bf"] : stage.characterPositions["dad"];
                     character.setPosition(pos.x, pos.y);
                 });
