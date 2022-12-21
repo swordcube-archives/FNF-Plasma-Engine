@@ -153,6 +153,11 @@ class Character extends FNFSprite {
 	 */
 	public var script:ScriptModule;
 
+	/**
+	 * The name of the character's spritesheet.
+	 */
+	public var spritesheet:String = "spritesheet";
+
 	var __baseFlipped:Bool = false;
 	var __antialiasing:Bool = true;
 
@@ -242,6 +247,7 @@ class Character extends FNFSprite {
 			load(SPARROW, Paths.image(spritesheetPath, false, mod));
 		else
 			load(PACKER, Paths.image(spritesheetPath, false, mod));
+		spritesheet = "spritesheet";
 
 		antialiasing = !data.no_antialiasing ? PlayerSettings.prefs.get("Antialiasing") : false;
 		__antialiasing = !data.no_antialiasing;
@@ -296,6 +302,7 @@ class Character extends FNFSprite {
 			load(SPARROW, Paths.image(spritesheetPath, false, mod));
 		else
 			load(PACKER, Paths.image(spritesheetPath, false, mod));
+		spritesheet = "spritesheet";
 
 		antialiasing = data.antialiasing ? PlayerSettings.prefs.get("Antialiasing") : false;
 		__antialiasing = data.antialiasing;
@@ -351,6 +358,7 @@ class Character extends FNFSprite {
 			default:
 				load(SPARROW, Paths.image('data/characters/$curCharacter/$spritesheetName', false, mod));
 		}
+		spritesheet = spritesheetName;
 		antialiasing = data.has.antialiasing ? (data.att.antialiasing == 'true' ? PlayerSettings.prefs.get("Antialiasing") : false) : PlayerSettings.prefs.get("Antialiasing");
 		__antialiasing = data.has.antialiasing ? data.att.antialiasing == 'true' : true;
 		singDuration = data.has.sing_duration ? Std.parseFloat(data.att.sing_duration) : 4.0;

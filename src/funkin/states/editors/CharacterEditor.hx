@@ -45,6 +45,7 @@ class CharacterEditor extends Editor {
     // UI
     public var UI_box:FlxUITabMenu;
     public var UI_animBox:FlxUITabMenu;
+    public var UI_fileBox:FlxUITabMenu;
 
     public var inputFields:Array<FlxUIInputText> = [];
 
@@ -129,6 +130,7 @@ class CharacterEditor extends Editor {
         shadowCharacter.loadCharacter(curCharacter);
         shadowCharacter.debugMode = true;
         shadowCharacter.color = FlxColor.BLACK;
+        shadowCharacter.alpha = 0.5;
         add(shadowCharacter);
         add(character);
 
@@ -198,10 +200,22 @@ class CharacterEditor extends Editor {
         UI_animBox.scrollFactor.set();
         add(UI_animBox);
 
+        var tabs = [
+            {name: "File",          label: "File"}
+        ];
+        UI_fileBox = new FlxUITabMenu(null, tabs, true);
+
+        var size = new Size(103, 60);
+        UI_fileBox.resize(size.width, size.height);
+        UI_fileBox.setPosition(FlxG.width - (size.width + 20), FlxG.height - (size.height + 20));
+        UI_fileBox.scrollFactor.set();
+        add(UI_fileBox);
+
         initTab("Animation_box", "Animations");
+        initTab("File_box", "File");
 
         // Put UI elements onto the HUD camera
-        for(item in [UI_box, UI_animBox, healthBarBG, healthBar, healthIcon])
+        for(item in [UI_box, UI_animBox, UI_fileBox, healthBarBG, healthBar, healthIcon])
             item.cameras = [camHUD];
 
         refreshAvailableAnims();
@@ -355,15 +369,15 @@ class CharacterEditor extends Editor {
                 group.add(new FlxText(scaleStepper.x, scaleStepper.y - 15, "Character Scale"));
                 group.add(scaleStepper);
 
-                var fuckYou:String = "";
+                var stringDanceSteps:String = "";
                 for(i in 0...character.danceSteps.length) {
                     var step:String = character.danceSteps[i];
-                    fuckYou += step;
+                    stringDanceSteps += step;
                     if(i < character.danceSteps.length - 1)
-                        fuckYou += ",";
+                        stringDanceSteps += ",";
                 }
 
-                var danceStepsInput = new FlxUIInputText(10, 140, Std.int(UI_box.width - 20), fuckYou, 8);
+                var danceStepsInput = new FlxUIInputText(10, 140, Std.int(UI_box.width - 20), stringDanceSteps, 8);
                 danceStepsInput.callback = function(text:String, action:String) {
                     character.danceSteps = CoolUtil.trimArray(text.split(","));
                 };
@@ -474,6 +488,17 @@ class CharacterEditor extends Editor {
                 colorPicker.scrollFactor.set();
                 group.add(colorPicker);
 
+                var iconColorButton = new FlxUIButton(10, 140, "Get color from icon", function() {
+                    healthBar.color = CoolUtil.dominantColor(healthIcon);
+                    colorPicker.setColor({
+                        "r": healthBar.color.red,
+                        "g": healthBar.color.green,
+                        "b": healthBar.color.blue
+                    }, false);
+                });
+                iconColorButton.resize(UI_box.width - 20, iconColorButton.height);
+                group.add(iconColorButton);
+
                 UI_box.addGroup(group);
 
             // this is for the box with the dropdown + the add & remove buttons
@@ -520,6 +545,19 @@ class CharacterEditor extends Editor {
                 group.add(shadowButton);
 
                 UI_animBox.addGroup(group);
+
+            case "File_box":
+                var group:FlxUI = new FlxUI(null, UI_fileBox);
+                group.name = label;
+
+                var saveButton = new FlxUIButton(10, 10, "Save", function() {
+                    var data:String = CoolUtil.getXMLDataFromCharacter(character, healthBar.color);
+                    File.saveContent(Paths.xml('data/characters/${character.curCharacter}/config'), data);
+                    FlxG.switchState(new funkin.states.menus.MainMenuState());
+                });
+                group.add(saveButton);
+
+                UI_fileBox.addGroup(group);
         }
     }
 

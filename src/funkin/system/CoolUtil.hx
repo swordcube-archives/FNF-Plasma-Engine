@@ -1,10 +1,14 @@
 package funkin.system;
 
+import openfl.events.IOErrorEvent;
+import funkin.game.Character;
 import funkin.states.PlayState;
 import funkin.system.ChartParser.ChartType;
-import flixel.math.FlxMath;
 import flixel.input.keyboard.FlxKey;
 import flixel.animation.FlxAnimation;
+import openfl.net.FileReference;
+import flixel.util.FlxColor;
+import openfl.events.Event as OpenFLEvent;
 
 using StringTools;
 
@@ -398,5 +402,117 @@ class CoolUtil {
 			}
 		}
 		return arrayToReturn;
+	}
+
+	public static var _file:FileReference;
+
+	// this has got to be the coolest shit i have made so far imo
+	// idc if it seems lame to other people i am loving coding this
+	/**
+	 * Generates a character XML with data from a `Character` instance.
+	 * @param character The character instance to turn into an xml.
+	 * @param healthBarColor The color used for the new character's health bar color.
+	 * @param fileName The file name of the XML.
+	 */
+	public static function getXMLDataFromCharacter(character:Character, healthBarColor:FlxColor) {
+		#if !docs
+		@:privateAccess {
+		var stringDanceSteps:String = "";
+		for(i in 0...character.danceSteps.length) {
+			var step:String = character.danceSteps[i];
+			stringDanceSteps += step;
+			if(i < character.danceSteps.length - 1)
+				stringDanceSteps += ",";
+		}
+		var animList:String = "";
+		var itemIndex:Int = 0;
+		var list:Array<String> = character.animation.getNameList();
+		for(item in list) {
+			@:privateAccess {
+				var animData = character.animation._animations[item];
+
+				var stringIndices:String = "";
+				for(i in 0...animData.inputIndices.length) {
+					var step:Int = animData.inputIndices[i];
+					stringIndices += step+"";
+					if(i < animData.inputIndices.length - 1)
+						stringIndices += ",";
+				}
+
+				var indicesThingie:String = animData.inputIndices.length > 0 ? 'indices="$stringIndices"' : '';
+				animList += '\t\t<animation name="$item" anim="${animData.prefix}" $indicesThingie fps="${Std.int(animData.frameRate)}" looped="${animData.looped}" offsetX="${character.offsets[item].x}" offsetY="${character.offsets[item].y}"/>';
+				if(itemIndex < list.length - 1) animList += "\n";
+			}
+
+			itemIndex++;
+		}
+		var generatedXML:String = '<!DOCTYPE plasma-character >
+<character spritesheet="${character.spritesheet}" is_player="${character.playerOffsets}" antialiasing="${character.__antialiasing}" sing_duration="${character.singDuration}" death_character="${character.deathCharacter}" icon="${character.healthIcon}" flip_x="${character.__baseFlipped}" dance_steps="$stringDanceSteps"> <!-- Generated via the Plasma Engine character editor -->
+	<animations>
+$animList
+	</animations>
+
+	<global_pos offsetX="${character.positionOffset.x}" offsetY="${character.positionOffset.y}" />
+	<camera offsetX="${character.cameraOffset.x}" offsetY="${character.cameraOffset.y}" />
+
+	<scale x="${character.scale.x}" y="${character.scale.y}" />
+	<scroll x="1" y="1" />
+
+	<!-- You can do "r="0" g="0" b="b" here to do RGB colors if you need to. -->
+	<color hex="${healthBarColor.toWebString()}" />
+</character>';
+
+		return generatedXML;
+		}
+		#end
+	}
+
+	public static function onSaveComplete(_:OpenFLEvent):Void {
+		_file.removeEventListener(OpenFLEvent.COMPLETE, onSaveComplete);
+		_file.removeEventListener(OpenFLEvent.CANCEL, onSaveCancel);
+		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+		_file = null;
+		FlxG.log.notice("Successfully saved file.");
+	}
+	
+	public static function onSaveCancel(_:OpenFLEvent):Void {
+		_file.removeEventListener(OpenFLEvent.COMPLETE, onSaveComplete);
+		_file.removeEventListener(OpenFLEvent.CANCEL, onSaveCancel);
+		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+		_file = null;
+	}
+
+	public static function onSaveError(_:OpenFLEvent):Void {
+		_file.removeEventListener(OpenFLEvent.COMPLETE, onSaveComplete);
+		_file.removeEventListener(OpenFLEvent.CANCEL, onSaveCancel);
+		_file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+		_file = null;
+		FlxG.log.error("Problem saving file");
+	}
+
+	public static function dominantColor(sprite:flixel.FlxSprite):Int {
+		var countByColor:Map<Int, Int> = [];
+		for(col in 0...sprite.frameWidth){
+			for(row in 0...sprite.frameHeight){
+			  var colorOfThisPixel:Int = sprite.pixels.getPixel32(col, row);
+			  if(colorOfThisPixel != 0){
+				  if(countByColor.exists(colorOfThisPixel)){
+				    countByColor[colorOfThisPixel] =  countByColor[colorOfThisPixel] + 1;
+				  }else if(countByColor[colorOfThisPixel] != 13520687 - (2*13520687)){
+					 countByColor[colorOfThisPixel] = 1;
+				  }
+			  }
+			}
+		 }
+		var maxCount = 0;
+		var maxKey:Int = 0;//after the loop this will store the max color
+		countByColor[flixel.util.FlxColor.BLACK] = 0;
+			for(key in countByColor.keys()){
+			if(countByColor[key] >= maxCount){
+				maxCount = countByColor[key];
+				maxKey = key;
+			}
+		}
+		return maxKey;
 	}
 }
