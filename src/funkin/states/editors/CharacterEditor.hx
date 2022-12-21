@@ -393,6 +393,7 @@ class CharacterEditor extends Editor {
                         var character = referenceGroup.members[i];
                         var pos = stage.characterPositions[funny[i]];
                         character.setPosition(pos.x, pos.y);
+                        trackCharacter();
                     }
 
                     var pos = character.isPlayer ? stage.characterPositions["bf"] : stage.characterPositions["dad"];
