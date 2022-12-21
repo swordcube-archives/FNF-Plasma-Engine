@@ -259,6 +259,7 @@ class CharacterEditor extends Editor {
     public var colorPicker:ColorPicker;
 
     function initTab(tab:String, label:String) {
+        #if !docs
         switch(tab) {
             case "General":
                 var group:FlxUI = new FlxUI(null, UI_box);
@@ -586,6 +587,7 @@ class CharacterEditor extends Editor {
 
                 UI_fileBox.addGroup(group);
         }
+        #end
     }
 
     // someone please tell me a better way of doing this i beg of you
