@@ -90,9 +90,12 @@ class CoolUtil {
 	 * @author Leather128
 	 */
 	public inline static function splitInt(string:String, delimeter:String):Array<Int> {
-		var splitString:Array<String> = string.split(delimeter);
+		string = string.trim();
 		var splitReturn:Array<Int> = [];
-		for (string in splitString) splitReturn.push(Std.parseInt(string));
+		if(string.length > 0) {
+			var splitString:Array<String> = string.split(delimeter);
+			for (string in splitString) splitReturn.push(Std.parseInt(string.trim()));
+		}
 		return splitReturn;
 	}
 

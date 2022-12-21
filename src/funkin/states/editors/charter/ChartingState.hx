@@ -23,12 +23,6 @@ class ChartingState extends Editor {
 	override function create() {
 		super.create();
 
-		// Update Discord RPC
-		DiscordRPC.changePresence(
-			"In the Chart Editor",
-			'Editing ${SONG.name}'
-		);
-
 		// Controls what happens when you press enter or space.
 		onAccept.add(function() {
 			if(FlxG.keys.justPressed.SPACE) {
@@ -44,6 +38,12 @@ class ChartingState extends Editor {
 			SONG = PlayState.SONG;
 		else
 			SONG = ChartParser.loadSong(AUTO, "test");
+
+		// Update Discord RPC
+		DiscordRPC.changePresence(
+			"In the Chart Editor",
+			'Editing ${SONG.name}'
+		);
 
 		// Fancyness!!! (real)
 		var bg = new FNFSprite().load(IMAGE, Paths.image("menus/menuBGNeo"));

@@ -1,5 +1,6 @@
 package funkin.ui;
 
+import flixel.addons.ui.FlxUIButton;
 import openfl.desktop.ClipboardTransferMode;
 import openfl.desktop.ClipboardFormats;
 import openfl.desktop.Clipboard;
@@ -10,7 +11,6 @@ import openfl.geom.Matrix;
 import flixel.util.FlxGradient;
 import funkin.system.BitmapHelper;
 import openfl.display.BitmapData;
-import flixel.ui.FlxButton;
 import funkin.system.FNFSprite;
 import flixel.math.FlxPoint;
 import flixel.FlxSprite;
@@ -38,9 +38,9 @@ class ColorPicker extends FlxSpriteGroup {
     var hueSlider:FNFSprite;
     var sbSlider:FNFSprite;
 
-    var copyButton:FlxButton;
-    var pasteButton:FlxButton;
-    var resetButton:FlxButton;
+    var copyButton:FlxUIButton;
+    var pasteButton:FlxUIButton;
+    var resetButton:FlxUIButton;
 
     var slidingHue = false;
     var slidingSB = false;
@@ -55,7 +55,7 @@ class ColorPicker extends FlxSpriteGroup {
      * @param w The width of the color picker
      * @param h The height of the color picker
      */
-    public function new(x:Float, y:Float, w:Int, h:Int, onResetShit:Void->Void) {
+    public function new(x:Float, y:Float, w:Int, h:Int, ?onResetShit:Void->Void) {
         super(x, y);
 
         onReset = onResetShit;
@@ -100,11 +100,11 @@ class ColorPicker extends FlxSpriteGroup {
         sbSlider = new FNFSprite(-10,-10);
         sbSlider.loadGraphic(BitmapHelper.newOutlinedCircle(8, 0x27FFFFFF, 2, 0x7FFFFFFF));
 
-        copyButton = new FlxButton(w+10, 10, "Copy", function() {
+        copyButton = new FlxUIButton(w+10, 10, "Copy", function() {
             var clipboardText = Clipboard.generalClipboard.setData(TEXT_FORMAT, '#'+StringTools.hex(curColor-0xFF000000, 6));
         });
 
-        pasteButton = new FlxButton(w+10, 44, "Paste", function() {
+        pasteButton = new FlxUIButton(w+10, 44, "Paste", function() {
             var clipboardText = Clipboard.generalClipboard.getData(TEXT_FORMAT, CLONE_PREFERRED);
             if (clipboardText != null) {
                 var parsedColor:Null<FlxColor> = FlxColor.fromString(clipboardText);
@@ -116,7 +116,7 @@ class ColorPicker extends FlxSpriteGroup {
             }
         });
 
-        resetButton = new FlxButton(w+10, 78, "Reset", onReset);
+        resetButton = new FlxUIButton(w+10, 78, "Reset", onReset);
 
         add(hueSprite);
         add(gradientSprite);
@@ -148,7 +148,8 @@ class ColorPicker extends FlxSpriteGroup {
                 onChange(hue,sat/100,bri/100);
         } else if (slidingSB) {
             sat = (FlxG.mouse.x-x)/size.x*100;
-            bri = (100-((FlxG.mouse.y-y)/size.y*100))+283;
+            var yy = y + camera.scroll.y; // oh my fucking god this fixed the color picker
+            bri = 100-((FlxG.mouse.y-yy)/size.y*100);
             updateSB();
             if (onChange != null)
                 onChange(hue,sat/100,bri/100);

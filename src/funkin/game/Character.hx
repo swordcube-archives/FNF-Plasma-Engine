@@ -154,10 +154,11 @@ class Character extends FNFSprite {
 	public var script:ScriptModule;
 
 	var __baseFlipped:Bool = false;
+	var __antialiasing:Bool = true;
 
 	public var specialAnims:Array<String> = [];
 
-	public function new(x:Float, y:Float, ?isPlayer:Bool = false) {
+	public function new(?x:Float = 0, ?y:Float = 0, ?isPlayer:Bool = false) {
 		super(x, y);
 		this.isPlayer = isPlayer;
 	}
@@ -243,6 +244,7 @@ class Character extends FNFSprite {
 			load(PACKER, Paths.image(spritesheetPath, false, mod));
 
 		antialiasing = !data.no_antialiasing ? PlayerSettings.prefs.get("Antialiasing") : false;
+		__antialiasing = !data.no_antialiasing;
 		singDuration = data.sing_duration;
 		healthIcon = data.healthicon;
 		flipX = data.flip_x;
@@ -296,6 +298,7 @@ class Character extends FNFSprite {
 			load(PACKER, Paths.image(spritesheetPath, false, mod));
 
 		antialiasing = data.antialiasing ? PlayerSettings.prefs.get("Antialiasing") : false;
+		__antialiasing = data.antialiasing;
 		singDuration = 4;
 		healthIcon = curCharacter;
 		flipX = data.flipX;
@@ -349,6 +352,7 @@ class Character extends FNFSprite {
 				load(SPARROW, Paths.image('data/characters/$curCharacter/$spritesheetName', false, mod));
 		}
 		antialiasing = data.has.antialiasing ? (data.att.antialiasing == 'true' ? PlayerSettings.prefs.get("Antialiasing") : false) : PlayerSettings.prefs.get("Antialiasing");
+		__antialiasing = data.has.antialiasing ? data.att.antialiasing == 'true' : true;
 		singDuration = data.has.sing_duration ? Std.parseFloat(data.att.sing_duration) : 4.0;
 		healthIcon = data.has.icon ? data.att.icon : curCharacter;
 		flipX = data.att.flip_x == "true";

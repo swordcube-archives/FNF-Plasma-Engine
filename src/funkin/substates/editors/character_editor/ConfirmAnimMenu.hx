@@ -1,7 +1,7 @@
 package funkin.substates.editors.character_editor;
 
+import flixel.addons.ui.FlxUIButton;
 import flixel.math.FlxPoint;
-import flixel.ui.FlxButton;
 import funkin.states.editors.CharacterEditor;
 import flixel.addons.ui.FlxUIDropDownMenu;
 import flixel.input.keyboard.FlxKey;
@@ -38,7 +38,7 @@ class ConfirmAnimMenu extends FNFSubState {
             add(title);
 
             var editor = CharacterEditor.current;
-            var nameInput = new FlxUIInputText(0, title.y + 40, Std.int(box.width - 15), editor.characterToModify.animation.name, 8); 
+            var nameInput = new FlxUIInputText(0, title.y + 40, Std.int(box.width - 15), editor.character.animation.name, 8); 
             nameInput.screenCenter(X);
             nameInput.cameras = this.cameras;
             var infoThing = new FlxText(nameInput.x, nameInput.y - 15, "Anim name (ex: idle, danceLeft, danceRight, singLEFT, singLEFTmiss)");
@@ -64,12 +64,15 @@ class ConfirmAnimMenu extends FNFSubState {
             hairyNuts.cameras = this.cameras;
             add(hairyNuts);
 
-            var addButton = new FlxButton(box.x + (box.width - 10), blalsText.y, "Add", function() {
+            var addButton = new FlxUIButton(box.x + (box.width - 10), blalsText.y, "Add", function() {
                 var editor = CharacterEditor.current;
-                editor.characterToModify.addAnim(nameInput.text, nameInputAtlas.text+"0", 24, false, FlxPoint.get(0, 0));
-                editor.characterToModify.playAnim(nameInput.text, true);
-                editor.animationDropDown.setData(FlxUIDropDownMenu.makeStrIdLabelArray(editor.characterToModify.animation.getNameList(), true));
+                editor.character.addAnim(nameInput.text, nameInputAtlas.text+"0", Std.int(editor.animFPSStepper.value), editor.loopBox.checked, FlxPoint.get(0, 0));
+                editor.shadowCharacter.addAnim(nameInput.text, nameInputAtlas.text+"0", Std.int(editor.animFPSStepper.value), editor.loopBox.checked, FlxPoint.get(0, 0));
+                editor.character.playAnim(nameInput.text, true);
+                editor.animationDropDown.setData(FlxUIDropDownMenu.makeStrIdLabelArray(editor.character.animation.getNameList(), true));
                 editor.animationDropDown.selectedLabel = nameInput.text;
+                editor.animOffsetXStepper.value = editor.character.rotOffset.x;
+                editor.animOffsetYStepper.value = editor.character.rotOffset.y;
                 close();
             });
             addButton.x -= addButton.width;
@@ -80,12 +83,13 @@ class ConfirmAnimMenu extends FNFSubState {
             title.screenCenter(X);
             add(title);
 
-            var removeButton = new FlxButton(0, title.y + 50, "Yes", function() {
+            var removeButton = new FlxUIButton(0, title.y + 50, "Yes", function() {
                 var editor = CharacterEditor.current;
-                editor.characterToModify.animation.remove(editor.characterToModify.animation.name);
-                editor.characterToModify.playAnim(editor.characterToModify.animation.getNameList()[0], true);
-                editor.animationDropDown.setData(FlxUIDropDownMenu.makeStrIdLabelArray(editor.characterToModify.animation.getNameList(), true));
-                editor.animationDropDown.selectedLabel = editor.characterToModify.animation.getNameList()[0];
+                editor.character.animation.remove(editor.character.animation.name);
+                editor.character.playAnim(editor.character.animation.getNameList()[0], true);
+                editor.animationDropDown.setData(FlxUIDropDownMenu.makeStrIdLabelArray(editor.character.animation.getNameList(), true));
+                editor.animationDropDown.selectedLabel = editor.character.animation.getNameList()[0];
+                editor.loopBox.checked = editor.character.animation.curAnim != null ? editor.character.animation.curAnim.looped : false;
                 close();
             });
             removeButton.screenCenter(X);
@@ -93,12 +97,16 @@ class ConfirmAnimMenu extends FNFSubState {
             removeButton.cameras = this.cameras;
             add(removeButton);
 
-            var removeButLikeNoFuckYouButton = new FlxButton(0, title.y + 50, "No", function() {
+            var removeButLikeNoFuckYouButton = new FlxUIButton(0, title.y + 50, "No", function() {
                 var editor = CharacterEditor.current;
-                editor.characterToModify.animation.remove(editor.characterToModify.animation.name);
-                editor.characterToModify.playAnim(editor.characterToModify.animation.getNameList()[0], true);
-                editor.animationDropDown.setData(FlxUIDropDownMenu.makeStrIdLabelArray(editor.characterToModify.animation.getNameList(), true));
-                editor.animationDropDown.selectedLabel = editor.characterToModify.animation.getNameList()[0];
+                editor.character.animation.remove(editor.character.animation.name);
+                editor.character.playAnim(editor.character.animation.getNameList()[0], true);
+                editor.animationDropDown.setData(FlxUIDropDownMenu.makeStrIdLabelArray(editor.character.animation.getNameList(), true));
+                editor.animationDropDown.selectedLabel = editor.character.animation.getNameList()[0];
+                editor.animOffsetXStepper.value = editor.character.rotOffset.x;
+                editor.animOffsetYStepper.value = editor.character.rotOffset.y;
+                var fps:Float = editor.character.animation.curAnim != null ? editor.character.animation.curAnim.frameRate : 24;
+                editor.animFPSStepper.value = fps;
                 close();
             });
             removeButLikeNoFuckYouButton.screenCenter(X);
