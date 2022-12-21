@@ -550,9 +550,28 @@ class CharacterEditor extends Editor {
                 var group:FlxUI = new FlxUI(null, UI_fileBox);
                 group.name = label;
 
+                var templateScript:String = 'function create() {
+\tcharacter.loadXML();
+}';
+
                 var saveButton = new FlxUIButton(10, 10, "Save", function() {
                     var data:String = CoolUtil.getXMLDataFromCharacter(character, healthBar.color);
                     File.saveContent(Paths.xml('data/characters/${character.curCharacter}/config'), data);
+                    
+                    var scriptPath:String = Paths.script('data/characters/${character.curCharacter}/script');
+                    if(!FileSystem.exists(scriptPath)) {
+                        var path:String = 'data/characters/${character.curCharacter}/config.hxs';
+                        if(Paths.currentMod == Paths.fallbackMod)
+                            path = '${Sys.getCwd()}'+(Main.developerMode ? '../../../../' : '')+'assets/$path';
+                        else
+                            path = '${Sys.getCwd()}'+(Main.developerMode ? '../../../../' : '')+'mods/${Paths.currentMod}/$path';
+
+                        File.saveContent(path, templateScript);
+                    } else {
+                        FileSystem.rename(scriptPath, scriptPath.replace("/script", "/script_BACKUP"));
+                        File.saveContent(scriptPath, templateScript);
+                    }
+
                     FlxG.switchState(new funkin.states.menus.MainMenuState());
                 });
                 group.add(saveButton);
