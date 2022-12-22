@@ -399,6 +399,7 @@ class CharacterEditor extends Editor {
 
                     var pos = character.isPlayer ? stage.characterPositions["bf"] : stage.characterPositions["dad"];
                     character.setPosition(pos.x, pos.y);
+                    positionCross();
                 });
                 stageDropDown.selectedLabel = "default";
                 group.add(new FlxText(stageDropDown.x, stageDropDown.y - 15, "Stage"));
