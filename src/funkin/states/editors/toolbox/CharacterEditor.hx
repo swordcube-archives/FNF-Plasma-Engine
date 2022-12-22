@@ -1,4 +1,4 @@
-package funkin.states.editors;
+package funkin.states.editors.toolbox;
 
 import flixel.addons.ui.FlxUIButton;
 import funkin.ui.ColorPicker;

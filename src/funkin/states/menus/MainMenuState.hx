@@ -1,7 +1,7 @@
 package funkin.states.menus;
 
+import funkin.states.editors.toolbox.ToolboxModSelect;
 import funkin.system.ModData.PackData;
-import funkin.states.editors.CharacterEditor;
 import funkin.scripting.Script;
 import flixel.FlxState;
 import funkin.ui.MainMenuButton;
@@ -136,7 +136,7 @@ class MainMenuState extends FNFState {
 				FlxG.switchState(new TitleState());
 
 			if(FlxG.keys.justPressed.SEVEN)
-				FlxG.switchState(new CharacterEditor());
+				FlxG.switchState(new ToolboxModSelect());
 		}
 
         script.updatePostCall(elapsed);

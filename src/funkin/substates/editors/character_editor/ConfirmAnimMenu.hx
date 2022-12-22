@@ -2,7 +2,7 @@ package funkin.substates.editors.character_editor;
 
 import flixel.addons.ui.FlxUIButton;
 import flixel.math.FlxPoint;
-import funkin.states.editors.CharacterEditor;
+import funkin.states.editors.toolbox.CharacterEditor;
 import flixel.addons.ui.FlxUIDropDownMenu;
 import flixel.input.keyboard.FlxKey;
 import flixel.addons.ui.FlxUIInputText;
