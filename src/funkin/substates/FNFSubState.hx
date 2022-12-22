@@ -19,12 +19,36 @@ class FNFSubState extends FlxSubState {
 		return PlayerSettings.prefs;
 	}
 
+	/**
+	 * The current beat of the song.
+	 */
+	public var curBeat:Int;
+
+	function get_curBeat():Int {
+		return Conductor.curBeat;
+	}
+
+	/**
+	 * The current step of the song.
+	 */
+	public var curStep:Int;
+
+	function get_curStep():Int {
+		return Conductor.curStep;
+	}
+
+	/**
+	 * The current section of the song.
+	 */
+	public var curSection:Int;
+
+	function get_curSection():Int {
+		return Std.int(Conductor.curStep / 16);
+	}
+
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-
-		#if debug
 		if(FlxG.keys.justPressed.F3) FlxG.resetState();
-		#end
 	}
 
 	override public function add(obj:FlxBasic) {

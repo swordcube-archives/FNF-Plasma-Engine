@@ -47,6 +47,19 @@ class PlayState extends FNFState {
 
 	public var gfSpeed:Int = 1;
 
+	/**
+	 * Controls how fast the camera bumps to the beat.
+	 * 
+	 * Lower = Faster
+	 * 
+	 * Higher = Slower
+	 */
+	public var cameraBopSpeed(get, default):Int = 4;
+
+	function get_cameraBopSpeed():Int {
+		return cameraBopSpeed < 1 ? 1 : cameraBopSpeed;
+	}
+
 	public var startingSong:Bool = true;
 	public var endingSong:Bool = false;
 
@@ -744,7 +757,7 @@ class PlayState extends FNFState {
 			Conductor.bpm = SONG.sections[curSection].bpm;
 		characterBop(curBeat);
 
-		if(curBeat % 4 == 0 && camBumping) {
+		if(curBeat % cameraBopSpeed == 0 && camBumping) {
 			camGame.zoom += 0.015;
 			camHUD.zoom += 0.03;
 		}
