@@ -30,7 +30,7 @@ class FNFState extends FlxUIState {
 	/**
 	 * The current beat of the song.
 	 */
-	public var curBeat:Int;
+	public var curBeat(get, null):Int;
 
 	function get_curBeat():Int {
 		return Conductor.curBeat;
@@ -39,7 +39,7 @@ class FNFState extends FlxUIState {
 	/**
 	 * The current step of the song.
 	 */
-	public var curStep:Int;
+	public var curStep(get, null):Int;
 
 	function get_curStep():Int {
 		return Conductor.curStep;
@@ -48,7 +48,7 @@ class FNFState extends FlxUIState {
 	/**
 	 * The current section of the song.
 	 */
-	public var curSection:Int;
+	public var curSection(get, null):Int;
 
 	function get_curSection():Int {
 		return Std.int(Conductor.curStep / 16);

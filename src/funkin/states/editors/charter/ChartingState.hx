@@ -17,7 +17,7 @@ class ChartingState extends Editor {
 	public var iconP2:HealthIcon;
 	public var iconP1:HealthIcon;
 
-	public var curSection:Int = 0;
+	public var curSelectedSection:Int = 0;
 	public var currentNoteType:String = "Default";
 
 	override function create() {
@@ -77,13 +77,13 @@ class ChartingState extends Editor {
 		super.update(elapsed);
 
 		if(controls.getP("UI_LEFT")) {
-			curSection = Std.int(FlxMath.bound(curSection - 1, 0, SONG.sections.length-1));
-			gridGroup.onChangeSection.dispatch(curSection);
+			curSelectedSection = Std.int(FlxMath.bound(curSelectedSection - 1, 0, SONG.sections.length-1));
+			gridGroup.onChangeSection.dispatch(curSelectedSection);
 		}
 
 		if(controls.getP("UI_RIGHT")) {
-			curSection = Std.int(FlxMath.bound(curSection + 1, 0, SONG.sections.length-1));
-			gridGroup.onChangeSection.dispatch(curSection);
+			curSelectedSection = Std.int(FlxMath.bound(curSelectedSection + 1, 0, SONG.sections.length-1));
+			gridGroup.onChangeSection.dispatch(curSelectedSection);
 		}
 	}
 }

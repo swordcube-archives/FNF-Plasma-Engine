@@ -27,10 +27,10 @@ class CharterGrid extends FlxTypedGroup<Dynamic> {
 
     var curSection(get, set):Int;
     function get_curSection() {
-        return charter.curSection;
+        return charter.curSelectedSection;
     }
     function set_curSection(value:Int) {
-        return charter.curSection = value;
+        return charter.curSelectedSection = value;
     }
 
     // Shortcuts to player settings shit
