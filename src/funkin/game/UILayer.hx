@@ -143,13 +143,13 @@ class UILayer extends FlxGroup {
 		healthBar.scrollFactor.set();
 		add(healthBar);
 
-		iconP1 = new HealthIcon().loadIcon(game.bf != null ? game.bf.healthIcon : "face");
-		iconP1.y = healthBar.y - 75;
+		iconP1 = new HealthIcon().loadIcon(game.bf != null ? game.bf.healthIcon : "face", true);
+		iconP1.y = healthBar.y;
 		iconP1.flipX = true;
 		add(iconP1);
 
-		iconP2 = new HealthIcon().loadIcon(game.dad != null ? game.dad.healthIcon : "face");
-		iconP2.y = healthBar.y - 75;
+		iconP2 = new HealthIcon().loadIcon(game.dad != null ? game.dad.healthIcon : "face", true);
+		iconP2.y = healthBar.y;
 		add(iconP2);
 
 		scoreTxt = new FlxText(0, healthBarBG.y + 35, 0);

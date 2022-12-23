@@ -33,9 +33,10 @@ class HealthIcon extends TrackingSprite {
     /**
     * Loads an icon from "images/icons".
     * @param char The character's icon to load
+    * @param updateOffset Whether or not the offset should be adjusted for icon heights bigger or smaller than 150.
     * @author swordcube
     */
-    public function loadIcon(char:String) {
+    public function loadIcon(char:String, ?updateOffset:Bool = false) {
         this.char = char;
         if(!FileSystem.exists(Paths.image('icons/$char'))) {
             char = "face";
@@ -53,6 +54,8 @@ class HealthIcon extends TrackingSprite {
         }
         animation.add('icon', bitch, 0, false);
 		animation.play('icon');
+        if(updateOffset)
+            updateHitbox();
         if(bitch.length > 1) animation.curAnim.curFrame = 1;
         
         return this;
@@ -88,6 +91,13 @@ class HealthIcon extends TrackingSprite {
                 }
         }
         return 0;
+    }
+
+    override function updateHitbox() {
+        super.updateHitbox();
+
+        offset.y = frameHeight * 0.5;
+        offset.y += ((1-scale.y)*frameHeight)*0.5;
     }
 
     override function update(elapsed:Float) {

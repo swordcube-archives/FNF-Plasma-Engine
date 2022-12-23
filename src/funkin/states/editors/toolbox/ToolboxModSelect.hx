@@ -138,7 +138,7 @@ class ToolboxModSelect extends FNFState {
         }
         if(controls.getP("ACCEPT")) {
             var canAccept:Bool = availableMods[Paths.currentMod].editable && ((prefs.get("Allow Unsafe Mods") && (availableMods[Paths.currentMod].allowUnsafeScripts || !availableMods[Paths.currentMod].allowUnsafeScripts)) || (!prefs.get("Allow Unsafe Mods") && !availableMods[Paths.currentMod].allowUnsafeScripts));
-            if(canAccept) {
+            if(availableMods[Paths.currentMod] != null && canAccept) {
                 FlxG.save.data.currentMod = Paths.currentMod;
                 FlxG.save.flush();
                 ModData.allowUnsafeScripts = availableMods[Paths.currentMod].allowUnsafeScripts;

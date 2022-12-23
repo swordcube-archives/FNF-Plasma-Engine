@@ -100,6 +100,7 @@ class FreeplayState extends FNFState {
 				icon.tracked = songText;
 				icon.scrollFactor.set();
 				iconArray.push(icon);
+				icon.y += icon.height * 0.5;
 				add(icon);
 			}
 

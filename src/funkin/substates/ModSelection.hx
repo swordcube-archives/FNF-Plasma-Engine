@@ -140,7 +140,7 @@ class ModSelection extends FNFSubState {
         }
         if(controls.getP("ACCEPT")) {
             var canAccept:Bool = (prefs.get("Allow Unsafe Mods") && (availableMods[Paths.currentMod].allowUnsafeScripts || !availableMods[Paths.currentMod].allowUnsafeScripts)) || (!prefs.get("Allow Unsafe Mods") && !availableMods[Paths.currentMod].allowUnsafeScripts);
-            if(canAccept) {
+            if(availableMods[Paths.currentMod] != null && canAccept) {
                 FlxG.sound.music.stop();
                 FlxG.save.data.currentMod = Paths.currentMod;
                 FlxG.save.flush();

@@ -167,7 +167,7 @@ class CharacterEditor extends Editor {
         healthBar.color = character.healthBarColor;
 		add(healthBar);
 
-        healthIcon = new HealthIcon(healthBar.x, healthBar.y - 75).loadIcon(character.healthIcon);
+        healthIcon = new HealthIcon(healthBar.x, healthBar.y).loadIcon(character.healthIcon, true);
         add(healthIcon);
 
         // Setup UI
