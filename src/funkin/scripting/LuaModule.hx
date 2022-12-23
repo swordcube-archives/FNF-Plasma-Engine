@@ -26,12 +26,19 @@ class LuaModule extends ScriptModule {
         Console.debug("LuaJIT version: " + Lua.versionJIT());
     }
 
+    override public function get(name:String):Dynamic {
+		if(lua == null) return null;
+        return variables[name];
+	}
+
     override public function set(name:String, value:Dynamic) {
 		if(lua == null) return;
 		Convert.toLua(lua, value);
 		Lua.setglobal(lua, name);
+        variables[name] = value;
 	}
 
+    var variables:Map<String, Dynamic> = [];
     var functions:Map<String, Dynamic> = [];
     override public function setFunc(func:String, value:Dynamic) {
         functions[func] = value;

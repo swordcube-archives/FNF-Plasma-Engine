@@ -67,6 +67,14 @@ class UILayer extends FlxGroup {
 				playerStrums.screenCenter(X);
 			}
 		}
+		
+		var underlay = new FlxSprite(opponentStrums.x - 5).makeGraphic(Std.int(opponentStrums.width) + 10, FlxG.height, FlxColor.BLACK);
+		underlay.alpha = prefs.get("Lane Underlay");
+		add(underlay);
+
+		var underlay = new FlxSprite(playerStrums.x - 5).makeGraphic(Std.int(playerStrums.width) + 10, FlxG.height, FlxColor.BLACK);
+		underlay.alpha = prefs.get("Lane Underlay");
+		add(underlay);
 
 		add(opponentStrums);
 		add(playerStrums);

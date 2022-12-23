@@ -19,7 +19,6 @@ class HScriptUtil {
 
             // Abstracts
             "FlxColor" => {
-                // color lore
                 "BLACK": FlxColor.BLACK,
                 "BLUE": FlxColor.BLUE,
                 "BROWN": FlxColor.BROWN,
@@ -36,7 +35,6 @@ class HScriptUtil {
                 "WHITE": FlxColor.WHITE,
                 "YELLOW": FlxColor.YELLOW,
     
-                // functions
                 "add": FlxColor.add,
                 "fromCMYK": FlxColor.fromCMYK,
                 "fromHSB": FlxColor.fromHSB,

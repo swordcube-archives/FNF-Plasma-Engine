@@ -44,6 +44,32 @@ class HScriptModule extends ScriptModule {
         
         // Default imports
         set("scriptModule", this);
+        set("importScript", function(path:String) {
+            var script:ScriptModule = Script.load(Paths.script(path));
+            script.run(false);
+            @:privateAccess {
+                switch(Type.getClass(script)) {
+                    case HScriptModule:
+                        var casted:HScriptModule = cast script;
+                        for(name=>value in casted.interp.variables)
+                            set(name, value);
+                        
+                    case LuaModule:
+                        var casted:LuaModule = cast script;
+                        for(name=>value in casted.variables)
+                            set(name, value);
+                        
+                        for(name=>value in casted.functions)
+                            set(name, value);
+                }
+            }
+            script.destroy();
+        });
+        set("loadScript", function(path:String, ?autoRun:Bool = false) {
+            var script:ScriptModule = Script.load(Paths.script(path));
+            if(autoRun) script.run();
+            return script;
+        });
 
         for(key => value in HScriptUtil.getDefaultImports())
             set(key, value);

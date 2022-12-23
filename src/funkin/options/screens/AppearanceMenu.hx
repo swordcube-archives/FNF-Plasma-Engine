@@ -46,6 +46,14 @@ class AppearanceMenu extends OptionScreen {
                     null,
                     ["Arrows", "Circles"]
                 ),
+                new NumberOption(
+                    "Lane Underlay",
+                    "Choose whether or not you want a box to go behind your notes. Helps with readability in charts.\n0 = OFF, 0.5 = Half Visible, 1 = ON",
+                    null,
+                    0.1,
+                    1,
+                    [0, 1]
+                ),
                 new BoolOption(
                     "Enable Note Splashes",
                     "Choose whether you want note splashes on or not, Useful if you find these distracting.",

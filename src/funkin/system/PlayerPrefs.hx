@@ -93,6 +93,10 @@ class PlayerPrefs {
                 name: "Fancy Console",
                 value: true
             },
+            {
+                name: "Lane Underlay",
+                value: 0
+            }
         ],
 
         // gameplay modifiers only appear in freeplay by

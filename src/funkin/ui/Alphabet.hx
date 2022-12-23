@@ -95,7 +95,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphabetChar> {
 
 @:dox(hide)
 class AlphabetChar extends FNFSprite {
-    public static var supportedChars:Array<String> = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789[]←↓↑→-~!@#$%^&*()?,.<>“”'\\/\n ".split("");
+    public static var supportedChars:Array<String> = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789[]←↓↑→-_~!@#$%^&*()?,.<>“”'\\/\n ".split("");
 
     public var char:String = "";
     public var font:AlphabetFont = Bold;
@@ -230,6 +230,9 @@ class AlphabetChar extends FNFSprite {
                     case "-":
                         anim = "-dash-";
                         offsets.y += 14 * size;
+                    case "_":
+                        anim = "_";
+                        offsets.y += 34 * size;
                     case "←":
                         anim = "-left arrow-";
                         offsets.y += 16 * size;
