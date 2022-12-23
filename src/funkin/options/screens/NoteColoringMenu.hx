@@ -101,7 +101,7 @@ class NoteColoringMenu extends FNFSubState {
     }
 
     public function goBack() {
-        FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/cancelMenu")));
+        CoolUtil.playMenuSFX(2);
         close();
     }
 
@@ -192,6 +192,6 @@ class NoteColoringMenu extends FNFSubState {
         selectedText.text = '< $keyAmount >';
         selectedText.screenCenter(X);
 
-        FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/scrollMenu")));
+        CoolUtil.playMenuSFX(0);
     }
 }

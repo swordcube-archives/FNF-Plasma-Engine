@@ -37,6 +37,11 @@ class PreferencesMenu extends OptionScreen {
                     null
                 ),
                 new BoolOption(
+                    "Beta Updates",
+                    "Allows the game to update to pre-releases.",
+                    null
+                ),
+                new BoolOption(
                     "Miss Sounds",
                     "Choose whether or not you want a sound to play when missing a note.",
                     null

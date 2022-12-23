@@ -1,6 +1,7 @@
 package;
 
 import funkin.macros.BuildCounterMacro;
+import sys.thread.Thread;
 import funkin.ui.LogsOverlay;
 import flixel.FlxGame;
 import flixel.FlxState;
@@ -23,6 +24,8 @@ class Main extends Sprite {
 	public static var fpsCounter:FPS;
 	public static var logsOverlay:LogsOverlay;
 
+	public static var gameThreads:Array<Thread> = [];
+
 	var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var initialState:Class<FlxState> = Init; // The FlxState the game starts with.
@@ -34,10 +37,19 @@ class Main extends Sprite {
 	public static var audioDisconnected:Bool = false;
 	public static var changeID:Int = 0;
 
+	static var __threadCycle:Int = 0;
+	public static function execAsync(func:Void->Void) {
+		var thread = gameThreads[(__threadCycle++) % gameThreads.length];
+		thread.events.run(func);
+	}
+
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
 	public function new() {
 		super();
+
+		for(i in 0...4)
+			gameThreads.push(Thread.createWithEventLoop(function() {Thread.current().events.promise();}));
 
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, framerate, framerate, skipSplash, startFullscreen));
 		addChild(logsOverlay = new LogsOverlay());

@@ -63,6 +63,6 @@ class MainMenuList extends FlxTypedGroup<MainMenuButton> {
         curSelected = FlxMath.wrap(curSelected + change, 0, length - 1);
         onSelect.dispatch();
 
-        FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/scrollMenu"))); 
+        CoolUtil.playMenuSFX(0);
     }
 }

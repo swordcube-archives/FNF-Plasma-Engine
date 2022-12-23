@@ -27,7 +27,7 @@ class CategoryGroup extends FlxTypedGroup<CategoryText> {
         if(controls.getP("UI_DOWN")) changeSelection(1);
         if(controls.getP("ACCEPT")) {
             disabled = true;
-            FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/confirmMenu")));
+            CoolUtil.playMenuSFX(1);
             var text:CategoryText = members[curSelected];
             if(prefs.get("Flashing Lights")) {
                 FlxFlicker.flicker(text, 1, 0.06, true, false, function(f) {
@@ -48,6 +48,6 @@ class CategoryGroup extends FlxTypedGroup<CategoryText> {
         for(i in 0...length) {
             members[i].alpha = curSelected == i ? 1 : 0.6;
         }
-        FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/scrollMenu")));
+        CoolUtil.playMenuSFX(0);
     }
 }

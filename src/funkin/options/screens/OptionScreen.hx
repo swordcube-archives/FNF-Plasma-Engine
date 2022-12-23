@@ -239,7 +239,7 @@ class OptionScreen extends FNFSubState {
                         if(prefs.get("Flashing Lights"))
                             FlxFlicker.flicker(grpTitles.members[curSelected], 0.5, 0.06, true, false);
                         if(casted.updateCallback != null) casted.updateCallback(cast prefs.get(saveData));
-                        FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/confirmMenu")));
+                        CoolUtil.playMenuSFX(1);
 
                     case MenuOption:
                         var casted:MenuOption = cast option;
@@ -257,7 +257,7 @@ class OptionScreen extends FNFSubState {
         camFollow.setPosition(0, 0);
         FlxG.camera.scroll.set(0, 0);
         FlxG.camera.follow(null, null, 0);
-        FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/cancelMenu")));
+        CoolUtil.playMenuSFX(2);
         close();
     }
 
@@ -290,6 +290,6 @@ class OptionScreen extends FNFSubState {
         descText.y = descBox.y + 3;
         descText.text += "\n     ";
 
-        FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/scrollMenu")));
+        CoolUtil.playMenuSFX(0);
     }
 }

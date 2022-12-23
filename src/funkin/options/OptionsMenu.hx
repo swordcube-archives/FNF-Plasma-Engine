@@ -83,7 +83,7 @@ class OptionsMenu extends FNFState {
 	function goBack() {
 		PlayerSettings.prefs.flush();
 		PlayerSettings.controls.flush();
-		FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/cancelMenu")));
+		CoolUtil.playMenuSFX(2);
 		FlxG.switchState(new MainMenuState());
 	}
 }

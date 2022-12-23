@@ -163,7 +163,7 @@ class CharterGrid extends FlxTypedGroup<Dynamic> {
         // Make sure we don't end up in a null section
         if(curSection > SONG.sections.length - 1) {
             while(curSection > SONG.sections.length - 1) {
-                var previousSection:Section = CoolUtil.lastInArray(SONG.sections);
+                var previousSection:Section = CoolUtil.last(SONG.sections);
                 SONG.sections.push({
                     notes: [],
                     playerSection: previousSection != null ? previousSection.playerSection : false,
@@ -248,7 +248,7 @@ class CharterGrid extends FlxTypedGroup<Dynamic> {
             altAnim: false
         });
 
-        return CoolUtil.lastInArray(SONG.sections[curSection].notes);
+        return SONG.sections[curSection].notes.last();
     }
 
     function yToTime(y:Float) {

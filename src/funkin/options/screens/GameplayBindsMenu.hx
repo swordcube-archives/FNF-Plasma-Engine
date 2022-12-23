@@ -73,7 +73,7 @@ class GameplayBindsMenu extends FNFSubState {
     }
 
     public function goBack() {
-        FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/cancelMenu")));
+        CoolUtil.playMenuSFX(2);
         close();
     }
 
@@ -124,7 +124,7 @@ class GameplayBindsMenu extends FNFSubState {
                 bindText.x -= bindText.width / 2;
 
                 changingBind = false;
-                FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/confirmMenu")));
+                CoolUtil.playMenuSFX(1);
             }
         }
 
@@ -188,6 +188,6 @@ class GameplayBindsMenu extends FNFSubState {
         selectedText.text = '< $keyAmount >';
         selectedText.screenCenter(X);
 
-        FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/scrollMenu")));
+        CoolUtil.playMenuSFX(0);
     }
 }

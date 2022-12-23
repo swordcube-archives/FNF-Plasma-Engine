@@ -155,7 +155,7 @@ class StoryMenuState extends FNFState {
 	}
 
 	inline function changeSelection(?change:Int = 0) {
-		FlxG.sound.play(Assets.load(SOUND, Paths.sound('menus/scrollMenu')));
+		CoolUtil.playMenuSFX(0);
 
 		grpWeeks.members[curSelected].alpha = 0.6;
 		curSelected = Std.int(FlxMath.wrap(curSelected + change, 0, grpWeeks.length-1));
@@ -240,7 +240,7 @@ class StoryMenuState extends FNFState {
 			if(controls.getP("UI_DOWN") && !confirmed) changeSelection(1);
 	
 			if(controls.getP("BACK") && !confirmed) {
-				FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/cancelMenu")));
+				CoolUtil.playMenuSFX(2);
 				FlxG.switchState(new funkin.states.menus.MainMenuState());
 			}
 	
@@ -260,7 +260,7 @@ class StoryMenuState extends FNFState {
 				new FlxTimer().start(1, function(tmr:FlxTimer) {
 					FlxG.switchState(new PlayState());
 				});
-				FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/confirmMenu")));
+				CoolUtil.playMenuSFX(1);
 			}
 		}
 

@@ -293,6 +293,6 @@ class PauseSubState extends FNFSubState {
 		timeTxt.visible = menuItems[curSelected] == "Skip Time";
 		timeTxt.text = FlxStringUtil.formatTime(curTime/1000.0) + " / " + FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0);
 		
-		FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/scrollMenu")));
+		CoolUtil.playMenuSFX(0);
 	}
 }

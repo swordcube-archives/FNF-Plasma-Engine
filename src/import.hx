@@ -13,6 +13,9 @@ import base.Highscore;
 import base.Assets;
 import flixel.util.FlxColor;
 import funkin.system.PlayerSettings;
+
+using StringTools;
+using funkin.system.CoolUtil;
 #end
 
 // Works in macros

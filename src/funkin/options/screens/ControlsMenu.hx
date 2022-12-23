@@ -84,7 +84,7 @@ class ControlsMenu extends OptionScreen {
                 val[bindSelected].text = CoolUtil.keyToString(curKey);
                 val[bindSelected].visible = true;
             }
-            FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/confirmMenu")));
+            CoolUtil.playMenuSFX(1);
         } else {
             if(controls.getP("ACCEPT")) {
                 var option:Dynamic = generalOptions[curSelected];
@@ -96,7 +96,7 @@ class ControlsMenu extends OptionScreen {
                         if(val != null) {
                             val[bindSelected].visible = false;
                         }
-                        FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/scrollMenu")));
+                        CoolUtil.playMenuSFX(0);
                 }
             }
         }

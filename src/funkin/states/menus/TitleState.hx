@@ -20,6 +20,8 @@ import flixel.util.FlxTimer;
 using StringTools;
 
 class TitleState extends FNFState {
+	static var hasCheckedUpdates:Bool = false;
+
 	public var script:ScriptModule;
 	public var runDefaultCode:Bool = true;
 	
@@ -158,12 +160,23 @@ class TitleState extends FNFState {
 					titleText.animation.play('press');
 
 				FlxG.camera.flash(FlxColor.WHITE, 1);
-				FlxG.sound.play(Assets.load(SOUND, Paths.sound('menus/confirmMenu')), 0.7);
+				CoolUtil.playMenuSFX(1);
 
 				transitioning = true;
 
 				new FlxTimer().start(2, function(tmr:FlxTimer) {
+					#if UPDATE_CHECKING
+					var report = hasCheckedUpdates ? null : funkin.updating.UpdateUtil.checkForUpdates();
+					hasCheckedUpdates = true;
+
+					if (report != null && report.newUpdate) {
+						FlxG.switchState(new funkin.updating.UpdateAvailableScreen(report));
+					} else {
+						FlxG.switchState(new MainMenuState());
+					}
+					#else
 					FlxG.switchState(new MainMenuState());
+					#end
 				});
 			}
 

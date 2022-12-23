@@ -117,7 +117,7 @@ class ToolboxModSelect extends FNFState {
         selectedText.screenCenter(X);
         add(selectedText);
 
-        FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/scrollMenu")));
+        CoolUtil.playMenuSFX(0);
     }
 
     override function update(elapsed:Float) {
@@ -133,7 +133,7 @@ class ToolboxModSelect extends FNFState {
 
         if(controls.getP("BACK")) {
             Paths.currentMod = initialMod;
-            FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/cancelMenu")));
+            CoolUtil.playMenuSFX(2);
             FlxG.switchState(new MainMenuState());
         }
         if(controls.getP("ACCEPT")) {
@@ -142,7 +142,7 @@ class ToolboxModSelect extends FNFState {
                 FlxG.save.data.currentMod = Paths.currentMod;
                 FlxG.save.flush();
                 ModData.allowUnsafeScripts = availableMods[Paths.currentMod].allowUnsafeScripts;
-                FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/confirmMenu")));
+                CoolUtil.playMenuSFX(1);
                 FlxG.switchState(new ToolboxMain());
             }
         }
@@ -167,6 +167,6 @@ class ToolboxModSelect extends FNFState {
 
         unsafeText.visible = data.allowUnsafeScripts || !data.editable;
 
-        FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/scrollMenu")));
+        CoolUtil.playMenuSFX(0);
     }
 }

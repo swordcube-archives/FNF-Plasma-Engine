@@ -1,5 +1,6 @@
 package;
 
+import funkin.github.GitHubRelease;
 import flixel.FlxSprite;
 import flixel.math.FlxRect;
 import flixel.math.FlxPoint;
@@ -13,6 +14,9 @@ import funkin.windows.WindowsAPI;
 import funkin.system.AudioSwitchFix;
 import lime.app.Application;
 import flixel.FlxState;
+import funkin.github.GitHub;
+
+using StringTools;
 
 class Init extends FlxState {
     override function create() {
@@ -99,6 +103,10 @@ class Init extends FlxState {
 			var rehe:Dynamic = null;
 			rehe.intentionalNullError();
 		}
+
+		#if UPDATE_CHECKING
+		funkin.updating.UpdateUtil.init();
+		#end
 
 		FlxG.switchState(new funkin.states.menus.TitleState());
     }

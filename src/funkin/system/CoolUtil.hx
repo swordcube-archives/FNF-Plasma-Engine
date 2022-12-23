@@ -28,28 +28,43 @@ class CoolUtil {
 	 * Gets the last item in `array` and returns it.
 	 * @param array The array to get the item from.
 	 */
-	public static function lastInArray(array:Array<Dynamic>):Dynamic {
+	public static function last<T>(array:Array<T>):T {
 		if(array.length < 1) return null;
 		return array[array.length-1];
 	}
 
 	/**
-	 * Converts bytes into a human-readable format `(Examples: 1b, 256kb, 1024mb, 2048gb, 4096tb)
+	 * Plays a specified Menu SFX.
+	 * @param menuSFX Menu SFX to play.
+	 * @param volume At which volume it should play.
+	 */
+	 public static function playMenuSFX(menuSFX:Int = 0, volume:Float = 1) {
+		FlxG.sound.play(Assets.load(SOUND, Paths.sound(switch(menuSFX) {
+			case 1:		'menus/confirmMenu';
+			case 2:		'menus/cancelMenu';
+			default: 	'menus/scrollMenu';
+		})), volume);
+	}
+
+	public static function addZeros(str:String, num:Int) {
+		while(str.length < num) str = '0${str}';
+		return str;
+	}
+
+	/**
+	 * Converts bytes into a human-readable format `(Examples: 1b, 256kb, 1024mb, 2048gb, 4096tb)`
 	 * @param num The bytes to convert.
 	 * @return String
 	 */
-	 public inline static function getSizeLabel(num:Int):String {
-		var size:Float = Math.abs(num) != num ? Math.abs(num) + 2147483648 : num;
-		var data = 0;
-		var dataTexts = ["b", "kb", "mb", "gb", "tb", "pb"];
-
-		while (size > 1024 && data < dataTexts.length - 1) {
-			data++;
-			size = size / 1024;
+	public static function getSizeLabel(size:Float):String {
+		var labels = ["B", "KB", "MB", "GB", "TB"];
+		var rSize:Float = size;
+		var label:Int = 0;
+		while(rSize > 1024 && label < labels.length-1) {
+			label++;
+			rSize /= 1024;
 		}
-
-		size = Math.round(size * 100) / 100;
-		return size + dataTexts[data].toUpperCase();
+		return '${Std.int(rSize) + "." + addZeros(Std.string(Std.int((rSize % 1) * 100)), 2)}${labels[label]}';
 	}
 
 	/**

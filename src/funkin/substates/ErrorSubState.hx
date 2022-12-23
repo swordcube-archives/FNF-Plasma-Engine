@@ -46,7 +46,7 @@ class ErrorSubState extends FNFSubState {
 		super.update(elapsed);
 
 		if(controls.getP("BACK")) {
-			FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/cancelMenu")));
+			CoolUtil.playMenuSFX(2);
 			close();
 		}
 	}

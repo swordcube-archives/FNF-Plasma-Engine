@@ -176,7 +176,7 @@ class FreeplayState extends FNFState {
 
 			if (controls.getP("BACK")) {
 				threadActive = false;
-				FlxG.sound.play(Assets.load(SOUND, Paths.sound("menus/cancelMenu")));
+				CoolUtil.playMenuSFX(2);
 				FlxG.switchState(new MainMenuState());
 			}
 
@@ -246,7 +246,7 @@ class FreeplayState extends FNFState {
 	}
 
 	function changeSelection(change:Int = 0) {
-		FlxG.sound.play(Assets.load(SOUND, Paths.sound('menus/scrollMenu')));
+		CoolUtil.playMenuSFX(0);
 
 		grpSongs.members[curSelected].alpha = 0.6;
 		curSelected = FlxMath.wrap(curSelected + change, 0, songs.length-1);

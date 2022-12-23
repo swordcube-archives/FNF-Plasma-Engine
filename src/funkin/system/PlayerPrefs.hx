@@ -48,6 +48,10 @@ class PlayerPrefs {
                 value: true
             },
             {
+                name: "Beta Updates",
+                value: false
+            },
+            {
                 name: "Framerate Cap",
                 value: 240
             },
