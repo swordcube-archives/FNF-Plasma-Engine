@@ -56,12 +56,13 @@
 
 	<haxeflag name="--macro" value="include('funkin')" />
 	<haxeflag name="--macro" value="include('flixel')" />
-	<haxeflag name="--macro" value="include('sys')" unless="html5" />
+	<haxeflag name="--macro" value="include('sys')" unless="web" />
 	<haxeflag name="--macro" value="include('DateTools')" />
 	<haxeflag name="--macro" value="include('EReg')" />
 	<haxeflag name="--macro" value="include('Lambda')" />
 	<haxeflag name="--macro" value="include('StringBuf')" />
 	<haxeflag name="--macro" value="include('haxe.crypto')" />
+	<haxeflag name="--macro" value="funkin.macros.StdDeprecationsRemover.init()" />
 
 	<!-- _________________________________ Custom _______________________________ -->
 	
