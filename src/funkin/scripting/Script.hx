@@ -1,5 +1,6 @@
 package funkin.scripting;
 
+import funkin.scripting.events.InputSystemEvent;
 import funkin.scripting.events.SimpleNoteEvent;
 import funkin.scripting.events.NoteHitEvent;
 import flixel.util.FlxDestroyUtil.IFlxDestroyable;
@@ -97,6 +98,18 @@ class ScriptModule implements IFlxDestroyable {
                             event.note.strumTime, event.note.direction, event.note.isSustainNote, event.note.mustPress,
                             event.note.parent.notes.members.indexOf(event.note), 
                             event.note.type
+                        ];
+                    case InputSystemEvent:
+                        var event:InputSystemEvent = cast event;
+                        args = [
+                            event.cancelled
+                        ];
+
+                    // IT'S IMPORTANT THAT THIS IS LAST!!!!!
+                    case CancellableEvent:
+                        var event:CancellableEvent = cast event;
+                        args = [
+                            event.cancelled
                         ];
                 }
                 var ret:Dynamic = this.call(func, args);

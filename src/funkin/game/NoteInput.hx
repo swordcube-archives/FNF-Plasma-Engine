@@ -1,6 +1,6 @@
 package funkin.game;
 
-import funkin.scripting.events.CancellableEvent;
+import funkin.scripting.events.InputSystemEvent;
 import funkin.scripting.Script;
 import flixel.text.FlxText;
 import funkin.system.FNFSprite;
@@ -33,7 +33,7 @@ class NoteInput implements IFlxDestroyable {
 	}
 
 	function onJustPressed(evt:KeyboardEvent) {
-		var event = PlayState.current.scripts.event("onKeyPress", new CancellableEvent());
+		var event = PlayState.current.scripts.event("onKeyPress", new InputSystemEvent(parent));
         if(parent.isOpponent || PlayerSettings.prefs.get("Botplay") || PlayState.paused || event.cancelled) return;
 		
 		@:privateAccess
@@ -274,7 +274,7 @@ class NoteInput implements IFlxDestroyable {
 	}
 
 	function onJustReleased(evt:KeyboardEvent) {
-		var event = PlayState.current.scripts.event("onKeyRelease", new CancellableEvent());
+		var event = PlayState.current.scripts.event("onKeyRelease", new InputSystemEvent(parent));
         if(parent.isOpponent || PlayerSettings.prefs.get("Botplay") || PlayState.paused || event.cancelled) return;
 
 		@:privateAccess
