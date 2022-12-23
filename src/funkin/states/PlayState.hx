@@ -60,6 +60,8 @@ class PlayState extends FNFState {
 		return cameraBopSpeed < 1 ? 1 : cameraBopSpeed;
 	}
 
+	public var strumsBlocked:Array<Bool> = [];
+
 	public var startingSong:Bool = true;
 	public var endingSong:Bool = false;
 
@@ -205,6 +207,8 @@ class PlayState extends FNFState {
 
 		if(FileSystem.exists(Paths.voices(SONG.name)))
 			cachedSounds["voices"] = Assets.load(SOUND, Paths.voices(SONG.name));
+
+		strumsBlocked = [for(i in 0...SONG.keyAmount) false];
 
 		// Setup cameras
 		camGame = FlxG.camera;

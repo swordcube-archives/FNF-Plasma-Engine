@@ -2,6 +2,8 @@ package funkin.scripting.events;
 
 class CancellableEvent {
     @:dox(hide) public var cancelled:Bool = false;
+
+    public function new() {}
     
     /**
      * Prevents this event from running.

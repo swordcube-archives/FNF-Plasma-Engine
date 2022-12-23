@@ -1,5 +1,6 @@
 package funkin.game;
 
+import funkin.scripting.events.CancellableEvent;
 import funkin.scripting.Script;
 import flixel.text.FlxText;
 import funkin.system.FNFSprite;
@@ -32,8 +33,9 @@ class NoteInput implements IFlxDestroyable {
 	}
 
 	function onJustPressed(evt:KeyboardEvent) {
-        if(parent.isOpponent || PlayerSettings.prefs.get("Botplay") || PlayState.paused) return;
-
+		var event = PlayState.current.scripts.event("onKeyPress", new CancellableEvent());
+        if(parent.isOpponent || PlayerSettings.prefs.get("Botplay") || PlayState.paused || event.cancelled) return;
+		
 		@:privateAccess
 		var key:Int = evt.keyCode;
 		var binds = PlayerSettings.controls.list['GAME_${parent.keyAmount}'];
@@ -53,9 +55,9 @@ class NoteInput implements IFlxDestroyable {
 			}
 		}
 
-		var dontHit:Array<Bool> = [for(i in 0...parent.keyAmount) false];
 		if (data == -1 || pressed[data]) return;
 		pressed[data] = true;
+
 		var receptor = parent.receptors.members[data];
 		var rgb = PlayerSettings.prefs.get('NOTE_COLORS_${parent.keyAmount}')[data];
 		receptor.colorShader.setColors(rgb[0], rgb[1], rgb[2]);
@@ -165,6 +167,13 @@ class NoteInput implements IFlxDestroyable {
 		var placement:String = Std.string(combo);
 
 		var game = PlayState.current;
+
+		if(note.isSustainNote) {
+			game.health += game.healthGain + judgeData.health;
+			if(game.health > game.maxHealth) game.health = game.maxHealth;
+			return;
+		}
+
 		game.score += Math.floor(judgeData.score * (Conductor.rate >= 1 ? 1 : Conductor.rate));
 		game.totalNotes++;
 		game.totalHit += judgeData.mod;
@@ -265,7 +274,8 @@ class NoteInput implements IFlxDestroyable {
 	}
 
 	function onJustReleased(evt:KeyboardEvent) {
-        if(parent.isOpponent || PlayerSettings.prefs.get("Botplay") || PlayState.paused) return;
+		var event = PlayState.current.scripts.event("onKeyRelease", new CancellableEvent());
+        if(parent.isOpponent || PlayerSettings.prefs.get("Botplay") || PlayState.paused || event.cancelled) return;
 
 		@:privateAccess
 		var key:Int = evt.keyCode;

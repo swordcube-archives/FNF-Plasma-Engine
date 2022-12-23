@@ -9,6 +9,7 @@ class SimpleNoteEvent extends CancellableEvent {
     public var note:Note;
 
     public function new(note:Note) {
+        super();
         this.note = note;
     }
 }

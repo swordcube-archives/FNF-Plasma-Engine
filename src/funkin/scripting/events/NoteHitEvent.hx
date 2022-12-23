@@ -14,6 +14,7 @@ class NoteHitEvent extends CancellableEvent {
     public var rating:String = "sick";
 
     public function new(note:Note, rating:String) {
+        super();
         this.note = note;
         this.rating = rating;
     }

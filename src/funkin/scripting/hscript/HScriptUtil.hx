@@ -222,9 +222,31 @@ class HScriptUtil {
             "FlxTimer" => flixel.util.FlxTimer,
             "FlxTween" => flixel.tweens.FlxTween, 
             "FlxEase" => flixel.tweens.FlxEase,
-            "FlxAxes" => flixel.util.FlxAxes,
+
+            // FlxAxes is also a goofy ass abstract!!!!!!!!!!
+            "FlxAxes" => {
+                "X": flixel.util.FlxAxes.X,
+                "Y": flixel.util.FlxAxes.Y,
+                "XY": flixel.util.FlxAxes.XY,
+                "NONE": flixel.util.FlxAxes.NONE,
+                "fromString": function(str:String) {
+                    return switch(str.toLowerCase()) {
+                        case "x": flixel.util.FlxAxes.X;
+                        case "y": flixel.util.FlxAxes.Y;
+                        case "xy", "yx", "both": flixel.util.FlxAxes.XY;
+                        case "none", "", null: flixel.util.FlxAxes.NONE;
+                        default: flixel.util.FlxAxes.NONE;
+                    }
+                },
+                "fromBools": function(x:Bool, y:Bool) {
+                    return cast(x ? (cast X : Int) : 0) | (y ? (cast Y : Int) : 0);
+                }
+            },
             "FlxGroup" => flixel.group.FlxGroup,
-            "FlxPoint" => flixel.math.FlxPoint,
+
+            // FlxPoint is a goofy ass abstract now!!
+            @:access(flixel.math.FlxPoint.FlxBasePoint)
+            "FlxPoint" => flixel.math.FlxPoint.FlxBasePoint,
             
             // Classes (Funkin)
             "Paths" => Paths,
