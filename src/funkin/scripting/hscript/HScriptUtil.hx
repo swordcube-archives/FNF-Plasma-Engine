@@ -228,6 +228,7 @@ class HScriptUtil {
                 "X": flixel.util.FlxAxes.X,
                 "Y": flixel.util.FlxAxes.Y,
                 "XY": flixel.util.FlxAxes.XY,
+                "YX": flixel.util.FlxAxes.XY,
                 "NONE": flixel.util.FlxAxes.NONE,
                 "fromString": function(str:String) {
                     return switch(str.toLowerCase()) {
