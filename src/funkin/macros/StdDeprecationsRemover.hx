@@ -11,7 +11,7 @@ import haxe.macro.Compiler;
  */
 class StdDeprecationsRemover {
     public static function init() {
-        Compiler.addGlobalMetadata('Std', '@:build(hscript.UsingHandler.build())');
+        Compiler.addGlobalMetadata('Std', '@:build(funkin.macros.StdDeprecationsRemover.build())');
     }
 
     public static function build():Array<Field> {
