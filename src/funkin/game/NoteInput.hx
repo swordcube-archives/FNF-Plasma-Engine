@@ -98,23 +98,26 @@ class NoteInput implements IFlxDestroyable {
 					}
 				}
 			}
-		} else if(!PlayerSettings.prefs.get("Ghost Tapping")) {
-			var game = PlayState.current;
-			game.health -= 0.0475;
-			game.vocals.volume = 0;
-			var chars:Array<Character> = (PlayerSettings.prefs.get("Play As Opponent") && !PlayState.isStoryMode) ? game.dads : game.bfs;
-			for(c in chars) {
-				if(c != null && !c.specialAnim) {
-					c.holdTimer = 0;
-					c.playAnim(c.getSingAnim(parent.keyAmount, data)+"miss", true);
-				}
+		} else if(!PlayerSettings.prefs.get("Ghost Tapping"))
+			ghostMiss(data);
+	}
+
+	public function ghostMiss(data:Int) {
+		var game = PlayState.current;
+		game.health -= 0.0475;
+		game.vocals.volume = 0;
+		var chars:Array<Character> = (PlayerSettings.prefs.get("Play As Opponent") && !PlayState.isStoryMode) ? game.dads : game.bfs;
+		for(c in chars) {
+			if(c != null && !c.specialAnim) {
+				c.holdTimer = 0;
+				c.playAnim(c.getSingAnim(parent.keyAmount, data)+"miss", true);
 			}
-			game.score -= 10;
-			game.misses++;
-			game.UI.updateScoreText();
-			if(PlayerSettings.prefs.get("Miss Sounds"))
-				FlxG.sound.play(Assets.load(SOUND, Paths.sound('game/missnote${FlxG.random.int(1,3)}')), FlxG.random.float(0.1,0.2));
 		}
+		game.score -= 10;
+		game.misses++;
+		game.UI.updateScoreText();
+		if(PlayerSettings.prefs.get("Miss Sounds"))
+			FlxG.sound.play(Assets.load(SOUND, Paths.sound('game/missnote${FlxG.random.int(1,3)}')), FlxG.random.float(0.1,0.2));
 	}
 
 	public function goodNoteHit(note:Note) {
