@@ -34,6 +34,10 @@ class AsyncUpdater {
     public static var executableGitHubName:String = "update-linux";
     public static var executableName:String = "PlasmaEngine";
     #end
+    #if macos
+    public static var executableGitHubName:String = "update-macos";
+    public static var executableName:String = "PlasmaEngine";
+    #end
 
     public var releases:Array<GitHubRelease>;
     public var progress:UpdaterProgress = new UpdaterProgress();
