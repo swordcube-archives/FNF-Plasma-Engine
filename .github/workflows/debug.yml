@@ -47,6 +47,7 @@ jobs:
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
           haxelib install hxcpp-debug-server
+          haxelib install markdown
           haxelib list
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
@@ -84,6 +85,7 @@ jobs:
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
           haxelib install hxcpp-debug-server
+          haxelib install markdown
           haxelib list
         shell: cmd
       - name: Create Version Tag
@@ -122,6 +124,7 @@ jobs:
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
           haxelib git hxCodec https://github.com/polybiusproxy/hxCodec
           haxelib install hxcpp-debug-server
+          haxelib install markdown
           haxelib list
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
