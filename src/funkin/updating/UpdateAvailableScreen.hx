@@ -1,5 +1,6 @@
 package funkin.updating;
 
+#if !docs
 import funkin.ui.FunkinText;
 import funkin.system.FNFSprite;
 import funkin.states.FNFState;
@@ -155,3 +156,4 @@ class UpdateAvailableScreen extends FNFState {
         FlxG.mouse.visible = false;
     }
 }
+#end

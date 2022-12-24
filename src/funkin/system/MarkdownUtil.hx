@@ -1,5 +1,6 @@
 package funkin.system;
 
+#if !docs
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
 
@@ -86,3 +87,4 @@ class MarkdownUtil {
         return text;
     }
 }
+#end

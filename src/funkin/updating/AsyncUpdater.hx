@@ -1,5 +1,6 @@
 package funkin.updating;
 
+#if !docs
 import openfl.Lib;
 import sys.io.Process;
 import haxe.zip.Reader;
@@ -184,3 +185,4 @@ enum abstract UpdaterStep(Int) {
     var DOWNLOADING_EXECUTABLE = 2;
     var INSTALLING = 3;
 }
+#end

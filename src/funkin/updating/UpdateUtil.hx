@@ -1,5 +1,6 @@
 package funkin.updating;
 
+#if !docs
 import funkin.github.GitHubRelease;
 import sys.FileSystem;
 import haxe.io.Path;
@@ -103,3 +104,4 @@ typedef UpdateCheckCallback = {
 
     @:optional var updates:Array<GitHubRelease>;
 }
+#end

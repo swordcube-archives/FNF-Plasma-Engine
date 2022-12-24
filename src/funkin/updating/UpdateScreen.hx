@@ -1,5 +1,6 @@
 package funkin.updating;
 
+#if !docs
 import funkin.system.FNFSprite;
 import funkin.ui.FunkinText;
 import flixel.math.FlxMath;
@@ -163,3 +164,4 @@ class UpdateScreen extends FNFState {
         chosenColor = FlxMath.wrap(chosenColor+1, 0, rainbowList.length-1);
     }
 }
+#end
