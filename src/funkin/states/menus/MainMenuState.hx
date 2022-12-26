@@ -77,6 +77,7 @@ class MainMenuState extends FNFState {
 			add(list);
 
 			// Add menu options here!
+			script.call("onAddMenus");
 			list.addButton('story mode', function() {
 				startExitState(new StoryMenuState());
 			});
@@ -84,11 +85,12 @@ class MainMenuState extends FNFState {
 				startExitState(new FreeplayState());
 			});
 			list.addButton('credits', function() {
-				startExitState(new PlaceholderState("No credits yet! Fuck you!"));
+				startExitState(new CreditsState());
 			});
 			list.addButton('options', function() {
 				startExitState(new funkin.options.OptionsMenu());
 			});
+			script.call("onAddMenusPost");
 			//
 
 			list.centerList();
