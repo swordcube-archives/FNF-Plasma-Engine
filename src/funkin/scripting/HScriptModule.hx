@@ -54,6 +54,7 @@ class HScriptModule extends ScriptModule {
                         for(name=>value in casted.interp.variables)
                             set(name, value);
                         
+                    #if LUA_ALLOWED
                     case LuaModule:
                         var casted:LuaModule = cast script;
                         for(name=>value in casted.variables)
@@ -61,6 +62,7 @@ class HScriptModule extends ScriptModule {
                         
                         for(name=>value in casted.functions)
                             set(name, value);
+                    #end
                 }
             }
             script.destroy();

@@ -21,11 +21,39 @@ class LuaUtil {
     public static function setScriptDefaults(script:LuaModule) {
 		var game = PlayState.current;
 
+		// Compiler flags (use like a normal if statement for these, ex: if linux then doThing() end)
+		script.set("debug", #if debug true #else false #end);
+		script.set("release", #if !debug true #else false #end);
+
+		// OS flags
+		script.set("desktop", #if desktop true #else false #end);
+		script.set("windows", #if windows true #else false #end);
+		script.set("macos", #if macos true #else false #end);
+		script.set("mac", #if macos true #else false #end);
+		script.set("linux", #if linux true #else false #end);
+		script.set("hl", #if hl true #else false #end);
+		script.set("hashlink", #if hl true #else false #end);
+		script.set("android", #if android true #else false #end);
+		script.set("web", #if web true #else false #end);
+		script.set("html5", #if html5 true #else false #end);
+		script.set("neko", #if neko true #else false #end);
+
+		// Library/feature flags
+		script.set("LUA_ALLOWED", #if LUA_ALLOWED true #else false #end);
+		script.set("VIDEOS_ALLOWED", #if VIDEOS_ALLOWED true #else false #end);
+		script.set("UPDATE_CHECKING", #if UPDATE_CHECKING true #else false #end);
+		script.set("DEVELOPER_MODE", Main.developerMode);
+
 		// Variables
         script.set("engine", {
-            "name": "Plasma Engine",
-            "version": Main.engineVersion
+			name: "Plasma Engine",
+			version: Main.engineVersion,
+
+			// Build number is -1 on release builds!!!
+			build: Main.buildNumber,
+			developerMode: Main.developerMode
         });
+		script.set("developerMode", Main.developerMode);
 
 		if(game != null) {
 			script.set("song", {

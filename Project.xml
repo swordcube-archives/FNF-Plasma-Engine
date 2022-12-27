@@ -25,9 +25,9 @@
 
 	<!-- ________________________________ Defines _______________________________ -->
 
-	<define name="LUA_ALLOWED" if="desktop"/>
-	<define name="VIDEOS_ALLOWED" if="desktop || android"/>
-	<define name="UPDATE_CHECKING" />
+	<define name="LUA_ALLOWED" if="desktop" unless="web || hl || neko"/>
+	<define name="VIDEOS_ALLOWED" if="desktop || android" unless="hl || neko"/>
+	<define name="UPDATE_CHECKING" unless="web || hl || neko"/>
 
 	<!-- _______________________________ Libraries ______________________________ -->
 

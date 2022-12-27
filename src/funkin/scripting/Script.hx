@@ -79,6 +79,7 @@ class ScriptModule implements IFlxDestroyable {
         switch(this.scriptType) {
             case HScript:
                 this.call(func, [event]);
+            #if LUA_ALLOWED
             case LuaScript:
                 // this is dumb as hell but lua is mental pain on whole new levels
                 var args:Array<Dynamic> = [];
@@ -115,6 +116,7 @@ class ScriptModule implements IFlxDestroyable {
                 var ret:Dynamic = this.call(func, args);
                 if(ret == false)
                     event.cancel();
+            #end
             default: // gah
         }
         return event;

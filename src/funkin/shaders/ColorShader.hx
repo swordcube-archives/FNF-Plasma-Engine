@@ -1,8 +1,6 @@
 package funkin.shaders;
 
-/**
- * This shader was made by YoshiCrafter29
- */
+// This shader was made by YoshiCrafter29
 class ColorShader extends FlxFixedShader {
     @:glFragmentSource('#pragma header
 

@@ -5,15 +5,16 @@ import openfl.display3D.Program3D;
 
 using StringTools;
 
-// goddamn prefix
-
 @:access(openfl.display3D.Context3D)
 @:access(openfl.display3D.Program3D)
 @:access(openfl.display.ShaderInput)
 @:access(openfl.display.ShaderParameter)
-/**
- * This shader was made by YoshiCrafter29
- */
+
+// This class was made by YoshiCrafter29
+//
+// this class only still exists because of ColorShader and OutlineShader, if those didn't exist
+// this class wouldn't exist either
+
 class FlxFixedShader extends FlxShader {
     public var custom:Bool = false;
     public override function new() {

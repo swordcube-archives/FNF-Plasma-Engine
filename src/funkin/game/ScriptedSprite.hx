@@ -30,7 +30,8 @@ class ScriptedSprite extends FNFSprite {
      */
     override function update(elapsed:Float) {
         script.updateCall(elapsed);
-		super.update(elapsed);
+        if(!exists) return;
+        super.update(elapsed);
         script.updatePostCall(elapsed);
 	}
 

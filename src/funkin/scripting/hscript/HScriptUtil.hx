@@ -14,7 +14,39 @@ import flixel.input.keyboard.FlxKey;
 class HScriptUtil {
     public static function getDefaultImports():Map<String, Dynamic> {
         return [
+            // Compiler flags (use like a normal if statement for these, ex: if(linux) doThing();)
+            "debug" => #if debug true #else false #end,
+            "release" => #if !debug true #else false #end,
+
+            // OS flags
+            "desktop" => #if desktop true #else false #end,
+            "windows" => #if windows true #else false #end,
+            "macos" => #if macos true #else false #end,
+            "mac" => #if macos true #else false #end,
+            "linux" => #if linux true #else false #end,
+            "hl" => #if hl true #else false #end,
+            "hashlink" => #if hl true #else false #end,
+            "android" => #if android true #else false #end,
+            "web" => #if web true #else false #end,
+            "html5" => #if html5 true #else false #end,
+            "neko" => #if neko true #else false #end,
+
+            // Library/feature flags
+            "LUA_ALLOWED" => #if LUA_ALLOWED true #else false #end,
+            "VIDEOS_ALLOWED" => #if VIDEOS_ALLOWED true #else false #end,
+            "UPDATE_CHECKING" => #if UPDATE_CHECKING true #else false #end,
+            "DEVELOPER_MODE" => Main.developerMode,
+
             // Variables
+            "engine" => {
+                name: "Plasma Engine",
+                version: Main.engineVersion,
+
+                // Build number is -1 on release builds!!!
+                build: Main.buildNumber,
+                developerMode: Main.developerMode
+            },
+            "developerMode" => Main.developerMode,
             "mod" => Paths.currentMod, // Shortcut to `Paths.currentMod`
 
             // Abstracts
@@ -191,6 +223,27 @@ class HScriptUtil {
                 "OUTLINE": FlxTextBorderStyle.OUTLINE,
                 "OUTLINE_FAST": FlxTextBorderStyle.OUTLINE_FAST
             },
+            "FlxAxes" => {
+                "X": flixel.util.FlxAxes.X,
+                "Y": flixel.util.FlxAxes.Y,
+                "XY": flixel.util.FlxAxes.XY,
+                "YX": flixel.util.FlxAxes.XY,
+                "NONE": flixel.util.FlxAxes.NONE,
+                "fromString": function(str:String) {
+                    return switch(str.toLowerCase()) {
+                        case "x": flixel.util.FlxAxes.X;
+                        case "y": flixel.util.FlxAxes.Y;
+                        case "xy", "yx", "both": flixel.util.FlxAxes.XY;
+                        case "none", "", null: flixel.util.FlxAxes.NONE;
+                        default: flixel.util.FlxAxes.NONE;
+                    }
+                },
+                "fromBools": function(x:Bool, y:Bool) {
+                    return cast(x ? (cast X : Int) : 0) | (y ? (cast Y : Int) : 0);
+                }
+            },
+            @:access(flixel.math.FlxPoint.FlxBasePoint)
+            "FlxPoint" => flixel.math.FlxPoint.FlxBasePoint,
 
             // Classes (Haxe)
             "Json" => {
@@ -213,62 +266,91 @@ class HScriptUtil {
             "DateTools" => DateTools,
 
             // Classes (Flixel)
-            "FlxG" => flixel.FlxG,
-            "FlxSprite" => flixel.FlxSprite,
-            "FlxText" => flixel.text.FlxText,
-            "FlxMath" => flixel.math.FlxMath,
-            "FlxTimer" => flixel.util.FlxTimer,
-            "FlxTween" => flixel.tweens.FlxTween, 
-            "FlxEase" => flixel.tweens.FlxEase,
+            "FlxG"              => flixel.FlxG,
+            "FlxSprite"         => flixel.FlxSprite,
+            "FlxBasic"          => flixel.FlxBasic,
+            "FlxCamera"         => flixel.FlxCamera,
+            "state"             => flixel.FlxG.state,
+            "FlxEase"           => flixel.tweens.FlxEase,
+            "FlxTween"          => flixel.tweens.FlxTween,
+            "FlxSound"          => flixel.system.FlxSound,
+            "FlxAssets"         => flixel.system.FlxAssets,
+            "FlxMath"           => flixel.math.FlxMath,
+            "FlxGroup"          => flixel.group.FlxGroup,
+            "FlxTypedGroup"     => flixel.group.FlxGroup.FlxTypedGroup,
+            "FlxSpriteGroup"    => flixel.group.FlxSpriteGroup,
+            "FlxTypeText"       => flixel.addons.text.FlxTypeText,
+            "FlxText"           => flixel.text.FlxText,
+            "FlxTimer"          => flixel.util.FlxTimer,
 
-            // FlxAxes is also a goofy ass abstract!!!!!!!!!!
-            "FlxAxes" => {
-                "X": flixel.util.FlxAxes.X,
-                "Y": flixel.util.FlxAxes.Y,
-                "XY": flixel.util.FlxAxes.XY,
-                "YX": flixel.util.FlxAxes.XY,
-                "NONE": flixel.util.FlxAxes.NONE,
-                "fromString": function(str:String) {
-                    return switch(str.toLowerCase()) {
-                        case "x": flixel.util.FlxAxes.X;
-                        case "y": flixel.util.FlxAxes.Y;
-                        case "xy", "yx", "both": flixel.util.FlxAxes.XY;
-                        case "none", "", null: flixel.util.FlxAxes.NONE;
-                        default: flixel.util.FlxAxes.NONE;
-                    }
-                },
-                "fromBools": function(x:Bool, y:Bool) {
-                    return cast(x ? (cast X : Int) : 0) | (y ? (cast Y : Int) : 0);
-                }
-            },
-            "FlxGroup" => flixel.group.FlxGroup,
-
-            // FlxPoint is a goofy ass abstract now!!
-            @:access(flixel.math.FlxPoint.FlxBasePoint)
-            "FlxPoint" => flixel.math.FlxPoint.FlxBasePoint,
-            
             // Classes (Funkin)
+            // Asset Management
             "Paths" => Paths,
             "Assets" => Assets,
+
+            // Scripting
+            "Script" => funkin.scripting.Script,
             "FNFSprite" => funkin.system.FNFSprite,
+
+            // Utilities
             "CoolUtil" => CoolUtil,
             "MathUtil" => MathUtil,
-            "PlayerSettings" => PlayerSettings,
-            "Script" => funkin.scripting.Script,
             "VideoHelper" => funkin.system.VideoHelper,
+
+            // Misc
             "Conductor" => Conductor,
+            "Alphabet" => funkin.ui.Alphabet,
+            "FunkinText" => funkin.ui.FunkinText,
+            "ScriptedSprite" => funkin.game.ScriptedSprite,
+
+            // Shaders
+            "FunkinShader" => funkin.shaders.FunkinShader,
+            "CustomShader" => funkin.shaders.CustomShader,
+            "ColorShader" => funkin.shaders.ColorShader,
+            "OutlineShader" => funkin.shaders.OutlineShader,
+
+            // Menus (states)
+            "TitleState" => funkin.states.menus.TitleState,
+            "StoryMenuState" => funkin.states.menus.StoryMenuState,
+            "MainMenuState" => funkin.states.menus.MainMenuState,
+            "FreeplayState" => funkin.states.menus.FreeplayState,
+            "FreeplayMenuState" => funkin.states.menus.FreeplayState,
+            "OptionsMenu" => funkin.options.OptionsMenu,
+            "OptionsMenuState" => funkin.options.OptionsMenu,
+            "OptionsState" => funkin.options.OptionsMenu,
+
+            // Menus (substates)
+            "PauseSubState" => funkin.substates.PauseSubState,
+
+            "ScriptableState" => funkin.states.ScriptableState,
+            "ScriptableSubState" => funkin.substates.ScriptableSubState,
+            "GameOverSubstate" => funkin.substates.GameOverSubstate,
+
+            // Preferences & Controls
+            "prefs" => PlayerSettings.prefs,
+            "Prefs" => PlayerSettings.prefs,
+            "Preferences" => PlayerSettings.prefs,
+            "Settings" => PlayerSettings.prefs,
+            "Options" => PlayerSettings.prefs,
+
+            "controls" => PlayerSettings.controls,
+            "Controls" => PlayerSettings.controls,
+
+            "PlayerSettings" => PlayerSettings,
+
+            // Gameplay
+            "PlayState" => funkin.states.PlayState.current,
+            "PlayState_" => funkin.states.PlayState,
+            "Character" => funkin.game.Character,
+            "Boyfriend" => funkin.game.Character, // Compatibility moment!
             "StrumLine" => funkin.game.StrumLine,
             "Receptor" => funkin.game.StrumLine.Receptor,
             "Note" => funkin.game.Note,
-            "CustomShader" => funkin.shaders.CustomShader,
-            "ScriptedSprite" => funkin.game.ScriptedSprite,
-            "ScriptableState" => funkin.states.ScriptableState,
-            "ScriptableSubState" => funkin.substates.ScriptableSubState,
-            "prefs" => PlayerSettings.prefs,
-            "controls" => PlayerSettings.controls,
-            "PlayState" => funkin.states.PlayState.current,
-            "PlayState_" => funkin.states.PlayState,
-            "global" => (funkin.states.PlayState.current != null ? funkin.states.PlayState.current.global : cast([], Map<String, Dynamic>))
+
+            // what kinda goofy ass casting shit was i doing here
+            // cast([], Map<String, Dynamic>) is kinda dumb now that i think about it
+            // considering i can just new do "new Map<String, Dynamic>()""
+            "global" => (funkin.states.PlayState.current != null ? funkin.states.PlayState.current.global : new Map<String, Dynamic>())
         ];
     }
 }

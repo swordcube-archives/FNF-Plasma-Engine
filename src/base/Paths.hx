@@ -63,6 +63,14 @@ class Paths {
 		return asset('$path.xml', mod);
 	}
 
+	public inline static function frag(path:String, ?mod:Null<String>) {
+		return asset('shaders/$path.frag', mod);
+	}
+
+	public inline static function vert(path:String, ?mod:Null<String>) {
+		return asset('shaders/$path.vert', mod);
+	}
+
 	public inline static function video(path:String, ?mod:Null<String>) {
 		return asset('videos/$path', mod);
 	}
