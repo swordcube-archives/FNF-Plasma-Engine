@@ -669,6 +669,9 @@ class PlayState extends FNFState {
 	}
 
 	public function finishSong(?ignoreNoteOffset:Bool = false) {
+		endingSong = true;
+		FlxG.sound.music.onComplete = null;
+
         persistentUpdate = false;
         persistentDraw = true;
 
@@ -688,8 +691,8 @@ class PlayState extends FNFState {
 
         persistentUpdate = false;
         persistentDraw = true;
-        
-        endingSong = true;
+
+		endingSong = true;
 
 		// lazy but probably works
 		if(PlayerSettings.prefs.get("Botplay"))
