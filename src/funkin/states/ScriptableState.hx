@@ -15,7 +15,7 @@ class ScriptableState extends FNFState {
      */
     public function new(script:String) {
         super();
-        this.script = Script.load(Paths.script(script));
+        this.script = Script.load(Paths.script('data/states/$script'));
         this.script.setParent(this);
     }
 
