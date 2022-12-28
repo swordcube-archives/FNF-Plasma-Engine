@@ -34,7 +34,7 @@ using StringTools;
 **/
 class PlayState extends FNFState {
 	public static var paused:Bool = false;
-	public static var SONG:Song = ChartParser.loadSong(BASE, "tutorial");
+	public static var SONG:Song;
 	public static var curDifficulty:String = "normal";
 	public static var weekName:String = "tutorial";
 	public static var storyScore:Int = 0;
@@ -192,14 +192,15 @@ class PlayState extends FNFState {
 
 		FlxG.sound.music.stop();
 
-		#if discord_rpc
+		// Setup song
+		if(SONG == null)
+			SONG = ChartParser.loadSong(VANILLA, "tutorial");
+
 		DiscordRPC.changePresence(
 			'Playing ${SONG.name}',
 			'Starting song...'
 		);
-		#end
 
-		// Setup song
 		Conductor.bpm = SONG.bpm;
 		Conductor.mapBPMChanges(SONG); // i deadass forgot to add this what 💀️
 
@@ -392,6 +393,7 @@ class PlayState extends FNFState {
 		// Make the beatHit and stepHit actually work
 		Conductor.onBeat.add(beatHit);
 		Conductor.onStep.add(stepHit);
+		Conductor.onSection.add(sectionHit);
 
 		// Call createPost on scripts
 		scripts.createPostCall();
@@ -469,11 +471,6 @@ class PlayState extends FNFState {
 		scripts.updateCall(elapsed);
 
 		super.update(elapsed);
-
-		if(!startingSong) {
-			var curSection:Int = Std.int(FlxMath.bound(Conductor.curStep / 16, 0, SONG.sections.length-1));
-			moveCamera(SONG.sections[curSection] != null ? SONG.sections[curSection].playerSection : false);
-		}
 
 		if(events[0] != null && events[0].strumTime <= Conductor.position) {
 			for(data in events[0].events)
@@ -782,6 +779,18 @@ class PlayState extends FNFState {
         scripts.call("stepHitPost", [curStep]);
 	}
 
+	function sectionHit(curSection:Int) {
+		if(endingSong || paused) return;
+        scripts.call("onSectionHit", [curStep]);
+        scripts.call("sectionHit", [curStep]);
+
+		var curSection:Int = Std.int(FlxMath.bound(Conductor.curStep / 16, 0, SONG.sections.length-1));
+		moveCamera(SONG.sections[curSection] != null ? SONG.sections[curSection].playerSection : false);
+
+        scripts.call("onSectionHitPost", [curStep]);
+        scripts.call("sectionHitPost", [curStep]);
+	}
+
 	function characterBop(curBeat:Int) {
 		for(c in dads) {
 			if(c != null && c.animation.curAnim != null && !c.animation.curAnim.name.startsWith("sing") && !c.stunned)
@@ -797,6 +806,7 @@ class PlayState extends FNFState {
 	}
 
 	override function destroy() {
+		SONG = null;
 		current = null;
 		super.destroy();
 	}

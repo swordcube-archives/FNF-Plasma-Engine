@@ -66,10 +66,11 @@ class FreeplayState extends FNFState {
 		script.setParent(this);
 		script.run();
 
-		#if discord_rpc
 		// Updating Discord Rich Presence
-		DiscordRPC.changePresence("In the Freeplay Menu", null);
-		#end
+		DiscordRPC.changePresence(
+			"In the Freeplay Menu", 
+			null
+		);
 
 		if(runDefaultCode) {
 			var data = new haxe.xml.Access(Xml.parse(Assets.load(TEXT, Paths.xml("data/freeplaySongs"))).firstElement());
@@ -237,12 +238,10 @@ class FreeplayState extends FNFState {
 		diffText.text = arrowThings[0]+songs[curSelected].difficulties[curDifficulty].toUpperCase()+arrowThings[1];
 		positionHighscore();
 
-		#if discord_rpc
 		DiscordRPC.changePresence(
 			"In the Freeplay Menu", 
 			"Selecting "+songs[curSelected].songName+" on "+songs[curSelected].difficulties[curDifficulty]
 		);
-		#end
 	}
 
 	function changeSelection(change:Int = 0) {

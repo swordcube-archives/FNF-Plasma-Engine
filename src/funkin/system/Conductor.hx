@@ -1,5 +1,6 @@
 package funkin.system;
 
+import funkin.states.PlayState;
 import flixel.system.FlxSound;
 import flixel.util.FlxSignal.FlxTypedSignal;
 
@@ -40,12 +41,17 @@ class Conductor {
 
 	public static var onBeat:FlxTypedSignal<Int->Void> = new FlxTypedSignal<Int->Void>();
 	public static var onStep:FlxTypedSignal<Int->Void> = new FlxTypedSignal<Int->Void>();
+	public static var onSection:FlxTypedSignal<Int->Void> = new FlxTypedSignal<Int->Void>();
 
 	public static var curStep:Int = 0;
 	public static var curBeat:Int = 0;
 
 	public static var curDecStep:Float = 0;
 	public static var curDecBeat:Float = 0;
+
+	public static var curSection:Int = 0;
+
+	static var stepsToDo:Int = 0;
 
 	public static function init() {
 		FlxG.signals.preUpdate.add(update);
@@ -92,7 +98,7 @@ class Conductor {
 				skippedSteps.push(i);
 			}
 		}
-		if (skippedSteps.length > 0) 
+		if (skippedSteps.length > 0)
 			skippedSteps = [];
 
 		curStep = trueStep;
@@ -103,13 +109,57 @@ class Conductor {
 		oldStep = curStep;
 	}
 
+	static function getSectionSteps(song:Song, section:Int):Int {
+		var val:Null<Int> = null;
+		if (song.sections[section] != null)
+			val = song.sections[section].lengthInSteps;
+		return val != null ? val : 16;
+	}
+
 	static function stepHit() {
 		onStep.dispatch(curStep);
 		if (curStep % 4 == 0)
 			onBeat.dispatch(Math.floor(curStep / 4.0));
 
+		if (PlayState.SONG != null) {
+			if (oldStep < curStep)
+				updateSection();
+			else
+				rollbackSection();
+		}
+
 		if (!storedSteps.contains(curStep))
 			storedSteps.push(curStep);
+	}
+
+	static function updateSection():Void {
+		if (stepsToDo < 1)
+			stepsToDo = getSectionSteps(PlayState.SONG, curSection);
+		while (curStep >= stepsToDo) {
+			curSection++;
+			stepsToDo += getSectionSteps(PlayState.SONG, curSection);
+			onSection.dispatch(curSection);
+		}
+	}
+
+	static function rollbackSection():Void {
+		if (curStep < 0) return;
+
+		var lastSection:Int = curSection;
+		curSection = 0;
+		stepsToDo = 0;
+		for (i in 0...PlayState.SONG.sections.length) {
+			if (PlayState.SONG.sections[i] != null) {
+				stepsToDo += getSectionSteps(PlayState.SONG, curSection);
+				if (stepsToDo > curStep)
+					break;
+
+				curSection++;
+			}
+		}
+
+		if (curSection > lastSection)
+			onSection.dispatch(curSection);
 	}
 
 	public static function mapBPMChanges(song:Song) {
@@ -129,7 +179,7 @@ class Conductor {
 				bpmChangeMap.push(event);
 			}
 
-			var deltaSteps:Int = song.sections[i].lengthInSteps;
+			var deltaSteps:Int = getSectionSteps(song, i);
 			totalSteps += deltaSteps;
 			totalPos += ((60 / curBPM) * 1000 / 4) * deltaSteps;
 		}

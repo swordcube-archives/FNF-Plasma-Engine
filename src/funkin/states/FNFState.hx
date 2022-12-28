@@ -51,7 +51,7 @@ class FNFState extends FlxUIState {
 	public var curSection(get, null):Int;
 
 	function get_curSection():Int {
-		return Std.int(Conductor.curStep / 16);
+		return Conductor.curSection;
 	}
 
 	// convienience function

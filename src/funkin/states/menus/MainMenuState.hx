@@ -39,7 +39,10 @@ class MainMenuState extends FNFState {
 		super.create();
 
 		// Updating Discord Rich Presence
-		DiscordRPC.changePresence("In the Main Menu", null);
+		DiscordRPC.changePresence(
+			"In the Main Menu", 
+			null
+		);
 
 		enableTransitions();
 
