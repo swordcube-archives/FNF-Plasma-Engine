@@ -1,7 +1,5 @@
 package base;
 
-import funkin.ui.LogsOverlay;
-
 @:dox(hide)
  typedef ConsoleLogSymbol = {
     var regularSymbol:String;

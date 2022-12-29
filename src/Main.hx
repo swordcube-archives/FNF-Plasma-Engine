@@ -2,7 +2,6 @@ package;
 
 import funkin.macros.BuildCounterMacro;
 import sys.thread.Thread;
-import funkin.ui.LogsOverlay;
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.display.FPS;
@@ -22,7 +21,6 @@ class Main extends Sprite {
 	}
 
 	public static var fpsCounter:FPS;
-	public static var logsOverlay:LogsOverlay;
 
 	public static var gameThreads:Array<Thread> = [];
 
@@ -52,7 +50,6 @@ class Main extends Sprite {
 			gameThreads.push(Thread.createWithEventLoop(function() {Thread.current().events.promise();}));
 
 		addChild(new FlxGame(gameWidth, gameHeight, initialState, framerate, framerate, skipSplash, startFullscreen));
-		addChild(logsOverlay = new LogsOverlay());
 		addChild(fpsCounter = new FPS(10, 3, 0xFFFFFF));
 	}
 }
