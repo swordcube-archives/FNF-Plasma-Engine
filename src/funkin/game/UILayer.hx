@@ -20,6 +20,9 @@ class UILayer extends FlxGroup {
     public var iconP2:HealthIcon;
 	public var iconP1:HealthIcon;
 
+	public var opponentUnderlay:FlxSprite;
+	public var playerUnderlay:FlxSprite;
+
 	public var healthBarBG:FlxSprite;
 	public var healthBar:FlxBar;
 
@@ -68,13 +71,13 @@ class UILayer extends FlxGroup {
 			}
 		}
 		
-		var underlay = new FlxSprite(opponentStrums.x - 5).makeGraphic(Std.int(opponentStrums.width) + 10, FlxG.height, FlxColor.BLACK);
-		underlay.alpha = prefs.get("Lane Underlay");
-		add(underlay);
+		opponentUnderlay = new FlxSprite(opponentStrums.x - 5).makeGraphic(Std.int(opponentStrums.width) + 10, FlxG.height, FlxColor.BLACK);
+		opponentUnderlay.alpha = prefs.get("Lane Underlay");
+		add(opponentUnderlay);
 
-		var underlay = new FlxSprite(playerStrums.x - 5).makeGraphic(Std.int(playerStrums.width) + 10, FlxG.height, FlxColor.BLACK);
-		underlay.alpha = prefs.get("Lane Underlay");
-		add(underlay);
+		playerUnderlay = new FlxSprite(playerStrums.x - 5).makeGraphic(Std.int(playerStrums.width) + 10, FlxG.height, FlxColor.BLACK);
+		playerUnderlay.alpha = prefs.get("Lane Underlay");
+		add(playerUnderlay);
 
 		add(opponentStrums);
 		add(playerStrums);
