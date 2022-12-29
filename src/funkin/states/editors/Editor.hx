@@ -10,8 +10,6 @@ class Editor extends FNFState {
     override function create() {
         super.create();
 
-        enableTransitions();
-
         onBack.add(function() {
             FlxG.switchState(new MainMenuState());
         });

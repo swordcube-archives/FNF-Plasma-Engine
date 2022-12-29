@@ -180,8 +180,6 @@ class PlayState extends FNFState {
 			Assets.load(SOUND, Paths.sound('game/missnote3'));
 		}
 
-		enableTransitions();
-
 		GameOverSubstate.reset();
 
 		paused = false;

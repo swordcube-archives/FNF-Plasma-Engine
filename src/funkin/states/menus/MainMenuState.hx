@@ -44,8 +44,6 @@ class MainMenuState extends FNFState {
 			null
 		);
 
-		enableTransitions();
-
 		persistentUpdate = persistentDraw = true;
 
 		script = Script.load(Paths.script('data/states/MainMenuState'));

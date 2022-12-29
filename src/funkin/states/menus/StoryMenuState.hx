@@ -61,7 +61,6 @@ class StoryMenuState extends FNFState {
 	
 	override function create() {
 		super.create();
-		enableTransitions();
 
 		weekList = WeekUtil.getWeekList();
 

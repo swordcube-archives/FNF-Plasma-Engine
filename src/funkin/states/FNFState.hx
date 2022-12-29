@@ -54,17 +54,13 @@ class FNFState extends FlxUIState {
 		return Conductor.curSection;
 	}
 
-	// convienience function
-	// use in create!
-	function enableTransitions() {
+	override function create() {
+		super.create();
+
 		#if !docs
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
 		#end
-	}
-
-	override function create() {
-		super.create();
 
 		persistentUpdate = false;
 		persistentDraw = true;

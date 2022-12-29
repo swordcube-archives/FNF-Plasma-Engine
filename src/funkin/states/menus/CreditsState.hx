@@ -27,8 +27,6 @@ class CreditsState extends FNFState {
     override function create() {
         super.create();
 
-        enableTransitions();
-
         var bg = new FNFSprite().load(IMAGE, Paths.image("menus/menuBGBlue"));
         bg.scrollFactor.set();
         add(bg);

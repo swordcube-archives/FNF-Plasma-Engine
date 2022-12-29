@@ -1,26 +1,89 @@
 package funkin.states.menus;
 
+import funkin.system.FNFSprite;
+import haxe.xml.Access;
+import flixel.util.typeLimit.OneOfTwo;
 import openfl.media.Sound;
 import funkin.scripting.Script;
 import funkin.ui.Alphabet;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
-import flixel.addons.transition.FlxTransitionableState;
-import flixel.addons.transition.TransitionData;
-import flixel.graphics.FlxGraphic;
 import flixel.group.FlxGroup;
-import flixel.input.gamepad.FlxGamepad;
-import flixel.text.FlxText;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 
 using StringTools;
 
+typedef TitleXMLSpriteVisibility = {
+	var spriteName:String;
+	var visible:Bool;
+}
+
+typedef TitleXMLLines = Array<OneOfTwo<String, TitleXMLSpriteVisibility>>;
+
+class IntroText {
+	public var lines:TitleXMLLines;
+
+	public function new(?lines:Null<TitleXMLLines>) {
+		if(lines == null) lines = [];
+		this.lines = lines;
+	}
+
+	public function show() {
+		var state = cast(FlxG.state, TitleState);
+		state.deleteCoolText();
+
+		for(sprite in state.shownSprites)
+			sprite.visible = false;
+
+		if (lines == null || lines.length <= 0) return;
+
+		for(e in lines) {
+			if (e is String) {
+				var text:String = cast e;
+				for(k=>e in state.curWacky) text = text.replace('{introText${k+1}', e);
+				state.addMoreText(text);
+			} else if (e is Dynamic) {
+				var data:TitleXMLSpriteVisibility = e;
+				if (data.spriteName == "" || data.spriteName == null) continue;
+
+				var sprite:Dynamic = state.script.get(data.spriteName);
+				@:privateAccess
+				if(sprite == null) sprite = Reflect.getProperty(state, data.spriteName);
+				if(sprite == null || !(sprite is FlxSprite || sprite is FNFSprite)) continue;
+
+				sprite.visible = data.visible;
+				state.shownSprites.push(sprite);
+			}
+		}
+	}
+}
+
 class TitleState extends FNFState {
-	static var hasCheckedUpdates:Bool = false;
+	public static var hasCheckedUpdates:Bool = false;
+
+	public var shownSprites:Array<Dynamic> = [];
+
+	public var titleLines:Map<Int, IntroText> = [
+		// Fallback data for if the XML can't load
+		1 => new IntroText(['swordcube', 'Leather128', 'Stilic', 'Raf']),
+		3 => new IntroText(['swordcube', 'Leather128', 'Stilic', 'Raf', 'present']),
+		4 => new IntroText(),
+		5 => new IntroText(['In association', 'with']),
+		7 => new IntroText(['In association', 'with', 'newgrounds', {
+			spriteName: "ngSpr",
+			visible: true
+		}]),
+		8 => new IntroText(),
+		9 => new IntroText(["{introText1}"]),
+		11 => new IntroText(["{introText1}", "{introText2}"]),
+		12 => new IntroText(),
+		13 => new IntroText(['Friday']),
+		14 => new IntroText(['Friday', 'Night']),
+		15 => new IntroText(['Friday', 'Night', "Funkin'"]),
+	];
+	public var default_titleLines:Map<Int, IntroText> = [];
+	public var titleLength:Int = 16;
 
 	public var script:ScriptModule;
 	public var runDefaultCode:Bool = true;
@@ -35,11 +98,12 @@ class TitleState extends FNFState {
 
 	public var curWacky:Array<String> = [];
 
-	public var freakyMenu:Sound;
-
 	override public function create():Void {
-		curWacky = FlxG.random.getObject(getIntroTextShit());
+		curWacky = FlxG.random.getObject(parseIntroText());
 		super.create();
+
+		for(beat => line in titleLines)
+			default_titleLines[beat] = new IntroText(line.lines);
 
 		DiscordRPC.changePresence(
 			"In the Title Screen", 
@@ -53,46 +117,8 @@ class TitleState extends FNFState {
 		// hey guys..  .  it's  me. . . . ..... saster
 		// YOOO IS THAT SASTICLES/?!!?!@?!@?!@?!@?
 
-		if(runDefaultCode) {
-			freakyMenu = Assets.load(SOUND, Paths.music('menuMusic'));
-			
-			logoBl = new FlxSprite(-150, -100);
-			logoBl.frames = Assets.load(SPARROW, Paths.image('menus/title/logoBumpin'));
-			logoBl.antialiasing = PlayerSettings.prefs.get("Antialiasing");
-			logoBl.animation.addByPrefix('bump', 'logo bumpin', 24, false);
-			logoBl.animation.play('bump');
-			logoBl.updateHitbox();
-
-			gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
-			gfDance.frames = Assets.load(SPARROW, Paths.image('menus/title/gfDanceTitle'));
-			gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
-			gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
-			gfDance.antialiasing = PlayerSettings.prefs.get("Antialiasing");
-			add(gfDance);
-			add(logoBl);
-
-			titleText = new FlxSprite(100, FlxG.height * 0.8);
-			titleText.frames = Assets.load(SPARROW, Paths.image('menus/title/titleEnter'));
-			titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
-			titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
-			titleText.antialiasing = PlayerSettings.prefs.get("Antialiasing");
-			titleText.animation.play('idle');
-			titleText.updateHitbox();
-			add(titleText);
-
-			credGroup = new FlxGroup();
-			add(credGroup);
-			textGroup = new FlxGroup();
-
-			blackScreen = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-			credGroup.add(blackScreen);
-
-			ngSpr = new FlxSprite(0, FlxG.height * 0.52);
-
-			new FlxTimer().start(1, function(tmr:FlxTimer) {
-				startIntro();
-			});
-		}
+		if(runDefaultCode)
+			startIntro();
 
 		Conductor.onBeat.add(beatHit);
 		Conductor.onStep.add(stepHit);
@@ -105,28 +131,98 @@ class TitleState extends FNFState {
 	public var danceLeft:Bool = false;
 	public var titleText:FlxSprite;
 
+	function loadXML() {
+		// Load the intial XML Data.
+		var xml:Xml = Xml.parse(Assets.load(TEXT, Paths.xml('data/titlescreen/titlescreen'))).firstElement();
+		if (xml == null)
+			return Console.error('Occured while loading the title screen XML: Either the XML doesn\'t exist or the "titlescreen" node is missing!');
+
+		try {
+			var data:Access = new Access(xml);
+
+			if(data.hasNode.intro) {
+				titleLines = [];
+				var intro_node:Access = data.node.intro; // <- This is done to make the code look cleaner (aka instead of data.node.intro.nodes.intro)
+				if (intro_node.has.length) titleLength = Std.parseInt(intro_node.att.length);
+
+				for (text in intro_node.nodes.text) {
+					var beat:Int = text.has.beat ? Std.parseInt(text.att.beat) : 0;
+					var texts:Array<OneOfTwo<String, TitleXMLSpriteVisibility>> = [];
+					for(e in text.elements) {
+						switch(e.name) {
+							case "line":
+								if (!e.has.text) continue;
+								texts.push(e.att.text);
+								
+							case "introtext":
+								if (!e.has.line) continue;
+								texts.push('{introText${e.att.line}}');
+
+							case "showsprite", "hidesprite":
+								if (!e.has.name) continue;
+								texts.push({
+									spriteName: e.att.name,
+									visible: e.name == "showsprite"
+								});
+						}
+					}
+					titleLines[beat] = new IntroText(texts);
+				}
+			}
+		} catch(e) {
+			titleLines = default_titleLines;
+			Console.error('Failed to load the Titlescreen XML: ${e.details()}');
+		}
+	}
+
 	function startIntro() {
 		startedIntro = true;
 
-		if (!initialized) {
-			enableTransitions();
-
-			if (FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))
-				FlxG.sound.playMusic(freakyMenu, 0);
-
+		if (FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing)) {
+			FlxG.sound.playMusic(Assets.load(SOUND, Paths.music('menuMusic')), 0);
 			FlxG.sound.music.fadeIn(4, 0, 1);
 		}
 
 		Conductor.bpm = 102;
 		persistentUpdate = true;
 
+		loadXML();
+			
+		logoBl = new FlxSprite(-150, -100);
+		logoBl.frames = Assets.load(SPARROW, Paths.image('menus/title/logoBumpin'));
+		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24, false);
+		logoBl.animation.play('bump');
+		logoBl.updateHitbox();
+
+		gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
+		gfDance.frames = Assets.load(SPARROW, Paths.image('menus/title/gfDanceTitle'));
+		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
+		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
+		add(gfDance);
+		add(logoBl);
+
+		titleText = new FlxSprite(100, FlxG.height * 0.8);
+		titleText.frames = Assets.load(SPARROW, Paths.image('menus/title/titleEnter'));
+		titleText.animation.addByPrefix('idle', "Press Enter to Begin", 24);
+		titleText.animation.addByPrefix('press', "ENTER PRESSED", 24);
+		titleText.animation.play('idle');
+		titleText.updateHitbox();
+		add(titleText);
+
+		credGroup = new FlxGroup();
+		add(credGroup);
+		textGroup = new FlxGroup();
+
+		blackScreen = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		credGroup.add(blackScreen);
+
+		ngSpr = new FlxSprite(0, FlxG.height * 0.52);
 		ngSpr.loadGraphic(Assets.load(IMAGE, Paths.image('menus/title/newgrounds_logo')));
-		add(ngSpr);
 		ngSpr.visible = false;
-		ngSpr.setGraphicSize(Std.int(ngSpr.width * 0.8));
+		ngSpr.scale.set(0.8, 0.8);
 		ngSpr.updateHitbox();
 		ngSpr.screenCenter(X);
-		ngSpr.antialiasing = PlayerSettings.prefs.get("Antialiasing");
+		add(ngSpr);
 
 		if (initialized)
 			skipIntro();
@@ -134,15 +230,14 @@ class TitleState extends FNFState {
 			initialized = true;
 	}
 
-	function getIntroTextShit():Array<Array<String>> {
-		var fullText:String = Assets.load(TEXT, Paths.txt('data/introText'));
+	function parseIntroText():Array<Array<String>> {
+		var fullText:String = Assets.load(TEXT, Paths.txt('data/titlescreen/introText'));
 
 		var firstArray:Array<String> = fullText.split('\n');
 		var swagGoodArray:Array<Array<String>> = [];
 
-		for (i in firstArray) {
+		for (i in firstArray)
 			swagGoodArray.push(i.split('--'));
-		}
 
 		return swagGoodArray;
 	}
@@ -157,7 +252,7 @@ class TitleState extends FNFState {
 			if (FlxG.sound.music != null)
 				Conductor.position = FlxG.sound.music.time;
 
-			var pressedEnter:Bool = FlxG.keys.justPressed.ENTER;
+			var pressedEnter:Bool = FlxG.keys.justPressed.ENTER || controls.getP("ACCEPT");
 			if (pressedEnter && startedIntro && !transitioning && skippedIntro) {
 				if (titleText != null && prefs.get("Flashing Lights"))
 					titleText.animation.play('press');
@@ -190,7 +285,7 @@ class TitleState extends FNFState {
         script.updatePostCall(elapsed);
 	}
 
-	function createCoolText(textArray:Array<String>) {
+	public function createCoolText(textArray:Array<String>) {
 		for (i in 0...textArray.length) {
 			var money:Alphabet = new Alphabet(0, 0, Bold, textArray[i]);
 			money.screenCenter(X);
@@ -200,7 +295,7 @@ class TitleState extends FNFState {
 		}
 	}
 
-	function addMoreText(text:String) {
+	public function addMoreText(text:String) {
 		var coolText:Alphabet = new Alphabet(0, 0, Bold, text);
 		coolText.screenCenter(X);
 		coolText.y += (textGroup.length * 60) + 200;
@@ -208,7 +303,7 @@ class TitleState extends FNFState {
 		textGroup.add(coolText);
 	}
 
-	function deleteCoolText() {
+	public function deleteCoolText() {
 		while (textGroup.members.length > 0) {
 			credGroup.remove(textGroup.members[0], true);
 			textGroup.remove(textGroup.members[0], true);
@@ -220,45 +315,17 @@ class TitleState extends FNFState {
 			script.call(func, [curBeat]);
 
 		if(runDefaultCode) {
-			logoBl.animation.play('bump', true);
 			danceLeft = !danceLeft;
 
-			if (danceLeft)
-				gfDance.animation.play('danceRight');
-			else
-				gfDance.animation.play('danceLeft');
+			logoBl.animation.play('bump', true);
+			gfDance.animation.play(danceLeft ? 'danceRight' : 'danceLeft');
 
-			FlxG.log.add(curBeat);
-
-			switch (curBeat) {
-				case 1:
-					createCoolText(['swordcube', 'Leather128', 'Stilic', 'Raf']);
-				case 3:
-					addMoreText('present');
-				case 4:
-					deleteCoolText();
-				case 5:
-					createCoolText(['You should', 'go check out']);
-				case 7:
-					addMoreText('newgrounds');
-					ngSpr.visible = true;
-				case 8:
-					deleteCoolText();
-					ngSpr.visible = false;
-				case 9:
-					createCoolText([curWacky[0]]);
-				case 11:
-					addMoreText(curWacky[1]);
-				case 12:
-					deleteCoolText();
-				case 13:
-					addMoreText('Friday');
-				case 14:
-					addMoreText('Night');
-				case 15:
-					addMoreText('Funkin');
-				case 16:
-					skipIntro();
+			if (curBeat >= titleLength)
+				skipIntro();
+			else {
+				var introText = titleLines[curBeat];
+				if (introText != null)
+					introText.show();
 			}
 		}
 
@@ -283,12 +350,12 @@ class TitleState extends FNFState {
 	var skippedIntro:Bool = false;
 
 	function skipIntro():Void {
-		if (!skippedIntro) {
-			remove(ngSpr);
+		if (skippedIntro) return;
 
-			FlxG.camera.flash(FlxColor.WHITE, 4);
-			remove(credGroup);
-			skippedIntro = true;
-		}
+		remove(ngSpr);
+
+		FlxG.camera.flash(FlxColor.WHITE, 4);
+		remove(credGroup);
+		skippedIntro = true;
 	}
 }

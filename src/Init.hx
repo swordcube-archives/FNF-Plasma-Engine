@@ -64,12 +64,12 @@ class Init extends FlxState {
 
 		#if debug
 		if(Sys.args().contains("-livereload")) Main.developerMode = true;
-		#end
-
 		// build counter macro activates even when it shouldn't
 		// so i'm putting this back here
-		var buildNum:Int = Std.parseInt(File.getContent('./buildNumber.txt'));
-        File.saveContent('./buildNumber.txt', Std.string(buildNum+1));
+		var path:String = '${Sys.getCwd()}../../../../buildNumber.txt';
+		var buildNum:Int = Std.parseInt(File.getContent(path));
+        File.saveContent(path, Std.string(buildNum+1));
+		#end
 
 		DiscordRPC.initialize();
 
