@@ -240,23 +240,21 @@ class Note extends FNFSprite {
                 updateHitbox();
                 offsetX();
             }
+
+			if (mustPress) {
+				var hitMults:Array<Float> = shouldHit ? [1.5, 1.5] : [0.3, 0.2];
+				if (strumTime > Conductor.position - Conductor.safeZoneOffset * hitMults[0]
+					&& strumTime < Conductor.position + Conductor.safeZoneOffset * hitMults[1])
+					canBeHit = true;
+				else
+					canBeHit = false;
+	
+				if (strumTime < Conductor.position - Conductor.safeZoneOffset && !wasGoodHit)
+					tooLate = true;
+			}
+	
+			if (tooLate) alpha = 0.3;
 		}
-
-		if (mustPress && parent != null) {
-			var hitMults:Array<Float> = shouldHit ? [1.5, 1.5] : [0.5, 0.5];
-			if (strumTime > Conductor.position - Conductor.safeZoneOffset * hitMults[0]
-				&& strumTime < Conductor.position + Conductor.safeZoneOffset * hitMults[1])
-				canBeHit = true;
-			else
-				canBeHit = false;
-
-			if (strumTime < Conductor.position - Conductor.safeZoneOffset && !wasGoodHit)
-				tooLate = true;
-		} else {
-			canBeHit = false;
-		}
-
-		if (tooLate) alpha = 0.3;
 	}
 
 	override public function playAnim(name:String, force:Bool = false, reversed:Bool = false, frame:Int = 0) {
