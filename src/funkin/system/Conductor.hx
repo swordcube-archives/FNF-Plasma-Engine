@@ -117,16 +117,17 @@ class Conductor {
 	}
 
 	static function stepHit() {
-		onStep.dispatch(curStep);
-		if (curStep % 4 == 0)
-			onBeat.dispatch(Math.floor(curStep / 4.0));
-
-		if (PlayState.SONG != null) {
+		if (PlayState.SONG != null && FlxG.state == PlayState.current) {
 			if (oldStep < curStep)
 				updateSection();
 			else
 				rollbackSection();
-		}
+		} else
+			curSection = Std.int(curStep / 16);
+
+		onStep.dispatch(curStep);
+		if (curStep % 4 == 0)
+			onBeat.dispatch(Math.floor(curStep / 4.0));
 
 		if (!storedSteps.contains(curStep))
 			storedSteps.push(curStep);

@@ -34,7 +34,7 @@ using StringTools;
 **/
 class PlayState extends FNFState {
 	public static var paused:Bool = false;
-	public static var SONG:Song;
+	public static var SONG:Song = ChartParser.loadSong(VANILLA, "tutorial");
 	public static var curDifficulty:String = "normal";
 	public static var weekName:String = "tutorial";
 	public static var storyScore:Int = 0;
@@ -97,10 +97,7 @@ class PlayState extends FNFState {
 	public var camHUD:FlxCamera;
 	public var camOther:FlxCamera;
 
-	public var cachedSounds:Map<String, Sound> = [
-		"menuMusic"  => Assets.load(SOUND, Paths.music("menuMusic")),
-		"inst"       => Assets.load(SOUND, Paths.inst(SONG.name))
-	];
+	public var cachedSounds:Map<String, Sound> = [];
 	public var vocals:FlxSound = new FlxSound();
 
 	public function new() {
@@ -191,9 +188,14 @@ class PlayState extends FNFState {
 		FlxG.sound.music.stop();
 
 		// Setup song
-		if(SONG == null)
+		if(SONG == null) 
 			SONG = ChartParser.loadSong(VANILLA, "tutorial");
 
+		cachedSounds = [
+			"menuMusic"  => Assets.load(SOUND, Paths.music("menuMusic")),
+			"inst"       => Assets.load(SOUND, Paths.inst(SONG.name))
+		];
+		
 		DiscordRPC.changePresence(
 			'Playing ${SONG.name}',
 			'Starting song...'
@@ -804,7 +806,6 @@ class PlayState extends FNFState {
 	}
 
 	override function destroy() {
-		SONG = null;
 		current = null;
 		super.destroy();
 	}
