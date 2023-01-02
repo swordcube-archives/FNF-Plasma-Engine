@@ -756,9 +756,6 @@ class PlayState extends FNFState {
 		scripts.call("onBeatHit", [curBeat]);
 		scripts.call("beatHit", [curBeat]);
 
-		var curSection:Int = Std.int(FlxMath.bound(Conductor.curStep / 16, 0, SONG.sections.length-1));
-		if (SONG.sections[curSection] != null && SONG.sections[curSection].changeBPM)
-			Conductor.bpm = SONG.sections[curSection].bpm;
 		characterBop(curBeat);
 
 		if(curBeat % cameraBopSpeed == 0 && camBumping) {
@@ -768,27 +765,29 @@ class PlayState extends FNFState {
 		UI.beatHit(curBeat);
 
 		scripts.call("onBeatHitPost", [curBeat]);
-        scripts.call("beatHitPost", [curBeat]);
+        	scripts.call("beatHitPost", [curBeat]);
 	}
 
 	function stepHit(curStep:Int) {
 		if(endingSong || paused) return;
-        scripts.call("onStepHit", [curStep]);
-        scripts.call("stepHit", [curStep]);
-        scripts.call("onStepHitPost", [curStep]);
-        scripts.call("stepHitPost", [curStep]);
+		scripts.call("onStepHit", [curStep]);
+		scripts.call("stepHit", [curStep]);
+		scripts.call("onStepHitPost", [curStep]);
+		scripts.call("stepHitPost", [curStep]);
 	}
 
 	function sectionHit(curSection:Int) {
 		if(endingSong || paused) return;
-        scripts.call("onSectionHit", [curStep]);
-        scripts.call("sectionHit", [curStep]);
+		scripts.call("onSectionHit", [curSection]);
+		scripts.call("sectionHit", [curSection]);
+		
+		if (SONG.sections[curSection] != null && SONG.sections[curSection].changeBPM)
+			Conductor.bpm = SONG.sections[curSection].bpm;
 
-		var curSection:Int = Std.int(FlxMath.bound(Conductor.curStep / 16, 0, SONG.sections.length-1));
 		moveCamera(SONG.sections[curSection] != null ? SONG.sections[curSection].playerSection : false);
 
-        scripts.call("onSectionHitPost", [curStep]);
-        scripts.call("sectionHitPost", [curStep]);
+		scripts.call("onSectionHitPost", [curSection]);
+		scripts.call("sectionHitPost", [curSection]);
 	}
 
 	function characterBop(curBeat:Int) {
