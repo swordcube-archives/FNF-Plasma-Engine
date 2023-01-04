@@ -68,6 +68,9 @@ class PlayState extends FNFState {
 	public var camBumping:Bool = true;
 	public var camZooming:Bool = true;
 
+	public var iconBumping:Bool = true;
+	public var iconZooming:Bool = true;
+
 	public var dad:Character;
 	public var gf:Character;
 	public var bf:Character;

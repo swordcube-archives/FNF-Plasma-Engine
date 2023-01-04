@@ -188,25 +188,30 @@ class UILayer extends FlxGroup {
 	}
 
 	public function beatHit(curBeat:Int) {
-		iconP2.scale.add(0.2, 0.2);
-		iconP2.updateHitbox();
+		if(PlayState.current.iconBumping) {
+			iconP2.scale.add(0.2, 0.2);
+			iconP2.updateHitbox();
 
-		iconP1.scale.add(0.2, 0.2);
-		iconP1.updateHitbox();
+			iconP1.scale.add(0.2, 0.2);
+			iconP1.updateHitbox();
 
-		updateIcons();
+			updateIcons();
+		}
 	}
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-		var iconLerp:Float = 0.25;
+		if(PlayState.current.iconZooming) {
+			var iconLerp:Float = 0.25;
 
-		iconP2.scale.set(MathUtil.fixedLerp(iconP2.scale.x, 1, iconLerp), MathUtil.fixedLerp(iconP2.scale.y, 1, iconLerp));
-		iconP2.updateHitbox();
+			iconP2.scale.set(MathUtil.fixedLerp(iconP2.scale.x, 1, iconLerp), MathUtil.fixedLerp(iconP2.scale.y, 1, iconLerp));
+			iconP2.updateHitbox();
 
-		iconP1.scale.set(MathUtil.fixedLerp(iconP1.scale.x, 1, iconLerp), MathUtil.fixedLerp(iconP1.scale.y, 1, iconLerp));
-		iconP1.updateHitbox();
-		updateIcons();
+			iconP1.scale.set(MathUtil.fixedLerp(iconP1.scale.x, 1, iconLerp), MathUtil.fixedLerp(iconP1.scale.y, 1, iconLerp));
+			iconP1.updateHitbox();
+			updateIcons();
+		}
+
 		updateTime();
 	}
 
