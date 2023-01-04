@@ -55,9 +55,9 @@ class StrumLine extends FlxSpriteGroup {
 
         // Generates the new receptors
         for(i in 0...keyAmount) {
-            var receptor = new Receptor(((Note.spacing * Note.keyInfo[keyAmount].scale) * i) * Note.keyInfo[keyAmount].spacing, -10, keyAmount, i, skin);
+            var receptor = new Receptor(((Note.spacing * Note.keyInfo[keyAmount].scale) * i) * Note.keyInfo[keyAmount].spacing, 0, keyAmount, i, skin);
             receptor.alpha = 0;
-            FlxTween.tween(receptor, {y: y + 10, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * i)});
+            FlxTween.tween(receptor, {alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * i)});
             receptors.add(receptor);
         }
 
