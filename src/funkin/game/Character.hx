@@ -469,7 +469,6 @@ class Character extends FNFSprite {
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
-
 		script.updateCall(elapsed);
 
 		if(!debugMode) {
