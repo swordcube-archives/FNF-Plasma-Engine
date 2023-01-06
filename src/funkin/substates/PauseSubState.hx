@@ -152,7 +152,7 @@ class PauseSubState extends FNFSubState {
 					curTime = FlxMath.bound(curTime + (controls.get("UI_LEFT") ? -500 : 500), 0, FlxG.sound.music.length);
 					timeTxt.text = FlxStringUtil.formatTime(curTime/1000.0) + " / " + FlxStringUtil.formatTime(FlxG.sound.music.length/1000.0);
 		
-					if(holdTimer > 0.6) holdTimer = 0.5;
+					if(holdTimer > 0.5) holdTimer = 0.425;
 				}
 			} else {
 				holdTimer = 0.0;
